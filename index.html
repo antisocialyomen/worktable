@@ -105,8 +105,9 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .cb .cc{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all var(--t)}
 .cb input:checked+.cc{background:var(--primary);border-color:var(--primary)}
 .cb input:checked+.cc::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#fff;font-size:11px}
-.cb .ct{flex:1;font-size:14px}
+.cb .ct{flex:1;font-size:14px;min-width:0;word-break:break-word}
 .cb input:checked~.ct{text-decoration:line-through;color:var(--text3)}
+.cb-acts{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;z-index:2000;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .3s}
 .toast.show{opacity:1}
 .toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;transition:background var(--t)}
@@ -189,9 +190,12 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .si .label{font-size:12px}
   .ft{gap:6px;margin-bottom:10px}
   .ft .fb{padding:4px 10px;font-size:12px}
-  .cb{padding:6px 0}
+  .cb{padding:6px 0;flex-wrap:wrap}
   .cb .cc{width:18px;height:18px}
   .cb .ct{font-size:13px}
+  .cb-acts{flex-direction:column;align-items:flex-end;gap:2px;margin-left:6px;flex:0 0 auto}
+  .cb-acts .btn-icon{width:28px;height:28px}
+  .cb-acts .tag{padding:1px 6px;font-size:11px}
   .page.active{padding-bottom:4px}
   #homeStats{grid-template-columns:repeat(2,1fr)!important}
   #homeStats .sc{flex-direction:row}
@@ -309,6 +313,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="nav-item active" data-mod="home"><i class="fas fa-home"></i><span>首页</span></div>
       <div class="nav-item" data-mod="tasks"><i class="fas fa-tasks"></i><span>任务</span><span class="badge" id="taskBadge">0</span></div>
       <div class="nav-item" data-mod="life"><i class="fas fa-heart"></i><span>日常</span></div>
+      <div class="nav-item" data-mod="food"><i class="fas fa-utensils"></i><span>吃啥</span></div>
       <div class="nav-item" data-mod="schedule"><i class="fas fa-calendar"></i><span>日程</span></div>
       <div class="nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>笔记</span></div>
       <div class="nav-item" data-mod="study"><i class="fas fa-graduation-cap"></i><span>学习</span></div>
@@ -316,7 +321,6 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="nav-item" data-mod="drama"><i class="fas fa-film"></i><span>热播</span></div>
       <div class="nav-item" data-mod="data"><i class="fas fa-chart-bar"></i><span>数据</span></div>
       <div class="nav-item" data-mod="content"><i class="fas fa-pen-fancy"></i><span>创作</span></div>
-      <div class="nav-item" data-mod="food"><i class="fas fa-utensils"></i><span>吃啥</span></div>
       <div class="nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>设置</span></div>
     </nav>
   </aside>
@@ -660,11 +664,11 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="m-nav-in">
         <div class="m-nav-item active" data-mod="home"><i class="fas fa-home"></i><span>首页</span></div>
         <div class="m-nav-item" data-mod="tasks"><i class="fas fa-tasks"></i><span>任务</span></div>
+        <div class="m-nav-item" data-mod="food"><i class="fas fa-utensils"></i><span>吃啥</span></div>
         <div class="m-nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>灵感</span></div>
         <div class="m-nav-item" data-mod="study"><i class="fas fa-graduation-cap"></i><span>学习</span></div>
         <div class="m-nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
         <div class="m-nav-item" data-mod="drama"><i class="fas fa-film"></i><span>剧集</span></div>
-        <div class="m-nav-item" data-mod="food"><i class="fas fa-utensils"></i><span>吃啥</span></div>
         <div class="m-nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>设置</span></div>
       </div>
     </nav>
@@ -2083,11 +2087,11 @@ function renderYearBars() {
   setDots('ybMonFill', mPct);
 }
 function setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; }
-// 1 行 20 列点阵进度条：根据百分比点亮前 N 个圆点
+// 1 行 12 列点阵进度条：根据百分比点亮前 N 个圆点
 function setDots(id, pct) {
   const e = document.getElementById(id);
   if (!e) return;
-  const N = 20;
+  const N = 12;
   const on = Math.round(Math.max(0, Math.min(100, pct)) / 100 * N);
   let h = '';
   for (let i = 0; i < N; i++) h += '<span class="dot' + (i < on ? ' on' : '') + '"></span>';
@@ -2213,7 +2217,7 @@ function renderTasks() {
     list.innerHTML = filtered.map(t => {
       const pCls = t.pri === 'h' ? 't3' : t.pri === 'l' ? 't2' : 't1';
       const pLbl = t.pri === 'h' ? '紧急' : t.pri === 'l' ? '低优' : '普通';
-      return '<div class="cb"><input type="checkbox"' + (t.done ? 'checked' : '') + ' onchange="toggleTask(\'' + t.id + '\')"><span class="cc"></span><span class="ct" style="' + (t.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + t.title + '</span><span class="tag ' + pCls + '">' + pLbl + '</span><span style="font-size:12px;color:var(--text3)">' + (t.date === today ? '今天' : t.date || '') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editTask(\'' + t.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();deleteTask(\'' + t.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+      return '<div class="cb"><input type="checkbox"' + (t.done ? 'checked' : '') + ' onchange="toggleTask(\'' + t.id + '\')"><span class="cc"></span><span class="ct" style="' + (t.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + t.title + '</span><span class="cb-acts"><span class="tag ' + pCls + '">' + pLbl + '</span><span style="font-size:12px;color:var(--text3)">' + (t.date === today ? '今天' : t.date || '') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editTask(\'' + t.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();deleteTask(\'' + t.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></span></div>';
     }).join('');
   }
   renderTasksChart();
@@ -2391,7 +2395,7 @@ function renderExpChart() {
   const ctx = document.getElementById('expChart');
   if (!ctx) return;
   if (charts.exp) charts.exp.destroy();
-  charts.exp = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } }, title: { display: true, text: m + (expMonthLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: 12 } }, tooltip: pctTooltip } } });
+  charts.exp = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', layout: { padding: 16 }, plugins: { legend: { display: false }, title: { display: true, text: m + (expMonthLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: 12 } }, tooltip: pctTooltip } }, plugins: [doughnutOutsideLabels] });
 }
 function renderAnnual() {
   const e = Store.get('expenses', []);
@@ -2401,7 +2405,7 @@ function renderAnnual() {
   const ctx = document.getElementById('annChart');
   if (ctx) {
     if (charts.ann) charts.ann.destroy();
-    charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } }, title: { display: true, text: y + (expYearLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: 12 } }, tooltip: pctTooltip } } });
+    charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', layout: { padding: 16 }, plugins: { legend: { display: false }, title: { display: true, text: y + (expYearLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: 12 } }, tooltip: pctTooltip } }, plugins: [doughnutOutsideLabels] });
   }
   const inc = expenseSum(inYear, 'i'), exp = expenseSum(inYear, 'e');
   const el = document.getElementById('annSummary');
@@ -3760,6 +3764,47 @@ function expGroupByLevel(arr, level) {
   return { labels: entries.map(e => e[0]), values: entries.map(e => e[1]) };
 }
 const pctTooltip = { callbacks: { label: function(ctx) { const total = ctx.dataset.data.reduce((a, b) => a + b, 0); const v = ctx.parsed; const p = total ? (v / total * 100).toFixed(1) : 0; return ' ' + ctx.label + '：¥' + v.toFixed(2) + '（' + p + '%）'; } } };
+// 自定义插件：把分类名 + 占比画在环外（带引导线）
+const doughnutOutsideLabels = {
+  id: 'outsideLabels',
+  afterDatasetsDraw(chart) {
+    const meta = chart.getDatasetMeta(0);
+    if (!meta || !meta.data || meta.data.length === 0) return;
+    const data = chart.data.datasets[0].data;
+    const labels = chart.data.labels || [];
+    const colors = chart.data.datasets[0].backgroundColor || [];
+    const total = data.reduce((a, b) => a + (Number(b) || 0), 0);
+    if (total <= 0) return;
+    const cx = meta.data[0].x, cy = meta.data[0].y;
+    const { ctx } = chart;
+    ctx.save();
+    ctx.font = '12px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.textBaseline = 'middle';
+    meta.data.forEach((arc, i) => {
+      const v = Number(data[i]) || 0;
+      if (v <= 0) return;
+      const pct = v / total * 100;
+      const mid = (arc.startAngle + arc.endAngle) / 2;
+      const r = arc.outerRadius;
+      const x1 = cx + Math.cos(mid) * r;
+      const y1 = cy + Math.sin(mid) * r;
+      const x2 = cx + Math.cos(mid) * (r + 16);
+      const y2 = cy + Math.sin(mid) * (r + 16);
+      const color = colors[i % colors.length] || '#999';
+      // 引导线
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      // 标签
+      const text = (labels[i] || '') + ' ' + pct.toFixed(2) + '%';
+      const onRight = Math.cos(mid) >= 0;
+      ctx.textAlign = onRight ? 'left' : 'right';
+      ctx.fillStyle = color;
+      ctx.fillText(text, onRight ? x2 + 4 : x2 - 4, y2);
+    });
+    ctx.restore();
+  }
+};
 let expMonthLevel = 'l1';
 let expYearLevel = 'l1';
 
