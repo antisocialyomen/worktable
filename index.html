@@ -236,11 +236,56 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .yb-label{font-weight:600;font-size:15px;white-space:nowrap}
 .yb-data{font-size:12px;color:var(--text2);white-space:nowrap}
 .pixel{font-family:'VT323','DotGothic16',monospace;font-size:23px;line-height:1;color:var(--primary);font-weight:400;letter-spacing:1px;vertical-align:middle;padding:0 1px}
-.dotbar{position:relative;height:18px;border-radius:10px;background-color:rgba(0,0,0,0.03);background-image:radial-gradient(circle, #E7D2D8 40%, transparent 44%);background-size:12px 12px;background-position:2px 3px;overflow:hidden}
-.dotbar>i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:10px;background-image:radial-gradient(circle, var(--primary) 40%, transparent 44%);background-size:12px 12px;background-position:2px 3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
-[data-theme=dark] .dotbar{background-color:rgba(255,255,255,0.04);background-image:radial-gradient(circle, #4A3038 40%, transparent 44%)}
-[data-theme=dark] .dotbar>i{background-image:radial-gradient(circle, var(--primary-light) 40%, transparent 44%)}
+.dotbar{position:relative;display:flex;gap:5px;padding:6px;border-radius:25%;background-color:rgba(0,0,0,0.03);overflow:hidden}
+.dotbar .dot{width:12px;height:12px;border-radius:25%;background:#EADDE2;flex:0 0 auto;transition:background .35s,box-shadow .35s}
+.dotbar .dot.on{background:#D10056;box-shadow:0 0 6px rgba(209,0,86,0.55)}
+[data-theme=dark] .dotbar{background-color:rgba(255,255,255,0.05)}
+[data-theme=dark] .dotbar .dot{background:#4A3038}
+[data-theme=dark] .dotbar .dot.on{background:#D10056;box-shadow:0 0 7px rgba(255,70,130,0.65)}
 [data-theme=dark] .pixel{color:var(--primary-light)}
+
+/* ===== 心情日志弹框 ===== */
+.mask{position:fixed;inset:0;background:rgba(40,20,30,0.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:1500;display:flex;align-items:center;justify-content:center;padding:16px}
+.mask.hide{display:none}
+.modal{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:100%;max-width:440px;max-height:90vh;overflow-y:auto;padding:22px}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.modal-hd h3{font-size:17px;font-weight:700}
+.modal-x{cursor:pointer;color:var(--text3);font-size:20px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px}
+.modal-x:hover{background:var(--primary-bg);color:var(--primary)}
+.mood-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:8px 0 6px}
+.mood-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:26px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:all var(--t)}
+.mood-cell:hover{transform:scale(1.08)}
+.mood-cell.active{border-color:var(--primary);background:var(--primary-bg);box-shadow:0 2px 8px rgba(255,107,138,0.25)}
+.log-area{width:100%;min-height:96px;resize:vertical;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px;line-height:1.6;font-family:inherit;margin-top:6px}
+.log-count{text-align:right;font-size:12px;color:var(--text3);margin-top:4px}
+
+/* ===== 心情日志列表（日历下方） ===== */
+.mood-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.mood-item:last-child{border-bottom:none}
+.mood-emoji{font-size:26px;flex:0 0 auto;line-height:1.2}
+.mood-body{flex:1;min-width:0}
+.mood-text{font-size:14px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.mood-date{font-size:12px;color:var(--text3);margin-top:2px}
+.mood-del{cursor:pointer;color:var(--text3);font-size:14px}
+.mood-del:hover{color:var(--d)}
+
+/* ===== 学习模块 ===== */
+.study-word{text-align:center;padding:20px 8px}
+.study-main{font-size:30px;font-weight:800;color:var(--primary);line-height:1.4;word-break:break-all}
+.study-py{font-size:15px;color:var(--accent);margin-top:8px;letter-spacing:.5px}
+.study-def{font-size:15px;color:var(--text);margin-top:12px;line-height:1.8;text-align:left;background:var(--primary-bg);border-radius:12px;padding:14px 16px}
+.study-src{font-size:12px;color:var(--text3);margin-top:8px;text-align:right}
+.study-actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.study-counter{text-align:center;font-size:13px;color:var(--text2);margin-top:10px}
+.book-item{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.book-item:last-child{border-bottom:none}
+.book-tag{flex:0 0 auto;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--accent-light);color:var(--accent);font-weight:600}
+.book-main{flex:1;min-width:0}
+.book-t{font-size:15px;font-weight:600}
+.book-s{font-size:12px;color:var(--text3);margin-top:2px;word-break:break-all}
+.book-x{cursor:pointer;color:var(--text3);font-size:14px}
+.book-x:hover{color:var(--d)}
+
 </style>
 </head>
 <body>
@@ -268,6 +313,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="nav-item" data-mod="life"><i class="fas fa-heart"></i><span>日常</span></div>
       <div class="nav-item" data-mod="schedule"><i class="fas fa-calendar"></i><span>日程</span></div>
       <div class="nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>笔记</span></div>
+      <div class="nav-item" data-mod="study"><i class="fas fa-graduation-cap"></i><span>学习</span></div>
       <div class="nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
       <div class="nav-item" data-mod="drama"><i class="fas fa-film"></i><span>热播</span></div>
       <div class="nav-item" data-mod="data"><i class="fas fa-chart-bar"></i><span>数据</span></div>
@@ -300,11 +346,11 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <div class="yb-wrap">
             <div class="yb-row">
               <div class="yb-top"><span class="yb-label" id="ybYearLabel">2026年</span><span class="yb-data"><span class="pixel" id="ybYearPct">0%</span> / 2027还有<span class="pixel" id="ybYearDays">0</span>天</span></div>
-              <div class="dotbar"><i id="ybYearFill"></i></div>
+              <div class="dotbar" id="ybYearFill"></div>
             </div>
             <div class="yb-row">
               <div class="yb-top"><span class="yb-label" id="ybMonLabel">8月</span><span class="yb-data"><span class="pixel" id="ybMonPct">0%</span> / 剩余<span class="pixel" id="ybMonDays">0</span>天</span></div>
-              <div class="dotbar"><i id="ybMonFill"></i></div>
+              <div class="dotbar" id="ybMonFill"></div>
             </div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
@@ -356,9 +402,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb" data-t="period">🩸 经期</span>
         </div>
         <div class="life-tab" id="l-expense">
-          <div class="g2"><div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div><div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01"><select class="in" id="expType" style="flex:0 0 auto;width:80px"><option value="e">支出</option><option value="i">收入</option></select></div><div class="ig"><select class="in" id="expCat"><option value="餐饮">🍜 餐饮</option><option value="交通">🚗 交通</option><option value="购物">🛍️ 购物</option><option value="娱乐">🎮 娱乐</option><option value="学习">📚 学习</option><option value="医疗">💊 医疗</option><option value="住房">🏠 住房</option><option value="薪资">💰 薪资</option><option value="其他">📦 其他</option></select><input class="in" id="expNote" placeholder="备注"><button class="btn btn-p" onclick="addExpense()"><i class="fas fa-plus"></i></button></div><div style="margin-top:8px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number"><button class="btn-sm btn-a" onclick="setBudget()">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div></div><div class="card"><div class="card-hd"><h3>📊 月度分析</h3><div style="margin-left:auto"><input type="month" id="expMonth" onchange="renderExpChart()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"></div></div><div style="height:200px"><canvas id="expChart"></canvas></div></div></div>
-          <div class="card"><div class="card-hd"><h3>📈 年度分析 <span id="annYearLabel" style="font-size:13px;color:var(--text2)"></span></h3><div style="margin-left:auto"><input type="number" id="expYear" onchange="renderAnnual()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px;width:90px"></div></div><div class="g2" style="margin-top:8px"><div style="height:240px"><canvas id="annChart"></canvas></div><div id="annSummary" style="min-height:200px;display:flex;align-items:center"></div></div></div>
+          <div class="g2"><div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div><div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01"><select class="in" id="expType" style="flex:0 0 auto;width:80px"><option value="e">支出</option><option value="i">收入</option></select></div><div class="ig"><select class="in" id="expCat" onchange="onExpCatChange()"><option value="餐饮">🍜 餐饮</option><option value="交通">🚗 交通</option><option value="购物">🛍️ 购物</option><option value="娱乐">🎮 娱乐</option><option value="学习">📚 学习</option><option value="医疗">💊 医疗</option><option value="住房">🏠 住房</option><option value="薪资">💰 薪资</option><option value="其他">📦 其他</option></select><select class="in" id="expSub" style="flex:0 0 auto;width:120px"></select><input class="in" id="expNote" placeholder="备注"><button class="btn-sm btn-o" onclick="manageExpSubs()" title="管理二级分类" style="flex:0 0 auto"><i class="fas fa-cog"></i></button><button class="btn btn-p" onclick="addExpense()"><i class="fas fa-plus"></i></button></div><div style="margin-top:8px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number"><button class="btn-sm btn-a" onclick="setBudget()">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div></div><div class="card"><div class="card-hd"><h3>📊 月度分析</h3><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expMonthLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="month" id="expMonth" onchange="renderExpChart()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"></div></div><div style="height:200px"><canvas id="expChart"></canvas></div></div></div>
+          <div class="card"><div class="card-hd"><h3>📈 年度分析 <span id="annYearLabel" style="font-size:13px;color:var(--text2)"></span></h3><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expYearLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="number" id="expYear" onchange="renderAnnual()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px;width:90px"></div></div><div class="g2" style="margin-top:8px"><div style="height:240px"><canvas id="annChart"></canvas></div><div id="annSummary" style="min-height:200px;display:flex;align-items:center"></div></div></div>
           <div class="card"><div class="card-hd"><h3>📋 收支明细</h3><button class="btn-sm btn btn-o" onclick="exportCSV()"><i class="fas fa-download"></i> 导出CSV</button></div><div class="g4" id="expTotals" style="margin:8px 0 12px"></div><div class="ft" id="expPeriodTabs" style="margin-bottom:10px"><span class="fb active" data-p="all">全部</span><span class="fb" data-p="day">按天</span><span class="fb" data-p="month">按月</span><span class="fb" data-p="year">按年</span></div><div id="expList"></div></div>
+          <div class="card" style="margin-top:12px"><div class="card-hd"><h3>😰 情绪化消费</h3><span class="tag t3">自动识别</span></div><div id="emoStat" style="margin-bottom:12px"></div><div id="emoList"></div></div>
         </div>
         <div class="life-tab" id="l-habit" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>🔥 我的习惯</h3><button class="btn-sm btn-p" onclick="addHabit()"><i class="fas fa-plus"></i> 新建</button></div><div id="habitList"></div></div><div class="card"><div class="card-hd"><h3>📅 本月打卡</h3></div><div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div><div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text2)">本月打卡 <span id="monthCheck">0</span> 天</div></div></div></div>
         <div class="life-tab" id="l-health" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><button class="btn btn-p" onclick="addHealth()">记录</button></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3>📈 体重趋势</h3></div><div style="height:200px"><canvas id="weightChart"></canvas></div></div></div><div class="card"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="healthList"></div></div></div>
@@ -384,8 +431,9 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
         <!-- 日历 + 近期日程 -->
         <div class="sched-tab" id="s-cal">
-          <div class="card"><div class="card-hd"><h3>📅 日程</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="addEvent()"><i class="fas fa-plus"></i> 新建日程</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
+          <div class="card"><div class="card-hd"><h3>📅 日程</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="addEvent()"><i class="fas fa-plus"></i> 新建日程</button><button class="btn-sm btn-a" onclick="openMoodModal()" style="margin-left:6px"><i class="fas fa-plus"></i> 新建日志</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
           <div class="card"><div class="card-hd"><h3>📋 近期日程</h3></div><div id="eventList"></div></div>
+          <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📓 心情日志</h3><button class="btn-sm btn-a" onclick="openMoodModal()"><i class="fas fa-plus"></i> 写日志</button></div><div id="moodLogList"></div></div>
         </div>
 
         <!-- 倒数日 -->
@@ -418,6 +466,59 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="card"><div class="card-hd"><h3>✏️ 快速笔记</h3><button class="btn-sm btn-p" onclick="showEditor()"><i class="fas fa-plus"></i> 新建笔记</button></div><div id="noteEditor" style="display:none"><div class="ig"><input class="in" id="noteTitle" placeholder="笔记标题"></div><textarea class="in" id="noteContent" placeholder="写下你的灵感..." rows="4" style="resize:vertical;min-height:80px"></textarea><div class="ig" style="margin-top:8px"><select class="in" id="noteCat" style="flex:0 0 auto;width:120px"><option value="工作">工作</option><option value="学习">学习</option><option value="生活">生活</option><option value="灵感">灵感</option></select><input class="in" id="noteTags" placeholder="标签（逗号分隔）"><button class="btn btn-p" onclick="saveNote()"><i class="fas fa-save"></i> 保存</button><button class="btn btn-o" onclick="hideEditor()">取消</button></div></div></div>
         <div class="ig"><input class="in" id="noteSearch" placeholder="搜索笔记..." oninput="renderNotes()"><select class="in" id="noteCatFilter" style="flex:0 0 auto;width:120px" onchange="renderNotes()"><option value="all">全部分类</option><option value="工作">工作</option><option value="学习">学习</option><option value="生活">生活</option><option value="灵感">灵感</option></select></div>
         <div id="notesList" style="margin-top:12px"></div>
+      </div>
+
+      <!-- STUDY -->
+      <div class="page" id="p-study">
+        <div class="ft" id="studyTabs">
+          <span class="fb active" data-s="cn">🀄 中文积累</span>
+          <span class="fb" data-s="en">🔤 英语积累</span>
+          <span class="fb" data-s="book">📚 积累本</span>
+        </div>
+
+        <!-- 中文积累 -->
+        <div class="study-tab" id="s-cn">
+          <div class="card">
+            <div class="card-hd"><h3>🀄 每日中文积累</h3><span class="tag t2" id="cnKind">成语</span></div>
+            <div class="study-word">
+              <div class="study-main" id="cnMain">—</div>
+              <div class="study-py" id="cnPy"></div>
+              <div class="study-def" id="cnDef"></div>
+              <div class="study-src" id="cnSrc"></div>
+            </div>
+            <div class="study-actions">
+              <button class="btn btn-o" onclick="switchCn()"><i class="fas fa-random"></i> 切换下一个</button>
+              <button class="btn btn-p" onclick="addCnToBook()"><i class="fas fa-plus"></i> 加入积累本</button>
+            </div>
+            <div class="study-counter" id="cnCount"></div>
+          </div>
+        </div>
+
+        <!-- 英语积累 -->
+        <div class="study-tab" id="s-en" style="display:none">
+          <div class="card">
+            <div class="card-hd"><h3>🔤 每日英语积累</h3><span class="tag t1" id="enKind">考研</span></div>
+            <div class="study-word">
+              <div class="study-main" id="enMain">—</div>
+              <div class="study-py" id="enPy"></div>
+              <div class="study-def" id="enDef"></div>
+              <div class="study-src" id="enSrc"></div>
+            </div>
+            <div class="study-actions">
+              <button class="btn btn-o" onclick="switchEn()"><i class="fas fa-random"></i> 切换下一个</button>
+              <button class="btn btn-p" onclick="addEnToBook()"><i class="fas fa-plus"></i> 加入积累本</button>
+            </div>
+            <div class="study-counter" id="enCount"></div>
+          </div>
+        </div>
+
+        <!-- 积累本 -->
+        <div class="study-tab" id="s-book" style="display:none">
+          <div class="card">
+            <div class="card-hd"><h3>📚 我的积累本</h3><span class="btn-sm btn-o" onclick="clearBook()" style="color:var(--d)"><i class="fas fa-trash"></i> 清空</span></div>
+            <div id="bookList"></div>
+          </div>
+        </div>
       </div>
 
       <!-- HOT NEWS -->
@@ -562,6 +663,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="m-nav-item active" data-mod="home"><i class="fas fa-home"></i><span>首页</span></div>
         <div class="m-nav-item" data-mod="tasks"><i class="fas fa-tasks"></i><span>任务</span></div>
         <div class="m-nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>灵感</span></div>
+        <div class="m-nav-item" data-mod="study"><i class="fas fa-graduation-cap"></i><span>学习</span></div>
         <div class="m-nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
         <div class="m-nav-item" data-mod="drama"><i class="fas fa-film"></i><span>剧集</span></div>
         <div class="m-nav-item" data-mod="food"><i class="fas fa-utensils"></i><span>吃啥</span></div>
@@ -571,6 +673,22 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   </main>
 </div>
 <div class="toast" id="toast"></div>
+
+<!-- 心情日志弹框 -->
+<div class="mask hide" id="moodMask" onclick="if(event.target===this)closeMoodModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3>📓 写今天的日志</h3><span class="modal-x" onclick="closeMoodModal()"><i class="fas fa-times"></i></span></div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:6px">① 选一个今天的心情</div>
+    <div class="mood-grid" id="moodGrid"></div>
+    <div style="font-size:13px;color:var(--text2);margin:14px 0 2px">② 写点今天的想法（最多 300 字）</div>
+    <textarea class="log-area" id="moodText" maxlength="300" placeholder="今天过得怎么样？记下此刻的心情吧…" oninput="document.getElementById('moodCount').textContent=this.value.length+'/300'"></textarea>
+    <div class="log-count"><span id="moodCount">0/300</span></div>
+    <div style="text-align:right;margin-top:14px">
+      <button class="btn btn-o" onclick="closeMoodModal()">取消</button>
+      <button class="btn btn-p" onclick="saveMoodLog()" style="margin-left:8px"><i class="fas fa-save"></i> 保存</button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* === 农历转换库 solarlunar 3.1.0 (内置，自包含) === */
@@ -1432,12 +1550,12 @@ function toast(msg) {
 // ===== NAVIGATION =====
 const MOD_NAMES = {
   home:'首页', tasks:'任务', life:'日常', schedule:'日程',
-  notes:'笔记', hotnews:'热点', drama:'热播', data:'数据',
+  notes:'笔记', study:'学习', hotnews:'热点', drama:'热播', data:'数据',
   content:'创作', food:'吃啥', settings:'设置'
 };
 const MOD_ICONS = {
   home:'fa-home', tasks:'fa-tasks', life:'fa-heart', schedule:'fa-calendar',
-  notes:'fa-lightbulb', hotnews:'fa-fire', drama:'fa-film', data:'fa-chart-bar',
+  notes:'fa-lightbulb', study:'fa-graduation-cap', hotnews:'fa-fire', drama:'fa-film', data:'fa-chart-bar',
   content:'fa-pen-fancy', food:'fa-utensils', settings:'fa-cog'
 };
 
@@ -1462,6 +1580,7 @@ function go(m) {
   if (m === 'data') setTimeout(renderDataCharts, 100);
   if (m === 'schedule') switchSchedTab((typeof schedTab !== 'undefined' && schedTab) || 'cal');
   if (m === 'food') switchFoodTab(foodTab);
+  if (m === 'study') renderStudy();
   renderAll();
 }
 
@@ -1499,6 +1618,10 @@ document.addEventListener('DOMContentLoaded', function() {
       else if (parent === 'expPeriodTabs') switchExpPeriod(fb.getAttribute('data-p'));
       else if (parent === 'foodTabs') switchFoodTab(fb.getAttribute('data-f'));
       else if (parent === 'schedTabs') switchSchedTab(fb.getAttribute('data-s'));
+      else if (parent === 'studyTabs') switchStudyTab(fb.getAttribute('data-s'));
+      else if (parent === 'expMonthLevelTabs') { expMonthLevel = fb.getAttribute('data-l'); renderExpChart(); }
+      else if (parent === 'expYearLevelTabs') { expYearLevel = fb.getAttribute('data-l'); renderAnnual(); }
+      else if (parent === 'studyTabs') switchStudyTab(fb.getAttribute('data-s'));
     });
   });
   // Init
@@ -1645,7 +1768,7 @@ function initTheme() {
 
 // ===== WEBDAV =====
 function readSyncData() {
-  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods','water','calorie','eatCats','countdowns'];
+  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs'];
   const d = {};
   keys.forEach(k => { d[k] = Store.get(k, null); });
   return d;
@@ -1689,13 +1812,16 @@ function mergeArrayById(localArr, remoteArr) {
 
 function mergeRecords(local, remote) {
   const result = {};
-  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant','periods','calorie','eatCats','countdowns'];
+  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant','periods','calorie','eatCats','countdowns','studyBook'];
   const allKeys = new Set([...Object.keys(local || {}), ...Object.keys(remote || {})]);
   for (const key of allKeys) {
     const loc = local ? local[key] : undefined;
     const rem = remote ? remote[key] : undefined;
     if (arrayKeys.includes(key) && Array.isArray(loc) && Array.isArray(rem)) {
       result[key] = mergeArrayById(loc, rem);
+    } else if (key === 'moodlogs' || key === 'expSubs') {
+      // 对象按日期/分类键浅合并，避免单端覆盖另一端的键
+      result[key] = Object.assign({}, loc || {}, rem || {});
     } else {
       result[key] = rem !== undefined ? rem : loc;
     }
@@ -1885,6 +2011,7 @@ function renderAll() {
   renderHabits(); renderHealth(); renderShopping(); renderColl();
   renderTopics(); renderMats(); renderCalendar(); renderEvents();
   renderFood(); renderFiles(); updateBadge(); updateNewsBadge(); updateDramaBadge();
+  renderMoodLogs();
 }
 
 // ===== BADGE =====
@@ -1945,7 +2072,7 @@ function renderYearBars() {
   setText('ybYearLabel', y + '年');
   setText('ybYearPct', Math.round(yPct) + '%');
   setText('ybYearDays', yDays);
-  setWidth('ybYearFill', yPct);
+  setDots('ybYearFill', yPct);
   // —— 月度 ——
   const mStart = new Date(y, m, 1);
   const mEnd = new Date(y, m + 1, 1);
@@ -1955,10 +2082,19 @@ function renderYearBars() {
   setText('ybMonLabel', (m + 1) + '月');
   setText('ybMonPct', Math.round(mPct) + '%');
   setText('ybMonDays', mDays);
-  setWidth('ybMonFill', mPct);
+  setDots('ybMonFill', mPct);
 }
 function setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; }
-function setWidth(id, pct) { const e = document.getElementById(id); if (e) e.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
+// 1 行 20 列点阵进度条：根据百分比点亮前 N 个圆点
+function setDots(id, pct) {
+  const e = document.getElementById(id);
+  if (!e) return;
+  const N = 20;
+  const on = Math.round(Math.max(0, Math.min(100, pct)) / 100 * N);
+  let h = '';
+  for (let i = 0; i < N; i++) h += '<span class="dot' + (i < on ? ' on' : '') + '"></span>';
+  e.innerHTML = h;
+}
 
 // ============================================================
 // PERIOD TRACKER (经期记录与预测)
@@ -2222,8 +2358,13 @@ function renderExpenses() {
   else if (expPeriod === 'year') list = e.filter(x => (x.date || '').startsWith(y));
   document.getElementById('expList').innerHTML = list.length === 0
     ? '<div class="emp"><i class="fas fa-coins"></i><p>该区间没有收支记录</p></div>'
-    : list.slice(0, 100).map(x => '<div class="cb" style="cursor:default"><div style="font-size:14px;font-weight:500;flex:1">' + (x.cat || '其他') + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.date || '') + ' ' + (x.note || '') + '</span></div><span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + '">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editExpense(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delExpense(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : list.slice(0, 100).map(x => {
+        const emo = isEmotional(x);
+        const catLabel = (x.cat || '其他') + (x.sub ? ' · ' + x.sub : '');
+        return '<div class="cb" style="cursor:default"><div style="font-size:14px;font-weight:500;flex:1">' + catLabel + (emo ? ' <span title="情绪化消费" style="font-size:13px">😰</span>' : '') + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.date || '') + ' ' + (x.note || '') + '</span></div><span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + '">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editExpense(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delExpense(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+      }).join('');
   renderExpTotals(e, today, ym, y);
+  renderEmotional();
   const b = Store.get('budget', 0);
   document.getElementById('budTotal').textContent = b ? '¥' + b : '未设置';
   if (b > 0) {
@@ -2248,23 +2389,21 @@ function renderExpTotals(e, today, ym, y) {
 function renderExpChart() {
   const e = Store.get('expenses', []);
   const m = document.getElementById('expMonth')?.value || new Date().toISOString().slice(0, 7);
-  const c = {};
-  e.filter(x => x.type === 'e' && (x.date || '').startsWith(m)).forEach(x => { c[x.cat || '其他'] = (c[x.cat || '其他'] || 0) + parseFloat(x.amt); });
+  const g = expGroupByLevel(e.filter(x => x.type === 'e' && (x.date || '').startsWith(m)), expMonthLevel);
   const ctx = document.getElementById('expChart');
   if (!ctx) return;
   if (charts.exp) charts.exp.destroy();
-  charts.exp = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A','#8C6BB0','#BAA0AA'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } }, title: { display: true, text: m + ' 支出分类', font: { size: 12 } } } } });
+  charts.exp = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } }, title: { display: true, text: m + (expMonthLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: 12 } }, tooltip: pctTooltip } } });
 }
 function renderAnnual() {
   const e = Store.get('expenses', []);
   const y = (document.getElementById('expYear')?.value || new Date().getFullYear()).toString();
   const inYear = e.filter(x => (x.date || '').startsWith(y));
-  const c = {};
-  inYear.filter(x => x.type === 'e').forEach(x => { c[x.cat || '其他'] = (c[x.cat || '其他'] || 0) + parseFloat(x.amt); });
+  const g = expGroupByLevel(inYear.filter(x => x.type === 'e'), expYearLevel);
   const ctx = document.getElementById('annChart');
   if (ctx) {
     if (charts.ann) charts.ann.destroy();
-    charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A','#8C6BB0','#BAA0AA'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } }, title: { display: true, text: y + ' 支出分类', font: { size: 12 } } } } });
+    charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } }, title: { display: true, text: y + (expYearLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: 12 } }, tooltip: pctTooltip } } });
   }
   const inc = expenseSum(inYear, 'i'), exp = expenseSum(inYear, 'e');
   const el = document.getElementById('annSummary');
@@ -2279,7 +2418,8 @@ function addExpense() {
   const a = parseFloat(document.getElementById('expAmt').value);
   if (!a || a <= 0) return toast('请输入有效金额');
   const e = Store.get('expenses', []);
-  e.unshift({ id: Date.now().toString(), amt: a, type: document.getElementById('expType').value, cat: document.getElementById('expCat').value, note: document.getElementById('expNote').value.trim() || '', date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
+  const now = Date.now();
+  e.unshift({ id: Date.now().toString(), amt: a, type: document.getElementById('expType').value, cat: document.getElementById('expCat').value, sub: document.getElementById('expSub').value || '', note: document.getElementById('expNote').value.trim() || '', date: new Date().toISOString().slice(0, 10), createdAt: now, updatedAt: now });
   Store.set('expenses', e);
   document.getElementById('expAmt').value = ''; document.getElementById('expNote').value = '';
   renderExpenses(); renderExpChart(); renderAnnual();
@@ -2292,12 +2432,13 @@ function editExpense(id) {
   const a = prompt('金额：', x.amt);
   if (a === null) return;
   const type = prompt('类型（e 支出 / i 收入）：', x.type || 'e');
-  const cat = prompt('分类：', x.cat || '其他');
+  const cat = prompt('一级分类：', x.cat || '其他');
+  const sub = prompt('二级分类（可留空）：', x.sub || '');
   const note = prompt('备注：', x.note || '');
   const date = prompt('日期 (YYYY-MM-DD)：', x.date || new Date().toISOString().slice(0, 10));
   const amt = parseFloat(a);
   if (!isNaN(amt) && amt > 0) {
-    x.amt = amt; x.type = (type || 'e').trim(); x.cat = cat || x.cat; x.note = note; x.date = date || x.date; x.updatedAt = Date.now();
+    x.amt = amt; x.type = (type || 'e').trim(); x.cat = cat || x.cat; x.sub = (sub || '').trim(); x.note = note; x.date = date || x.date; x.updatedAt = Date.now();
     Store.set('expenses', e); renderExpenses(); renderExpChart(); renderAnnual(); toast('✅ 已更新');
   }
 }
@@ -2464,10 +2605,11 @@ function renderCalendar() {
     const it = ds === t;
     const de = ev.filter(x => x.date === ds);
     const dayCd = cds.filter(x => x.ds === ds);
+    const ml = (Store.get('moodlogs', {}) || {})[ds];
     const dayStyle = it ? 'background:var(--primary);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center' : '';
     const dots = de.slice(0, 2).map(x => '<div onclick="event.stopPropagation();editEvent(\'' + x.id + '\')" style="font-size:10px;background:var(--primary);color:#fff;padding:1px 4px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer">' + x.title + '</div>').join('');
     const cdDots = dayCd.slice(0, 2).map(x => '<div onclick="event.stopPropagation();go(\'schedule\');switchSchedTab(\'cd\')" style="font-size:10px;color:#fff;padding:1px 4px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;background:' + x.color + '">' + x.name + '</div>').join('');
-    h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:8px;min-height:60px;font-size:13px"><div onclick="openEventForDate(\'' + ds + '\')" style="font-weight:600;margin-bottom:2px;cursor:pointer;' + dayStyle + '">' + i + '</div>' + dots + cdDots + ((de.length + dayCd.length) > 4 ? '<div style="font-size:10px;color:var(--text3)">+' + ((de.length + dayCd.length) - 4) + '更多</div>' : '') + '</div>';
+    h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:8px;min-height:60px;font-size:13px"><div onclick="openEventForDate(\'' + ds + '\')" style="font-weight:600;margin-bottom:2px;cursor:pointer;display:flex;align-items:center;gap:4px;' + dayStyle + '">' + i + (ml ? ' <span style="font-size:14px;line-height:1">' + ml.mood + '</span>' : '') + '</div>' + dots + cdDots + ((de.length + dayCd.length) > 4 ? '<div style="font-size:10px;color:var(--text3)">+' + ((de.length + dayCd.length) - 4) + '更多</div>' : '') + '</div>';
   }
   document.getElementById('calGrid').innerHTML = h;
 }
@@ -2610,7 +2752,7 @@ function switchSchedTab(s) {
   document.querySelectorAll('.sched-tab').forEach(el => el.style.display = 'none');
   const tab = document.getElementById('s-' + schedTab);
   if (tab) tab.style.display = 'block';
-  if (schedTab === 'cal') { renderCalendar(); renderEvents(); }
+  if (schedTab === 'cal') { renderCalendar(); renderEvents(); renderMoodLogs(); }
   if (schedTab === 'cd') { if (!window.__cdColor) { window.__cdColor = CD_COLORS[0].v; } renderCDColors(window.__cdColor); onCDCalType(); renderCountdowns(); }
 }
 function onCDCalType() {
@@ -3287,11 +3429,351 @@ function rmWant(idx) {
 }
 
 // ============================================================
+// 心情日志（日程内）
+// ============================================================
+const MOOD_EMOJIS = ['😊','🙂','😍','🥰','😎','🤔','😴','😢','😭','😡','🥳','😩','😱','🤒','💪','🌟'];
+let moodSel = '';
+let moodDate = '';
+function escHtml(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function getMoodlogs() { const m = Store.get('moodlogs', {}); return (m && typeof m === 'object' && !Array.isArray(m)) ? m : {}; }
+function openMoodModal() {
+  moodDate = document.getElementById('evDate')?.value || new Date().toISOString().slice(0, 10);
+  const cur = getMoodlogs()[moodDate];
+  moodSel = cur ? cur.mood : '';
+  document.getElementById('moodText').value = cur ? (cur.text || '') : '';
+  document.getElementById('moodCount').textContent = (cur ? (cur.text || '').length : 0) + '/300';
+  renderMoodGrid();
+  document.getElementById('moodMask').classList.remove('hide');
+}
+function closeMoodModal() { document.getElementById('moodMask').classList.add('hide'); }
+function renderMoodGrid() {
+  document.getElementById('moodGrid').innerHTML = MOOD_EMOJIS.map(e => '<div class="mood-cell' + (e === moodSel ? ' active' : '') + '" onclick="selectMood(\'' + e + '\')">' + e + '</div>').join('');
+}
+function selectMood(e) { moodSel = e; renderMoodGrid(); }
+function saveMoodLog() {
+  const text = document.getElementById('moodText').value.trim();
+  if (!moodSel) return toast('请选择一个心情符号');
+  const logs = getMoodlogs();
+  logs[moodDate] = { mood: moodSel, text, date: moodDate, updatedAt: Date.now() };
+  Store.set('moodlogs', logs);
+  closeMoodModal(); renderMoodLogs(); renderCalendar(); toast('✅ 日志已保存');
+}
+function renderMoodLogs() {
+  const el = document.getElementById('moodLogList');
+  if (!el) return;
+  const logs = getMoodlogs();
+  const dates = Object.keys(logs).sort((a, b) => b.localeCompare(a));
+  if (dates.length === 0) { el.innerHTML = '<div class="emp" style="padding:20px"><i class="fas fa-book-open"></i><p>还没有日志，点右上角「写日志」记录今天的心情吧</p></div>'; return; }
+  el.innerHTML = dates.slice(0, 10).map(d => {
+    const x = logs[d];
+    return '<div class="mood-item"><span class="mood-emoji">' + (x.mood || '🙂') + '</span><div class="mood-body"><div class="mood-text">' + (x.text ? escHtml(x.text) : '<span style="color:var(--text3)">（只记了心情，没有文字）</span>') + '</div><div class="mood-date">' + d + '</div></div><span class="mood-del" onclick="delMoodLog(\'' + d + '\')"><i class="fas fa-times"></i></span></div>';
+  }).join('');
+}
+function delMoodLog(d) {
+  if (!confirm('删除 ' + d + ' 的日志？')) return;
+  const logs = getMoodlogs(); delete logs[d]; Store.set('moodlogs', logs);
+  renderMoodLogs(); renderCalendar(); toast('已删除');
+}
+
+// ============================================================
+// 学习模块
+// ============================================================
+const STUDY_CN = [
+  { k:'成语', w:'守株待兔', py:'shǒu zhū dài tù', def:'比喻死守狭隘经验、不知变通，或妄想不劳而获、坐享其成。', src:'《韩非子》' },
+  { k:'成语', w:'画蛇添足', py:'huà shé tiān zú', def:'比喻做了多余的事，非但无益，反而不合适。', src:'《战国策》' },
+  { k:'成语', w:'井底之蛙', py:'jǐng dǐ zhī wā', def:'比喻见识狭小、目光短浅的人。', src:'《庄子》' },
+  { k:'成语', w:'杯弓蛇影', py:'bēi gōng shé yǐng', def:'比喻因疑神疑鬼而自惊自怕、虚惊一场。', src:'《风俗通义》' },
+  { k:'成语', w:'卧薪尝胆', py:'wò xīn cháng dǎn', def:'形容人刻苦自励、发愤图强，以图东山再起。', src:'《史记》' },
+  { k:'成语', w:'闻鸡起舞', py:'wén jī qǐ wǔ', def:'比喻有志者及时奋发、勤学苦练。', src:'《晋书》' },
+  { k:'成语', w:'破釜沉舟', py:'pò fǔ chén zhōu', def:'比喻下定决心，不顾一切干到底。', src:'《史记》' },
+  { k:'成语', w:'指鹿为马', py:'zhǐ lù wéi mǎ', def:'比喻故意颠倒黑白、混淆是非。', src:'《史记》' },
+  { k:'成语', w:'塞翁失马', py:'sài wēng shī mǎ', def:'比喻坏事在一定条件下可以变为好事（焉知非福）。', src:'《淮南子》' },
+  { k:'成语', w:'愚公移山', py:'yú gōng yí shān', def:'比喻坚持不懈、不畏艰难，终能成功。', src:'《列子》' },
+  { k:'成语', w:'叶公好龙', py:'yè gōng hào lóng', def:'比喻口头爱好某事物，实际并非真爱。', src:'刘向《新序》' },
+  { k:'成语', w:'滥竽充数', py:'làn yú chōng shù', def:'比喻无真才实学的人混在行家里充数。', src:'《韩非子》' },
+  { k:'成语', w:'刻舟求剑', py:'kè zhōu qiú jiàn', def:'比喻拘泥成法、不知变通，办事刻板。', src:'《吕氏春秋》' },
+  { k:'成语', w:'拔苗助长', py:'bá miáo zhù zhǎng', def:'比喻违反事物发展规律、急于求成反而坏事。', src:'《孟子》' },
+  { k:'成语', w:'亡羊补牢', py:'wáng yáng bǔ láo', def:'比喻出了问题及时补救，免得再受损失。', src:'《战国策》' },
+  { k:'成语', w:'自相矛盾', py:'zì xiāng máo dùn', def:'比喻言行前后抵触、互不一致。', src:'《韩非子》' },
+  { k:'成语', w:'狐假虎威', py:'hú jiǎ hǔ wēi', def:'比喻借别人的势力来欺压、吓唬人。', src:'《战国策》' },
+  { k:'成语', w:'鹬蚌相争', py:'yù bàng xiāng zhēng', def:'比喻双方相持不下，使第三者从中得利。', src:'《战国策》' },
+  { k:'成语', w:'朝三暮四', py:'zhāo sān mù sì', def:'原指用手段蒙骗，后多指反复无常、变化不定。', src:'《庄子》' },
+  { k:'成语', w:'水滴石穿', py:'shuǐ dī shí chuān', def:'比喻只要有恒心、坚持不懈，事情就能成功。', src:'《汉书》' },
+  { k:'成语', w:'一鸣惊人', py:'yī míng jīng rén', def:'比喻平时默默无闻，一下子做出惊人的成绩。', src:'《史记》' },
+  { k:'成语', w:'程门立雪', py:'chéng mén lì xuě', def:'比喻尊敬师长、诚心求教。', src:'《宋史》' },
+  { k:'成语', w:'举一反三', py:'jǔ yī fǎn sān', def:'从一件事类推而知道许多事，形容善于推理、触类旁通。', src:'《论语》' },
+  { k:'成语', w:'锲而不舍', py:'qiè ér bù shě', def:'比喻有恒心、有毅力，坚持不懈。', src:'《荀子·劝学》' },
+  { k:'成语', w:'任重道远', py:'rèn zhòng dào yuǎn', def:'担子沉重、路途遥远，比喻责任重大、长期奋斗。', src:'《论语》' },
+  { k:'词汇', w:'沆瀣一气', py:'hàng xiè yī qì', def:'比喻臭味相投的人勾结在一起。', src:'宋·钱易《南部新书》' },
+  { k:'词汇', w:'饕餮', py:'tāo tiè', def:'传说中贪食的恶兽，比喻贪吃或贪婪的人。', src:'《山海经》' },
+  { k:'词汇', w:'魑魅魍魉', py:'chī mèi wǎng liǎng', def:'泛指各种各样的妖魔鬼怪、坏人。', src:'《左传》' },
+  { k:'词汇', w:'貔貅', py:'pí xiū', def:'传说中凶猛的瑞兽，比喻勇猛的军队，民间视为招财之物。', src:'《史记》' },
+  { k:'词汇', w:'踟蹰', py:'chí chú', def:'心里犹豫、要走不走的样子。', src:'《诗经》' },
+  { k:'词汇', w:'蹉跎', py:'cuō tuó', def:'光阴白白过去，虚度岁月。', src:'晋·阮籍' },
+  { k:'词汇', w:'龃龉', py:'jǔ yǔ', def:'上下牙齿对不齐，比喻意见不合、互相抵触。', src:'唐·韩愈' },
+  { k:'词汇', w:'觊觎', py:'jì yú', def:'非分的企图或希望，含贬义。', src:'《左传》' },
+  { k:'词汇', w:'缱绻', py:'qiǎn quǎn', def:'情意深厚、缠绵，难分难舍。', src:'《诗经》' },
+  { k:'词汇', w:'氤氲', py:'yīn yūn', def:'形容烟、云气浓郁弥漫的样子。', src:'《易经》' },
+  { k:'词汇', w:'纨绔', py:'wán kù', def:'旧指富贵人家子弟所穿的细绢裤，借指只知享受、不务正业的富家子弟。', src:'《汉书》' },
+  { k:'词汇', w:'囹圄', py:'líng yǔ', def:'监狱、牢狱。', src:'《礼记》' },
+  { k:'词汇', w:'葳蕤', py:'wēi ruí', def:'草木茂盛、枝叶下垂的样子。', src:'《楚辞》' },
+  { k:'诗词', w:'床前明月光，疑是地上霜。举头望明月，低头思故乡。', py:'chuáng qián míng yuè guāng，yí shì dì shàng shuāng。jǔ tóu wàng míng yuè，dī tóu sī gù xiāng。', def:'明亮的月光洒在床前，仿佛地上结了一层霜；抬头望月，不由得低头思念起故乡。', src:'李白《静夜思》' },
+  { k:'诗词', w:'红豆生南国，春来发几枝。愿君多采撷，此物最相思。', py:'hóng dòu shēng nán guó，chūn lái fā jǐ zhī。yuàn jūn duō cǎi xié，cǐ wù zuì xiāng sī。', def:'红豆生长在南国，春天抽出新枝；愿你多多采撷，它最是寄托相思之物。', src:'王维《相思》' },
+  { k:'诗词', w:'海上生明月，天涯共此时。', py:'hǎi shàng shēng míng yuè，tiān yá gòng cǐ shí。', def:'辽阔的海上升起一轮明月，远在天涯的人此刻与你共赏同一轮月。', src:'张九龄《望月怀远》' },
+  { k:'诗词', w:'会当凌绝顶，一览众山小。', py:'huì dāng líng jué dǐng，yī lǎn zhòng shān xiǎo。', def:'定要登上最高峰，俯瞰群山都显得渺小，喻志向远大。', src:'杜甫《望岳》' },
+  { k:'诗词', w:'大漠孤烟直，长河落日圆。', py:'dà mò gū yān zhí，cháng hé luò rì yuán。', def:'大漠中孤烟笔直升起，长河之上落日浑圆，描绘塞外苍茫壮阔之景。', src:'王维《使至塞上》' },
+  { k:'诗词', w:'春风又绿江南岸，明月何时照我还。', py:'chūn fēng yòu lǜ jiāng nán àn，míng yuè hé shí zhào wǒ huán。', def:'春风又吹绿了江南两岸，明月啊，何时才能照着我回到故乡。', src:'王安石《泊船瓜洲》' },
+  { k:'诗词', w:'欲穷千里目，更上一层楼。', py:'yù qióng qiān lǐ mù，gèng shàng yī céng lóu。', def:'想看得更远，就要再登上一层楼，喻不断进取才能有更开阔的视野。', src:'王之涣《登鹳雀楼》' },
+  { k:'现代诗', w:'面朝大海，春暖花开', py:'miàn cháo dà hǎi，chūn nuǎn huā kāi', def:'诗人向往一种朴素、自由、温暖而充满希望的生活。', src:'海子《面朝大海，春暖花开》' },
+  { k:'现代诗', w:'黑夜给了我黑色的眼睛，我却用它寻找光明', py:'hēi yè gěi le wǒ hēi sè de yǎn jing，wǒ què yòng tā xún zhǎo guāng míng', def:'在黑暗中依然执著地追求光明与希望，是「一代人」的精神写照。', src:'顾城《一代人》' },
+  { k:'现代诗', w:'轻轻的我走了，正如我轻轻的来', py:'qīng qīng de wǒ zǒu le，zhèng rú wǒ qīng qīng de lái', def:'以轻柔舒缓的笔调，写出离别康桥时的依恋与淡淡哀愁。', src:'徐志摩《再别康桥》' },
+  { k:'现代诗', w:'卑鄙是卑鄙者的通行证，高尚是高尚者的墓志铭', py:'bēi bǐ shì bēi bǐ zhě de tōng xíng zhèng，gāo shàng shì gāo shàng zhě de mù zhì míng', def:'对时代困境的冷峻发问：卑劣者畅行无阻，高洁者却受难。', src:'北岛《回答》' },
+  { k:'现代诗', w:'我如果爱你，绝不像攀援的凌霄花，借你的高枝炫耀自己', py:'wǒ rú guǒ ài nǐ，jué bù xiàng pān yuán de líng xiāo huā，jiè nǐ de gāo zhī xuàn yào zì jǐ', def:'表达独立、平等、不依附的爱情观。', src:'舒婷《致橡树》' }
+];
+const STUDY_EN = [
+  { w:'abundant', py:'/əˈbʌndənt/', pos:'adj.', def:'丰富的，充裕的', src:'四六级' },
+  { w:'accelerate', py:'/əkˈseləreɪt/', pos:'v.', def:'使加快，促进', src:'四六级' },
+  { w:'accomplish', py:'/əˈkʌmplɪʃ/', pos:'v.', def:'完成，实现', src:'四六级' },
+  { w:'accurate', py:'/ˈækjərət/', pos:'adj.', def:'准确的，精确的', src:'四六级' },
+  { w:'acquire', py:'/əˈkwaɪər/', pos:'v.', def:'获得，习得', src:'四六级' },
+  { w:'adequate', py:'/ˈædɪkwət/', pos:'adj.', def:'足够的，适当的', src:'四六级' },
+  { w:'advocate', py:'/ˈædvəkeɪt/', pos:'v.', def:'提倡，主张', src:'考研' },
+  { w:'arbitrary', py:'/ˈɑːrbɪtreri/', pos:'adj.', def:'任意的，武断的', src:'考研' },
+  { w:'articulate', py:'/ɑːrˈtɪkjuleɪt/', pos:'v.', def:'清晰有力地表达', src:'专八' },
+  { w:'assess', py:'/əˈses/', pos:'v.', def:'评估，评定', src:'四六级' },
+  { w:'attribute', py:'/əˈtrɪbjuːt/', pos:'v.', def:'把…归因于', src:'考研' },
+  { w:'conscious', py:'/ˈkɑːnʃəs/', pos:'adj.', def:'意识到的，清醒的', src:'四六级' },
+  { w:'consecutive', py:'/kənˈsekjətɪv/', pos:'adj.', def:'连续的，连贯的', src:'考研' },
+  { w:'constitute', py:'/ˈkɑːnstɪtuːt/', pos:'v.', def:'构成，组成', src:'考研' },
+  { w:'controversial', py:'/ˌkɑːntrəˈvɜːrʃl/', pos:'adj.', def:'有争议的', src:'考研' },
+  { w:'crucial', py:'/ˈkruːʃl/', pos:'adj.', def:'至关重要的，关键性的', src:'四六级' },
+  { w:'deliberate', py:'/dɪˈlɪbərət/', pos:'adj.', def:'故意的；深思熟虑的', src:'考研' },
+  { w:'demonstrate', py:'/ˈdemənstreɪt/', pos:'v.', def:'证明；演示，示范', src:'四六级' },
+  { w:'diminish', py:'/dɪˈmɪnɪʃ/', pos:'v.', def:'减少，削弱', src:'考研' },
+  { w:'diverse', py:'/daɪˈvɜːrs/', pos:'adj.', def:'多样的，不同的', src:'四六级' },
+  { w:'eliminate', py:'/ɪˈlɪmɪneɪt/', pos:'v.', def:'消除，淘汰', src:'考研' },
+  { w:'enhance', py:'/ɪnˈhæns/', pos:'v.', def:'提高，增强', src:'四六级' },
+  { w:'fundamental', py:'/ˌfʌndəˈmentl/', pos:'adj.', def:'基本的，根本的', src:'四六级' },
+  { w:'hypothesis', py:'/haɪˈpɑːθəsɪs/', pos:'n.', def:'假说，假设', src:'考研' },
+  { w:'implement', py:'/ˈɪmplɪment/', pos:'v.', def:'实施，执行', src:'考研' },
+  { w:'inevitably', py:'/ɪnˈevɪtəbli/', pos:'adv.', def:'不可避免地', src:'考研' },
+  { w:'phenomenon', py:'/fəˈnɑːmɪnən/', pos:'n.', def:'现象', src:'四六级' },
+  { w:'profound', py:'/prəˈfaʊnd/', pos:'adj.', def:'深刻的，渊博的', src:'考研' },
+  { w:'subsequent', py:'/ˈsʌbsɪkwənt/', pos:'adj.', def:'随后的，后来的', src:'考研' },
+  { w:'sustain', py:'/səˈsteɪn/', pos:'v.', def:'保持，维持；支撑', src:'考研' },
+  { w:'tremendous', py:'/trəˈmendəs/', pos:'adj.', def:'巨大的，极大的', src:'四六级' },
+  { w:'undermine', py:'/ˌʌndərˈmaɪn/', pos:'v.', def:'逐渐削弱，暗中破坏', src:'考研' },
+  { w:'vulnerable', py:'/ˈvʌlnərəbl/', pos:'adj.', def:'易受伤害的，脆弱的', src:'考研' },
+  { w:'whereas', py:'/ˌwerˈæz/', pos:'conj.', def:'然而，鉴于', src:'四六级' },
+  { w:'compulsory', py:'/kəmˈpʌlsəri/', pos:'adj.', def:'强制的，义务的', src:'专八' },
+  { w:'discrepancy', py:'/dɪˈskrepənsi/', pos:'n.', def:'差异，不一致', src:'专八' },
+  { w:'imminent', py:'/ˈɪmɪnənt/', pos:'adj.', def:'即将发生的，逼近的', src:'专八' },
+  { w:'intricate', py:'/ˈɪntrɪkət/', pos:'adj.', def:'错综复杂的，精细的', src:'专八' },
+  { w:'lucrative', py:'/ˈluːkrətɪv/', pos:'adj.', def:'获利多的，赚钱的', src:'专八' },
+  { w:'meticulous', py:'/məˈtɪkjələs/', pos:'adj.', def:'一丝不苟的，细致的', src:'专八' }
+];
+let studyTab = 'cn';
+function switchStudyTab(s) {
+  studyTab = s || 'cn';
+  document.querySelectorAll('.study-tab').forEach(el => el.style.display = 'none');
+  const tab = document.getElementById('s-' + studyTab);
+  if (tab) tab.style.display = 'block';
+  renderStudy();
+}
+function renderStudy() {
+  if (studyTab === 'cn') renderCn();
+  else if (studyTab === 'en') renderEn();
+  else renderBook();
+}
+function cnState() {
+  let s = Store.get('studyCn', null);
+  const daily = parseInt(todayStr().replace(/-/g, ''), 10) % STUDY_CN.length;
+  if (!s || s.date !== todayStr()) { s = { date: todayStr(), idx: daily, seen: [daily] }; Store.set('studyCn', s); }
+  if (!Array.isArray(s.seen)) s.seen = [s.idx];
+  return s;
+}
+function renderCn() {
+  const s = cnState();
+  const it = STUDY_CN[s.idx];
+  if (!it) return;
+  document.getElementById('cnKind').textContent = it.k;
+  document.getElementById('cnMain').textContent = it.w;
+  document.getElementById('cnPy').textContent = it.py || '';
+  document.getElementById('cnDef').textContent = it.def || '';
+  document.getElementById('cnSrc').textContent = it.src ? '—— ' + it.src : '';
+  document.getElementById('cnCount').textContent = '今日已看 ' + s.seen.length + ' 个（每日固定一个，可切换随机）';
+}
+function switchCn() {
+  const s = cnState();
+  const pool = STUDY_CN.map((_, i) => i).filter(i => !s.seen.includes(i));
+  const idx = pool.length ? pool[Math.floor(Math.random() * pool.length)] : Math.floor(Math.random() * STUDY_CN.length);
+  s.idx = idx; if (!s.seen.includes(idx)) s.seen.push(idx);
+  Store.set('studyCn', s); renderCn();
+}
+function enState() {
+  let s = Store.get('studyEn', null);
+  const daily = parseInt(todayStr().replace(/-/g, ''), 10) % STUDY_EN.length;
+  if (!s || s.date !== todayStr()) { s = { date: todayStr(), idx: daily, seen: [daily] }; Store.set('studyEn', s); }
+  if (!Array.isArray(s.seen)) s.seen = [s.idx];
+  if (!s.seen.includes(s.idx)) s.seen.push(s.idx);
+  return s;
+}
+function renderEn() {
+  const s = enState();
+  const it = STUDY_EN[s.idx];
+  if (!it) return;
+  document.getElementById('enKind').textContent = it.src || '考研';
+  document.getElementById('enMain').textContent = it.w;
+  document.getElementById('enPy').textContent = it.py || '';
+  document.getElementById('enDef').textContent = (it.pos ? it.pos + ' ' : '') + (it.def || '');
+  document.getElementById('enSrc').textContent = '';
+  document.getElementById('enCount').textContent = '今日已背 ' + s.seen.length + ' 个单词';
+}
+function switchEn() {
+  const s = enState();
+  const pool = STUDY_EN.map((_, i) => i).filter(i => !s.seen.includes(i));
+  const idx = pool.length ? pool[Math.floor(Math.random() * pool.length)] : Math.floor(Math.random() * STUDY_EN.length);
+  s.idx = idx; if (!s.seen.includes(idx)) s.seen.push(idx);
+  Store.set('studyEn', s); renderEn();
+}
+function getBook() { const b = Store.get('studyBook', []); return Array.isArray(b) ? b : []; }
+function addToBook(item) {
+  const b = getBook();
+  if (b.some(x => x.w === item.w && x.kind === item.kind)) return toast('已在积累本里了');
+  b.unshift(Object.assign({ id: Date.now().toString(), updatedAt: Date.now() }, item));
+  Store.set('studyBook', b);
+  toast('✅ 已加入积累本');
+  if (studyTab === 'book') renderBook();
+}
+function addCnToBook() {
+  const s = cnState(); const it = STUDY_CN[s.idx];
+  if (!it) return;
+  addToBook({ kind: 'cn', tag: it.k, w: it.w, py: it.py || '', def: it.def || '', src: it.src || '' });
+}
+function addEnToBook() {
+  const s = enState(); const it = STUDY_EN[s.idx];
+  if (!it) return;
+  addToBook({ kind: 'en', tag: it.src || '考研', w: it.w, py: it.py || '', def: (it.pos ? it.pos + ' ' : '') + (it.def || ''), src: '' });
+}
+function renderBook() {
+  const b = getBook();
+  const el = document.getElementById('bookList');
+  if (!el) return;
+  if (b.length === 0) { el.innerHTML = '<div class="emp" style="padding:20px"><i class="fas fa-book"></i><p>积累本还是空的，去「中文/英语积累」里把喜欢的内容加进来吧</p></div>'; return; }
+  el.innerHTML = b.map(x => '<div class="book-item"><span class="book-tag">' + (x.tag || (x.kind === 'cn' ? '中文' : '英语')) + '</span><div class="book-main"><div class="book-t">' + escHtml(x.w) + (x.py ? ' <span style="font-size:12px;color:var(--accent);font-weight:400">' + escHtml(x.py) + '</span>' : '') + '</div><div class="book-s">' + escHtml(x.def) + (x.src ? ' —— ' + escHtml(x.src) : '') + '</div></div><span class="book-x" onclick="delBookItem(\'' + x.id + '\')"><i class="fas fa-times"></i></span></div>').join('');
+}
+function delBookItem(id) { Store.set('studyBook', getBook().filter(x => x.id !== id)); renderBook(); }
+function clearBook() { if (!confirm('清空积累本？')) return; Store.set('studyBook', []); renderBook(); toast('已清空'); }
+
+// ============================================================
+// 记账：二级分类
+// ============================================================
+const EXP_SUBS_DEFAULT = {
+  '餐饮': ['早餐','午餐','晚餐','零食','饮品','果蔬','生鲜','粮油调味','甜品','外卖'],
+  '交通': ['公交地铁','打车','高铁火车','飞机','加油','停车','共享单车'],
+  '购物': ['服饰','数码','美妆','日用品','家居','鞋包'],
+  '娱乐': ['电影','演出','游戏','会员','旅游','健身'],
+  '学习': ['书籍','课程','文具','考试','培训'],
+  '医疗': ['门诊','药品','体检','牙科'],
+  '住房': ['房租','物业','水电燃气','维修'],
+  '薪资': [],
+  '其他': []
+};
+function getExpSubs() {
+  let s = Store.get('expSubs', null);
+  if (!s || typeof s !== 'object' || Array.isArray(s)) { s = JSON.parse(JSON.stringify(EXP_SUBS_DEFAULT)); Store.set('expSubs', s); }
+  Object.keys(EXP_SUBS_DEFAULT).forEach(k => { if (!Array.isArray(s[k])) s[k] = EXP_SUBS_DEFAULT[k].slice(); });
+  return s;
+}
+function onExpCatChange() { fillExpSubs(); }
+function fillExpSubs() {
+  const catEl = document.getElementById('expCat');
+  if (!catEl) return;
+  const cat = catEl.value;
+  const subs = getExpSubs()[cat] || [];
+  const sel = document.getElementById('expSub');
+  let h = '<option value="">（不选二级）</option>';
+  subs.forEach(s => { h += '<option value="' + s + '">' + s + '</option>'; });
+  sel.innerHTML = h;
+}
+function manageExpSubs() {
+  const cat = document.getElementById('expCat').value;
+  const subs = getExpSubs();
+  const op = prompt('「' + cat + '」二级分类管理：\n输入新名称 = 添加\n输入 "del:名称" = 删除\n当前：' + (subs[cat] && subs[cat].length ? subs[cat].join('、') : '（无）'), '');
+  if (!op) return;
+  if (op.startsWith('del:')) {
+    const n = op.slice(4).trim();
+    subs[cat] = (subs[cat] || []).filter(s => s !== n);
+    Store.set('expSubs', subs); fillExpSubs(); toast('已删除');
+  } else {
+    const n = op.trim();
+    if (!n) return;
+    if (!subs[cat]) subs[cat] = [];
+    if (subs[cat].includes(n)) return toast('已存在');
+    subs[cat].push(n);
+    Store.set('expSubs', subs); fillExpSubs();
+    document.getElementById('expSub').value = n;
+    toast('已添加二级分类「' + n + '」');
+  }
+}
+
+// ============================================================
+// 记账：饼图分级 + 情绪化消费
+// ============================================================
+const EXP_COLORS = ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A','#8C6BB0','#BAA0AA','#56CCF2','#F2994A','#BB6BD9','#27AE60','#E67E22','#2E86C1','#7DCEA0','#C0392B'];
+const EMOTIONAL_KEYWORDS = ['奶茶','咖啡','星巴克','甜品','蛋糕','巧克力','零食','薯片','冰淇淋','雪糕','酒','啤酒','盲盒','抽卡','直播','游戏','电影','ktv','KTV','按摩','spa','SPA','冲动','心情','难过','安慰','礼物','剁手','夜宵','烧烤','火锅','炸鸡','外卖','口红','包包','演唱会','周边','手办','彩票','赌博','双十一','双11','618','直播间','种草','拔草'];
+function isEmotional(x) {
+  if (!x || x.type !== 'e') return false;
+  const txt = (x.note || '') + ' ' + (x.sub || '') + ' ' + (x.cat || '');
+  for (const k of EMOTIONAL_KEYWORDS) if (txt.indexOf(k) > -1) return true;
+  if (x.cat === '娱乐') return true;
+  if (x.cat === '餐饮' && ['零食','饮品','甜品','外卖'].includes(x.sub)) return true;
+  // 深夜时段（22 点后或凌晨 6 点前）按实际购买时间判断
+  const ts = x.createdAt || x.updatedAt;
+  if (ts) { const h = new Date(ts).getHours(); if (h >= 22 || h < 6) return true; }
+  return false;
+}
+function renderEmotional() {
+  const el = document.getElementById('emoStat');
+  const listEl = document.getElementById('emoList');
+  if (!el || !listEl) return;
+  const e = Store.get('expenses', []);
+  const ym = new Date().toISOString().slice(0, 7);
+  const monthExp = e.filter(x => x.type === 'e' && (x.date || '').startsWith(ym));
+  const emo = monthExp.filter(isEmotional);
+  const total = monthExp.reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
+  const emoTotal = emo.reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
+  const pct = total ? (emoTotal / total * 100) : 0;
+  el.innerHTML = '<div style="display:flex;gap:18px;flex-wrap:wrap">' +
+    '<div><span style="font-size:12px;color:var(--text3)">本月情绪化消费</span><div style="font-size:22px;font-weight:700;color:var(--d)">¥' + emoTotal.toFixed(2) + '</div></div>' +
+    '<div><span style="font-size:12px;color:var(--text3)">笔数</span><div style="font-size:22px;font-weight:700">' + emo.length + '</div></div>' +
+    '<div><span style="font-size:12px;color:var(--text3)">占本月支出</span><div style="font-size:22px;font-weight:700;color:var(--alert)">' + pct.toFixed(1) + '%</div></div>' +
+    '<div style="font-size:12px;color:var(--text3);align-self:flex-end">按关键词 / 娱乐分类 / 深夜时段自动识别</div></div>';
+  if (emo.length === 0) { listEl.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:6px 0">本月暂无情绪化消费，继续保持～</div>'; return; }
+  listEl.innerHTML = emo.slice(0, 8).map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-size:13px">' + (x.cat || '其他') + (x.sub ? ' · ' + x.sub : '') + (x.note ? ' <span style="color:var(--text3)">' + escHtml(x.note) + '</span>' : '') + '</div><span style="font-weight:600;color:var(--d)">-¥' + parseFloat(x.amt).toFixed(2) + '</span><span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.date || '') + '</span></div>').join('');
+}
+function expGroupByLevel(arr, level) {
+  const c = {};
+  arr.forEach(x => {
+    const key = level === 'l2' ? ((x.cat || '其他') + (x.sub ? '·' + x.sub : '')) : (x.cat || '其他');
+    c[key] = (c[key] || 0) + (parseFloat(x.amt) || 0);
+  });
+  const entries = Object.entries(c).sort((a, b) => b[1] - a[1]);
+  return { labels: entries.map(e => e[0]), values: entries.map(e => e[1]) };
+}
+const pctTooltip = { callbacks: { label: function(ctx) { const total = ctx.dataset.data.reduce((a, b) => a + b, 0); const v = ctx.parsed; const p = total ? (v / total * 100).toFixed(1) : 0; return ' ' + ctx.label + '：¥' + v.toFixed(2) + '（' + p + '%）'; } } };
+let expMonthLevel = 'l1';
+let expYearLevel = 'l1';
+
+// 初始化二级分类下拉
+onExpCatChange();
+
+// ============================================================
 // DATA MANAGEMENT
 // ============================================================
 function exportData() {
   const d = {};
-  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant'].forEach(k => { d[k] = Store.get(k, null); });
+  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs'].forEach(k => { d[k] = Store.get(k, null); });
   const b = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = '工作台备份_' + new Date().toISOString().slice(0, 10) + '.json'; a.click(); toast('✅ 已导出');
 }
@@ -3304,8 +3786,8 @@ function importData(i) {
 function clearData() {
   if (!confirm('确定清空所有数据？\n建议先导出备份！')) return;
   if (!confirm('再次确认！')) return;
-  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','hotFav','dramaWant'].forEach(k => Store.set(k, []));
-  Store.set('budget', 0); Store.set('targetWeight', 0);
+  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook'].forEach(k => Store.set(k, []));
+  Store.set('budget', 0); Store.set('targetWeight', 0); Store.set('expSubs', {});
   renderAll(); toast('🗑️ 已清空');
 }
 </script>
