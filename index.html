@@ -231,6 +231,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <div class="card"><div class="card-hd"><h3>🔥 习惯打卡</h3><span class="btn-sm btn-o" onclick="go('life')">查看全部 →</span></div><div id="homeHabits"></div></div>
         </div>
         <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📅 今日日程</h3><span class="btn-sm btn-o" onclick="go('schedule')">查看全部 →</span></div><div id="homeEvents"></div></div>
+        <div class="card" id="homePeriod" style="margin-top:16px;display:none;border-left:4px solid var(--primary);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>🩸 经期提醒</h3><span class="btn-sm btn-o" onclick="go('life')">记录 / 详情 →</span></div><div id="homePeriodTip" style="font-size:14px;line-height:1.7"></div></div>
       </div>
 
       <!-- TASKS -->
@@ -258,6 +259,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb" data-t="health">❤️ 健康</span>
           <span class="fb" data-t="shopping">🛒 购物</span>
           <span class="fb" data-t="collection">📚 书影音</span>
+          <span class="fb" data-t="period">🩸 经期</span>
         </div>
         <div class="life-tab" id="l-expense">
           <div class="g2"><div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div><div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01"><select class="in" id="expType" style="flex:0 0 auto;width:80px"><option value="e">支出</option><option value="i">收入</option></select></div><div class="ig"><select class="in" id="expCat"><option value="餐饮">🍜 餐饮</option><option value="交通">🚗 交通</option><option value="购物">🛍️ 购物</option><option value="娱乐">🎮 娱乐</option><option value="学习">📚 学习</option><option value="医疗">💊 医疗</option><option value="住房">🏠 住房</option><option value="薪资">💰 薪资</option><option value="其他">📦 其他</option></select><input class="in" id="expNote" placeholder="备注"><button class="btn btn-p" onclick="addExpense()"><i class="fas fa-plus"></i></button></div><div style="margin-top:8px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number"><button class="btn-sm btn-a" onclick="setBudget()">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div></div><div class="card"><div class="card-hd"><h3>📊 月度分析</h3><div style="margin-left:auto"><input type="month" id="expMonth" onchange="renderExpChart()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"></div></div><div style="height:200px"><canvas id="expChart"></canvas></div></div></div>
@@ -268,6 +270,18 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="life-tab" id="l-health" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><button class="btn btn-p" onclick="addHealth()">记录</button></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3>📈 体重趋势</h3></div><div style="height:200px"><canvas id="weightChart"></canvas></div></div></div><div class="card"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="healthList"></div></div></div>
         <div class="life-tab" id="l-shopping" style="display:none"><div class="card"><div class="card-hd"><h3>🛒 购物清单</h3></div><div class="ig"><input class="in" id="shopIn" placeholder="添加购物项..." onkeydown="if(event.key==='Enter') addShop()"><select class="in" id="shopCat" style="flex:0 0 auto;width:100px"><option value="食品">食品</option><option value="日用品">日用品</option><option value="服饰">服饰</option><option value="数码">数码</option><option value="其他">其他</option></select><button class="btn btn-p" onclick="addShop()"><i class="fas fa-plus"></i></button></div><div id="shopList"></div></div></div>
         <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="card-hd"><h3>📚 书影音收藏</h3><button class="btn-sm btn-p" onclick="addColl()"><i class="fas fa-plus"></i> 添加</button></div><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="music">🎵 音乐</option></select></div><div id="collList" style="margin-top:8px"></div></div></div>
+        <div class="life-tab" id="l-period" style="display:none">
+          <div class="g2">
+            <div class="card"><div class="card-hd"><h3>🩸 记录经期</h3></div>
+              <div class="ig"><input class="in" id="perStart" type="date" style="flex:1"><input class="in" id="perLen" type="number" min="1" placeholder="天数" style="flex:0 0 auto;width:72px;margin-left:6px"></div>
+              <div style="font-size:12px;color:var(--text3);margin-top:6px">或填结束日（自动算天数）：<input class="in" id="perEnd" type="date" style="display:inline-block;width:auto;margin-left:4px"></div>
+              <div class="ig" style="margin-top:10px"><input class="in" id="perNote" placeholder="备注（如量/身体感受）"><button class="btn btn-p" onclick="addPeriod()"><i class="fas fa-plus"></i> 记录</button></div>
+            </div>
+            <div class="card"><div class="card-hd"><h3>🔮 周期预测</h3></div><div id="perPredict"></div></div>
+          </div>
+          <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="periodList"></div></div>
+        </div>
+
       </div>
 
       <!-- SCHEDULE -->
@@ -526,7 +540,7 @@ function initTheme() {
 
 // ===== WEBDAV =====
 function readSyncData() {
-  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant'];
+  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods'];
   const d = {};
   keys.forEach(k => { d[k] = Store.get(k, null); });
   return d;
@@ -570,7 +584,7 @@ function mergeArrayById(localArr, remoteArr) {
 
 function mergeRecords(local, remote) {
   const result = {};
-  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant'];
+  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant','periods'];
   const allKeys = new Set([...Object.keys(local || {}), ...Object.keys(remote || {})]);
   for (const key of allKeys) {
     const loc = local ? local[key] : undefined;
@@ -748,6 +762,106 @@ function renderHome() {
   document.getElementById('homeEvents').innerHTML = evToday.length === 0
     ? '<div class="emp" style="padding:20px"><p>📭 今天没有日程安排</p></div>'
     : evToday.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:12px;color:var(--text2)">📅 今日</span></div>').join('');
+  renderPeriodHome();
+}
+
+// ============================================================
+// PERIOD TRACKER (经期记录与预测)
+// ============================================================
+function pAddDays(d, n) { const dt = new Date(Date.parse(d) + n * 86400000); return dt.toISOString().slice(0, 10); }
+function pDiff(a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 86400000); }
+function pMD(s) { if (!s) return ''; const p = s.split('-'); return parseInt(p[1]) + '月' + parseInt(p[2]) + '日'; }
+
+function predictPeriod() {
+  const ps = (Store.get('periods', []) || []).slice().sort((a, b) => a.start < b.start ? -1 : 1);
+  if (ps.length < 2) return null;
+  const cycles = [];
+  for (let i = 1; i < ps.length; i++) {
+    const c = pDiff(ps[i - 1].start, ps[i].start);
+    if (c > 0) cycles.push(c);
+  }
+  if (!cycles.length) return null;
+  const last3 = cycles.slice(-3);
+  const avgCycle = Math.round(last3.reduce((a, b) => a + b, 0) / last3.length);
+  const avgLen = Math.round(ps.reduce((a, b) => a + (b.length || 7), 0) / ps.length);
+  const lastStart = ps[ps.length - 1].start;
+  const nextStart = pAddDays(lastStart, avgCycle);
+  const nextEnd = pAddDays(nextStart, avgLen - 1);
+  return { avgCycle, avgLen, lastStart, nextStart, nextEnd, count: ps.length };
+}
+
+function periodTip() {
+  const ps = Store.get('periods', []) || [];
+  if (!ps.length) return '';
+  const today = new Date().toISOString().slice(0, 10);
+  const sorted = ps.slice().sort((a, b) => a.start < b.start ? 1 : -1);
+  const last = sorted[0];
+  const lastLen = last.length || 7;
+  const lastEnd = pAddDays(last.start, lastLen - 1);
+  if (today >= last.start && today <= lastEnd) {
+    const remain = pDiff(today, lastEnd) + 1;
+    return '🩸 经期进行中，预计还有 <b>' + remain + ' 天</b>结束，注意休息与保暖～';
+  }
+  const pr = predictPeriod();
+  if (pr) {
+    const days = pDiff(today, pr.nextStart);
+    if (days >= 0 && days <= 3) {
+      return '🩸 预计 <b>' + pMD(pr.nextStart) + '</b> 来潮，还有 <b>' + days + ' 天</b>，记得备好卫生用品～';
+    }
+    if (days < 0 && today <= pr.nextEnd) {
+      return '🩸 预测经期应在 <b>' + pMD(pr.nextStart) + '</b> 开始，若已开始请到「生活管理」记录一下';
+    }
+  }
+  return '';
+}
+
+function renderPeriodHome() {
+  const card = document.getElementById('homePeriod');
+  if (!card) return;
+  const tip = periodTip();
+  if (tip) { document.getElementById('homePeriodTip').innerHTML = tip; card.style.display = 'block'; }
+  else card.style.display = 'none';
+}
+
+function addPeriod() {
+  const start = document.getElementById('perStart').value;
+  if (!start) { toast('请选择经期开始日期'); return; }
+  let end = document.getElementById('perEnd').value;
+  let len = parseInt(document.getElementById('perLen').value) || 0;
+  if (end) { len = pDiff(start, end) + 1; if (len < 1) len = 1; }
+  else if (!len || len < 1) len = 7;
+  const ps = Store.get('periods', []) || [];
+  ps.push({ id: Date.now().toString(), start, length: len, note: (document.getElementById('perNote').value || '').trim(), updatedAt: Date.now() });
+  Store.set('periods', ps);
+  renderPeriod(); renderPeriodHome(); toast('🩸 已记录经期');
+}
+
+function editPeriod(id) {
+  const ps = Store.get('periods', []) || [];
+  const p = ps.find(x => x.id === id); if (!p) return;
+  const s = prompt('经期开始日期 (YYYY-MM-DD)：', p.start); if (!s) return;
+  const l = prompt('持续天数：', p.length); if (!l) return;
+  p.start = s; p.length = Math.max(1, parseInt(l) || p.length); p.updatedAt = Date.now();
+  Store.set('periods', ps); renderPeriod(); renderPeriodHome(); toast('✅ 已更新');
+}
+
+function delPeriod(id) {
+  if (!confirm('删除这条经期记录？')) return;
+  Store.set('periods', (Store.get('periods', []) || []).filter(x => x.id !== id));
+  renderPeriod(); renderPeriodHome(); toast('已删除');
+}
+
+function renderPeriod() {
+  const startEl = document.getElementById('perStart');
+  if (startEl && !startEl.value) startEl.value = new Date().toISOString().slice(0, 10);
+  const periods = (Store.get('periods', []) || []).slice().sort((a, b) => a.start < b.start ? 1 : -1);
+  const pr = predictPeriod();
+  document.getElementById('perPredict').innerHTML = pr
+    ? '<div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px"><div><span style="font-size:12px;color:var(--text3)">平均周期</span><div style="font-size:22px;font-weight:700">' + pr.avgCycle + '<span style="font-size:13px;font-weight:400;color:var(--text2)"> 天</span></div></div><div><span style="font-size:12px;color:var(--text3)">平均经期</span><div style="font-size:22px;font-weight:700">' + pr.avgLen + '<span style="font-size:13px;font-weight:400;color:var(--text2)"> 天</span></div></div><div><span style="font-size:12px;color:var(--text3)">预测下次来潮</span><div style="font-size:22px;font-weight:700;color:var(--primary)">' + pMD(pr.nextStart) + '</div></div></div><div style="font-size:13px;color:var(--text2)">基于 ' + pr.count + ' 次记录推算（取最近周期均值），仅供参考</div>'
+    : '<div style="font-size:14px;color:var(--text2);line-height:1.8">📝 至少记录 <b>2 次</b> 经期后，即可预测下次来潮日期。<br>当前已记录 <b>' + periods.length + '</b> 次。<br><span style="font-size:12px;color:var(--text3)">越早开始记录，预测越准</span></div>';
+  document.getElementById('periodList').innerHTML = periods.length === 0
+    ? '<div class="emp" style="padding:16px"><p>还没有记录</p></div>'
+    : periods.map(p => '<div class="cb" style="align-items:center"><div style="flex:1"><div style="font-weight:500">' + pMD(p.start) + ' 起 · 共 ' + p.length + ' 天</div>' + (p.note ? '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + p.note + '</div>' : '') + '</div><span class="btn-sm btn-o" onclick="editPeriod(\'' + p.id + '\')"><i class="fas fa-edit"></i></span><span class="btn-sm btn-o" style="color:var(--d)" onclick="delPeriod(\'' + p.id + '\')"><i class="fas fa-trash"></i></span></div>').join('');
 }
 
 // ============================================================
@@ -892,6 +1006,7 @@ function switchLifeTab(t) {
   if (t === 'expense') { initExpPeriods(); setTimeout(() => { renderExpChart(); renderAnnual(); }, 100); }
   if (t === 'health') setTimeout(renderWeightChart, 100);
   if (t === 'habit') renderHeatmap();
+  if (t === 'period') renderPeriod();
 }
 
 let expPeriod = 'all';
