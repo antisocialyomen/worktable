@@ -634,10 +634,9 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
         <!-- 吃什么 -->
         <div class="food-tab" id="f-eat" style="display:none">
-          <div class="card"><div class="card-hd"><h3>🎲 吃什么</h3><button class="btn-sm btn-o" onclick="manageEatCats()"><i class="fas fa-cog"></i> 管理分类</button></div>
+          <div class="card"><div class="card-hd"><h3>🎲 吃什么</h3><button class="btn-sm btn-o" onclick="openEatCatsModal()"><i class="fas fa-cog"></i> 管理分类</button></div>
             <div class="ft" id="eatCats" style="margin-bottom:12px;flex-wrap:wrap"></div>
-            <div style="margin-bottom:8px"><button class="btn-sm btn-o" onclick="addEatItem()"><i class="fas fa-plus"></i> 添加词条到当前分类</button></div>
-            <div id="eatItems" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
+            <div id="eatItems" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;align-items:center"></div>
             <div style="text-align:center;padding:14px 0">
               <div id="eatRoulette" style="min-height:90px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:var(--primary);padding:14px;border:2px dashed var(--border);border-radius:14px;background:var(--primary-bg)">选个分类，开始掷骰子 🎲</div>
               <div style="margin-top:14px">
@@ -689,6 +688,21 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <button class="btn btn-o" onclick="closeMoodModal()">取消</button>
       <button class="btn btn-p" onclick="saveMoodLog()" style="margin-left:8px"><i class="fas fa-save"></i> 保存</button>
     </div>
+  </div>
+</div>
+
+<!-- 吃什么·管理分类弹窗 -->
+<div class="mask hide" id="eatCatsMask" onclick="if(event.target===this)closeEatCatsModal()">
+  <div class="modal" style="max-width:520px" onclick="event.stopPropagation()">
+    <div class="modal-hd">
+      <h3>🍽️ 管理分类</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn-sm btn-p" onclick="showAddEatCat()"><i class="fas fa-plus"></i> 新建</button>
+        <span class="modal-x" onclick="closeEatCatsModal()"><i class="fas fa-times"></i></span>
+      </div>
+    </div>
+    <div id="eatNewCatWrap"></div>
+    <div id="eatCatsList"></div>
   </div>
 </div>
 
@@ -3037,49 +3051,124 @@ function renderEatItems() {
   const cat = cats.find(c => c.name === eatCurCat);
   const wrap = document.getElementById('eatItems');
   if (!wrap) return;
-  if (!cat) { wrap.innerHTML = ''; return; }
-  wrap.innerHTML = cat.items.map((it, i) => '<span class="eat-item">' + it + ' <span class="x" onclick="delEatItem(\'' + cat.name + '\',' + i + ')">✕</span></span>').join('');
+  if (!cat || cat.items.length === 0) {
+    wrap.innerHTML = '<span style="font-size:13px;color:var(--text3)">暂无词条，点右上角「管理分类」添加</span>';
+    return;
+  }
+  if (eatItemsOpen) {
+    wrap.innerHTML = cat.items.map((it, i) => '<span class="eat-item">' + it + ' <span class="x" onclick="delEatItem(\'' + cat.name + '\',' + i + ')">✕</span></span>').join('') + '<span class="eat-item" style="background:var(--accent-light);color:var(--accent);cursor:pointer" onclick="toggleEatItems()">收起 ▴</span>';
+  } else {
+    const preview = cat.items.slice(0, 8).join('、');
+    wrap.innerHTML = '<span style="font-size:13px;color:var(--text2)">共 ' + cat.items.length + ' 个词条：' + preview + (cat.items.length > 8 ? '…' : '') + '</span><span class="eat-item" style="background:var(--accent-light);color:var(--accent);cursor:pointer;margin-left:6px" onclick="toggleEatItems()">展开全部 ▾</span>';
+  }
 }
+function toggleEatItems() { eatItemsOpen = !eatItemsOpen; renderEatItems(); }
 function delEatItem(catName, i) {
   const cats = getEatCats();
   const cat = cats.find(c => c.name === catName);
   if (cat) { cat.items.splice(i, 1); saveEatCats(cats); renderEatItems(); }
 }
-function addEatItem() {
-  const cats = getEatCats();
-  const cat = cats.find(c => c.name === eatCurCat);
-  if (!cat) return toast('请先选择分类');
-  const v = prompt('给「' + eatCurCat + '」添加词条：');
-  if (!v) return;
-  v.split(/[,，、\n]/).map(s => s.trim()).filter(Boolean).forEach(s => { if (!cat.items.includes(s)) cat.items.push(s); });
-  saveEatCats(cats); renderEatItems(); toast('已添加');
+// —— 管理分类弹窗 ——
+function openEatCatsModal() {
+  eatEditingIdx = -1;
+  document.getElementById('eatNewCatWrap').innerHTML = '';
+  renderEatCatsList();
+  document.getElementById('eatCatsMask').classList.remove('hide');
 }
-function manageEatCats() {
+function closeEatCatsModal() {
+  eatEditingIdx = -1;
+  document.getElementById('eatCatsMask').classList.add('hide');
+}
+function showAddEatCat() {
+  document.getElementById('eatNewCatWrap').innerHTML = '<div class="ig" style="margin-bottom:10px"><input class="in" id="eatNewCatIn" placeholder="新分类名称" onkeydown="if(event.key===\'Enter\')saveNewEatCat()"><button class="btn-sm btn-a" onclick="saveNewEatCat()">保存</button></div>';
+  document.getElementById('eatNewCatIn').focus();
+}
+function saveNewEatCat() {
+  const n = (document.getElementById('eatNewCatIn').value || '').trim();
+  if (!n) return toast('请输入分类名称');
   const cats = getEatCats();
-  const op = prompt('「吃什么」分类管理：\n输入新分类名 = 新建分类\n输入 "del:分类名" = 删除该分类\n输入 "add:分类名" = 给该分类批量添加词条（逗号分隔）\n当前分类：' + cats.map(c => c.name + '(' + c.items.length + ')').join('、'), '');
-  if (!op) return;
-  if (op.startsWith('del:')) {
-    const n = op.slice(4).trim();
-    if (cats.length <= 1) return toast('至少保留一个分类');
-    saveEatCats(cats.filter(c => c.name !== n));
-    if (eatCurCat === n) eatCurCat = '';
-    renderEatCats(); toast('已删除分类');
-  } else if (op.startsWith('add:')) {
-    const n = op.slice(4).trim();
-    let cat = cats.find(c => c.name === n);
-    if (!cat) { cat = { name: n, items: [] }; cats.push(cat); }
-    const items = prompt('给「' + n + '」输入词条（逗号分隔）：');
-    if (items) items.split(/[,，、\n]/).map(s => s.trim()).filter(Boolean).forEach(s => { if (!cat.items.includes(s)) cat.items.push(s); });
-    saveEatCats(cats); renderEatCats(); toast('已更新分类词条');
-  } else {
-    const n = op.trim();
-    if (!n) return;
-    if (cats.find(c => c.name === n)) return toast('分类已存在');
-    cats.push({ name: n, items: [] });
-    saveEatCats(cats); eatCurCat = n; renderEatCats(); toast('已新建分类');
-  }
+  if (cats.find(c => c.name === n)) return toast('分类已存在');
+  cats.push({ name: n, items: [] });
+  saveEatCats(cats);
+  document.getElementById('eatNewCatWrap').innerHTML = '';
+  renderEatCatsList();
+  if (!eatCurCat) eatCurCat = n;
+  renderEatCats();
+  toast('已新建分类「' + n + '」');
+}
+function renderEatCatsList() {
+  const cats = getEatCats();
+  const el = document.getElementById('eatCatsList');
+  if (!el) return;
+  if (cats.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:20px">还没有分类</div>'; return; }
+  el.innerHTML = cats.map((c, idx) => {
+    let html = '<div style="border-bottom:1px solid var(--border)">';
+    html += '<div style="display:flex;align-items:center;gap:6px;padding:10px 0">' +
+      '<div style="flex:1;min-width:0;font-size:14px;font-weight:600">' + escHtml(c.name) + ' <span style="font-size:12px;color:var(--text3);font-weight:400">' + (c.items ? c.items.length : 0) + ' 词条</span></div>' +
+      '<button class="btn-sm btn-o" onclick="toggleEditEatCat(' + idx + ')"><i class="fas fa-pen"></i> 编辑</button>' +
+      '<button class="btn-sm btn-o" style="color:var(--d)" onclick="delEatCategory(' + idx + ')"><i class="fas fa-trash"></i> 删除</button>' +
+      '</div>';
+    if (eatEditingIdx === idx) {
+      html += '<div style="padding:4px 0 12px 10px;border-top:1px dashed var(--border)">' +
+        '<div class="ig" style="margin-bottom:8px"><input class="in" id="eatRenameIn" placeholder="修改分类名称" value="' + escHtml(c.name) + '"><button class="btn-sm btn-a" onclick="renameEatCat(' + idx + ')">改名</button></div>' +
+        '<div class="ig" style="margin-bottom:8px"><input class="in" id="eatAddItemIn" placeholder="新增词条（逗号分隔多个）" onkeydown="if(event.key===\'Enter\')addEatCatItems(' + idx + ')"><button class="btn-sm btn-a" onclick="addEatCatItems(' + idx + ')">添加</button></div>' +
+        '<div style="font-size:12px;color:var(--text3);margin:6px 0">词条（点 ✕ 删除）：</div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px">' +
+        ((c.items && c.items.length) ? c.items.map((it, i) => '<span class="eat-item">' + escHtml(it) + ' <span class="x" onclick="delEatCatItem(' + idx + ',' + i + ')">✕</span></span>').join('') : '<span style="font-size:12px;color:var(--text3)">暂无词条</span>') +
+        '</div></div>';
+    }
+    html += '</div>';
+    return html;
+  }).join('');
+}
+function toggleEditEatCat(idx) { eatEditingIdx = (eatEditingIdx === idx) ? -1 : idx; renderEatCatsList(); }
+function renameEatCat(idx) {
+  const n = (document.getElementById('eatRenameIn').value || '').trim();
+  if (!n) return toast('请输入名称');
+  const cats = getEatCats();
+  const old = cats[idx].name;
+  if (cats.some((c, i) => i !== idx && c.name === n)) return toast('分类名已存在');
+  cats[idx].name = n;
+  saveEatCats(cats);
+  if (eatCurCat === old) eatCurCat = n;
+  eatEditingIdx = -1;
+  renderEatCatsList(); renderEatCats();
+  toast('已改名');
+}
+function addEatCatItems(idx) {
+  const inp = document.getElementById('eatAddItemIn');
+  const v = (inp.value || '');
+  if (!v.trim()) return toast('请输入词条');
+  const cats = getEatCats();
+  const cat = cats[idx];
+  let added = 0;
+  v.split(/[,，、\n]/).map(s => s.trim()).filter(Boolean).forEach(s => { if (!cat.items.includes(s)) { cat.items.push(s); added++; } });
+  saveEatCats(cats);
+  inp.value = '';
+  renderEatCatsList(); renderEatCats();
+  toast('已添加 ' + added + ' 个词条');
+}
+function delEatCatItem(idx, i) {
+  const cats = getEatCats();
+  cats[idx].items.splice(i, 1);
+  saveEatCats(cats);
+  renderEatCatsList(); renderEatCats();
+}
+function delEatCategory(idx) {
+  const cats = getEatCats();
+  if (cats.length <= 1) return toast('至少保留一个分类');
+  if (!confirm('删除分类「' + cats[idx].name + '」及其所有词条？')) return;
+  const name = cats[idx].name;
+  cats.splice(idx, 1);
+  saveEatCats(cats);
+  if (eatCurCat === name) eatCurCat = '';
+  if (eatEditingIdx === idx) eatEditingIdx = -1;
+  renderEatCatsList(); renderEatCats();
+  toast('已删除');
 }
 let eatCurCat = '';
+let eatItemsOpen = false;
+let eatEditingIdx = -1;
 let eatTimer = null;
 function curEatPool() {
   const cats = getEatCats();
