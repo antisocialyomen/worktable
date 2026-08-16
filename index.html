@@ -31,8 +31,9 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 #splash.hide{opacity:0;pointer-events:none}
 .splash-avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:24px;box-shadow:0 8px 28px rgba(255,107,138,0.28)}
 #splashHello{font-size:28px;font-weight:700;margin-bottom:8px;color:var(--text)}
-#splashName{outline:none;border-bottom:1px dashed transparent;transition:border-color .2s;cursor:text}
+#splashName{outline:none;border-bottom:1px dashed transparent;transition:border-color .2s;cursor:text;min-width:2px}
 #splashName:hover,#splashName:focus{border-bottom-color:var(--primary)}
+#splashName:empty:before{content:'你的名字';color:var(--text3);font-weight:400}
 #splashTime{font-size:38px;font-weight:700;margin-bottom:4px;color:var(--primary);font-variant-numeric:tabular-nums}
 #splashDate{font-size:15px;color:var(--text2);margin-bottom:36px}
 #enterBtn{padding:12px 32px;font-size:16px;border-radius:28px;box-shadow:0 6px 18px rgba(255,107,138,0.3)}
@@ -206,7 +207,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 <!-- Entry / Splash Page -->
 <div id="splash">
   <img src="assets/labubu-avatar.png" alt="" class="splash-avatar">
-  <h1 id="splashHello">Hello，<span id="splashName" contenteditable="true" spellcheck="false" title="点击修改你的名字">小遥</span></h1>
+  <h1 id="splashHello">Hello，<span id="splashName" contenteditable="true" spellcheck="false" title="点击输入你的名字"></span></h1>
   <div id="splashTime"></div>
   <div id="splashDate"></div>
   <button id="enterBtn" class="btn btn-p" onclick="enterApp()">进入工作台</button>
@@ -217,7 +218,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <img src="assets/labubu-avatar.png" alt="" class="brand-avatar">
-      <div class="brand-title">个人工作台</div>
+      <div class="brand-title" id="sideName">个人工作台</div>
     </div>
     <nav class="sidebar-nav" id="sideNav">
       <div class="nav-item active" data-mod="home"><i class="fas fa-home"></i><span>首页</span></div>
@@ -390,6 +391,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
       <!-- SETTINGS -->
       <div class="page" id="p-settings">
+        <div class="card"><div class="card-hd"><h3>👤 昵称</h3></div><div class="ig"><input class="in" id="nickIn" placeholder="输入你的昵称，将显示在侧栏与进入页" style="font-size:14px"></div><button class="btn-sm btn-p" onclick="saveNickname()"><i class="fas fa-save"></i> 保存</button><span id="nickStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>🎨 外观设置</h3></div><div class="si-item"><div><div class="si-l">深色模式</div><div class="si-d">切换明暗主题</div></div><div class="toggle" id="themeToggle" onclick="toggleTheme()"></div></div></div>
         <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ 已启用 Cloudflare KV 云同步，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到坚果云 WebDAV</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">① 注册坚果云 → ② 账户信息→安全选项→第三方应用管理 → ③ 生成应用密码 → ④ 填下面信息保存</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="坚果云账号（邮箱）" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>📦 数据管理</h3></div><div class="si-item"><div><div class="si-l">导出全部数据</div></div><button class="btn-sm btn-p" onclick="exportData()"><i class="fas fa-download"></i> 导出</button></div><div class="si-item"><div><div class="si-l">导入数据</div></div><button class="btn-sm btn-o" onclick="document.getElementById('importIn').click()"><i class="fas fa-upload"></i> 导入</button><input type="file" id="importIn" accept=".json" style="display:none" onchange="importData(this)"></div><div class="si-item"><div><div class="si-l" style="color:var(--d)">清空所有数据</div></div><button class="btn-sm btn" style="background:var(--d);color:#fff;padding:5px 10px;font-size:12px;border-radius:8px" onclick="clearData()"><i class="fas fa-trash"></i> 清空</button></div></div>
@@ -551,16 +553,33 @@ document.addEventListener('click', function(e) {
   }
 });
 
+// ===== NICKNAME =====
+function applyNickname() {
+  const n = Store.get('userName', '');
+  const sn = document.getElementById('splashName');
+  if (sn) sn.textContent = n;
+  const sb = document.getElementById('sideName');
+  if (sb) sb.textContent = n || '个人工作台';
+  const ni = document.getElementById('nickIn');
+  if (ni) ni.value = n;
+}
+function saveNickname() {
+  const v = (document.getElementById('nickIn').value || '').trim();
+  Store.set('userName', v);
+  applyNickname();
+  toast('✅ 昵称已保存');
+}
 // ===== SPLASH =====
 function initSplashName() {
   const el = document.getElementById('splashName');
   if (!el) return;
-  const saved = Store.get('userName', '');
-  if (saved) el.textContent = saved;
+  applyNickname();
   el.addEventListener('blur', () => {
     const v = (el.textContent || '').trim();
-    el.textContent = v || '小遥';
-    Store.set('userName', el.textContent);
+    el.textContent = v;
+    Store.set('userName', v);
+    const sb = document.getElementById('sideName');
+    if (sb) sb.textContent = v || '个人工作台';
   });
   el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
 }
