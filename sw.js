@@ -1,4 +1,4 @@
-const CACHE = 'workbench-v14';
+const CACHE = 'workbench-v15';
 const PRECACHE = ['/', '/index.html', '/manifest.json', '/assets/bg-wallpaper.jpg', '/assets/labubu-avatar.jpg'];
 
 self.addEventListener('install', e => {

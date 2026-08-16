@@ -13,6 +13,9 @@
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=DotGothic16&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--primary:#FF6B8A;--primary-light:#FF8DA6;--primary-dark:#E05070;--primary-bg:#FFD4A8;--accent:#8140DC;--accent-light:#E8D8F5;--alert:#FFB347;--bg:#FFF5EE;--bg-card:#FFFFFF;--bg-nav:#FFFFFF;--text:#4A3040;--text2:#8A6A7A;--text3:#BAA0AA;--border:#F5E0E0;--shadow:0 2px 8px rgba(255,107,138,0.1);--shadow-lg:0 8px 25px rgba(255,107,138,0.15);--radius:16px;--radius-sm:10px;--radius-lg:24px;--nav-w:170px;--h:56px;--t:.3s;--s:#8BC4A0;--w:#FFB347;--d:#FF6B8A;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
@@ -225,6 +228,20 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 #eatRoulette.rolling{color:var(--text3);border-color:var(--primary);animation:pulse .25s infinite alternate}
 @keyframes pulse{from{opacity:.5}to{opacity:1}}
 
+/* ===== 年度/月度 点阵进度条 ===== */
+.yb-wrap{margin-top:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)}
+.yb-row{margin:0 0 16px}
+.yb-row:last-child{margin-bottom:0}
+.yb-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font);font-size:14px;color:var(--text);margin-bottom:9px}
+.yb-label{font-weight:600;font-size:15px;white-space:nowrap}
+.yb-data{font-size:12px;color:var(--text2);white-space:nowrap}
+.pixel{font-family:'VT323','DotGothic16',monospace;font-size:23px;line-height:1;color:var(--primary);font-weight:400;letter-spacing:1px;vertical-align:middle;padding:0 1px}
+.dotbar{position:relative;height:18px;border-radius:10px;background-color:rgba(0,0,0,0.03);background-image:radial-gradient(circle, #E7D2D8 40%, transparent 44%);background-size:12px 12px;background-position:2px 3px;overflow:hidden}
+.dotbar>i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:10px;background-image:radial-gradient(circle, var(--primary) 40%, transparent 44%);background-size:12px 12px;background-position:2px 3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+[data-theme=dark] .dotbar{background-color:rgba(255,255,255,0.04);background-image:radial-gradient(circle, #4A3038 40%, transparent 44%)}
+[data-theme=dark] .dotbar>i{background-image:radial-gradient(circle, var(--primary-light) 40%, transparent 44%)}
+[data-theme=dark] .pixel{color:var(--primary-light)}
+</style>
 </head>
 <body>
 <div id="wallpaper"></div>
@@ -280,6 +297,16 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <img src="assets/labubu-avatar.png" alt="Labubu" style="position:absolute;top:-10px;right:20px;width:48px;height:48px;border-radius:50%;object-fit:cover;opacity:0.85;pointer-events:none;user-select:none">
           <h1 id="greeting" style="font-size:24px;font-weight:700">早上好 👋</h1>
           <p style="color:var(--text2);margin-top:4px">今天也要高效工作，享受生活 ✨</p>
+          <div class="yb-wrap">
+            <div class="yb-row">
+              <div class="yb-top"><span class="yb-label" id="ybYearLabel">2026年</span><span class="yb-data"><span class="pixel" id="ybYearPct">0%</span> / 2027还有<span class="pixel" id="ybYearDays">0</span>天</span></div>
+              <div class="dotbar"><i id="ybYearFill"></i></div>
+            </div>
+            <div class="yb-row">
+              <div class="yb-top"><span class="yb-label" id="ybMonLabel">8月</span><span class="yb-data"><span class="pixel" id="ybMonPct">0%</span> / 剩余<span class="pixel" id="ybMonDays">0</span>天</span></div>
+              <div class="dotbar"><i id="ybMonFill"></i></div>
+            </div>
+          </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
             <button class="btn btn-p" onclick="go('tasks')"><i class="fas fa-plus"></i> 快速新建任务</button>
             <button class="btn btn-a" onclick="go('life')"><i class="fas fa-coins"></i> 记一笔</button>
@@ -1899,7 +1926,39 @@ function renderHome() {
     : evToday.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:12px;color:var(--text2)">📅 今日</span></div>').join('');
   renderPeriodHome();
   renderCountdownHome();
+  renderYearBars();
 }
+
+// 年度 / 月度 点阵进度条（随现实时间同步）
+function renderYearBars() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth();
+  const msDay = 86400000;
+  // —— 年度 ——
+  const yStart = new Date(y, 0, 1);
+  const yEnd = new Date(y + 1, 0, 1);
+  const yPct = (now - yStart) / (yEnd - yStart) * 100;
+  const dayOfYear = Math.floor((now - yStart) / msDay) + 1;
+  const totalDays = Math.round((yEnd - yStart) / msDay);
+  const yDays = totalDays - dayOfYear; // 距离下一年剩余天数（不含今天）
+  setText('ybYearLabel', y + '年');
+  setText('ybYearPct', Math.round(yPct) + '%');
+  setText('ybYearDays', yDays);
+  setWidth('ybYearFill', yPct);
+  // —— 月度 ——
+  const mStart = new Date(y, m, 1);
+  const mEnd = new Date(y, m + 1, 1);
+  const mPct = (now - mStart) / (mEnd - mStart) * 100;
+  const dim = new Date(y, m + 1, 0).getDate();
+  const mDays = dim - now.getDate(); // 距离下月剩余天数（不含今天）
+  setText('ybMonLabel', (m + 1) + '月');
+  setText('ybMonPct', Math.round(mPct) + '%');
+  setText('ybMonDays', mDays);
+  setWidth('ybMonFill', mPct);
+}
+function setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; }
+function setWidth(id, pct) { const e = document.getElementById(id); if (e) e.style.width = Math.max(0, Math.min(100, pct)) + '%'; }
 
 // ============================================================
 // PERIOD TRACKER (经期记录与预测)
