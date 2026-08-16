@@ -76,6 +76,9 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .si4{background:#E8D8F5;color:#8140DC}
 .si .num{font-size:24px;font-weight:700;line-height:1.2}
 .si .label{font-size:13px;color:var(--text2)}
+.sc > .si:nth-child(2){width:auto;height:auto;flex:1;min-width:0;display:block;padding:0;background:transparent;color:inherit}
+.sc > .si:nth-child(2) .num{font-size:22px;font-weight:700;line-height:1.2}
+.sc > .si:nth-child(2) .label{font-size:13px;color:var(--text2);line-height:1.3}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius-lg);font-size:14px;font-weight:500;cursor:pointer;transition:all var(--t)}
 .btn-p{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 12px rgba(255,107,138,0.25)}
 .btn-p:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 6px 16px rgba(255,107,138,0.35)}
@@ -224,13 +227,13 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="nav-item active" data-mod="home"><i class="fas fa-home"></i><span>首页</span></div>
       <div class="nav-item" data-mod="tasks"><i class="fas fa-tasks"></i><span>任务</span><span class="badge" id="taskBadge">0</span></div>
       <div class="nav-item" data-mod="life"><i class="fas fa-heart"></i><span>日常</span></div>
-      <div class="nav-item" data-mod="schedule"><i class="fas fa-calendar"></i><span>日程管理</span></div>
+      <div class="nav-item" data-mod="schedule"><i class="fas fa-calendar"></i><span>日程</span></div>
       <div class="nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>笔记</span></div>
       <div class="nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
       <div class="nav-item" data-mod="drama"><i class="fas fa-film"></i><span>热播</span></div>
       <div class="nav-item" data-mod="data"><i class="fas fa-chart-bar"></i><span>数据</span></div>
       <div class="nav-item" data-mod="content"><i class="fas fa-pen-fancy"></i><span>创作</span></div>
-      <div class="nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>系统设置</span></div>
+      <div class="nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>设置</span></div>
     </nav>
   </aside>
 
@@ -326,7 +329,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
       <!-- SCHEDULE -->
       <div class="page" id="p-schedule">
-        <div class="card"><div class="card-hd"><h3>📅 日程管理</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="addEvent()"><i class="fas fa-plus"></i> 新建日程</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
+        <div class="card"><div class="card-hd"><h3>📅 日程</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="addEvent()"><i class="fas fa-plus"></i> 新建日程</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
         <div class="card"><div class="card-hd"><h3>📋 近期日程</h3></div><div id="eventList"></div></div>
       </div>
 
@@ -365,7 +368,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="g4" style="margin-bottom:16px">
           <div class="sc"><div class="si si1"><i class="fas fa-calendar-week"></i></div><div class="si"><div class="num" id="dWeekTasks">0</div><div class="label">本周任务</div></div></div>
           <div class="sc"><div class="si si2"><i class="fas fa-check-double"></i></div><div class="si"><div class="num" id="dWeekDone">0</div><div class="label">本周完成</div></div></div>
-          <div class="sc"><div class="si si3"><i class="fas fa-clock"></i></div><div class="si"><div class="num" id="dFocus">0</div><div class="label">专注时长(h)</div></div></div>
+          <div class="sc"><div class="si si3"><i class="fas fa-clock"></i></div><div class="si"><div class="num" id="dFocus">0</div><div class="label">专注时长<br>(h)</div></div></div>
           <div class="sc"><div class="si si4"><i class="fas fa-trophy"></i></div><div class="si"><div class="num" id="dRate">0%</div><div class="label">完成率</div></div></div>
         </div>
         <div class="g2"><div class="card"><div class="card-hd"><h3>📈 任务完成趋势</h3></div><div style="height:220px"><canvas id="trendChart"></canvas></div></div><div class="card"><div class="card-hd"><h3>🎯 任务分类分布</h3></div><div style="height:220px"><canvas id="distChart"></canvas></div></div></div>
@@ -391,7 +394,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
       <!-- SETTINGS -->
       <div class="page" id="p-settings">
-        <div class="card"><div class="card-hd"><h3>👤 昵称</h3></div><div class="ig"><input class="in" id="nickIn" placeholder="输入你的昵称，将显示在侧栏与进入页" style="font-size:14px"></div><button class="btn-sm btn-p" onclick="saveNickname()"><i class="fas fa-save"></i> 保存</button><span id="nickStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
+        <div class="card"><div class="card-hd"><h3>👤 昵称</h3></div><div class="ig"><input class="in" id="nickIn" placeholder="输入你的昵称，将显示在侧栏与进入页" style="font-size:14px"></div><button class="btn-sm btn-p" onclick="saveNickname()"><i class="fas fa-save"></i> 保存</button><span id="nickStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div>
         <div class="card"><div class="card-hd"><h3>🎨 外观设置</h3></div><div class="si-item"><div><div class="si-l">深色模式</div><div class="si-d">切换明暗主题</div></div><div class="toggle" id="themeToggle" onclick="toggleTheme()"></div></div></div>
         <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ Cloudflare KV 云同步已启用，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div id="kvMissing" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:#FFF0E0;border-radius:8px;margin-bottom:12px">⚠️ Cloudflare KV 未绑定。请在 Cloudflare Pages 项目的 <b>Settings → Functions → KV namespace bindings</b> 里添加绑定：<br>• <b>Variable name（变量名）</b>必须填 <code>SYNC_KV</code><br>• <b>KV namespace</b> 选 <code>workbench-data</code><br>保存并重新部署后云同步自动生效。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到云端</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">当前使用 WebDAV 同步（KV 未绑定时的回退方案）。如已绑定 KV，请保存空白配置让系统自动切换。</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="WebDAV 账号" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>📦 数据管理</h3></div><div class="si-item"><div><div class="si-l">导出全部数据</div></div><button class="btn-sm btn-p" onclick="exportData()"><i class="fas fa-download"></i> 导出</button></div><div class="si-item"><div><div class="si-l">导入数据</div></div><button class="btn-sm btn-o" onclick="document.getElementById('importIn').click()"><i class="fas fa-upload"></i> 导入</button><input type="file" id="importIn" accept=".json" style="display:none" onchange="importData(this)"></div><div class="si-item"><div><div class="si-l" style="color:var(--d)">清空所有数据</div></div><button class="btn-sm btn" style="background:var(--d);color:#fff;padding:5px 10px;font-size:12px;border-radius:8px" onclick="clearData()"><i class="fas fa-trash"></i> 清空</button></div></div>
@@ -430,9 +433,9 @@ function toast(msg) {
 
 // ===== NAVIGATION =====
 const MOD_NAMES = {
-  home:'首页', tasks:'任务', life:'日常', schedule:'日程管理',
+  home:'首页', tasks:'任务', life:'日常', schedule:'日程',
   notes:'笔记', hotnews:'热点', drama:'热播', data:'数据',
-  content:'创作', settings:'系统设置'
+  content:'创作', settings:'设置'
 };
 const MOD_ICONS = {
   home:'fa-home', tasks:'fa-tasks', life:'fa-heart', schedule:'fa-calendar',
