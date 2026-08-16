@@ -52,7 +52,8 @@ async function handleWebDAVProxy(request) {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE'
+        'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE',
+        'Access-Control-Max-Age': '86400'
       }
     });
   }
@@ -63,47 +64,61 @@ async function handleWebDAVProxy(request) {
   const wdFile = request.headers.get('X-WD-FILE') || 'workbench-data.json';
 
   if (!wdUrl || !wdUser || !wdPass) {
-    return new Response(JSON.stringify({ error: '缺少 WebDAV 凭据' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-    });
+    return jsonError(400, '缺少 WebDAV 凭据');
+  }
+
+  let targetUrl;
+  try {
+    targetUrl = new URL(wdFile, wdUrl.replace(/\/+$/, '') + '/').href;
+  } catch (e) {
+    return jsonError(400, 'WebDAV 地址格式错误：' + e.message);
+  }
+
+  const auth = 'Basic ' + b64(wdUser + ':' + wdPass);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 25000);
+
+  const init = {
+    method: request.method,
+    headers: {
+      'Authorization': auth,
+      'Content-Type': request.headers.get('Content-Type') || 'application/json'
+    },
+    signal: controller.signal
+  };
+  if (request.method === 'PUT') {
+    try { init.body = await request.text(); }
+    catch (e) { clearTimeout(timer); return jsonError(400, '读取请求体失败：' + e.message); }
   }
 
   try {
-    const targetUrl = new URL(wdFile, wdUrl.replace(/\/+$/, '') + '/').href;
-    const auth = 'Basic ' + b64(wdUser + ':' + wdPass);
-
-    const init = {
-      method: request.method,
-      headers: {
-        'Authorization': auth,
-        'Content-Type': request.headers.get('Content-Type') || 'application/json'
-      }
-    };
-
-    if (request.method === 'PUT') {
-      init.body = await request.text();
-    }
-
     const response = await fetch(targetUrl, init);
-    const body = await response.arrayBuffer();
-
-    return new Response(body, {
+    clearTimeout(timer);
+    // 以文本读取后转发，避免直接透传上游二进制/畸形响应导致 Cloudflare 边缘返回 520
+    const text = await response.text();
+    return new Response(text, {
       status: response.status,
-      statusText: response.statusText,
       headers: {
-        'Content-Type': response.headers.get('Content-Type') || 'application/json',
+        'Content-Type': response.headers.get('Content-Type') || 'application/json; charset=utf-8',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE'
       }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'WebDAV 代理失败', detail: error.message }), {
-      status: 502,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-    });
+    clearTimeout(timer);
+    if (error && error.name === 'AbortError') {
+      return jsonError(504, '连接 WebDAV 超时（25 秒），请检查地址或网络是否可达');
+    }
+    return jsonError(502, 'WebDAV 代理失败：' + (error ? error.message : '未知错误'));
   }
+}
+
+function jsonError(status, msg) {
+  return new Response(JSON.stringify({ error: msg }), {
+    status,
+    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' }
+  });
 }
 
 function b64(str) {

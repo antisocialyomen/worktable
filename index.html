@@ -224,6 +224,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <div class="card"><div class="card-hd"><h3>📌 今日任务</h3><span class="btn-sm btn-o" onclick="go('tasks')">查看全部 →</span></div><div id="homeTasks"></div></div>
           <div class="card"><div class="card-hd"><h3>🔥 习惯打卡</h3><span class="btn-sm btn-o" onclick="go('life')">查看全部 →</span></div><div id="homeHabits"></div></div>
         </div>
+        <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📅 今日日程</h3><span class="btn-sm btn-o" onclick="go('schedule')">查看全部 →</span></div><div id="homeEvents"></div></div>
       </div>
 
       <!-- TASKS -->
@@ -253,8 +254,9 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb" data-t="collection">📚 书影音</span>
         </div>
         <div class="life-tab" id="l-expense">
-          <div class="g2"><div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div><div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01"><select class="in" id="expType" style="flex:0 0 auto;width:80px"><option value="e">支出</option><option value="i">收入</option></select></div><div class="ig"><select class="in" id="expCat"><option value="餐饮">🍜 餐饮</option><option value="交通">🚗 交通</option><option value="购物">🛍️ 购物</option><option value="娱乐">🎮 娱乐</option><option value="学习">📚 学习</option><option value="医疗">💊 医疗</option><option value="住房">🏠 住房</option><option value="薪资">💰 薪资</option><option value="其他">📦 其他</option></select><input class="in" id="expNote" placeholder="备注"><button class="btn btn-p" onclick="addExpense()"><i class="fas fa-plus"></i></button></div><div style="margin-top:8px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number"><button class="btn-sm btn-a" onclick="setBudget()">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div></div><div class="card"><div class="card-hd"><h3>📊 月度分析</h3></div><div style="height:200px"><canvas id="expChart"></canvas></div></div></div>
-          <div class="card"><div class="card-hd"><h3>📋 收支明细</h3><button class="btn-sm btn btn-o" onclick="exportCSV()"><i class="fas fa-download"></i> 导出CSV</button></div><div id="expList"></div></div>
+          <div class="g2"><div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div><div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01"><select class="in" id="expType" style="flex:0 0 auto;width:80px"><option value="e">支出</option><option value="i">收入</option></select></div><div class="ig"><select class="in" id="expCat"><option value="餐饮">🍜 餐饮</option><option value="交通">🚗 交通</option><option value="购物">🛍️ 购物</option><option value="娱乐">🎮 娱乐</option><option value="学习">📚 学习</option><option value="医疗">💊 医疗</option><option value="住房">🏠 住房</option><option value="薪资">💰 薪资</option><option value="其他">📦 其他</option></select><input class="in" id="expNote" placeholder="备注"><button class="btn btn-p" onclick="addExpense()"><i class="fas fa-plus"></i></button></div><div style="margin-top:8px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number"><button class="btn-sm btn-a" onclick="setBudget()">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div></div><div class="card"><div class="card-hd"><h3>📊 月度分析</h3><div style="margin-left:auto"><input type="month" id="expMonth" onchange="renderExpChart()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"></div></div><div style="height:200px"><canvas id="expChart"></canvas></div></div></div>
+          <div class="card"><div class="card-hd"><h3>📈 年度分析 <span id="annYearLabel" style="font-size:13px;color:var(--text2)"></span></h3><div style="margin-left:auto"><input type="number" id="expYear" onchange="renderAnnual()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px;width:90px"></div></div><div class="g2" style="margin-top:8px"><div style="height:240px"><canvas id="annChart"></canvas></div><div id="annSummary" style="min-height:200px;display:flex;align-items:center"></div></div></div>
+          <div class="card"><div class="card-hd"><h3>📋 收支明细</h3><button class="btn-sm btn btn-o" onclick="exportCSV()"><i class="fas fa-download"></i> 导出CSV</button></div><div class="g4" id="expTotals" style="margin:8px 0 12px"></div><div class="ft" id="expPeriodTabs" style="margin-bottom:10px"><span class="fb active" data-p="all">全部</span><span class="fb" data-p="day">按天</span><span class="fb" data-p="month">按月</span><span class="fb" data-p="year">按年</span></div><div id="expList"></div></div>
         </div>
         <div class="life-tab" id="l-habit" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>🔥 我的习惯</h3><button class="btn-sm btn-p" onclick="addHabit()"><i class="fas fa-plus"></i> 新建</button></div><div id="habitList"></div></div><div class="card"><div class="card-hd"><h3>📅 本月打卡</h3></div><div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div><div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text2)">本月打卡 <span id="monthCheck">0</span> 天</div></div></div></div>
         <div class="life-tab" id="l-health" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><button class="btn btn-p" onclick="addHealth()">记录</button></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3>📈 体重趋势</h3></div><div style="height:200px"><canvas id="weightChart"></canvas></div></div></div><div class="card"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="healthList"></div></div></div>
@@ -264,7 +266,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
       <!-- SCHEDULE -->
       <div class="page" id="p-schedule">
-        <div class="card"><div class="card-hd"><h3>📅 日程管理</h3><button class="btn-sm btn-p" onclick="addEvent()"><i class="fas fa-plus"></i> 新建日程</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
+        <div class="card"><div class="card-hd"><h3>📅 日程管理</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="addEvent()"><i class="fas fa-plus"></i> 新建日程</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
         <div class="card"><div class="card-hd"><h3>📋 近期日程</h3></div><div id="eventList"></div></div>
       </div>
 
@@ -431,6 +433,7 @@ document.addEventListener('DOMContentLoaded', function() {
       else if (parent === 'contentTabs') switchContentTab(fb.getAttribute('data-c'));
       else if (parent === 'newsTabs') renderNews(fb.getAttribute('data-p'));
       else if (parent === 'dramaTabs') renderDrama(fb.getAttribute('data-d'));
+      else if (parent === 'expPeriodTabs') switchExpPeriod(fb.getAttribute('data-p'));
     });
   });
   // Init
@@ -470,6 +473,8 @@ function initApp() {
   initGreeting();
   initTheme();
   WebDAV.init();
+  const evDateEl = document.getElementById('evDate');
+  if (evDateEl && !evDateEl.value) evDateEl.value = new Date().toISOString().slice(0, 10);
   renderAll();
   updateBadge();
   setInterval(updateBadge, 10000);
@@ -562,6 +567,10 @@ function mergeRecords(local, remote) {
   return result;
 }
 
+async function errDetail(r) {
+  try { const j = await r.json(); return j.error || j.detail || ''; } catch(e) { return ''; }
+}
+
 const WebDAV = {
   enabled: false, url: '', user: '', pass: '', file: 'workbench-data.json',
   proxy: '/api/webdav',
@@ -604,8 +613,11 @@ const WebDAV = {
           renderAll();
           toast(mergeAfter ? '☁️ 云端数据已合并' : '☁️ 云端数据已同步');
         }
+      } else {
+        const detail = await errDetail(r);
+        toast('⚠️ 拉取失败 ' + r.status + (detail ? '：' + detail : ''));
       }
-    } catch(e) {}
+    } catch(e) { toast('⚠️ 同步失败：网络错误'); }
   },
   async push() {
     if (!this.enabled) return;
@@ -616,7 +628,7 @@ const WebDAV = {
         body: JSON.stringify(d)
       });
       if (r.ok) toast('☁️ 数据已上传');
-      else { const txt = await r.text(); toast('⚠️ 同步失败 ' + r.status); }
+      else { const detail = await errDetail(r); toast('⚠️ 同步失败 ' + r.status + (detail ? '：' + detail : '')); }
     } catch(e) { toast('⚠️ 同步失败：网络错误'); }
   }
 };
@@ -705,6 +717,11 @@ function renderHome() {
   document.getElementById('homeHabits').innerHTML = habits.length === 0
     ? '<div class="emp" style="padding:20px"><p>还没有习惯</p></div>'
     : habits.slice(0, 4).map(h => '<div class="cb" onclick="toggleHabit(\'' + h.id + '\')"><input type="checkbox"' + (h.records && h.records.includes(today) ? 'checked' : '') + '><span class="cc"></span><span class="ct">' + h.name + '</span><span style="font-size:12px;color:var(--text3)">🔥 ' + (h.records ? h.records.length : 0) + '天</span></div>').join('');
+
+  const evToday = Store.get('events', []).filter(x => x.date === today);
+  document.getElementById('homeEvents').innerHTML = evToday.length === 0
+    ? '<div class="emp" style="padding:20px"><p>📭 今天没有日程安排</p></div>'
+    : evToday.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:12px;color:var(--text2)">📅 今日</span></div>').join('');
 }
 
 // ============================================================
@@ -727,7 +744,7 @@ function renderTasks() {
     list.innerHTML = filtered.map(t => {
       const pCls = t.pri === 'h' ? 't3' : t.pri === 'l' ? 't2' : 't1';
       const pLbl = t.pri === 'h' ? '紧急' : t.pri === 'l' ? '低优' : '普通';
-      return '<div class="cb"><input type="checkbox"' + (t.done ? 'checked' : '') + ' onchange="toggleTask(\'' + t.id + '\')"><span class="cc"></span><span class="ct" style="' + (t.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + t.title + '</span><span class="tag ' + pCls + '">' + pLbl + '</span><span style="font-size:12px;color:var(--text3)">' + (t.date === today ? '今天' : t.date || '') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();deleteTask(\'' + t.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+      return '<div class="cb"><input type="checkbox"' + (t.done ? 'checked' : '') + ' onchange="toggleTask(\'' + t.id + '\')"><span class="cc"></span><span class="ct" style="' + (t.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + t.title + '</span><span class="tag ' + pCls + '">' + pLbl + '</span><span style="font-size:12px;color:var(--text3)">' + (t.date === today ? '今天' : t.date || '') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editTask(\'' + t.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();deleteTask(\'' + t.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
     }).join('');
   }
   renderTasksChart();
@@ -776,6 +793,22 @@ function deleteTask(id) {
   Store.set('tasks', Store.get('tasks', []).filter(t => t.id !== id));
   renderTasks(); renderHome(); updateBadge();
 }
+function editTask(id) {
+  const tasks = Store.get('tasks', []);
+  const t = tasks.find(x => x.id === id);
+  if (!t) return;
+  const title = prompt('任务内容：', t.title);
+  if (title === null) return;
+  const pri = prompt('优先级（h 紧急 / m 普通 / l 低优）：', t.pri || 'm');
+  const date = prompt('日期 (YYYY-MM-DD)：', t.date || new Date().toISOString().slice(0, 10));
+  if (title.trim()) {
+    t.title = title.trim();
+    t.pri = (pri || 'm').trim();
+    t.date = date || t.date;
+    t.updatedAt = Date.now();
+    Store.set('tasks', tasks); renderTasks(); renderHome(); updateBadge(); toast('✅ 已更新');
+  }
+}
 
 // ============================================================
 // NOTES
@@ -791,26 +824,35 @@ function renderNotes() {
     ? '<div class="emp"><i class="fas fa-lightbulb"></i><p>还没有灵感笔记</p></div>'
     : f.map(n => '<div class="cb" style="cursor:pointer" onclick="editNote(\'' + n.id + '\')"><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:14px">' + (n.title || '无标题') + '</div><div style="font-size:12px;color:var(--text3);margin-top:2px">' + (n.content || '').slice(0, 60) + ((n.content || '').length > 60 ? '...' : '') + '</div></div><span class="tag t1">' + (n.cat || '其他') + '</span><span style="font-size:11px;color:var(--text3)">' + (n.createdAt || '').slice(0, 10) + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();delNote(\'' + n.id + '\')" style="color:var(--d)"><i class="fas fa-trash"></i></button></div>').join('');
 }
-function showEditor() { document.getElementById('noteEditor').style.display = 'block'; document.getElementById('noteTitle').value = ''; document.getElementById('noteContent').value = ''; document.getElementById('noteTitle').focus(); }
-function hideEditor() { document.getElementById('noteEditor').style.display = 'none'; }
+let editingNoteId = null;
+function showEditor() { editingNoteId = null; document.getElementById('noteEditor').style.display = 'block'; document.getElementById('noteTitle').value = ''; document.getElementById('noteContent').value = ''; document.getElementById('noteCat').value = '其他'; document.getElementById('noteTags').value = ''; document.getElementById('noteTitle').focus(); }
+function hideEditor() { editingNoteId = null; document.getElementById('noteEditor').style.display = 'none'; }
 function saveNote() {
   const t = document.getElementById('noteTitle').value.trim() || '无标题';
   const c = document.getElementById('noteContent').value.trim();
   if (!c) return toast('请输入笔记内容');
+  const tags = document.getElementById('noteTags').value.split(',').map(x => x.trim()).filter(Boolean);
+  const cat = document.getElementById('noteCat').value;
   const notes = Store.get('notes', []);
-  notes.unshift({ id: Date.now().toString(), title: t, content: c, cat: document.getElementById('noteCat').value, tags: document.getElementById('noteTags').value.split(',').map(x => x.trim()).filter(Boolean), createdAt: new Date().toISOString(), updatedAt: Date.now() });
+  if (editingNoteId) {
+    const n = notes.find(x => x.id === editingNoteId);
+    if (n) { n.title = t; n.content = c; n.cat = cat; n.tags = tags; n.updatedAt = Date.now(); }
+    editingNoteId = null;
+  } else {
+    notes.unshift({ id: Date.now().toString(), title: t, content: c, cat, tags, createdAt: new Date().toISOString(), updatedAt: Date.now() });
+  }
   Store.set('notes', notes); hideEditor(); renderNotes(); renderHome();
 }
 function editNote(id) {
   const notes = Store.get('notes', []);
   const n = notes.find(x => x.id === id);
   if (!n) return;
-  document.getElementById('noteTitle').value = n.title;
-  document.getElementById('noteContent').value = n.content;
-  document.getElementById('noteCat').value = n.cat;
+  editingNoteId = id;
+  document.getElementById('noteTitle').value = n.title || '';
+  document.getElementById('noteContent').value = n.content || '';
+  document.getElementById('noteCat').value = n.cat || '其他';
   document.getElementById('noteTags').value = (n.tags || []).join(', ');
   document.getElementById('noteEditor').style.display = 'block';
-  Store.set('notes', notes.filter(x => x.id !== id)); renderNotes();
 }
 function delNote(id) { Store.set('notes', Store.get('notes', []).filter(n => n.id !== id)); renderNotes(); renderHome(); }
 
@@ -821,20 +863,35 @@ function switchLifeTab(t) {
   document.querySelectorAll('.life-tab').forEach(el => el.style.display = 'none');
   const tab = document.getElementById('l-' + t);
   if (tab) tab.style.display = 'block';
-  if (t === 'expense') setTimeout(renderExpChart, 100);
+  if (t === 'expense') { initExpPeriods(); setTimeout(() => { renderExpChart(); renderAnnual(); }, 100); }
   if (t === 'health') setTimeout(renderWeightChart, 100);
   if (t === 'habit') renderHeatmap();
 }
 
+let expPeriod = 'all';
+function switchExpPeriod(p) { expPeriod = p || 'all'; renderExpenses(); }
+function initExpPeriods() {
+  const m = document.getElementById('expMonth'); if (m && !m.value) m.value = new Date().toISOString().slice(0, 7);
+  const y = document.getElementById('expYear'); if (y && !y.value) y.value = new Date().getFullYear();
+}
+function expenseSum(arr, type) { return arr.filter(x => x.type === type).reduce((s, x) => s + (parseFloat(x.amt) || 0), 0); }
 function renderExpenses() {
   const e = Store.get('expenses', []);
-  document.getElementById('expList').innerHTML = e.length === 0
-    ? '<div class="emp"><i class="fas fa-coins"></i><p>还没有收支记录</p></div>'
-    : e.slice(0, 20).map(x => '<div class="cb" style="cursor:default"><div style="font-size:14px;font-weight:500;flex:1">' + (x.cat || '其他') + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + '">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span></div>').join('');
+  const today = new Date().toISOString().slice(0, 10);
+  const ym = today.slice(0, 7);
+  const y = today.slice(0, 4);
+  let list = e;
+  if (expPeriod === 'day') list = e.filter(x => x.date === today);
+  else if (expPeriod === 'month') list = e.filter(x => (x.date || '').startsWith(ym));
+  else if (expPeriod === 'year') list = e.filter(x => (x.date || '').startsWith(y));
+  document.getElementById('expList').innerHTML = list.length === 0
+    ? '<div class="emp"><i class="fas fa-coins"></i><p>该区间没有收支记录</p></div>'
+    : list.slice(0, 100).map(x => '<div class="cb" style="cursor:default"><div style="font-size:14px;font-weight:500;flex:1">' + (x.cat || '其他') + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.date || '') + ' ' + (x.note || '') + '</span></div><span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + '">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editExpense(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delExpense(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+  renderExpTotals(e, today, ym, y);
   const b = Store.get('budget', 0);
   document.getElementById('budTotal').textContent = b ? '¥' + b : '未设置';
   if (b > 0) {
-    const te = e.filter(x => x.type === 'e').reduce((s, x) => s + parseFloat(x.amt), 0);
+    const te = e.filter(x => x.type === 'e' && (x.date || '').startsWith(ym)).reduce((s, x) => s + parseFloat(x.amt), 0);
     document.getElementById('budUsed').textContent = '¥' + te.toFixed(0);
     const pct = Math.min(te / b * 100, 100);
     const f = document.getElementById('budFill');
@@ -842,14 +899,45 @@ function renderExpenses() {
     f.style.background = pct > 90 ? 'var(--d)' : pct > 70 ? 'var(--alert)' : 'var(--s)';
   }
 }
+function renderExpTotals(e, today, ym, y) {
+  const tE = expenseSum(e.filter(x => x.date === today), 'e'), tI = expenseSum(e.filter(x => x.date === today), 'i');
+  const mE = expenseSum(e.filter(x => (x.date || '').startsWith(ym)), 'e'), mI = expenseSum(e.filter(x => (x.date || '').startsWith(ym)), 'i');
+  const yE = expenseSum(e.filter(x => (x.date || '').startsWith(y)), 'e'), yI = expenseSum(e.filter(x => (x.date || '').startsWith(y)), 'i');
+  document.getElementById('expTotals').innerHTML = [
+    ['今日支出', tE, 'var(--d)'], ['今日收入', tI, 'var(--accent)'],
+    ['本月支出', mE, 'var(--d)'], ['本月收入', mI, 'var(--accent)'],
+    ['本年支出', yE, 'var(--d)'], ['本年收入', yI, 'var(--accent)']
+  ].map(([l, v, col]) => '<div class="sc"><div class="si si1"><i class="fas fa-yen-sign"></i></div><div class="si"><div class="num" style="color:' + col + '">¥' + (v ? v.toFixed(2) : '0.00') + '</div><div class="label">' + l + '</div></div></div>').join('');
+}
 function renderExpChart() {
   const e = Store.get('expenses', []);
+  const m = document.getElementById('expMonth')?.value || new Date().toISOString().slice(0, 7);
   const c = {};
-  e.filter(x => x.type === 'e').forEach(x => { c[x.cat || '其他'] = (c[x.cat || '其他'] || 0) + parseFloat(x.amt); });
+  e.filter(x => x.type === 'e' && (x.date || '').startsWith(m)).forEach(x => { c[x.cat || '其他'] = (c[x.cat || '其他'] || 0) + parseFloat(x.amt); });
   const ctx = document.getElementById('expChart');
   if (!ctx) return;
   if (charts.exp) charts.exp.destroy();
-  charts.exp = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A','#8C6BB0','#BAA0AA'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } } } } });
+  charts.exp = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A','#8C6BB0','#BAA0AA'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } }, title: { display: true, text: m + ' 支出分类', font: { size: 12 } } } } });
+}
+function renderAnnual() {
+  const e = Store.get('expenses', []);
+  const y = (document.getElementById('expYear')?.value || new Date().getFullYear()).toString();
+  const inYear = e.filter(x => (x.date || '').startsWith(y));
+  const c = {};
+  inYear.filter(x => x.type === 'e').forEach(x => { c[x.cat || '其他'] = (c[x.cat || '其他'] || 0) + parseFloat(x.amt); });
+  const ctx = document.getElementById('annChart');
+  if (ctx) {
+    if (charts.ann) charts.ann.destroy();
+    charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: Object.keys(c), datasets: [{ data: Object.values(c), backgroundColor: ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A','#8C6BB0','#BAA0AA'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: 10 } } }, title: { display: true, text: y + ' 支出分类', font: { size: 12 } } } } });
+  }
+  const inc = expenseSum(inYear, 'i'), exp = expenseSum(inYear, 'e');
+  const el = document.getElementById('annSummary');
+  if (el) el.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;width:100%">' +
+    '<div><span style="font-size:12px;color:var(--text3)">年收入</span><div style="font-size:22px;font-weight:700;color:var(--accent)">¥' + inc.toFixed(2) + '</div></div>' +
+    '<div><span style="font-size:12px;color:var(--text3)">年支出</span><div style="font-size:22px;font-weight:700;color:var(--d)">¥' + exp.toFixed(2) + '</div></div>' +
+    '<div><span style="font-size:12px;color:var(--text3)">年结余</span><div style="font-size:22px;font-weight:700;color:var(--s)">¥' + (inc - exp).toFixed(2) + '</div></div>' +
+    '<div style="font-size:12px;color:var(--text3)">' + y + ' 年共 ' + inYear.length + ' 笔记录</div></div>';
+  const lbl = document.getElementById('annYearLabel'); if (lbl) lbl.textContent = '· ' + y;
 }
 function addExpense() {
   const a = parseFloat(document.getElementById('expAmt').value);
@@ -858,9 +946,26 @@ function addExpense() {
   e.unshift({ id: Date.now().toString(), amt: a, type: document.getElementById('expType').value, cat: document.getElementById('expCat').value, note: document.getElementById('expNote').value.trim() || '', date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
   Store.set('expenses', e);
   document.getElementById('expAmt').value = ''; document.getElementById('expNote').value = '';
-  renderExpenses(); renderExpChart();
+  renderExpenses(); renderExpChart(); renderAnnual();
 }
 function setBudget() { const v = parseFloat(document.getElementById('budgetIn').value); if (v > 0) { Store.set('budget', v); renderExpenses(); toast('✅ 预算已设置'); } }
+function editExpense(id) {
+  const e = Store.get('expenses', []);
+  const x = e.find(z => z.id === id);
+  if (!x) return;
+  const a = prompt('金额：', x.amt);
+  if (a === null) return;
+  const type = prompt('类型（e 支出 / i 收入）：', x.type || 'e');
+  const cat = prompt('分类：', x.cat || '其他');
+  const note = prompt('备注：', x.note || '');
+  const date = prompt('日期 (YYYY-MM-DD)：', x.date || new Date().toISOString().slice(0, 10));
+  const amt = parseFloat(a);
+  if (!isNaN(amt) && amt > 0) {
+    x.amt = amt; x.type = (type || 'e').trim(); x.cat = cat || x.cat; x.note = note; x.date = date || x.date; x.updatedAt = Date.now();
+    Store.set('expenses', e); renderExpenses(); renderExpChart(); renderAnnual(); toast('✅ 已更新');
+  }
+}
+function delExpense(id) { Store.set('expenses', Store.get('expenses', []).filter(x => x.id !== id)); renderExpenses(); renderExpChart(); renderAnnual(); }
 function exportCSV() {
   const e = Store.get('expenses', []);
   let c = '日期,类型,分类,金额,备注\n';
@@ -876,7 +981,7 @@ function renderHabits() {
   const h = Store.get('habits', []);
   document.getElementById('habitList').innerHTML = h.length === 0
     ? '<div class="emp" style="padding:20px"><i class="fas fa-fire"></i><p>还没有习惯</p></div>'
-    : h.map(x => '<div class="cb"><input type="checkbox"' + (x.records && x.records.includes(new Date().toISOString().slice(0, 10)) ? 'checked' : '') + ' onchange="toggleHabit(\'' + x.id + '\')"><span class="cc"></span><span class="ct">' + x.name + '</span><span style="font-size:12px;color:var(--text3)">🔥 ' + (x.records ? x.records.length : 0) + '天</span><button class="btn-icon btn-o" onclick="event.stopPropagation();delHabit(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : h.map(x => '<div class="cb"><input type="checkbox"' + (x.records && x.records.includes(new Date().toISOString().slice(0, 10)) ? 'checked' : '') + ' onchange="toggleHabit(\'' + x.id + '\')"><span class="cc"></span><span class="ct">' + x.name + '</span><span style="font-size:12px;color:var(--text3)">🔥 ' + (x.records ? x.records.length : 0) + '天</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editHabit(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delHabit(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
   renderHeatmap();
 }
 function renderHeatmap() {
@@ -907,6 +1012,14 @@ function toggleHabit(id) {
   Store.set('habits', h); renderHabits(); renderHome();
 }
 function addHabit() { const n = prompt('习惯名称：', ''); if (n && n.trim()) { const h = Store.get('habits', []); h.push({ id: Date.now().toString(), name: n.trim(), records: [], updatedAt: Date.now() }); Store.set('habits', h); renderHabits(); renderHome(); toast('✅ 已添加'); } }
+function editHabit(id) {
+  const h = Store.get('habits', []);
+  const x = h.find(z => z.id === id);
+  if (!x) return;
+  const n = prompt('习惯名称：', x.name);
+  if (n === null) return;
+  if (n.trim()) { x.name = n.trim(); x.updatedAt = Date.now(); Store.set('habits', h); renderHabits(); renderHome(); toast('✅ 已更新'); }
+}
 function delHabit(id) { Store.set('habits', Store.get('habits', []).filter(h => h.id !== id)); renderHabits(); renderHome(); }
 
 // ============================================================
@@ -916,7 +1029,7 @@ function renderHealth() {
   const r = Store.get('health', []);
   document.getElementById('healthList').innerHTML = r.length === 0
     ? '<div class="emp"><i class="fas fa-heartbeat"></i><p>还没有健康记录</p></div>'
-    : r.slice(0, 20).map(x => '<div class="cb" style="cursor:default"><div style="flex:1"><span style="font-weight:500">' + x.weight + 'kg</span>' + (x.fat ? ' / ' + x.fat + '%' : '') + '</div><span style="font-size:12px;color:var(--text3)">' + x.date + '</span></div>').join('');
+    : r.slice(0, 20).map(x => '<div class="cb" style="cursor:default"><div style="flex:1"><span style="font-weight:500">' + x.weight + 'kg</span>' + (x.fat ? ' / ' + x.fat + '%' : '') + '</div><span style="font-size:12px;color:var(--text3)">' + x.date + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editHealth(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delHealth(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
   const l = r[0];
   document.getElementById('curWeight').textContent = l ? l.weight + 'kg' : '--';
   document.getElementById('curBMI').textContent = l ? (l.weight / Math.pow(1.7, 2)).toFixed(1) : '--';
@@ -936,6 +1049,18 @@ function addHealth() {
   r.unshift({ id: Date.now().toString(), weight: w, fat: parseFloat(document.getElementById('hFat').value) || 0, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
   Store.set('health', r); document.getElementById('hWeight').value = ''; document.getElementById('hFat').value = ''; renderHealth();
 }
+function editHealth(id) {
+  const r = Store.get('health', []);
+  const x = r.find(z => z.id === id);
+  if (!x) return;
+  const w = prompt('体重 (kg)：', x.weight);
+  if (w === null) return;
+  const f = prompt('体脂率 (%)：', x.fat || 0);
+  const d = prompt('日期 (YYYY-MM-DD)：', x.date);
+  const weight = parseFloat(w);
+  if (!isNaN(weight) && weight > 0) { x.weight = weight; x.fat = parseFloat(f) || 0; x.date = d || x.date; x.updatedAt = Date.now(); Store.set('health', r); renderHealth(); toast('✅ 已更新'); }
+}
+function delHealth(id) { Store.set('health', Store.get('health', []).filter(x => x.id !== id)); renderHealth(); }
 
 // ============================================================
 // LIFE - Shopping
@@ -944,10 +1069,19 @@ function renderShopping() {
   const i = Store.get('shopping', []);
   document.getElementById('shopList').innerHTML = i.length === 0
     ? '<div class="emp" style="padding:20px"><i class="fas fa-shopping-cart"></i><p>购物清单为空</p></div>'
-    : i.map(x => '<div class="cb"><input type="checkbox"' + (x.done ? 'checked' : '') + ' onchange="togShop(\'' + x.id + '\')"><span class="cc"></span><span class="ct" style="' + (x.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + x.name + '</span><span class="tag t1">' + (x.cat || '其他') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();delShop(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : i.map(x => '<div class="cb"><input type="checkbox"' + (x.done ? 'checked' : '') + ' onchange="togShop(\'' + x.id + '\')"><span class="cc"></span><span class="ct" style="' + (x.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + x.name + '</span><span class="tag t1">' + (x.cat || '其他') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editShop(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delShop(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
 function addShop() { const n = document.getElementById('shopIn').value.trim(); if (!n) return; const i = Store.get('shopping', []); i.unshift({ id: Date.now().toString(), name: n, cat: document.getElementById('shopCat').value, done: false, updatedAt: Date.now() }); Store.set('shopping', i); document.getElementById('shopIn').value = ''; renderShopping(); }
 function togShop(id) { const i = Store.get('shopping', []); const x = i.find(x => x.id === id); if (x) { x.done = !x.done; x.updatedAt = Date.now(); Store.set('shopping', i); renderShopping(); } }
+function editShop(id) {
+  const i = Store.get('shopping', []);
+  const x = i.find(z => z.id === id);
+  if (!x) return;
+  const n = prompt('名称：', x.name);
+  if (n === null) return;
+  const c = prompt('分类（食品/日用品/服饰/数码/其他）：', x.cat || '其他');
+  if (n.trim()) { x.name = n.trim(); x.cat = c || x.cat; x.updatedAt = Date.now(); Store.set('shopping', i); renderShopping(); toast('✅ 已更新'); }
+}
 function delShop(id) { Store.set('shopping', Store.get('shopping', []).filter(i => i.id !== id)); renderShopping(); }
 
 // ============================================================
@@ -963,9 +1097,19 @@ function renderColl() {
   const icons = { book: 'fa-book', movie: 'fa-film', music: 'fa-music' };
   document.getElementById('collList').innerHTML = f.length === 0
     ? '<div class="emp" style="padding:20px"><i class="fas fa-star"></i><p>还没有收藏</p></div>'
-    : f.map(x => '<div class="cb" style="cursor:default"><i class="fas ' + (icons[x.type] || 'fa-star') + '" style="color:var(--primary);width:20px;text-align:center"></i><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:14px">' + x.title + '</div></div>' + (x.rating ? '<span style="color:var(--alert)">' + '★'.repeat(x.rating) + '</span>' : '') + '<button class="btn-icon btn-o" onclick="delColl(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : f.map(x => '<div class="cb" style="cursor:default"><i class="fas ' + (icons[x.type] || 'fa-star') + '" style="color:var(--primary);width:20px;text-align:center"></i><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:14px">' + x.title + '</div></div>' + (x.rating ? '<span style="color:var(--alert)">' + '★'.repeat(x.rating) + '</span>' : '') + '<button class="btn-icon btn-o" onclick="editColl(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delColl(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
 function addColl() { const t = prompt('名称：', ''); if (!t) return; const ty = prompt('类型（book/movie/music）：', 'book') || 'book'; const r = parseInt(prompt('评分（1-5）：', '3') || '3'); const i = Store.get('collections', []); i.unshift({ id: Date.now().toString(), title: t, type: ty, rating: Math.min(5, Math.max(1, r)), createdAt: new Date().toISOString(), updatedAt: Date.now() }); Store.set('collections', i); renderColl(); toast('✅ 已添加'); }
+function editColl(id) {
+  const i = Store.get('collections', []);
+  const x = i.find(z => z.id === id);
+  if (!x) return;
+  const t = prompt('名称：', x.title);
+  if (t === null) return;
+  const ty = prompt('类型（book/movie/music）：', x.type || 'book');
+  const r = prompt('评分（1-5）：', x.rating || 3);
+  if (t.trim()) { x.title = t.trim(); x.type = ty || x.type; x.rating = Math.min(5, Math.max(1, parseInt(r) || x.rating)); x.updatedAt = Date.now(); Store.set('collections', i); renderColl(); toast('✅ 已更新'); }
+}
 function delColl(id) { Store.set('collections', Store.get('collections', []).filter(i => i.id !== id)); renderColl(); }
 
 // ============================================================
@@ -993,10 +1137,27 @@ function renderEvents() {
   const t = new Date().toISOString().slice(0, 10);
   const up = ev.filter(x => x.date >= t).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 10);
   list.innerHTML = up.length === 0 ? '<div class="emp" style="padding:20px"><p>近期无日程</p></div>'
-    : up.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:13px;font-weight:500;margin-right:8px">' + x.date.slice(5) + '</span><button class="btn-icon btn-o" onclick="delEvent(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : up.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:13px;font-weight:500;margin-right:8px">' + x.date.slice(5) + '</span><button class="btn-icon btn-o" onclick="editEvent(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delEvent(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
-function addEvent() { const t = prompt('日程标题：', ''); if (!t) return; const d = prompt('日期 (YYYY-MM-DD)：', new Date().toISOString().slice(0, 10)); if (!d) return; const ev = Store.get('events', []); ev.push({ id: Date.now().toString(), title: t, date: d, note: prompt('备注：', ''), updatedAt: Date.now() }); Store.set('events', ev); renderCalendar(); renderEvents(); toast('✅ 已添加'); }
-function delEvent(id) { Store.set('events', Store.get('events', []).filter(e => e.id !== id)); renderCalendar(); renderEvents(); }
+function addEvent() {
+  const d0 = document.getElementById('evDate')?.value || new Date().toISOString().slice(0, 10);
+  const t = prompt('日程标题：', ''); if (!t) return;
+  const d = prompt('日期 (YYYY-MM-DD)：', d0); if (!d) return;
+  const ev = Store.get('events', []);
+  ev.push({ id: Date.now().toString(), title: t, date: d, note: prompt('备注：', ''), updatedAt: Date.now() });
+  Store.set('events', ev); renderCalendar(); renderEvents(); renderHome(); toast('✅ 已添加');
+}
+function editEvent(id) {
+  const ev = Store.get('events', []);
+  const x = ev.find(z => z.id === id);
+  if (!x) return;
+  const t = prompt('日程标题：', x.title);
+  if (t === null) return;
+  const d = prompt('日期 (YYYY-MM-DD)：', x.date);
+  const note = prompt('备注：', x.note || '');
+  if (t.trim()) { x.title = t.trim(); x.date = d || x.date; x.note = note; x.updatedAt = Date.now(); Store.set('events', ev); renderCalendar(); renderEvents(); renderHome(); toast('✅ 已更新'); }
+}
+function delEvent(id) { Store.set('events', Store.get('events', []).filter(e => e.id !== id)); renderCalendar(); renderEvents(); renderHome(); }
 function chMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderCalendar(); renderEvents(); }
 function goToday() { calDate = new Date(); renderCalendar(); renderEvents(); }
 
@@ -1050,17 +1211,39 @@ function renderTopics() {
   const sc = { 待创作: 't3', 进行中: 't1', 已发布: 't2' };
   document.getElementById('topicList').innerHTML = f.length === 0
     ? '<div class="emp"><i class="fas fa-pen-fancy"></i><p>还没有选题</p></div>'
-    : f.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '</div><span class="tag ' + (sc[x.status] || 't1') + '">' + (x.status || '待创作') + '</span><span style="font-size:12px;color:var(--text3);margin:0 8px">' + (x.date || '') + '</span><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : f.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '</div><span class="tag ' + (sc[x.status] || 't1') + '">' + (x.status || '待创作') + '</span><span style="font-size:12px;color:var(--text3);margin:0 8px">' + (x.date || '') + '</span><button class="btn-icon btn-o" onclick="editTopic(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
 function addTopic() { const t = prompt('选题标题：', ''); if (!t) return; const topics = Store.get('topics', []); topics.unshift({ id: Date.now().toString(), title: t, source: prompt('来源：', ''), status: '待创作', date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() }); Store.set('topics', topics); renderTopics(); toast('✅ 已添加'); }
+function editTopic(id) {
+  const topics = Store.get('topics', []);
+  const x = topics.find(z => z.id === id);
+  if (!x) return;
+  const t = prompt('选题标题：', x.title);
+  if (t === null) return;
+  const src = prompt('来源：', x.source || '');
+  const st = prompt('状态（待创作/进行中/已发布）：', x.status || '待创作');
+  const d = prompt('日期 (YYYY-MM-DD)：', x.date || new Date().toISOString().slice(0, 10));
+  if (t.trim()) { x.title = t.trim(); x.source = src; x.status = st || x.status; x.date = d || x.date; x.updatedAt = Date.now(); Store.set('topics', topics); renderTopics(); toast('✅ 已更新'); }
+}
 function delTopic(id) { Store.set('topics', Store.get('topics', []).filter(t => t.id !== id)); renderTopics(); }
 function renderMats() {
   const m = Store.get('materials', []);
   document.getElementById('matList').innerHTML = m.length === 0
     ? '<div class="emp"><i class="fas fa-paperclip"></i><p>素材库为空</p></div>'
-    : m.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (x.url ? '<a href="' + x.url + '" target="_blank" style="font-size:12px;margin-right:8px">🔗</a>' : '') + '<button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : m.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (x.url ? '<a href="' + x.url + '" target="_blank" style="font-size:12px;margin-right:8px">🔗</a>' : '') + '<button class="btn-icon btn-o" onclick="editMat(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
 function addMat() { const t = prompt('素材标题：', ''); if (!t) return; const m = Store.get('materials', []); m.unshift({ id: Date.now().toString(), title: t, note: prompt('备注：', ''), category: prompt('分类：', '参考'), url: prompt('链接：', ''), updatedAt: Date.now() }); Store.set('materials', m); renderMats(); toast('✅ 已添加'); }
+function editMat(id) {
+  const m = Store.get('materials', []);
+  const x = m.find(z => z.id === id);
+  if (!x) return;
+  const t = prompt('素材标题：', x.title);
+  if (t === null) return;
+  const note = prompt('备注：', x.note || '');
+  const cat = prompt('分类：', x.category || '参考');
+  const url = prompt('链接：', x.url || '');
+  if (t.trim()) { x.title = t.trim(); x.note = note; x.category = cat || x.category; x.url = url; x.updatedAt = Date.now(); Store.set('materials', m); renderMats(); toast('✅ 已更新'); }
+}
 function delMat(id) { Store.set('materials', Store.get('materials', []).filter(m => m.id !== id)); renderMats(); }
 
 // ============================================================
@@ -1297,9 +1480,18 @@ function showWant() {
   const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
   list.innerHTML = want.length === 0
     ? '<div class="emp" style="grid-column:1/-1"><i class="fas fa-heart"></i><p>想看列表为空</p></div>'
-    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer" onclick="window.open(\'' + w.url + '\',\'_blank\')">' + w.title + '</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;color:var(--text3)"><span class="tag t1">' + (typeName[w.type] || '影视') + '</span><span style="font-size:12px;color:var(--text3)">' + (w.rate ? '⭐' + w.rate : '') + '</span><span>' + w.date + '</span><div style="flex:1"></div><button class="btn-sm btn-o" onclick="rmWant(' + i + ')" style="color:var(--d)"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
+    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer" onclick="window.open(\'' + w.url + '\',\'_blank\')">' + w.title + '</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;color:var(--text3)"><span class="tag t1">' + (typeName[w.type] || '影视') + '</span><span style="font-size:12px;color:var(--text3)">' + (w.rate ? '⭐' + w.rate : '') + '</span><span>' + w.date + '</span><div style="flex:1"></div><button class="btn-sm btn-o" onclick="editWant(' + i + ')"><i class="fas fa-pen"></i> 评分</button><button class="btn-sm btn-o" onclick="rmWant(' + i + ')" style="color:var(--d)"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
 }
 
+function editWant(idx) {
+  let want = Store.get('dramaWant', []);
+  const w = want[idx];
+  if (!w) return;
+  const r = prompt('我的评分（留空则不评分）：', w.rate || '');
+  if (r === null) return;
+  w.rate = r.trim(); w.updatedAt = Date.now();
+  Store.set('dramaWant', want); showWant();
+}
 function rmWant(idx) {
   let want = Store.get('dramaWant', []);
   want.splice(idx, 1); Store.set('dramaWant', want);
