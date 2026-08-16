@@ -1,6 +1,7 @@
 # 本地验证脚本与截图（临时调试用，不进仓库）
 _verify.py
 _verify.png
+_check.js
 
 # WorkBuddy 项目内部数据（记忆/配置，不进仓库）
 .workbuddy/

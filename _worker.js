@@ -12,6 +12,11 @@ export default {
       return handleDoubanProxy(path, url.search);
     }
 
+    // 处理 /api/webdav 路径 → 代理到用户 WebDAV 服务（解决浏览器 CORS 跨域）
+    if (path === '/api/webdav' || path.startsWith('/api/webdav/')) {
+      return handleWebDAVProxy(request);
+    }
+
     // 其他路径 → 交给 Cloudflare Pages 托管静态文件
     // env.ASSETS.fetch 会从 Pages 的静态资源中查找并返回文件
     try {
@@ -38,6 +43,73 @@ export default {
     return new Response('Not Found', { status: 404 });
   }
 };
+
+async function handleWebDAVProxy(request) {
+  // 处理浏览器 CORS 预检请求
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE'
+      }
+    });
+  }
+
+  const wdUrl = request.headers.get('X-WD-URL');
+  const wdUser = request.headers.get('X-WD-USER');
+  const wdPass = request.headers.get('X-WD-PASS');
+  const wdFile = request.headers.get('X-WD-FILE') || 'workbench-data.json';
+
+  if (!wdUrl || !wdUser || !wdPass) {
+    return new Response(JSON.stringify({ error: '缺少 WebDAV 凭据' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    });
+  }
+
+  try {
+    const targetUrl = new URL(wdFile, wdUrl.replace(/\/+$/, '') + '/').href;
+    const auth = 'Basic ' + b64(wdUser + ':' + wdPass);
+
+    const init = {
+      method: request.method,
+      headers: {
+        'Authorization': auth,
+        'Content-Type': request.headers.get('Content-Type') || 'application/json'
+      }
+    };
+
+    if (request.method === 'PUT') {
+      init.body = await request.text();
+    }
+
+    const response = await fetch(targetUrl, init);
+    const body = await response.arrayBuffer();
+
+    return new Response(body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: {
+        'Content-Type': response.headers.get('Content-Type') || 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE'
+      }
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: 'WebDAV 代理失败', detail: error.message }), {
+      status: 502,
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    });
+  }
+}
+
+function b64(str) {
+  // UTF-8 安全的 base64 编码，避免账号/密码含非 ASCII 字符时 btoa 抛错
+  return btoa(unescape(encodeURIComponent(str)));
+}
 
 async function handleDoubanProxy(path, search) {
   // 提取豆瓣 API 路径

@@ -446,8 +446,68 @@ function initTheme() {
 }
 
 // ===== WEBDAV =====
+function readSyncData() {
+  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant'];
+  const d = {};
+  keys.forEach(k => { d[k] = Store.get(k, null); });
+  return d;
+}
+
+function ts(v) {
+  if (!v) return 0;
+  if (typeof v === 'number') return v;
+  const n = Date.parse(v);
+  return isNaN(n) ? 0 : n;
+}
+
+function mergeArrayById(localArr, remoteArr) {
+  if (!Array.isArray(localArr)) localArr = [];
+  if (!Array.isArray(remoteArr)) remoteArr = [];
+  const map = new Map();
+  for (const item of localArr) {
+    const key = item && item.id ? item.id : 'local_' + JSON.stringify(item);
+    map.set(key, { local: item });
+  }
+  for (const item of remoteArr) {
+    const key = item && item.id ? item.id : 'remote_' + JSON.stringify(item);
+    const entry = map.get(key) || {};
+    entry.remote = item;
+    map.set(key, entry);
+  }
+  const merged = [];
+  for (const entry of map.values()) {
+    if (entry.local && entry.remote) {
+      const lu = ts(entry.local.updatedAt) || ts(entry.local.createdAt);
+      const ru = ts(entry.remote.updatedAt) || ts(entry.remote.createdAt);
+      merged.push(ru >= lu ? entry.remote : entry.local);
+    } else if (entry.remote) {
+      merged.push(entry.remote);
+    } else {
+      merged.push(entry.local);
+    }
+  }
+  return merged;
+}
+
+function mergeRecords(local, remote) {
+  const result = {};
+  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant'];
+  const allKeys = new Set([...Object.keys(local || {}), ...Object.keys(remote || {})]);
+  for (const key of allKeys) {
+    const loc = local ? local[key] : undefined;
+    const rem = remote ? remote[key] : undefined;
+    if (arrayKeys.includes(key) && Array.isArray(loc) && Array.isArray(rem)) {
+      result[key] = mergeArrayById(loc, rem);
+    } else {
+      result[key] = rem !== undefined ? rem : loc;
+    }
+  }
+  return result;
+}
+
 const WebDAV = {
   enabled: false, url: '', user: '', pass: '', file: 'workbench-data.json',
+  proxy: '/api/webdav',
   init() {
     const c = Store.get('webdav', {});
     if (c.url && c.user && c.pass) {
@@ -463,16 +523,29 @@ const WebDAV = {
       setTimeout(() => this.pull(), 500);
     }
   },
-  auth() { return 'Basic ' + btoa(this.user + ':' + this.pass); },
-  async pull() {
+  headers() {
+    return {
+      'Content-Type': 'application/json',
+      'X-WD-URL': this.url,
+      'X-WD-USER': this.user,
+      'X-WD-PASS': this.pass,
+      'X-WD-FILE': this.file
+    };
+  },
+  async pull(mergeAfter = false) {
     if (!this.enabled) return;
     try {
-      const r = await fetch(this.url + this.file, { method: 'GET', headers: { 'Authorization': this.auth() } });
+      const r = await fetch(this.proxy, { method: 'GET', headers: this.headers() });
       if (r.ok) {
-        const d = await r.json();
+        const text = await r.text();
+        if (!text.trim()) return;
+        let d;
+        try { d = JSON.parse(text); } catch(e) { return; }
         if (d && typeof d === 'object') {
-          Object.keys(d).forEach(k => { if (d[k] !== null) Store.set(k, d[k]); });
-          renderAll(); toast('☁️ 云端数据已同步');
+          const merged = mergeRecords(readSyncData(), d);
+          Object.keys(merged).forEach(k => { if (merged[k] !== null) Store.set(k, merged[k]); });
+          renderAll();
+          toast(mergeAfter ? '☁️ 云端数据已合并' : '☁️ 云端数据已同步');
         }
       }
     } catch(e) {}
@@ -480,15 +553,13 @@ const WebDAV = {
   async push() {
     if (!this.enabled) return;
     try {
-      const d = {};
-      const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant'];
-      keys.forEach(k => { d[k] = Store.get(k, null); });
-      const r = await fetch(this.url + this.file, {
-        method: 'PUT', headers: { 'Authorization': this.auth(), 'Content-Type': 'application/json' },
+      const d = readSyncData();
+      const r = await fetch(this.proxy, {
+        method: 'PUT', headers: this.headers(),
         body: JSON.stringify(d)
       });
       if (r.ok) toast('☁️ 数据已上传');
-      else toast('⚠️ 同步失败');
+      else { const txt = await r.text(); toast('⚠️ 同步失败 ' + r.status); }
     } catch(e) { toast('⚠️ 同步失败：网络错误'); }
   }
 };
@@ -520,7 +591,8 @@ function saveWD() {
   document.getElementById('syncBtn').style.color = 'var(--accent)';
   document.getElementById('wdStatus').textContent = '☁️ 已配置';
   toast('✅ 已保存');
-  WebDAV.push();
+  // 首次保存：先合并云端已有数据，避免空本地覆盖云端
+  doSync();
 }
 function doSync() {
   if (!WebDAV.enabled) {
@@ -530,9 +602,10 @@ function doSync() {
     return;
   }
   document.getElementById('syncBtn').style.color = 'var(--alert)';
-  WebDAV.push().then(() => WebDAV.pull().then(() => {
+  // 先拉取云端数据合并到本地，再推送合并后的完整数据，避免旧本地覆盖云端
+  WebDAV.pull(true).then(() => WebDAV.push()).then(() => {
     document.getElementById('syncBtn').style.color = 'var(--accent)';
-  }));
+  });
 }
 
 // ===== RENDER ALL =====
@@ -633,14 +706,14 @@ function addTask() {
   const t = i.value.trim();
   if (!t) return toast('请输入任务内容');
   const tasks = Store.get('tasks', []);
-  tasks.unshift({ id: Date.now().toString(), title: t, pri: document.getElementById('taskPri').value, done: false, date: new Date().toISOString().slice(0, 10) });
+  tasks.unshift({ id: Date.now().toString(), title: t, pri: document.getElementById('taskPri').value, done: false, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
   Store.set('tasks', tasks);
   i.value = ''; renderTasks(); renderHome(); updateBadge();
 }
 function toggleTask(id) {
   const tasks = Store.get('tasks', []);
   const t = tasks.find(t => t.id === id);
-  if (t) { t.done = !t.done; Store.set('tasks', tasks); renderTasks(); renderHome(); updateBadge(); }
+  if (t) { t.done = !t.done; t.updatedAt = Date.now(); Store.set('tasks', tasks); renderTasks(); renderHome(); updateBadge(); }
 }
 function deleteTask(id) {
   Store.set('tasks', Store.get('tasks', []).filter(t => t.id !== id));
@@ -668,7 +741,7 @@ function saveNote() {
   const c = document.getElementById('noteContent').value.trim();
   if (!c) return toast('请输入笔记内容');
   const notes = Store.get('notes', []);
-  notes.unshift({ id: Date.now().toString(), title: t, content: c, cat: document.getElementById('noteCat').value, tags: document.getElementById('noteTags').value.split(',').map(x => x.trim()).filter(Boolean), createdAt: new Date().toISOString() });
+  notes.unshift({ id: Date.now().toString(), title: t, content: c, cat: document.getElementById('noteCat').value, tags: document.getElementById('noteTags').value.split(',').map(x => x.trim()).filter(Boolean), createdAt: new Date().toISOString(), updatedAt: Date.now() });
   Store.set('notes', notes); hideEditor(); renderNotes(); renderHome();
 }
 function editNote(id) {
@@ -725,7 +798,7 @@ function addExpense() {
   const a = parseFloat(document.getElementById('expAmt').value);
   if (!a || a <= 0) return toast('请输入有效金额');
   const e = Store.get('expenses', []);
-  e.unshift({ id: Date.now().toString(), amt: a, type: document.getElementById('expType').value, cat: document.getElementById('expCat').value, note: document.getElementById('expNote').value.trim() || '', date: new Date().toISOString().slice(0, 10) });
+  e.unshift({ id: Date.now().toString(), amt: a, type: document.getElementById('expType').value, cat: document.getElementById('expCat').value, note: document.getElementById('expNote').value.trim() || '', date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
   Store.set('expenses', e);
   document.getElementById('expAmt').value = ''; document.getElementById('expNote').value = '';
   renderExpenses(); renderExpChart();
@@ -773,9 +846,10 @@ function toggleHabit(id) {
   if (!x.records) x.records = [];
   const idx = x.records.indexOf(t);
   if (idx > -1) x.records.splice(idx, 1); else x.records.push(t);
+  x.updatedAt = Date.now();
   Store.set('habits', h); renderHabits(); renderHome();
 }
-function addHabit() { const n = prompt('习惯名称：', ''); if (n && n.trim()) { const h = Store.get('habits', []); h.push({ id: Date.now().toString(), name: n.trim(), records: [] }); Store.set('habits', h); renderHabits(); renderHome(); toast('✅ 已添加'); } }
+function addHabit() { const n = prompt('习惯名称：', ''); if (n && n.trim()) { const h = Store.get('habits', []); h.push({ id: Date.now().toString(), name: n.trim(), records: [], updatedAt: Date.now() }); Store.set('habits', h); renderHabits(); renderHome(); toast('✅ 已添加'); } }
 function delHabit(id) { Store.set('habits', Store.get('habits', []).filter(h => h.id !== id)); renderHabits(); renderHome(); }
 
 // ============================================================
@@ -802,7 +876,7 @@ function addHealth() {
   const w = parseFloat(document.getElementById('hWeight').value);
   if (!w) return toast('请输入体重');
   const r = Store.get('health', []);
-  r.unshift({ id: Date.now().toString(), weight: w, fat: parseFloat(document.getElementById('hFat').value) || 0, date: new Date().toISOString().slice(0, 10) });
+  r.unshift({ id: Date.now().toString(), weight: w, fat: parseFloat(document.getElementById('hFat').value) || 0, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
   Store.set('health', r); document.getElementById('hWeight').value = ''; document.getElementById('hFat').value = ''; renderHealth();
 }
 
@@ -815,8 +889,8 @@ function renderShopping() {
     ? '<div class="emp" style="padding:20px"><i class="fas fa-shopping-cart"></i><p>购物清单为空</p></div>'
     : i.map(x => '<div class="cb"><input type="checkbox"' + (x.done ? 'checked' : '') + ' onchange="togShop(\'' + x.id + '\')"><span class="cc"></span><span class="ct" style="' + (x.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + x.name + '</span><span class="tag t1">' + (x.cat || '其他') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();delShop(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
-function addShop() { const n = document.getElementById('shopIn').value.trim(); if (!n) return; const i = Store.get('shopping', []); i.unshift({ id: Date.now().toString(), name: n, cat: document.getElementById('shopCat').value, done: false }); Store.set('shopping', i); document.getElementById('shopIn').value = ''; renderShopping(); }
-function togShop(id) { const i = Store.get('shopping', []); const x = i.find(x => x.id === id); if (x) { x.done = !x.done; Store.set('shopping', i); renderShopping(); } }
+function addShop() { const n = document.getElementById('shopIn').value.trim(); if (!n) return; const i = Store.get('shopping', []); i.unshift({ id: Date.now().toString(), name: n, cat: document.getElementById('shopCat').value, done: false, updatedAt: Date.now() }); Store.set('shopping', i); document.getElementById('shopIn').value = ''; renderShopping(); }
+function togShop(id) { const i = Store.get('shopping', []); const x = i.find(x => x.id === id); if (x) { x.done = !x.done; x.updatedAt = Date.now(); Store.set('shopping', i); renderShopping(); } }
 function delShop(id) { Store.set('shopping', Store.get('shopping', []).filter(i => i.id !== id)); renderShopping(); }
 
 // ============================================================
@@ -834,7 +908,7 @@ function renderColl() {
     ? '<div class="emp" style="padding:20px"><i class="fas fa-star"></i><p>还没有收藏</p></div>'
     : f.map(x => '<div class="cb" style="cursor:default"><i class="fas ' + (icons[x.type] || 'fa-star') + '" style="color:var(--primary);width:20px;text-align:center"></i><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:14px">' + x.title + '</div></div>' + (x.rating ? '<span style="color:var(--alert)">' + '★'.repeat(x.rating) + '</span>' : '') + '<button class="btn-icon btn-o" onclick="delColl(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
-function addColl() { const t = prompt('名称：', ''); if (!t) return; const ty = prompt('类型（book/movie/music）：', 'book') || 'book'; const r = parseInt(prompt('评分（1-5）：', '3') || '3'); const i = Store.get('collections', []); i.unshift({ id: Date.now().toString(), title: t, type: ty, rating: Math.min(5, Math.max(1, r)), createdAt: new Date().toISOString() }); Store.set('collections', i); renderColl(); toast('✅ 已添加'); }
+function addColl() { const t = prompt('名称：', ''); if (!t) return; const ty = prompt('类型（book/movie/music）：', 'book') || 'book'; const r = parseInt(prompt('评分（1-5）：', '3') || '3'); const i = Store.get('collections', []); i.unshift({ id: Date.now().toString(), title: t, type: ty, rating: Math.min(5, Math.max(1, r)), createdAt: new Date().toISOString(), updatedAt: Date.now() }); Store.set('collections', i); renderColl(); toast('✅ 已添加'); }
 function delColl(id) { Store.set('collections', Store.get('collections', []).filter(i => i.id !== id)); renderColl(); }
 
 // ============================================================
@@ -864,7 +938,7 @@ function renderEvents() {
   list.innerHTML = up.length === 0 ? '<div class="emp" style="padding:20px"><p>近期无日程</p></div>'
     : up.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:13px;font-weight:500;margin-right:8px">' + x.date.slice(5) + '</span><button class="btn-icon btn-o" onclick="delEvent(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
-function addEvent() { const t = prompt('日程标题：', ''); if (!t) return; const d = prompt('日期 (YYYY-MM-DD)：', new Date().toISOString().slice(0, 10)); if (!d) return; const ev = Store.get('events', []); ev.push({ id: Date.now().toString(), title: t, date: d, note: prompt('备注：', '') }); Store.set('events', ev); renderCalendar(); renderEvents(); toast('✅ 已添加'); }
+function addEvent() { const t = prompt('日程标题：', ''); if (!t) return; const d = prompt('日期 (YYYY-MM-DD)：', new Date().toISOString().slice(0, 10)); if (!d) return; const ev = Store.get('events', []); ev.push({ id: Date.now().toString(), title: t, date: d, note: prompt('备注：', ''), updatedAt: Date.now() }); Store.set('events', ev); renderCalendar(); renderEvents(); toast('✅ 已添加'); }
 function delEvent(id) { Store.set('events', Store.get('events', []).filter(e => e.id !== id)); renderCalendar(); renderEvents(); }
 function chMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderCalendar(); renderEvents(); }
 function goToday() { calDate = new Date(); renderCalendar(); renderEvents(); }
@@ -896,7 +970,7 @@ function uploadFile(i) {
     if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(e)) c = 'doc';
     else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(e)) c = 'img';
     else if (e === 'pdf') c = 'pdf';
-    f.push({ id: Date.now() + Math.random(), name: x.name, cat: c, size: (x.size / 1024).toFixed(1) + 'KB', date: new Date().toISOString() });
+    f.push({ id: Date.now() + Math.random(), name: x.name, cat: c, size: (x.size / 1024).toFixed(1) + 'KB', date: new Date().toISOString(), updatedAt: Date.now() });
   });
   Store.set('files', f); renderFiles(); toast('✅ 已上传 ' + i.files.length + ' 个文件'); i.value = '';
 }
@@ -921,7 +995,7 @@ function renderTopics() {
     ? '<div class="emp"><i class="fas fa-pen-fancy"></i><p>还没有选题</p></div>'
     : f.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '</div><span class="tag ' + (sc[x.status] || 't1') + '">' + (x.status || '待创作') + '</span><span style="font-size:12px;color:var(--text3);margin:0 8px">' + (x.date || '') + '</span><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
-function addTopic() { const t = prompt('选题标题：', ''); if (!t) return; const topics = Store.get('topics', []); topics.unshift({ id: Date.now().toString(), title: t, source: prompt('来源：', ''), status: '待创作', date: new Date().toISOString().slice(0, 10) }); Store.set('topics', topics); renderTopics(); toast('✅ 已添加'); }
+function addTopic() { const t = prompt('选题标题：', ''); if (!t) return; const topics = Store.get('topics', []); topics.unshift({ id: Date.now().toString(), title: t, source: prompt('来源：', ''), status: '待创作', date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() }); Store.set('topics', topics); renderTopics(); toast('✅ 已添加'); }
 function delTopic(id) { Store.set('topics', Store.get('topics', []).filter(t => t.id !== id)); renderTopics(); }
 function renderMats() {
   const m = Store.get('materials', []);
@@ -929,7 +1003,7 @@ function renderMats() {
     ? '<div class="emp"><i class="fas fa-paperclip"></i><p>素材库为空</p></div>'
     : m.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (x.url ? '<a href="' + x.url + '" target="_blank" style="font-size:12px;margin-right:8px">🔗</a>' : '') + '<button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
-function addMat() { const t = prompt('素材标题：', ''); if (!t) return; const m = Store.get('materials', []); m.unshift({ id: Date.now().toString(), title: t, note: prompt('备注：', ''), category: prompt('分类：', '参考'), url: prompt('链接：', '') }); Store.set('materials', m); renderMats(); toast('✅ 已添加'); }
+function addMat() { const t = prompt('素材标题：', ''); if (!t) return; const m = Store.get('materials', []); m.unshift({ id: Date.now().toString(), title: t, note: prompt('备注：', ''), category: prompt('分类：', '参考'), url: prompt('链接：', ''), updatedAt: Date.now() }); Store.set('materials', m); renderMats(); toast('✅ 已添加'); }
 function delMat(id) { Store.set('materials', Store.get('materials', []).filter(m => m.id !== id)); renderMats(); }
 
 // ============================================================
@@ -1005,7 +1079,7 @@ function togFav(title, url, platform) {
   let favs = Store.get('hotFav', []);
   const idx = favs.findIndex(f => f.title === title);
   if (idx > -1) { favs.splice(idx, 1); toast('已取消收藏'); }
-  else { favs.unshift({ title, url, platform, date: new Date().toISOString().slice(0, 10) }); toast('✅ 已收藏到稍后阅读'); }
+  else { favs.unshift({ title, url, platform, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() }); toast('✅ 已收藏到稍后阅读'); }
   Store.set('hotFav', favs); renderNews(); updateNewsBadge();
 }
 
@@ -1147,7 +1221,7 @@ function togWant(title, url, type) {
       const item = dramaCache[t].find(d => d.title === title);
       if (item) { rate = item.rate; break; }
     }
-    want.unshift({ title, url, type, rate, date: new Date().toISOString().slice(0, 10) });
+    want.unshift({ title, url, type, rate, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
     toast('✅ 已加入想看');
   }
   Store.set('dramaWant', want); renderDrama(); updateDramaBadge();
