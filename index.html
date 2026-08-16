@@ -604,7 +604,7 @@ async function errDetail(r) {
 function syncErr(status, detail) {
   if (status === 401) return '凭据错误，请检查 WebDAV 应用密码是否过期/已重置（不要用登录密码）';
   if (status === 404) return '云端文件不存在，首次同步将自动创建';
-  if (status >= 500) return '云服务暂时不可用，请稍后重试';
+  if (status >= 500) return (detail ? '云服务暂时不可用：' + detail : '云服务暂时不可用，请稍后重试');
   return (detail || ('错误码 ' + status));
 }
 

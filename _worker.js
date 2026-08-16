@@ -82,6 +82,7 @@ async function handleWebDAVProxy(request) {
     method: request.method,
     headers: {
       'Authorization': auth,
+      'User-Agent': 'Mozilla/5.0 (compatible; WorkbenchSync/1.0)',
       'Content-Type': request.headers.get('Content-Type') || 'application/json'
     },
     signal: controller.signal
