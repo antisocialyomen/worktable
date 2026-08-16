@@ -2,6 +2,10 @@
 _verify.py
 _verify.png
 _check.js
+_mobile_*.py
+_mobile_*.png
+_desktop_*.py
+_desktop.png
 
 # WorkBuddy 项目内部数据（记忆/配置，不进仓库）
 .workbuddy/

@@ -115,9 +115,55 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .si-d{font-size:12px;color:var(--text3)}
 @media(max-width:1024px){.g4{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){
-  .sidebar{display:none}.m-nav{display:flex}.content{padding:16px}
-  .header{padding:0 16px}.header-left h2{font-size:16px}
-  .g2,.g4{grid-template-columns:1fr}.mg{grid-template-columns:1fr}
+  :root{--h:48px;--radius:12px;--radius-sm:8px;--radius-lg:16px}
+  .app{height:100dvh}
+  .sidebar{display:none;position:fixed;left:0;top:0;height:100%;width:min(75vw,260px);background:var(--bg-card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid var(--border);z-index:200;box-shadow:var(--shadow-lg)}
+  [data-theme=dark] .sidebar{background:rgba(58,36,48,0.95);border-right-color:rgba(74,48,56,0.6)}
+  .m-nav{display:flex;height:56px;background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--border)}
+  [data-theme=dark] .m-nav{background:rgba(58,36,48,0.92);border-top-color:rgba(74,48,56,0.5)}
+  .m-nav-item{gap:1px}
+  .m-nav-item i{font-size:17px}
+  .m-nav-item span{font-size:9px;white-space:nowrap}
+  .content{padding:12px;padding-bottom:16px}
+  .header{padding:0 12px;height:var(--h)}
+  .header-left{gap:8px;max-width:55%;overflow:hidden}
+  .header-left .mi{display:none}
+  .header-left h2{font-size:15px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+  .header-right{gap:4px}
+  .hbtn{width:34px;height:34px;font-size:15px}
+  .card{padding:14px;margin-bottom:10px;border-radius:var(--radius)}
+  .card-hd{margin-bottom:12px;gap:8px;flex-wrap:wrap}
+  .card-hd h3{font-size:14px}
+  .btn{padding:7px 12px;font-size:13px;border-radius:var(--radius-lg)}
+  .btn-sm{padding:4px 8px;font-size:11px}
+  .in{padding:8px 12px;font-size:14px}
+  .ig{flex-wrap:wrap;gap:8px;margin-bottom:10px}
+  .ig .in{flex:1 1 120px;min-width:100px;width:auto!important}
+  .ig select.in{flex:0 1 auto;min-width:70px;width:auto!important}
+  .ig .btn{flex:0 0 auto}
+  .g2,.g4{grid-template-columns:1fr;gap:10px}
+  .mg{grid-template-columns:1fr;gap:10px}
+  .sc{padding:12px 14px;gap:12px}
+  .si{width:40px;height:40px;font-size:18px}
+  .si .num{font-size:20px}
+  .si .label{font-size:12px}
+  .ft{gap:6px;margin-bottom:10px}
+  .ft .fb{padding:4px 10px;font-size:12px}
+  .cb{padding:6px 0}
+  .cb .cc{width:18px;height:18px}
+  .cb .ct{font-size:13px}
+  .page.active{padding-bottom:4px}
+  #homeStats{grid-template-columns:repeat(2,1fr)!important}
+  #homeStats .sc{flex-direction:row}
+  h1#greeting{font-size:20px}
+  .emp{padding:24px 12px}
+  .emp i{font-size:36px}
+  .si-item{padding:10px 0}
+  .si-l{font-size:13px}
+  .si-d{font-size:11px}
+  .toggle{width:40px;height:22px}
+  .toggle::after{width:18px;height:18px}
+  .toast{bottom:72px;font-size:13px;padding:8px 16px;max-width:90%;white-space:normal;text-align:center}
 }
 </style>
 </head>
@@ -141,6 +187,9 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>系统设置</span></div>
     </nav>
   </aside>
+
+  <!-- 移动端侧栏遮罩 -->
+  <div id="sbBack" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:150;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)" onclick="toggleSidebar()"></div>
 
   <main class="main">
     <header class="header">
@@ -391,7 +440,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function toggleSidebar() {
   if (window.innerWidth > 768) return;
   const s = document.getElementById('sidebar');
-  if (s.style.display === 'flex') { s.style.display = 'none'; return; }
+  const b = document.getElementById('sbBack');
+  if (s.style.display === 'flex') {
+    s.style.display = 'none';
+    if (b) b.style.display = 'none';
+    return;
+  }
   s.style.display = 'flex';
   s.style.position = 'fixed';
   s.style.left = '0';
@@ -399,12 +453,15 @@ function toggleSidebar() {
   s.style.height = '100%';
   s.style.zIndex = '200';
   s.style.boxShadow = 'var(--shadow-lg)';
+  if (b) b.style.display = 'block';
 }
 document.addEventListener('click', function(e) {
   if (window.innerWidth > 768) return;
   const s = document.getElementById('sidebar');
+  const b = document.getElementById('sbBack');
   if (s.style.display === 'flex' && !s.contains(e.target) && !document.getElementById('menuBtn').contains(e.target)) {
     s.style.display = 'none';
+    if (b) b.style.display = 'none';
   }
 });
 
