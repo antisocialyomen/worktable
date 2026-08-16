@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#FF6B8A">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="工作台">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/assets/labubu-avatar.jpg">
 <title>个人工作台</title>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -14,8 +18,8 @@
 :root{--primary:#FF6B8A;--primary-light:#FF8DA6;--primary-dark:#E05070;--primary-bg:#FFD4A8;--accent:#8140DC;--accent-light:#E8D8F5;--alert:#FFB347;--bg:#FFF5EE;--bg-card:#FFFFFF;--bg-nav:#FFFFFF;--text:#4A3040;--text2:#8A6A7A;--text3:#BAA0AA;--border:#F5E0E0;--shadow:0 2px 8px rgba(255,107,138,0.1);--shadow-lg:0 8px 25px rgba(255,107,138,0.15);--radius:16px;--radius-sm:10px;--radius-lg:24px;--nav-w:220px;--h:56px;--t:.3s;--s:#8BC4A0;--w:#FFB347;--d:#FF6B8A;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
 [data-theme=dark]{--bg:#2A1820;--bg-card:#3A2430;--bg-nav:#3A2430;--text:#F5E8EC;--text2:#C8A8B8;--text3:#9A7A8A;--border:#4A3038;--primary-bg:#3A2028}
 html{font-size:16px}
-body{font-family:var(--font);background:transparent;color:var(--text);line-height:1.6;overflow:hidden;height:100vh;transition:color var(--t)}
-#wallpaper{position:fixed;inset:0;z-index:0;background:url('assets/bg-wallpaper.jpg') center/cover no-repeat;pointer-events:none}
+body{font-family:var(--font);background:transparent;color:var(--text);line-height:1.6;overflow:hidden;height:100vh;transition:color var(--t);padding-top:0;padding-top:env(safe-area-inset-top)}
+#wallpaper{position:fixed;inset:0;z-index:0;background:url('assets/bg-wallpaper.jpg') center/cover no-repeat;pointer-events:none;top:env(safe-area-inset-top)}
 #wallpaper::after{content:'';position:absolute;inset:0;background:rgba(255,245,238,0.3);transition:background var(--t)}
 [data-theme=dark] #wallpaper::after{background:rgba(42,24,32,0.75)}
 [data-theme=dark] .sidebar{background:transparent;border-right-color:rgba(74,48,56,0.4)}
@@ -23,7 +27,7 @@ body{font-family:var(--font);background:transparent;color:var(--text);line-heigh
 [data-theme=dark] .m-nav{background:transparent;border-top-color:rgba(74,48,56,0.4)}
 a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-size:inherit;outline:none;border:none;background:none}button{cursor:pointer}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
-.app{position:relative;z-index:1;display:flex;height:100vh;overflow:hidden}
+.app{position:relative;z-index:1;display:flex;height:100vh;height:calc(100vh - env(safe-area-inset-top));overflow:hidden}
 .sidebar{width:var(--nav-w);background:transparent;border-right:1px solid rgba(255,255,255,0.25);display:flex;flex-direction:column;flex-shrink:0;z-index:100}
 .sidebar-header{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);height:var(--h);flex-shrink:0}
 .sidebar-header .logo{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -116,14 +120,16 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 @media(max-width:1024px){.g4{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){
   :root{--h:48px;--radius:12px;--radius-sm:8px;--radius-lg:16px}
-  .app{height:100dvh}
+  .app{height:100dvh;height:calc(100dvh - env(safe-area-inset-top))}
   .sidebar{display:none;position:fixed;left:0;top:0;height:100%;width:min(75vw,260px);background:var(--bg-card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid var(--border);z-index:200;box-shadow:var(--shadow-lg)}
   [data-theme=dark] .sidebar{background:rgba(58,36,48,0.95);border-right-color:rgba(74,48,56,0.6)}
   .m-nav{display:flex;height:56px;background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--border)}
   [data-theme=dark] .m-nav{background:rgba(58,36,48,0.92);border-top-color:rgba(74,48,56,0.5)}
-  .m-nav-item{gap:1px}
+  .m-nav-in{width:100%;justify-content:space-around}
+  .m-nav-item{gap:1px;flex:1 1 0;min-width:0;padding:4px 2px;position:relative}
   .m-nav-item i{font-size:17px}
-  .m-nav-item span{font-size:9px;white-space:nowrap}
+  .m-nav-item span{font-size:9px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
+  .m-nav-item .mb{right:50%;margin-right:-16px}
   .content{padding:12px;padding-bottom:16px}
   .header{padding:0 12px;height:var(--h)}
   .header-left{gap:8px;max-width:55%;overflow:hidden}
@@ -438,6 +444,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   // Init
   initApp();
+  // Register PWA service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
 });
 
 function toggleSidebar() {
@@ -1126,7 +1136,9 @@ function renderCalendar() {
     const ds = y + '-' + String(m + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
     const it = ds === t;
     const de = ev.filter(x => x.date === ds);
-    h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:8px;min-height:60px;font-size:13px"><div style="font-weight:600;margin-bottom:2px;' + (it ? 'background:var(--primary);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center' : '') + '">' + i + '</div>' + de.slice(0, 2).map(x => '<div style="font-size:10px;background:var(--primary);color:#fff;padding:1px 4px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + x.title + '</div>').join('') + (de.length > 2 ? '<div style="font-size:10px;color:var(--text3)">+' + (de.length - 2) + '更多</div>' : '') + '</div>';
+    const dayStyle = it ? 'background:var(--primary);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center' : '';
+    const dots = de.slice(0, 2).map(x => '<div onclick="event.stopPropagation();editEvent(\'' + x.id + '\')" style="font-size:10px;background:var(--primary);color:#fff;padding:1px 4px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer">' + x.title + '</div>').join('');
+    h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:8px;min-height:60px;font-size:13px"><div onclick="openEventForDate(\'' + ds + '\')" style="font-weight:600;margin-bottom:2px;cursor:pointer;' + dayStyle + '">' + i + '</div>' + dots + (de.length > 2 ? '<div style="font-size:10px;color:var(--text3)">+' + (de.length - 2) + '更多</div>' : '') + '</div>';
   }
   document.getElementById('calGrid').innerHTML = h;
 }
@@ -1139,13 +1151,32 @@ function renderEvents() {
   list.innerHTML = up.length === 0 ? '<div class="emp" style="padding:20px"><p>近期无日程</p></div>'
     : up.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:13px;font-weight:500;margin-right:8px">' + x.date.slice(5) + '</span><button class="btn-icon btn-o" onclick="editEvent(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delEvent(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
+function openEventForDate(ds) {
+  const ev = Store.get('events', []).filter(x => x.date === ds);
+  document.getElementById('evDate').value = ds;
+  if (ev.length === 0) {
+    addEventWithDate(ds);
+  } else if (ev.length === 1) {
+    editEvent(ev[0].id);
+  } else {
+    const list = ev.map((x, idx) => (idx + 1) + '. ' + x.title).join('\n');
+    const choice = prompt('该日期有 ' + ev.length + ' 个日程，输入序号编辑，或留空/0 新建：\n' + list);
+    if (!choice || choice === '0') { addEventWithDate(ds); return; }
+    const idx = parseInt(choice) - 1;
+    if (idx >= 0 && idx < ev.length) editEvent(ev[idx].id);
+    else addEventWithDate(ds);
+  }
+}
+function addEventWithDate(ds) {
+  const t = prompt('日程标题：', ''); if (!t) return;
+  const note = prompt('备注：', '');
+  const ev = Store.get('events', []);
+  ev.push({ id: Date.now().toString(), title: t, date: ds, note: note || '', updatedAt: Date.now() });
+  Store.set('events', ev); renderCalendar(); renderEvents(); renderHome(); toast('✅ 已添加');
+}
 function addEvent() {
   const d0 = document.getElementById('evDate')?.value || new Date().toISOString().slice(0, 10);
-  const t = prompt('日程标题：', ''); if (!t) return;
-  const d = prompt('日期 (YYYY-MM-DD)：', d0); if (!d) return;
-  const ev = Store.get('events', []);
-  ev.push({ id: Date.now().toString(), title: t, date: d, note: prompt('备注：', ''), updatedAt: Date.now() });
-  Store.set('events', ev); renderCalendar(); renderEvents(); renderHome(); toast('✅ 已添加');
+  openEventForDate(d0);
 }
 function editEvent(id) {
   const ev = Store.get('events', []);
