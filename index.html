@@ -27,6 +27,13 @@ body{font-family:var(--font);background:transparent;color:var(--text);line-heigh
 [data-theme=dark] .m-nav{background:transparent;border-top-color:rgba(74,48,56,0.4)}
 a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-size:inherit;outline:none;border:none;background:none}button{cursor:pointer}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
+#splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);text-align:center;padding:24px;transition:opacity .4s}
+#splash.hide{opacity:0;pointer-events:none}
+.splash-avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:24px;box-shadow:0 8px 28px rgba(255,107,138,0.28)}
+#splashHello{font-size:28px;font-weight:700;margin-bottom:8px;color:var(--text)}
+#splashTime{font-size:38px;font-weight:700;margin-bottom:4px;color:var(--primary);font-variant-numeric:tabular-nums}
+#splashDate{font-size:15px;color:var(--text2);margin-bottom:36px}
+#enterBtn{padding:12px 32px;font-size:16px;border-radius:28px;box-shadow:0 6px 18px rgba(255,107,138,0.3)}
 .app{position:relative;z-index:1;display:flex;height:100vh;height:calc(100vh - env(safe-area-inset-top));overflow:hidden}
 .sidebar{width:var(--nav-w);background:transparent;border-right:1px solid rgba(255,255,255,0.25);display:flex;flex-direction:column;flex-shrink:0;z-index:100}
 .sidebar-brand{padding:14px 8px 10px;text-align:center;flex-shrink:0;border-bottom:1px solid var(--border)}
@@ -129,13 +136,19 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .sidebar-brand{display:none}
   .sidebar-footer{display:none}
   .sidebar-nav{padding:4px 0}
-  .nav-item{position:relative;justify-content:center;gap:0;padding:12px 0;margin:2px 5px}
-  .nav-item span{display:none}
-  .nav-item .badge{position:absolute;top:4px;right:6px;margin-left:0;padding:0 5px;line-height:14px}
+  .nav-item{position:relative;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:8px 2px;margin:2px 4px;border-radius:10px}
+  .nav-item i{font-size:18px;width:18px;text-align:center}
+  .nav-item span{display:block;font-size:9px;line-height:1.2;text-align:center;margin-top:3px;max-width:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-item .badge{position:absolute;top:2px;right:2px;margin-left:0;padding:0 4px;line-height:12px;font-size:9px;min-width:12px;border-radius:6px}
   #menuBtn{display:none}
   .m-nav{display:none}
   #sbBack{display:none!important}
   .toast{bottom:20px}
+  .splash-avatar{width:96px;height:96px;margin-bottom:20px}
+  #splashHello{font-size:24px}
+  #splashTime{font-size:32px}
+  #splashDate{font-size:14px;margin-bottom:28px}
+  #enterBtn{padding:10px 28px;font-size:15px}
   [data-theme=dark] .m-nav{background:rgba(58,36,48,0.92);border-top-color:rgba(74,48,56,0.5)}
   .m-nav-in{width:100%;justify-content:space-around}
   .m-nav-item{gap:1px;flex:1 1 0;min-width:0;padding:4px 2px;position:relative}
@@ -187,6 +200,16 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 </head>
 <body>
 <div id="wallpaper"></div>
+
+<!-- Entry / Splash Page -->
+<div id="splash">
+  <img src="assets/labubu-avatar.png" alt="" class="splash-avatar">
+  <h1 id="splashHello">Hello，小遥</h1>
+  <div id="splashTime"></div>
+  <div id="splashDate"></div>
+  <button id="enterBtn" class="btn btn-p" onclick="enterApp()">进入工作台</button>
+</div>
+
 <div class="app" id="app">
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
@@ -471,6 +494,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   // Init
+  updateSplashTime();
+  setInterval(updateSplashTime, 1000);
   initApp();
   // Register PWA service worker
   if ('serviceWorker' in navigator) {
@@ -522,6 +547,24 @@ document.addEventListener('click', function(e) {
     if (b) b.style.display = 'none';
   }
 });
+
+// ===== SPLASH =====
+function enterApp() {
+  const s = document.getElementById('splash');
+  if (!s) return;
+  s.classList.add('hide');
+  setTimeout(() => { s.style.display = 'none'; }, 400);
+  Store.set('lastEnter', Date.now());
+}
+function updateSplashTime() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+  const dateStr = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+  const tEl = document.getElementById('splashTime');
+  const dEl = document.getElementById('splashDate');
+  if (tEl) tEl.textContent = timeStr;
+  if (dEl) dEl.textContent = dateStr;
+}
 
 // ===== INIT =====
 function initApp() {
