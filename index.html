@@ -124,9 +124,18 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 @media(max-width:768px){
   :root{--h:48px;--radius:12px;--radius-sm:8px;--radius-lg:16px}
   .app{height:100dvh;height:calc(100dvh - env(safe-area-inset-top))}
-  .sidebar{display:none;position:fixed;left:0;top:0;height:100%;width:min(75vw,260px);background:var(--bg-card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid var(--border);z-index:200;box-shadow:var(--shadow-lg)}
-  [data-theme=dark] .sidebar{background:rgba(58,36,48,0.95);border-right-color:rgba(74,48,56,0.6)}
-  .m-nav{display:flex;height:56px;background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--border)}
+  .sidebar{display:flex;position:relative;left:auto;top:auto;height:auto;width:58px;background:transparent;border-right:1px solid rgba(255,255,255,0.25);z-index:100;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  [data-theme=dark] .sidebar{background:transparent;border-right-color:rgba(74,48,56,0.4)}
+  .sidebar-brand{display:none}
+  .sidebar-footer{display:none}
+  .sidebar-nav{padding:4px 0}
+  .nav-item{position:relative;justify-content:center;gap:0;padding:12px 0;margin:2px 5px}
+  .nav-item span{display:none}
+  .nav-item .badge{position:absolute;top:4px;right:6px;margin-left:0;padding:0 5px;line-height:14px}
+  #menuBtn{display:none}
+  .m-nav{display:none}
+  #sbBack{display:none!important}
+  .toast{bottom:20px}
   [data-theme=dark] .m-nav{background:rgba(58,36,48,0.92);border-top-color:rgba(74,48,56,0.5)}
   .m-nav-in{width:100%;justify-content:space-around}
   .m-nav-item{gap:1px;flex:1 1 0;min-width:0;padding:4px 2px;position:relative}
@@ -183,25 +192,20 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <img src="assets/labubu-avatar.png" alt="" class="brand-avatar">
-      <div class="brand-title">小遥Workplace</div>
-      <div class="brand-sub">个人工作台</div>
+      <div class="brand-title">个人工作台</div>
     </div>
     <nav class="sidebar-nav" id="sideNav">
-      <div class="nav-item active" data-mod="home"><i class="fas fa-home"></i><span>首页概览</span></div>
-      <div class="nav-item" data-mod="tasks"><i class="fas fa-tasks"></i><span>任务管理</span><span class="badge" id="taskBadge">0</span></div>
-      <div class="nav-item" data-mod="life"><i class="fas fa-heart"></i><span>生活管理</span></div>
+      <div class="nav-item active" data-mod="home"><i class="fas fa-home"></i><span>首页</span></div>
+      <div class="nav-item" data-mod="tasks"><i class="fas fa-tasks"></i><span>任务</span><span class="badge" id="taskBadge">0</span></div>
+      <div class="nav-item" data-mod="life"><i class="fas fa-heart"></i><span>日常</span></div>
       <div class="nav-item" data-mod="schedule"><i class="fas fa-calendar"></i><span>日程管理</span></div>
-      <div class="nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>灵感笔记</span></div>
-      <div class="nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点新闻</span></div>
-      <div class="nav-item" data-mod="drama"><i class="fas fa-film"></i><span>新剧速递</span></div>
-      <div class="nav-item" data-mod="data"><i class="fas fa-chart-bar"></i><span>数据分析</span></div>
-      <div class="nav-item" data-mod="files"><i class="fas fa-folder"></i><span>文件管理</span></div>
-      <div class="nav-item" data-mod="content"><i class="fas fa-pen-fancy"></i><span>内容创作</span></div>
+      <div class="nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>笔记</span></div>
+      <div class="nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
+      <div class="nav-item" data-mod="drama"><i class="fas fa-film"></i><span>热播</span></div>
+      <div class="nav-item" data-mod="data"><i class="fas fa-chart-bar"></i><span>数据</span></div>
+      <div class="nav-item" data-mod="content"><i class="fas fa-pen-fancy"></i><span>创作</span></div>
       <div class="nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>系统设置</span></div>
     </nav>
-    <div class="sidebar-footer">
-      <img src="assets/labubu-avatar.png" alt="" class="footer-mascot">
-    </div>
   </aside>
 
   <!-- 移动端侧栏遮罩 -->
@@ -399,14 +403,14 @@ function toast(msg) {
 
 // ===== NAVIGATION =====
 const MOD_NAMES = {
-  home:'首页概览', tasks:'任务管理', life:'生活管理', schedule:'日程管理',
-  notes:'灵感笔记', hotnews:'热点新闻', drama:'新剧速递', data:'数据分析',
-  files:'文件管理', content:'内容创作', settings:'系统设置'
+  home:'首页', tasks:'任务', life:'日常', schedule:'日程管理',
+  notes:'笔记', hotnews:'热点', drama:'热播', data:'数据',
+  content:'创作', settings:'系统设置'
 };
 const MOD_ICONS = {
   home:'fa-home', tasks:'fa-tasks', life:'fa-heart', schedule:'fa-calendar',
   notes:'fa-lightbulb', hotnews:'fa-fire', drama:'fa-film', data:'fa-chart-bar',
-  files:'fa-folder', content:'fa-pen-fancy', settings:'fa-cog'
+  content:'fa-pen-fancy', settings:'fa-cog'
 };
 
 let currentMod = 'home';

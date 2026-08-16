@@ -75,51 +75,61 @@ async function handleWebDAVProxy(request) {
   }
 
   const auth = 'Basic ' + b64(wdUser + ':' + wdPass);
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 25000);
-
-  const init = {
-    method: request.method,
-    headers: {
-      'Authorization': auth,
-      'User-Agent': 'Mozilla/5.0 (compatible; WorkbenchSync/1.0)',
-      'Content-Type': request.headers.get('Content-Type') || 'application/json'
-    },
-    signal: controller.signal
-  };
+  // PUT 请求体提前读取，避免在重试循环中重复消费请求流
+  let bodyText = null;
   if (request.method === 'PUT') {
-    try { init.body = await request.text(); }
-    catch (e) { clearTimeout(timer); return jsonError(400, '读取请求体失败：' + e.message); }
+    try { bodyText = await request.text(); }
+    catch (e) { return jsonError(400, '读取请求体失败：' + e.message); }
   }
 
-  try {
-    const response = await fetch(targetUrl, init);
-    clearTimeout(timer);
-    const status = response.status;
-    // 上游返回 5xx（含 Cloudflare 边缘把畸形/超时响应包装成的 520）时，
-    // 不再原样透传给前端，否则前端会看到 520。统一返回干净 JSON 502。
-    if (status >= 500) {
-      return jsonError(502, '云同步服务暂时不可用（上游返回 ' + status + '），请稍后重试，或检查 WebDAV 地址与密码');
-    }
-    // 以文本读取后转发，避免直接透传上游二进制/畸形响应
-    const text = await response.text();
-    const ctype = response.headers.get('Content-Type') || 'application/json; charset=utf-8';
-    return new Response(text, {
-      status,
+  let targetHost = 'WebDAV';
+  try { targetHost = new URL(wdUrl).host; } catch (e) {}
+
+  // 上游偶发 5xx（含 Cloudflare 边缘把畸形/超时响应包装成的 520）时自动重试一次，
+  // 不顺延过多以免拖慢同步；若仍失败则返回干净 JSON 502 并附上游主机名，便于定位。
+  let lastStatus = 0;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 25000);
+    const init = {
+      method: request.method,
       headers: {
-        'Content-Type': ctype,
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE'
+        'Authorization': auth,
+        'User-Agent': 'Mozilla/5.0 (compatible; WorkbenchSync/1.0)',
+        'Content-Type': request.headers.get('Content-Type') || 'application/json'
+      },
+      signal: controller.signal
+    };
+    if (bodyText !== null) init.body = bodyText;
+    try {
+      const response = await fetch(targetUrl, init);
+      clearTimeout(timer);
+      const status = response.status;
+      if (status >= 500) {
+        lastStatus = status;
+        if (attempt < 1) { await new Promise(r => setTimeout(r, 800)); continue; }
+        return jsonError(502, '云同步服务暂时不可用（' + targetHost + ' 返回 ' + status + '），请稍后重试，或检查 WebDAV 地址与密码');
       }
-    });
-  } catch (error) {
-    clearTimeout(timer);
-    if (error && error.name === 'AbortError') {
-      return jsonError(504, '连接 WebDAV 超时（25 秒），请检查地址或网络是否可达');
+      const text = await response.text();
+      const ctype = response.headers.get('Content-Type') || 'application/json; charset=utf-8';
+      return new Response(text, {
+        status,
+        headers: {
+          'Content-Type': ctype,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE'
+        }
+      });
+    } catch (error) {
+      clearTimeout(timer);
+      if (error && error.name === 'AbortError') {
+        return jsonError(504, '连接 WebDAV 超时（25 秒），请检查地址或网络是否可达');
+      }
+      return jsonError(502, 'WebDAV 代理失败：' + (error ? error.message : '未知错误'));
     }
-    return jsonError(502, 'WebDAV 代理失败：' + (error ? error.message : '未知错误'));
   }
+  return jsonError(502, '云同步服务暂时不可用（' + targetHost + ' 返回 ' + lastStatus + '），请稍后重试，或检查 WebDAV 地址与密码');
 }
 
 function jsonError(status, msg) {
