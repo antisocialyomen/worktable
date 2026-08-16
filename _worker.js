@@ -131,7 +131,11 @@ function jsonError(status, msg) {
 
 function b64(str) {
   // UTF-8 安全的 base64 编码，避免账号/密码含非 ASCII 字符时 btoa 抛错
-  return btoa(unescape(encodeURIComponent(str)));
+  // 不用 unescape（Cloudflare Worker 某些环境可能不支持/会抛错）
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin);
 }
 
 async function handleDoubanProxy(path, search) {
