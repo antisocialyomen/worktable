@@ -366,7 +366,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <!-- SETTINGS -->
       <div class="page" id="p-settings">
         <div class="card"><div class="card-hd"><h3>🎨 外观设置</h3></div><div class="si-item"><div><div class="si-l">深色模式</div><div class="si-d">切换明暗主题</div></div><div class="toggle" id="themeToggle" onclick="toggleTheme()"></div></div></div>
-        <div class="card"><div class="card-hd"><h3>☁️ 云同步（坚果云 WebDAV）</h3></div><div class="si-item"><div><div class="si-l">启用云同步</div><div class="si-d">开启后数据自动同步到坚果云</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">① 注册坚果云 → ② 账户信息→安全选项→第三方应用管理 → ③ 生成应用密码 → ④ 填下面信息保存</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="坚果云账号（邮箱）" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
+        <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ 已启用 Cloudflare KV 云同步，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到坚果云 WebDAV</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">① 注册坚果云 → ② 账户信息→安全选项→第三方应用管理 → ③ 生成应用密码 → ④ 填下面信息保存</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="坚果云账号（邮箱）" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>📦 数据管理</h3></div><div class="si-item"><div><div class="si-l">导出全部数据</div></div><button class="btn-sm btn-p" onclick="exportData()"><i class="fas fa-download"></i> 导出</button></div><div class="si-item"><div><div class="si-l">导入数据</div></div><button class="btn-sm btn-o" onclick="document.getElementById('importIn').click()"><i class="fas fa-upload"></i> 导入</button><input type="file" id="importIn" accept=".json" style="display:none" onchange="importData(this)"></div><div class="si-item"><div><div class="si-l" style="color:var(--d)">清空所有数据</div></div><button class="btn-sm btn" style="background:var(--d);color:#fff;padding:5px 10px;font-size:12px;border-radius:8px" onclick="clearData()"><i class="fas fa-trash"></i> 清空</button></div></div>
         <div class="card"><div class="card-hd"><h3>ℹ️ 关于</h3></div><div style="font-size:14px;color:var(--text2);line-height:2"><p>🎀 个人工作台 v1.1 · Labubu 限定版</p><p>11 大模块 · 70+ 功能 · 全场景覆盖</p><p>🥟 部署到 Cloudflare Pages 后自动启用豆瓣数据</p></div></div>
       </div>
@@ -640,8 +640,32 @@ function syncErr(status, detail) {
 
 const WebDAV = {
   enabled: false, url: '', user: '', pass: '', file: 'workbench-data.json',
-  proxy: '/api/webdav',
+  proxy: '/api/sync', kvMode: false,
   init() {
+    // 探测同步后端：KV 已绑定则使用 KV（无需配置），否则回退 WebDAV
+    fetch('/api/sync/status', { method: 'GET' })
+      .then(r => r.ok ? r.json() : null)
+      .then(st => { if (st && st.kv) this.initKV(); else this.initWebDAV(); })
+      .catch(() => this.initWebDAV());
+  },
+  initKV() {
+    this.kvMode = true; this.enabled = true;
+    const kvInfo = document.getElementById('kvInfo');
+    if (kvInfo) kvInfo.style.display = 'block';
+    const row = document.getElementById('wdToggleRow');
+    if (row) row.style.display = 'none';
+    const cfg = document.getElementById('wdConfig');
+    if (cfg) cfg.style.display = 'none';
+    const tg = document.getElementById('wdToggle');
+    if (tg) tg.classList.add('on');
+    const sb = document.getElementById('syncBtn');
+    if (sb) sb.style.color = 'var(--accent)';
+    const st = document.getElementById('wdStatus');
+    if (st) st.textContent = '☁️ KV 已启用';
+    // 进入页面时静默拉取，避免网络抖动一进来就弹错
+    setTimeout(() => this.pull(false, true), 500);
+  },
+  initWebDAV() {
     const c = Store.get('webdav', {});
     if (c.url && c.user && c.pass) {
       this.url = c.url.replace(/\/+$/, '') + '/';
@@ -653,18 +677,18 @@ const WebDAV = {
       document.getElementById('wdConfig').style.display = 'block';
       document.getElementById('syncBtn').style.color = 'var(--accent)';
       document.getElementById('wdStatus').textContent = '☁️ 已配置';
-      // 进入页面时静默拉取，避免网络抖动/密码过期一进来就弹错
       setTimeout(() => this.pull(false, true), 500);
     }
   },
   headers() {
-    return {
-      'Content-Type': 'application/json',
-      'X-WD-URL': this.url,
-      'X-WD-USER': this.user,
-      'X-WD-PASS': this.pass,
-      'X-WD-FILE': this.file
-    };
+    const h = { 'Content-Type': 'application/json' };
+    if (!this.kvMode) {
+      h['X-WD-URL'] = this.url;
+      h['X-WD-USER'] = this.user;
+      h['X-WD-PASS'] = this.pass;
+      h['X-WD-FILE'] = this.file;
+    }
+    return h;
   },
   async pull(mergeAfter = false, silent = false) {
     if (!this.enabled) return;

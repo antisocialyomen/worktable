@@ -17,6 +17,11 @@ export default {
       return handleWebDAVProxy(request);
     }
 
+    // 处理 /api/sync 路径 → 优先 Cloudflare KV，未绑定则回退 WebDAV 代理
+    if (path === '/api/sync' || path === '/api/sync/status') {
+      return handleSyncApi(request, env);
+    }
+
     // 其他路径 → 交给 Cloudflare Pages 托管静态文件
     // env.ASSETS.fetch 会从 Pages 的静态资源中查找并返回文件
     try {
@@ -137,6 +142,66 @@ function jsonError(status, msg) {
     status,
     headers: { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' }
   });
+}
+
+// 云同步统一入口：Cloudflare KV 优先；未绑定 SYNC_KV 时回退到 WebDAV 代理。
+// KV 是 Cloudflare 原生存储，不存在 CORS/520/超时问题，最适合本应用跨设备同步。
+async function handleSyncApi(request, env) {
+  const cors = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE',
+    'Content-Type': 'application/json; charset=utf-8'
+  };
+
+  // 浏览器 CORS 预检
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE',
+        'Access-Control-Max-Age': '86400'
+      }
+    });
+  }
+
+  const url = new URL(request.url);
+
+  // 模式探测：KV 是否已绑定（前端据此决定是否要展示 WebDAV 配置）
+  if (url.pathname === '/api/sync/status' && request.method === 'GET') {
+    return new Response(JSON.stringify({ kv: !!(env && env.SYNC_KV) }), { status: 200, headers: cors });
+  }
+
+  const KEY = 'workbench-sync-v1';
+
+  // 优先使用 Cloudflare KV（原生、无 CORS/超时问题）
+  if (env && env.SYNC_KV) {
+    if (request.method === 'GET') {
+      try {
+        const data = await env.SYNC_KV.get(KEY, 'text');
+        return new Response(data || '{}', { status: 200, headers: cors });
+      } catch (e) {
+        return jsonError(502, '读取 KV 失败：' + (e ? e.message : '未知错误'));
+      }
+    }
+    if (request.method === 'PUT') {
+      let body;
+      try { body = await request.text(); } catch (e) { return jsonError(400, '读取请求体失败：' + e.message); }
+      try { JSON.parse(body); } catch (e) { return jsonError(400, '数据格式错误：不是合法 JSON'); }
+      try {
+        await env.SYNC_KV.put(KEY, body);
+        return new Response(JSON.stringify({ ok: true }), { status: 200, headers: cors });
+      } catch (e) {
+        return jsonError(502, '写入 KV 失败：' + (e ? e.message : '未知错误'));
+      }
+    }
+    return jsonError(405, '不支持的方法');
+  }
+
+  // 未绑定 KV → 回退到 WebDAV 代理（老用户/其他 WebDAV 服务仍可工作）
+  return handleWebDAVProxy(request);
 }
 
 function b64(str) {
