@@ -202,7 +202,29 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .toggle::after{width:18px;height:18px}
   .toast{bottom:72px;font-size:13px;padding:8px 16px;max-width:90%;white-space:normal;text-align:center}
 }
-</style>
+/* ===== FOOD MODULE ===== */
+.food-tab{display:block}
+.w-btn{display:inline-flex;align-items:center;justify-content:center;min-width:64px;padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:var(--bg-card);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;transition:all var(--t)}
+.w-btn:hover{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);transform:translateY(-2px)}
+.w-btn:active{transform:scale(.95)}
+.w-log-item{display:inline-flex;align-items:center;gap:6px;background:var(--primary-bg);color:var(--primary);border-radius:8px;padding:3px 8px;margin:3px 4px 0 0;font-size:12px}
+.w-log-item .x{cursor:pointer;opacity:.6}
+.w-log-item .x:hover{opacity:1}
+.cal-log-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.cal-log-item .ci-meal{font-size:12px;color:#fff;background:var(--primary);border-radius:6px;padding:1px 6px;flex:0 0 auto}
+.cal-log-item .ci-k{color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cal-log-item .ci-v{font-weight:700;color:var(--primary)}
+.cal-log-item .x{cursor:pointer;color:var(--text3);margin-left:4px}
+.cal-log-item .x:hover{color:var(--d)}
+.eat-cat{display:inline-block;padding:6px 14px;border-radius:20px;background:var(--bg-card);border:1px solid var(--border);color:var(--text2);font-size:13px;cursor:pointer;margin:3px}
+.eat-cat.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.eat-item{display:inline-block;padding:4px 10px;border-radius:8px;background:var(--primary-bg);color:var(--text);font-size:13px;cursor:pointer}
+.eat-item:hover{background:var(--primary);color:#fff}
+.eat-item .x{margin-left:6px;opacity:.5;cursor:pointer}
+.eat-item .x:hover{opacity:1}
+#eatRoulette.rolling{color:var(--text3);border-color:var(--primary);animation:pulse .25s infinite alternate}
+@keyframes pulse{from{opacity:.5}to{opacity:1}}
+
 </head>
 <body>
 <div id="wallpaper"></div>
@@ -233,6 +255,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="nav-item" data-mod="drama"><i class="fas fa-film"></i><span>热播</span></div>
       <div class="nav-item" data-mod="data"><i class="fas fa-chart-bar"></i><span>数据</span></div>
       <div class="nav-item" data-mod="content"><i class="fas fa-pen-fancy"></i><span>创作</span></div>
+      <div class="nav-item" data-mod="food"><i class="fas fa-utensils"></i><span>吃啥</span></div>
       <div class="nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>设置</span></div>
     </nav>
   </aside>
@@ -392,13 +415,87 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="c-tab" id="c-materials" style="display:none"><div class="card"><div class="card-hd"><h3>📎 素材库</h3><button class="btn-sm btn-p" onclick="addMat()"><i class="fas fa-plus"></i> 添加素材</button></div><div id="matList" style="margin-top:8px"></div></div></div>
       </div>
 
+      <!-- FOOD -->
+      <div class="page" id="p-food">
+        <div class="ft" id="foodTabs">
+          <span class="fb active" data-f="water">💧 饮水计划</span>
+          <span class="fb" data-f="calorie">🔥 热量计算</span>
+          <span class="fb" data-f="eat">🎲 吃什么</span>
+        </div>
+
+        <!-- 饮水计划 -->
+        <div class="food-tab" id="f-water">
+          <div class="g2">
+            <div class="card"><div class="card-hd"><h3>💧 今日饮水</h3></div>
+              <div style="text-align:center;padding:8px 0">
+                <div style="font-size:13px;color:var(--text2)">已喝 <b id="wDrank" style="color:var(--primary);font-size:18px">0</b> / 目标 <b id="wGoal">2000</b> ml</div>
+                <div style="font-size:34px;font-weight:800;margin:6px 0" id="wRemain">2000</div>
+                <div style="font-size:13px;color:var(--text2)">剩余 ml</div>
+                <div style="height:14px;background:var(--border);border-radius:7px;margin:14px 0 4px;overflow:hidden"><div id="wBar" style="height:100%;width:0%;background:linear-gradient(90deg,#56ccf2,#2f80ed);transition:width .4s"></div></div>
+                <div style="font-size:12px;color:var(--text3)" id="wPct">0%</div>
+              </div>
+              <div style="text-align:center;margin-top:6px"><button class="btn-sm btn-o" onclick="resetWater()"><i class="fas fa-undo"></i> 重置今日</button></div>
+            </div>
+            <div class="card"><div class="card-hd"><h3>➕ 记录饮水</h3></div>
+              <div id="wBtns" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div>
+              <div class="ig" style="margin-top:12px"><input class="in" id="wCustom" type="number" placeholder="自定义 ml" style="flex:1"><button class="btn btn-p" onclick="addWaterCustom()"><i class="fas fa-plus"></i> 添加</button></div>
+              <div style="font-size:13px;color:var(--text2);margin-top:10px">今日记录：</div>
+              <div id="wLog" style="margin-top:6px;font-size:13px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 热量计算 -->
+        <div class="food-tab" id="f-calorie" style="display:none">
+          <div class="card"><div class="card-hd"><h3>🔥 录入一餐</h3></div>
+            <div class="ig">
+              <select class="in" id="calMeal" style="flex:0 0 auto;width:110px">
+                <option value="早餐">🌅 早餐</option>
+                <option value="午餐">🍱 午餐</option>
+                <option value="晚餐">🌙 晚餐</option>
+                <option value="零食">🍪 零食</option>
+              </select>
+              <input class="in" id="calFood" placeholder="食材（如：米饭）" style="flex:1" list="calFoodList">
+              <datalist id="calFoodList"></datalist>
+              <input class="in" id="calGrams" type="number" placeholder="克数" style="flex:0 0 auto;width:80px">
+              <button class="btn btn-p" onclick="addCalorie()"><i class="fas fa-plus"></i></button>
+            </div>
+            <div style="font-size:12px;color:var(--text3);margin-top:6px">提示：输入食材即可自动匹配热量库（每 100g 的 kcal），未收录可手动填热量。</div>
+            <div id="calLog" style="margin-top:10px"></div>
+          </div>
+          <div class="card"><div class="card-hd"><h3>📊 今日摄入总热量</h3></div>
+            <div style="text-align:center;padding:6px 0">
+              <div style="font-size:40px;font-weight:800;color:var(--primary)" id="calTotal">0</div>
+              <div style="font-size:13px;color:var(--text2)">千卡 (kcal) · 今日合计</div>
+            </div>
+            <div class="g4" id="calByMeal" style="margin-top:10px"></div>
+          </div>
+        </div>
+
+        <!-- 吃什么 -->
+        <div class="food-tab" id="f-eat" style="display:none">
+          <div class="card"><div class="card-hd"><h3>🎲 吃什么</h3><button class="btn-sm btn-o" onclick="manageEatCats()"><i class="fas fa-cog"></i> 管理分类</button></div>
+            <div class="ft" id="eatCats" style="margin-bottom:12px;flex-wrap:wrap"></div>
+            <div style="margin-bottom:8px"><button class="btn-sm btn-o" onclick="addEatItem()"><i class="fas fa-plus"></i> 添加词条到当前分类</button></div>
+            <div id="eatItems" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
+            <div style="text-align:center;padding:14px 0">
+              <div id="eatRoulette" style="min-height:90px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:var(--primary);padding:14px;border:2px dashed var(--border);border-radius:14px;background:var(--primary-bg)">选个分类，开始掷骰子 🎲</div>
+              <div style="margin-top:14px">
+                <button class="btn btn-p" id="eatRollBtn" onclick="startRoll()" style="font-size:15px;padding:10px 24px"><i class="fas fa-dice"></i> 开始</button>
+              </div>
+              <div style="font-size:12px;color:var(--text3);margin-top:8px">点击「开始」随机闪现词条，再点「停止」留下一个。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- SETTINGS -->
       <div class="page" id="p-settings">
         <div class="card"><div class="card-hd"><h3>👤 昵称</h3></div><div class="ig"><input class="in" id="nickIn" placeholder="输入你的昵称，将显示在侧栏与进入页" style="font-size:14px"></div><button class="btn-sm btn-p" onclick="saveNickname()"><i class="fas fa-save"></i> 保存</button><span id="nickStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div>
         <div class="card"><div class="card-hd"><h3>🎨 外观设置</h3></div><div class="si-item"><div><div class="si-l">深色模式</div><div class="si-d">切换明暗主题</div></div><div class="toggle" id="themeToggle" onclick="toggleTheme()"></div></div></div>
         <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ Cloudflare KV 云同步已启用，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div id="kvMissing" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:#FFF0E0;border-radius:8px;margin-bottom:12px">⚠️ Cloudflare KV 未绑定。请在 Cloudflare Pages 项目的 <b>Settings → Functions → KV namespace bindings</b> 里添加绑定：<br>• <b>Variable name（变量名）</b>必须填 <code>SYNC_KV</code><br>• <b>KV namespace</b> 选 <code>workbench-data</code><br>保存并重新部署后云同步自动生效。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到云端</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">当前使用 WebDAV 同步（KV 未绑定时的回退方案）。如已绑定 KV，请保存空白配置让系统自动切换。</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="WebDAV 账号" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>📦 数据管理</h3></div><div class="si-item"><div><div class="si-l">导出全部数据</div></div><button class="btn-sm btn-p" onclick="exportData()"><i class="fas fa-download"></i> 导出</button></div><div class="si-item"><div><div class="si-l">导入数据</div></div><button class="btn-sm btn-o" onclick="document.getElementById('importIn').click()"><i class="fas fa-upload"></i> 导入</button><input type="file" id="importIn" accept=".json" style="display:none" onchange="importData(this)"></div><div class="si-item"><div><div class="si-l" style="color:var(--d)">清空所有数据</div></div><button class="btn-sm btn" style="background:var(--d);color:#fff;padding:5px 10px;font-size:12px;border-radius:8px" onclick="clearData()"><i class="fas fa-trash"></i> 清空</button></div></div>
-        <div class="card"><div class="card-hd"><h3>ℹ️ 关于</h3></div><div style="font-size:14px;color:var(--text2);line-height:2"><p>🎀 个人工作台 v1.1 · Labubu 限定版</p><p>11 大模块 · 70+ 功能 · 全场景覆盖</p><p>🥟 部署到 Cloudflare Pages 后自动启用豆瓣数据</p></div></div>
+        <div class="card"><div class="card-hd"><h3>ℹ️ 关于</h3></div><div style="font-size:14px;color:var(--text2);line-height:2"><p>🎀 个人工作台 v1.1 · Labubu 限定版</p><p>12 大模块 · 80+ 功能 · 全场景覆盖</p><p>🥟 部署到 Cloudflare Pages 后自动启用豆瓣数据</p></div></div>
       </div>
     </div>
 
@@ -410,6 +507,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="m-nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>灵感</span></div>
         <div class="m-nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
         <div class="m-nav-item" data-mod="drama"><i class="fas fa-film"></i><span>剧集</span></div>
+        <div class="m-nav-item" data-mod="food"><i class="fas fa-utensils"></i><span>吃啥</span></div>
         <div class="m-nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>设置</span></div>
       </div>
     </nav>
@@ -435,12 +533,12 @@ function toast(msg) {
 const MOD_NAMES = {
   home:'首页', tasks:'任务', life:'日常', schedule:'日程',
   notes:'笔记', hotnews:'热点', drama:'热播', data:'数据',
-  content:'创作', settings:'设置'
+  content:'创作', food:'吃啥', settings:'设置'
 };
 const MOD_ICONS = {
   home:'fa-home', tasks:'fa-tasks', life:'fa-heart', schedule:'fa-calendar',
   notes:'fa-lightbulb', hotnews:'fa-fire', drama:'fa-film', data:'fa-chart-bar',
-  content:'fa-pen-fancy', settings:'fa-cog'
+  content:'fa-pen-fancy', food:'fa-utensils', settings:'fa-cog'
 };
 
 let currentMod = 'home';
@@ -463,6 +561,7 @@ function go(m) {
   // Render module
   if (m === 'data') setTimeout(renderDataCharts, 100);
   if (m === 'schedule') renderCalendar();
+  if (m === 'food') switchFoodTab(foodTab);
   renderAll();
 }
 
@@ -498,6 +597,7 @@ document.addEventListener('DOMContentLoaded', function() {
       else if (parent === 'newsTabs') renderNews(fb.getAttribute('data-p'));
       else if (parent === 'dramaTabs') renderDrama(fb.getAttribute('data-d'));
       else if (parent === 'expPeriodTabs') switchExpPeriod(fb.getAttribute('data-p'));
+      else if (parent === 'foodTabs') switchFoodTab(fb.getAttribute('data-f'));
     });
   });
   // Init
@@ -644,7 +744,7 @@ function initTheme() {
 
 // ===== WEBDAV =====
 function readSyncData() {
-  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods'];
+  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods','water','calorie','eatCats'];
   const d = {};
   keys.forEach(k => { d[k] = Store.get(k, null); });
   return d;
@@ -688,7 +788,7 @@ function mergeArrayById(localArr, remoteArr) {
 
 function mergeRecords(local, remote) {
   const result = {};
-  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant','periods'];
+  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant','periods','calorie','eatCats'];
   const allKeys = new Set([...Object.keys(local || {}), ...Object.keys(remote || {})]);
   for (const key of allKeys) {
     const loc = local ? local[key] : undefined;
@@ -883,7 +983,7 @@ function renderAll() {
   renderHome(); renderTasks(); renderNotes(); renderExpenses();
   renderHabits(); renderHealth(); renderShopping(); renderColl();
   renderTopics(); renderMats(); renderCalendar(); renderEvents();
-  renderFiles(); updateBadge(); updateNewsBadge(); updateDramaBadge();
+  renderFood(); renderFiles(); updateBadge(); updateNewsBadge(); updateDramaBadge();
 }
 
 // ===== BADGE =====
@@ -1519,6 +1619,248 @@ function uploadFile(i) {
 // ============================================================
 // CONTENT
 // ============================================================
+// ============================================================
+// FOOD MODULE (吃啥)
+// ============================================================
+const WATER_GOAL = 2000;
+const WATER_TAGS = [100, 150, 200, 250, 300, 450, 500];
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+
+// ----- 饮水计划 -----
+function getWater() {
+  const w = Store.get('water', {});
+  if (typeof w !== 'object' || Array.isArray(w)) return {};
+  if (!w[todayStr()]) w[todayStr()] = [];
+  return w;
+}
+function renderWater() {
+  const w = getWater();
+  const day = w[todayStr()] || [];
+  const drank = day.reduce((s, x) => s + (x.ml || 0), 0);
+  const remain = Math.max(0, WATER_GOAL - drank);
+  const pct = Math.min(100, Math.round(drank / WATER_GOAL * 100));
+  const elDrank = document.getElementById('wDrank');
+  const elRemain = document.getElementById('wRemain');
+  const elBar = document.getElementById('wBar');
+  const elPct = document.getElementById('wPct');
+  if (elDrank) elDrank.textContent = drank;
+  if (elRemain) elRemain.textContent = remain;
+  if (elBar) elBar.style.width = pct + '%';
+  if (elPct) elPct.textContent = pct + '%';
+  // 标签按钮
+  const btns = document.getElementById('wBtns');
+  if (btns) btns.innerHTML = WATER_TAGS.map(m => '<button class="w-btn" onclick="addWater(' + m + ')">' + m + 'ml</button>').join('');
+  // 今日记录
+  const log = document.getElementById('wLog');
+  if (log) log.innerHTML = day.length === 0
+    ? '<span style="color:var(--text3)">暂无记录</span>'
+    : day.map((x, i) => '<span class="w-log-item">' + x.ml + 'ml <span class="x" onclick="delWater(' + i + ')">✕</span></span>').join('');
+}
+function addWater(ml) {
+  const w = getWater();
+  w[todayStr()].push({ ml });
+  Store.set('water', w); renderWater();
+}
+function addWaterCustom() {
+  const el = document.getElementById('wCustom');
+  const ml = parseInt(el.value);
+  if (!ml || ml <= 0) return toast('请输入有效水量');
+  addWater(ml); el.value = '';
+}
+function delWater(i) {
+  const w = getWater();
+  w[todayStr()].splice(i, 1);
+  Store.set('water', w); renderWater();
+}
+function resetWater() {
+  const w = getWater();
+  w[todayStr()] = [];
+  Store.set('water', w); renderWater(); toast('已重置今日饮水');
+}
+
+// ----- 热量计算 -----
+const CAL_LIB = {
+  '米饭':116,'粥':46,'馒头':223,'面包':312,'面条(煮)':110,'燕麦片':367,'红薯':102,'土豆':81,'玉米':112,'意大利面':158,'饺子':195,'包子':227,'油条':388,'年糕':154,'河粉':109,'米线':92,'炒饭':174,'炒面':165,
+  '猪肉(瘦)':143,'猪肉(五花)':349,'牛肉(瘦)':106,'鸡胸肉':133,'鸡腿肉':181,'鸡翅':194,'鸡蛋':144,'鸭蛋':180,'虾':93,'三文鱼':139,'带鱼':127,'螃蟹':95,'羊肉':118,'鸭肉':240,'火腿肠':212,'培根':541,'午餐肉':229,'豆腐':80,'豆皮':180,'牛奶':54,'酸奶':72,
+  '西兰花':34,'西红柿':20,'黄瓜':16,'胡萝卜':39,'菠菜':24,'白菜':17,'生菜':15,'芹菜':20,'茄子':25,'青椒':22,'豆角':30,'冬瓜':12,'南瓜':23,'洋葱':40,'韭菜':26,'花菜':24,'莲藕':73,'木耳':21,'蘑菇':20,'金针菇':26,'香菇':19,'海带':13,'紫菜':207,'魔芋':5,
+  '苹果':53,'香蕉':93,'草莓':32,'西瓜':31,'葡萄':44,'橙子':48,'梨':44,'桃子':48,'樱桃':46,'芒果':60,'火龙果':55,'牛油果':160,'榴莲':147,
+  '巧克力':550,'薯片':500,'饼干':450,'花生':580,'杏仁':575,'腰果':560,'冰淇淋':250,'奶茶':350,'可乐':42,'橙汁':45,'啤酒':43,
+  '橄榄油':900,'黄油':720,'沙拉酱':700
+};
+function calMatch(name) {
+  if (CAL_LIB[name] !== undefined) return CAL_LIB[name];
+  // 模糊匹配
+  const k = Object.keys(CAL_LIB).find(k => name.indexOf(k) === 0 || k.indexOf(name) === 0);
+  return k ? CAL_LIB[k] : null;
+}
+function renderCalorieFoodList() {
+  const dl = document.getElementById('calFoodList');
+  if (dl) dl.innerHTML = Object.keys(CAL_LIB).map(k => '<option value="' + k + '">' + k + ' (' + CAL_LIB[k] + ')</option>').join('');
+}
+function addCalorie() {
+  const meal = document.getElementById('calMeal').value;
+  const name = document.getElementById('calFood').value.trim();
+  const grams = parseFloat(document.getElementById('calGrams').value);
+  if (!name) return toast('请输入食材');
+  if (!grams || grams <= 0) return toast('请输入有效克数');
+  let per100 = calMatch(name);
+  if (per100 === null) {
+    const v = parseFloat(prompt('未收录「' + name + '」，请手动输入每 100g 的热量 (kcal)：', '100'));
+    if (isNaN(v)) return;
+    per100 = v; CAL_LIB[name] = v;
+  }
+  const kcal = Math.round(per100 * grams / 100 * 10) / 10;
+  const list = Store.get('calorie', []);
+  list.push({ id: 'c' + Date.now(), meal, name, grams, per100, kcal, date: todayStr() });
+  Store.set('calorie', list);
+  document.getElementById('calFood').value = '';
+  document.getElementById('calGrams').value = '';
+  renderCalorie();
+}
+function delCalorie(id) {
+  let list = Store.get('calorie', []);
+  list = list.filter(x => x.id !== id);
+  Store.set('calorie', list); renderCalorie();
+}
+function renderCalorie() {
+  const list = Store.get('calorie', []).filter(x => x.date === todayStr());
+  const meals = ['早餐', '午餐', '晚餐', '零食'];
+  const total = list.reduce((s, x) => s + (x.kcal || 0), 0);
+  const elTotal = document.getElementById('calTotal');
+  if (elTotal) elTotal.textContent = Math.round(total);
+  const byMealEl = document.getElementById('calByMeal');
+  if (byMealEl) byMealEl.innerHTML = meals.map(m => {
+    const s = list.filter(x => x.meal === m).reduce((a, x) => a + (x.kcal || 0), 0);
+    return '<div class="si"><div class="num">' + Math.round(s) + '</div><div class="label">' + m + '</div></div>';
+  }).join('');
+  const log = document.getElementById('calLog');
+  if (log) log.innerHTML = list.length === 0
+    ? '<div class="emp" style="padding:16px"><p>还没有记录</p></div>'
+    : list.map(x => '<div class="cal-log-item"><span class="ci-meal">' + x.meal + '</span><span class="ci-k">' + x.name + ' ' + x.grams + 'g</span><span class="ci-v">' + x.kcal + ' kcal</span><span class="x" onclick="delCalorie(\'' + x.id + '\')"><i class="fas fa-times"></i></span></div>').join('');
+}
+
+// ----- 吃什么（掷骰子） -----
+const EAT_DEFAULT = {
+  '早餐': ['小米粥','白煮蛋','豆浆油条','包子','三明治','燕麦牛奶','葱油饼','煎饼果子','肠粉','酸奶麦片','茶叶蛋','牛肉粉','胡辣汤','生煎包','豆腐脑','蒸饺','贝果','饭团','阳春面','牛奶麦片'],
+  '午餐/晚餐': ['西红柿炒蛋','青椒土豆丝','麻婆豆腐','宫保鸡丁','鱼香肉丝','回锅肉','红烧肉','黄焖鸡米饭','鸡公煲','水煮肉片','酸菜鱼','糖醋里脊','京酱肉丝','木须肉','家常豆腐','鱼香茄子','辣子鸡','毛血旺','地三鲜','酸辣白菜','香菇菜心','干煸豆角','蚂蚁上树','肉沫茄子','红烧排骨','糖醋排骨','可乐鸡翅','清蒸鲈鱼','蒜蓉西兰花','番茄牛腩','土豆炖牛肉','咖喱鸡','照烧鸡腿饭','台式卤肉饭','扬州炒饭','蛋炒饭','牛肉盖浇饭','腊肉煲仔饭','羊肉串','烤鱼','炸酱面','兰州拉面','重庆小面','牛肉面','刀削面','意大利面','披萨','汉堡','三明治','寿司','鳗鱼饭','石锅拌饭','韩式烤肉','部队火锅','麻辣烫','螺蛳粉','砂锅粥','皮蛋瘦肉粥','小笼包','蒸饺','馄饨','肉夹馍','凉皮','凉面','炒河粉','炒米粉','煲仔饭','寿喜锅','日式咖喱饭','泰式炒河粉','冬阴功汤','煎饺','烧麦','杂粮煎饼','煎饼果子','手抓饼','关东煮','葱油拌面','油泼面','biangbiang面','酸汤水饺','砂锅米线','麻辣香锅','干锅菜花','铁板鱿鱼','日式乌冬面','越南河粉','海南鸡饭','猪脚饭','梅菜扣肉饼','酱骨头','东北乱炖','锅包肉','番茄鸡蛋面','酸菜白肉','朝鲜冷面','白切鸡','红烧牛腩','卤味拼盘','麻辣拌','热干面','牛肉粉丝汤','猪肝面','大排面','虾仁炒饭','菠萝炒饭','咖喱牛肉饭','芝士焗饭','鸡腿堡','鳕鱼堡','照烧鸡排饭','排骨饭','三杯鸡','姜母鸭','红烧狮子头','清炖羊肉','萝卜炖牛腩','番茄龙利鱼','蒜香排骨','梅菜扣肉','水煮牛肉','毛氏红烧肉','剁椒鱼头','干锅虾','香辣蟹','烤鸭','盐水鸭','叫花鸡','佛跳墙','东坡肉','西湖醋鱼','龙井虾仁','片儿川','猫耳朵','蟹粉小笼','灌汤包','叉烧包','流沙包','糯米鸡','肠粉','虾饺','及第粥','状元及第粥','海鲜粥','鲍鱼粥','干贝粥','鱼片粥','滑鸡粥','柴鱼花生粥','白果腐竹粥'],
+  '零食': ['薯片','巧克力','饼干','奥利奥','坚果','瓜子','花生','核桃','腰果','杏仁','碧根果','开心果','夏威夷果','芒果干','草莓干','葡萄干','蜜饯','果冻','软糖','棉花糖','蛋挞','泡芙','马卡龙','甜甜圈','芝士蛋糕','提拉米苏','慕斯蛋糕','红丝绒蛋糕','黑森林蛋糕','戚风蛋糕','纸杯蛋糕','铜锣烧','可丽饼','华夫饼','松饼','班戟','双皮奶','杨枝甘露','芒果布丁','布丁','龟苓膏','绿豆糕','红豆糕','桂花糕','驴打滚','艾窝窝','糖葫芦','麻薯','麻花','萨其马','凤梨酥','蛋黄酥','老婆饼','榴莲酥','桃酥','雪花酥','牛轧糖','棒棒糖','山楂糕','果丹皮','海苔','魔芋爽','辣条','咪咪虾条','旺旺雪饼','仙贝','妙脆角','虾条','洋葱圈','鸡米花','鸡块','薯条','鸡翅','爆米花','冰淇淋','雪糕','冰棍','酸奶','养乐多','奶酪棒','奶枣','枣夹核桃','芝麻丸','黑芝麻丸','能量棒','蛋白棒','水果捞','椰果','西米露','烧仙草','珍珠奶茶','奶茶','果茶','柠檬茶','奶盖','芝士奶盖','椰奶奶茶','脏脏包','可颂','牛角包','吐司','欧包','贝果','碱水面包','肉桂卷','甜甜圈','马卡龙']
+};
+function getEatCats() {
+  let c = Store.get('eatCats', null);
+  if (!c || !Array.isArray(c) || c.length === 0) {
+    c = Object.keys(EAT_DEFAULT).map(k => ({ name: k, items: EAT_DEFAULT[k].slice() }));
+    Store.set('eatCats', c);
+  }
+  // 去重保护
+  c.forEach(cat => { if (cat.items) cat.items = Array.from(new Set(cat.items)); });
+  return c;
+}
+function saveEatCats(c) { Store.set('eatCats', c); }
+function renderEatCats() {
+  const cats = getEatCats();
+  const wrap = document.getElementById('eatCats');
+  if (!wrap) return;
+  if (!eatCurCat && cats.length) eatCurCat = cats[0].name;
+  wrap.innerHTML = cats.map(c => '<span class="eat-cat' + (c.name === eatCurCat ? ' active' : '') + '" onclick="selectEatCat(\'' + c.name + '\')">' + c.name + '</span>').join('');
+  renderEatItems();
+}
+function selectEatCat(name) { eatCurCat = name; renderEatCats(); stopRoll(); }
+function renderEatItems() {
+  const cats = getEatCats();
+  const cat = cats.find(c => c.name === eatCurCat);
+  const wrap = document.getElementById('eatItems');
+  if (!wrap) return;
+  if (!cat) { wrap.innerHTML = ''; return; }
+  wrap.innerHTML = cat.items.map((it, i) => '<span class="eat-item">' + it + ' <span class="x" onclick="delEatItem(\'' + cat.name + '\',' + i + ')">✕</span></span>').join('');
+}
+function delEatItem(catName, i) {
+  const cats = getEatCats();
+  const cat = cats.find(c => c.name === catName);
+  if (cat) { cat.items.splice(i, 1); saveEatCats(cats); renderEatItems(); }
+}
+function addEatItem() {
+  const cats = getEatCats();
+  const cat = cats.find(c => c.name === eatCurCat);
+  if (!cat) return toast('请先选择分类');
+  const v = prompt('给「' + eatCurCat + '」添加词条：');
+  if (!v) return;
+  v.split(/[,，、\n]/).map(s => s.trim()).filter(Boolean).forEach(s => { if (!cat.items.includes(s)) cat.items.push(s); });
+  saveEatCats(cats); renderEatItems(); toast('已添加');
+}
+function manageEatCats() {
+  const cats = getEatCats();
+  const op = prompt('「吃什么」分类管理：\n输入新分类名 = 新建分类\n输入 "del:分类名" = 删除该分类\n输入 "add:分类名" = 给该分类批量添加词条（逗号分隔）\n当前分类：' + cats.map(c => c.name + '(' + c.items.length + ')').join('、'), '');
+  if (!op) return;
+  if (op.startsWith('del:')) {
+    const n = op.slice(4).trim();
+    if (cats.length <= 1) return toast('至少保留一个分类');
+    saveEatCats(cats.filter(c => c.name !== n));
+    if (eatCurCat === n) eatCurCat = '';
+    renderEatCats(); toast('已删除分类');
+  } else if (op.startsWith('add:')) {
+    const n = op.slice(4).trim();
+    let cat = cats.find(c => c.name === n);
+    if (!cat) { cat = { name: n, items: [] }; cats.push(cat); }
+    const items = prompt('给「' + n + '」输入词条（逗号分隔）：');
+    if (items) items.split(/[,，、\n]/).map(s => s.trim()).filter(Boolean).forEach(s => { if (!cat.items.includes(s)) cat.items.push(s); });
+    saveEatCats(cats); renderEatCats(); toast('已更新分类词条');
+  } else {
+    const n = op.trim();
+    if (!n) return;
+    if (cats.find(c => c.name === n)) return toast('分类已存在');
+    cats.push({ name: n, items: [] });
+    saveEatCats(cats); eatCurCat = n; renderEatCats(); toast('已新建分类');
+  }
+}
+let eatCurCat = '';
+let eatTimer = null;
+function curEatPool() {
+  const cats = getEatCats();
+  const cat = cats.find(c => c.name === eatCurCat);
+  return cat ? cat.items : [];
+}
+function startRoll() {
+  const pool = curEatPool();
+  if (!pool || pool.length === 0) return toast('当前分类没有词条，请先添加');
+  const box = document.getElementById('eatRoulette');
+  const btn = document.getElementById('eatRollBtn');
+  if (eatTimer) { stopRoll(); return; }
+  box.classList.add('rolling');
+  btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
+  btn.classList.remove('btn-p'); btn.classList.add('btn-a');
+  let last = '';
+  eatTimer = setInterval(() => {
+    let pick;
+    do { pick = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && pick === last);
+    last = pick; box.textContent = pick;
+  }, 70);
+}
+function stopRoll() {
+  if (eatTimer) { clearInterval(eatTimer); eatTimer = null; }
+  const box = document.getElementById('eatRoulette');
+  const btn = document.getElementById('eatRollBtn');
+  if (box) box.classList.remove('rolling');
+  if (btn) { btn.innerHTML = '<i class="fas fa-dice"></i> 开始'; btn.classList.add('btn-p'); btn.classList.remove('btn-a'); }
+}
+
+// ----- FOOD 总入口 -----
+let foodTab = 'water';
+function switchFoodTab(f) {
+  foodTab = f || 'water';
+  document.querySelectorAll('.food-tab').forEach(el => el.style.display = 'none');
+  const tab = document.getElementById('f-' + foodTab);
+  if (tab) tab.style.display = 'block';
+  if (foodTab === 'water') renderWater();
+  if (foodTab === 'calorie') { renderCalorieFoodList(); renderCalorie(); }
+  if (foodTab === 'eat') renderEatCats();
+}
+function renderFood() {
+  renderWater();
+  renderCalorieFoodList();
+  renderCalorie();
+  renderEatCats();
+}
+
 function switchContentTab(t) {
   document.querySelectorAll('.c-tab').forEach(el => el.style.display = 'none');
   const tab = document.getElementById('c-' + t);
