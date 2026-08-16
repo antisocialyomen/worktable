@@ -144,7 +144,7 @@ function jsonError(status, msg) {
   });
 }
 
-// 云同步统一入口：Cloudflare KV 优先；未绑定 SYNC_KV 时回退到 WebDAV 代理。
+// 云同步统一入口：Cloudflare KV 优先；未绑定 KV 时回退到 WebDAV 代理。
 // KV 是 Cloudflare 原生存储，不存在 CORS/520/超时问题，最适合本应用跨设备同步。
 async function handleSyncApi(request, env) {
   const cors = {
@@ -169,18 +169,24 @@ async function handleSyncApi(request, env) {
 
   const url = new URL(request.url);
 
+  // 兼容两种绑定写法：推荐 Variable name = SYNC_KV；旧/误填 workbench-data 也支持
+  const KV = env && (env.SYNC_KV || env['workbench-data']);
+
   // 模式探测：KV 是否已绑定（前端据此决定是否要展示 WebDAV 配置）
   if (url.pathname === '/api/sync/status' && request.method === 'GET') {
-    return new Response(JSON.stringify({ kv: !!(env && env.SYNC_KV) }), { status: 200, headers: cors });
+    return new Response(JSON.stringify({
+      kv: !!KV,
+      name: KV ? (env.SYNC_KV ? 'SYNC_KV' : 'workbench-data') : null
+    }), { status: 200, headers: cors });
   }
 
   const KEY = 'workbench-sync-v1';
 
   // 优先使用 Cloudflare KV（原生、无 CORS/超时问题）
-  if (env && env.SYNC_KV) {
+  if (KV) {
     if (request.method === 'GET') {
       try {
-        const data = await env.SYNC_KV.get(KEY, 'text');
+        const data = await KV.get(KEY, 'text');
         return new Response(data || '{}', { status: 200, headers: cors });
       } catch (e) {
         return jsonError(502, '读取 KV 失败：' + (e ? e.message : '未知错误'));
@@ -191,7 +197,7 @@ async function handleSyncApi(request, env) {
       try { body = await request.text(); } catch (e) { return jsonError(400, '读取请求体失败：' + e.message); }
       try { JSON.parse(body); } catch (e) { return jsonError(400, '数据格式错误：不是合法 JSON'); }
       try {
-        await env.SYNC_KV.put(KEY, body);
+        await KV.put(KEY, body);
         return new Response(JSON.stringify({ ok: true }), { status: 200, headers: cors });
       } catch (e) {
         return jsonError(502, '写入 KV 失败：' + (e ? e.message : '未知错误'));
