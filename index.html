@@ -31,6 +31,8 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 #splash.hide{opacity:0;pointer-events:none}
 .splash-avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:24px;box-shadow:0 8px 28px rgba(255,107,138,0.28)}
 #splashHello{font-size:28px;font-weight:700;margin-bottom:8px;color:var(--text)}
+#splashName{outline:none;border-bottom:1px dashed transparent;transition:border-color .2s;cursor:text}
+#splashName:hover,#splashName:focus{border-bottom-color:var(--primary)}
 #splashTime{font-size:38px;font-weight:700;margin-bottom:4px;color:var(--primary);font-variant-numeric:tabular-nums}
 #splashDate{font-size:15px;color:var(--text2);margin-bottom:36px}
 #enterBtn{padding:12px 32px;font-size:16px;border-radius:28px;box-shadow:0 6px 18px rgba(255,107,138,0.3)}
@@ -204,7 +206,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 <!-- Entry / Splash Page -->
 <div id="splash">
   <img src="assets/labubu-avatar.png" alt="" class="splash-avatar">
-  <h1 id="splashHello">Hello，小遥</h1>
+  <h1 id="splashHello">Hello，<span id="splashName" contenteditable="true" spellcheck="false" title="点击修改你的名字">小遥</span></h1>
   <div id="splashTime"></div>
   <div id="splashDate"></div>
   <button id="enterBtn" class="btn btn-p" onclick="enterApp()">进入工作台</button>
@@ -496,6 +498,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Init
   updateSplashTime();
   setInterval(updateSplashTime, 1000);
+  initSplashName();
   initApp();
   // Register PWA service worker
   if ('serviceWorker' in navigator) {
@@ -549,6 +552,18 @@ document.addEventListener('click', function(e) {
 });
 
 // ===== SPLASH =====
+function initSplashName() {
+  const el = document.getElementById('splashName');
+  if (!el) return;
+  const saved = Store.get('userName', '');
+  if (saved) el.textContent = saved;
+  el.addEventListener('blur', () => {
+    const v = (el.textContent || '').trim();
+    el.textContent = v || '小遥';
+    Store.set('userName', el.textContent);
+  });
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
+}
 function enterApp() {
   const s = document.getElementById('splash');
   if (!s) return;
