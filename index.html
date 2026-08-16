@@ -446,6 +446,13 @@ document.addEventListener('DOMContentLoaded', function() {
   initApp();
   // Register PWA service worker
   if ('serviceWorker' in navigator) {
+    let reloading = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (reloading) return;
+      reloading = true;
+      toast('🔄 已更新，正在刷新…');
+      location.reload();
+    });
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   }
 });
@@ -580,6 +587,12 @@ function mergeRecords(local, remote) {
 async function errDetail(r) {
   try { const j = await r.json(); return j.error || j.detail || ''; } catch(e) { return ''; }
 }
+function syncErr(status, detail) {
+  if (status === 401) return '凭据错误，请检查 WebDAV 应用密码是否过期/已重置（不要用登录密码）';
+  if (status === 404) return '云端文件不存在，首次同步将自动创建';
+  if (status >= 500) return '云服务暂时不可用，请稍后重试';
+  return (detail || ('错误码 ' + status));
+}
 
 const WebDAV = {
   enabled: false, url: '', user: '', pass: '', file: 'workbench-data.json',
@@ -596,7 +609,8 @@ const WebDAV = {
       document.getElementById('wdConfig').style.display = 'block';
       document.getElementById('syncBtn').style.color = 'var(--accent)';
       document.getElementById('wdStatus').textContent = '☁️ 已配置';
-      setTimeout(() => this.pull(), 500);
+      // 进入页面时静默拉取，避免网络抖动/密码过期一进来就弹错
+      setTimeout(() => this.pull(false, true), 500);
     }
   },
   headers() {
@@ -608,7 +622,7 @@ const WebDAV = {
       'X-WD-FILE': this.file
     };
   },
-  async pull(mergeAfter = false) {
+  async pull(mergeAfter = false, silent = false) {
     if (!this.enabled) return;
     try {
       const r = await fetch(this.proxy, { method: 'GET', headers: this.headers() });
@@ -623,11 +637,13 @@ const WebDAV = {
           renderAll();
           toast(mergeAfter ? '☁️ 云端数据已合并' : '☁️ 云端数据已同步');
         }
+      } else if (r.status === 404) {
+        // 云端文件不存在（首次同步），属正常情况，不提示
       } else {
         const detail = await errDetail(r);
-        toast('⚠️ 拉取失败 ' + r.status + (detail ? '：' + detail : ''));
+        if (!silent) toast('⚠️ 拉取失败：' + syncErr(r.status, detail));
       }
-    } catch(e) { toast('⚠️ 同步失败：网络错误'); }
+    } catch(e) { if (!silent) toast('⚠️ 同步失败：网络错误'); }
   },
   async push() {
     if (!this.enabled) return;
@@ -638,7 +654,7 @@ const WebDAV = {
         body: JSON.stringify(d)
       });
       if (r.ok) toast('☁️ 数据已上传');
-      else { const detail = await errDetail(r); toast('⚠️ 同步失败 ' + r.status + (detail ? '：' + detail : '')); }
+      else { const detail = await errDetail(r); toast('⚠️ 同步失败：' + syncErr(r.status, detail)); }
     } catch(e) { toast('⚠️ 同步失败：网络错误'); }
   }
 };

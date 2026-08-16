@@ -94,12 +94,19 @@ async function handleWebDAVProxy(request) {
   try {
     const response = await fetch(targetUrl, init);
     clearTimeout(timer);
-    // 以文本读取后转发，避免直接透传上游二进制/畸形响应导致 Cloudflare 边缘返回 520
+    const status = response.status;
+    // 上游返回 5xx（含 Cloudflare 边缘把畸形/超时响应包装成的 520）时，
+    // 不再原样透传给前端，否则前端会看到 520。统一返回干净 JSON 502。
+    if (status >= 500) {
+      return jsonError(502, '云同步服务暂时不可用（上游返回 ' + status + '），请稍后重试，或检查 WebDAV 地址与密码');
+    }
+    // 以文本读取后转发，避免直接透传上游二进制/畸形响应
     const text = await response.text();
+    const ctype = response.headers.get('Content-Type') || 'application/json; charset=utf-8';
     return new Response(text, {
-      status: response.status,
+      status,
       headers: {
-        'Content-Type': response.headers.get('Content-Type') || 'application/json; charset=utf-8',
+        'Content-Type': ctype,
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, X-WD-URL, X-WD-USER, X-WD-PASS, X-WD-FILE'
