@@ -393,7 +393,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="page" id="p-settings">
         <div class="card"><div class="card-hd"><h3>👤 昵称</h3></div><div class="ig"><input class="in" id="nickIn" placeholder="输入你的昵称，将显示在侧栏与进入页" style="font-size:14px"></div><button class="btn-sm btn-p" onclick="saveNickname()"><i class="fas fa-save"></i> 保存</button><span id="nickStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>🎨 外观设置</h3></div><div class="si-item"><div><div class="si-l">深色模式</div><div class="si-d">切换明暗主题</div></div><div class="toggle" id="themeToggle" onclick="toggleTheme()"></div></div></div>
-        <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ 已启用 Cloudflare KV 云同步，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到坚果云 WebDAV</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">① 注册坚果云 → ② 账户信息→安全选项→第三方应用管理 → ③ 生成应用密码 → ④ 填下面信息保存</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="坚果云账号（邮箱）" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
+        <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ Cloudflare KV 云同步已启用，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div id="kvMissing" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:#FFF0E0;border-radius:8px;margin-bottom:12px">⚠️ Cloudflare KV 未绑定。请在 Cloudflare Pages 项目的 <b>Settings → Functions → KV namespace bindings</b> 里添加绑定：Variable name = <code>SYNC_KV</code>，KV namespace = <code>workbench-data</code>，重新部署后云同步自动生效。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到云端</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">当前使用 WebDAV 同步（KV 未绑定时的回退方案）。如已绑定 KV，请保存空白配置让系统自动切换。</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="WebDAV 账号" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>📦 数据管理</h3></div><div class="si-item"><div><div class="si-l">导出全部数据</div></div><button class="btn-sm btn-p" onclick="exportData()"><i class="fas fa-download"></i> 导出</button></div><div class="si-item"><div><div class="si-l">导入数据</div></div><button class="btn-sm btn-o" onclick="document.getElementById('importIn').click()"><i class="fas fa-upload"></i> 导入</button><input type="file" id="importIn" accept=".json" style="display:none" onchange="importData(this)"></div><div class="si-item"><div><div class="si-l" style="color:var(--d)">清空所有数据</div></div><button class="btn-sm btn" style="background:var(--d);color:#fff;padding:5px 10px;font-size:12px;border-radius:8px" onclick="clearData()"><i class="fas fa-trash"></i> 清空</button></div></div>
         <div class="card"><div class="card-hd"><h3>ℹ️ 关于</h3></div><div style="font-size:14px;color:var(--text2);line-height:2"><p>🎀 个人工作台 v1.1 · Labubu 限定版</p><p>11 大模块 · 70+ 功能 · 全场景覆盖</p><p>🥟 部署到 Cloudflare Pages 后自动启用豆瓣数据</p></div></div>
       </div>
@@ -709,7 +709,7 @@ async function errDetail(r) {
   } catch(e) { return ''; }
 }
 function syncErr(status, detail) {
-  if (status === 401) return '凭据错误，请检查 WebDAV 应用密码是否过期/已重置（不要用登录密码）';
+  if (status === 401) return '凭据错误，请检查应用密码是否过期/已重置';
   if (status === 404) return '云端文件不存在，首次同步将自动创建';
   if (status >= 500) return (detail ? '云服务暂时不可用：' + detail : '云服务暂时不可用，请稍后重试');
   return (detail || ('错误码 ' + status));
@@ -722,13 +722,26 @@ const WebDAV = {
     // 探测同步后端：KV 已绑定则使用 KV（无需配置），否则回退 WebDAV
     fetch('/api/sync/status', { method: 'GET' })
       .then(r => r.ok ? r.json() : null)
-      .then(st => { if (st && st.kv) this.initKV(); else this.initWebDAV(); })
-      .catch(() => this.initWebDAV());
+      .then(st => {
+        if (st && st.kv) { this.initKV(); }
+        else {
+          const km = document.getElementById('kvMissing');
+          if (km) km.style.display = 'block';
+          this.initWebDAV();
+        }
+      })
+      .catch(() => {
+        const km = document.getElementById('kvMissing');
+        if (km) km.style.display = 'block';
+        this.initWebDAV();
+      });
   },
   initKV() {
     this.kvMode = true; this.enabled = true;
     const kvInfo = document.getElementById('kvInfo');
     if (kvInfo) kvInfo.style.display = 'block';
+    const km = document.getElementById('kvMissing');
+    if (km) km.style.display = 'none';
     const row = document.getElementById('wdToggleRow');
     if (row) row.style.display = 'none';
     const cfg = document.getElementById('wdConfig');
@@ -744,6 +757,8 @@ const WebDAV = {
   },
   initWebDAV() {
     const c = Store.get('webdav', {});
+    const desc = document.getElementById('wdToggleDesc');
+    if (desc) desc.textContent = '开启后数据自动同步到 WebDAV（KV 未绑定）';
     if (c.url && c.user && c.pass) {
       this.url = c.url.replace(/\/+$/, '') + '/';
       this.user = c.user; this.pass = c.pass; this.enabled = true;
@@ -753,7 +768,7 @@ const WebDAV = {
       document.getElementById('wdToggle').classList.add('on');
       document.getElementById('wdConfig').style.display = 'block';
       document.getElementById('syncBtn').style.color = 'var(--accent)';
-      document.getElementById('wdStatus').textContent = '☁️ 已配置';
+      document.getElementById('wdStatus').textContent = '☁️ WebDAV 已配置';
       setTimeout(() => this.pull(false, true), 500);
     }
   },
@@ -804,6 +819,19 @@ const WebDAV = {
   }
 };
 function toggleWD() {
+  if (WebDAV.kvMode) {
+    // KV 模式下开关只控制是否启用同步
+    WebDAV.enabled = !WebDAV.enabled;
+    if (WebDAV.enabled) {
+      document.getElementById('wdToggle').classList.add('on');
+      document.getElementById('syncBtn').style.color = 'var(--accent)';
+      WebDAV.pull();
+    } else {
+      document.getElementById('wdToggle').classList.remove('on');
+      document.getElementById('syncBtn').style.color = 'var(--text2)';
+    }
+    return;
+  }
   const c = Store.get('webdav', {});
   if (!c.url || !c.user || !c.pass) {
     document.getElementById('wdConfig').style.display = 'block';
@@ -829,16 +857,15 @@ function saveWD() {
   WebDAV.user = user; WebDAV.pass = pass; WebDAV.enabled = true;
   document.getElementById('wdToggle').classList.add('on');
   document.getElementById('syncBtn').style.color = 'var(--accent)';
-  document.getElementById('wdStatus').textContent = '☁️ 已配置';
+  document.getElementById('wdStatus').textContent = '☁️ WebDAV 已配置';
   toast('✅ 已保存');
   // 首次保存：先合并云端已有数据，避免空本地覆盖云端
   doSync();
 }
 function doSync() {
   if (!WebDAV.enabled) {
-    toast('⚠️ 请先在设置中配置 WebDAV');
+    toast('⚠️ 请先在设置中启用云同步');
     go('settings');
-    document.getElementById('wdConfig').style.display = 'block';
     return;
   }
   document.getElementById('syncBtn').style.color = 'var(--alert)';
