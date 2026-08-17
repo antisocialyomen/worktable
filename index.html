@@ -124,7 +124,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .cb .ct{flex:1;font-size:14px;min-width:0;word-break:break-word}
 .cb input:checked~.ct{text-decoration:line-through;color:var(--text3)}
 .cb-acts{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;z-index:2000;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .3s}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;z-index:2000;opacity:0;pointer-events:none;white-space:pre-wrap;transition:opacity .3s}
 .toast.show{opacity:1}
 .toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;transition:background var(--t)}
 .toggle.on{background:var(--accent)}
@@ -1752,10 +1752,10 @@ const Store = {
 };
 
 // ===== HELPERS =====
-function toast(msg) {
+function toast(msg, duration) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), duration || 2500);
 }
 
 // ===== NAVIGATION =====
@@ -3343,7 +3343,7 @@ function renderCalendar() {
     const ml = (Store.get('moodlogs', {}) || {})[ds];
     const numStyle = it ? 'background:var(--primary);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin:0 auto' : 'margin:0 auto;text-align:center';
     const dots = de.slice(0, 2).map(x => '<div onclick="event.stopPropagation();editEvent(\'' + x.id + '\')" style="font-size:9px;background:var(--primary);color:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer">' + x.title + '</div>').join('');
-    const cdDots = dayCd.slice(0, 2).map(x => '<div onclick="event.stopPropagation();go(\'schedule\');switchSchedTab(\'cd\')" style="font-size:9px;color:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;background:' + x.color + '">' + x.name + '</div>').join('');
+    const cdDots = dayCd.slice(0, 2).map(x => '<div onclick="event.stopPropagation();showCdTip(\'' + x.id + '\')" style="font-size:9px;color:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;background:' + x.color + '">' + x.name + '</div>').join('');
     h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:6px;min-height:54px;font-size:13px"><div onclick="openEventForDate(\'' + ds + '\')" style="font-weight:600;cursor:pointer;' + numStyle + '">' + i + '</div>' + (ml ? '<div class="cal-emo" style="text-align:center;font-size:13px;line-height:1.1;margin-top:1px">' + ml.mood + '</div>' : '') + dots + cdDots + ((de.length + dayCd.length) > 4 ? '<div style="font-size:10px;color:var(--text3)">+' + ((de.length + dayCd.length) - 4) + '更多</div>' : '') + '</div>';
   }
   document.getElementById('calGrid').innerHTML = h;
@@ -3477,10 +3477,21 @@ function cdOnDate(y, m) {
   cds.forEach(o => {
     const occ = cdNextOccurrence(o, first);
     if (occ && occ >= first && occ <= last) {
-      res.push({ ds: occ.getFullYear() + '-' + String(occ.getMonth() + 1).padStart(2, '0') + '-' + String(occ.getDate()).padStart(2, '0'), name: o.name, color: o.color });
+      res.push({ id: o.id, ds: occ.getFullYear() + '-' + String(occ.getMonth() + 1).padStart(2, '0') + '-' + String(occ.getDate()).padStart(2, '0'), name: o.name, color: o.color });
     }
   });
   return res;
+}
+function showCdTip(id) {
+  const o = getCountdowns().find(x => x.id === id);
+  if (!o) return;
+  const left = cdDaysLeft(o);
+  const occ = cdNextOccurrence(o, new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+  const occStr = occ ? (occ.getFullYear() + '-' + String(occ.getMonth() + 1).padStart(2, '0') + '-' + String(occ.getDate()).padStart(2, '0')) : '—';
+  const leftTxt = (left === null) ? '日期无效' : (left > 0 ? '还有 ' + left + ' 天' : (left === 0 ? '就是今天！' : '已过 ' + Math.abs(left) + ' 天'));
+  const rep = { none: '不重复', daily: '每天', weekly: '每周', monthly: '每月', yearly: '每年' }[o.repeat] || '不重复';
+  const cal = o.calType === 'lunar' ? '农历' : '公历';
+  toast(o.name + '\n' + cal + '·' + rep + ' · ' + leftTxt + '\n目标 ' + occStr, 2000);
 }
 function switchSchedTab(s) {
   schedTab = s || 'cal';
