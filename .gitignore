@@ -10,6 +10,8 @@ _verify*.py
 _verify*.png
 _shot_*.png
 _shot_*.py
+_eat_*.png
+_restructure_expense.py
 
 # WorkBuddy 项目内部数据（记忆/配置，不进仓库）
 .workbuddy/
