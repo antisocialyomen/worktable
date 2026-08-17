@@ -488,7 +488,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="life-tab" id="l-habit" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>🔥 我的习惯</h3><button class="btn-sm btn-p" onclick="addHabit()"><i class="fas fa-plus"></i> 新建</button></div><div id="habitList"></div></div><div class="card"><div class="card-hd"><h3>📅 本月打卡</h3></div><div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div><div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text2)">本月打卡 <span id="monthCheck">0</span> 天</div></div></div></div>
         <div class="life-tab" id="l-health" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><button class="btn btn-p" onclick="addHealth()">记录</button></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3>📈 体重趋势</h3></div><div style="height:200px"><canvas id="weightChart"></canvas></div></div></div><div class="card"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="healthList"></div></div></div>
         <div class="life-tab" id="l-shopping" style="display:none"><div class="card"><div class="card-hd"><h3>🛒 购物清单</h3></div><div class="ig"><input class="in" id="shopIn" placeholder="添加购物项..." onkeydown="if(event.key==='Enter') addShop()"><select class="in" id="shopCat" style="flex:0 0 auto;width:100px"><option value="食品">食品</option><option value="日用品">日用品</option><option value="服饰">服饰</option><option value="数码">数码</option><option value="其他">其他</option></select><button class="btn btn-p" onclick="addShop()"><i class="fas fa-plus"></i></button></div><div id="shopList"></div></div></div>
-        <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="card-hd"><h3>📚 书影音收藏</h3><button class="btn-sm btn-p" onclick="addColl()"><i class="fas fa-plus"></i> 添加</button></div><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="music">🎵 音乐</option></select></div><div id="collList" style="margin-top:8px"></div></div></div>
+        <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="card-hd"><h3>📚 书影音收藏</h3><button class="btn-sm btn-p" onclick="addColl()"><i class="fas fa-plus"></i> 添加</button></div><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="tv">📺 电视剧</option><option value="music">🎵 音乐</option></select></div><div id="collList" style="margin-top:8px"></div></div></div>
         <div class="life-tab" id="l-period" style="display:none">
           <div class="card">
             <div class="card-hd"><h3>🩸 经期日历</h3>
@@ -874,6 +874,26 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
         <button class="btn btn-o" onclick="closeTopicModal()">取消</button>
         <button class="btn btn-p" onclick="saveTopic()"><i class="fas fa-save"></i> 保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 书影音编辑弹窗 -->
+<div class="mask hide" id="collMask" onclick="if(event.target===this)closeCollModal()">
+  <div class="modal" style="max-width:480px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3 id="collMaskTitle">📚 添加收藏</h3><span class="modal-x" onclick="closeCollModal()"><i class="fas fa-times"></i></span></div>
+    <div id="collMaskBody">
+      <div class="ig" style="margin-bottom:10px"><input class="in" id="collTitle" placeholder="名称 *" style="flex:1"></div>
+      <div class="ig" style="margin-bottom:10px"><select class="in" id="collType" style="flex:1"><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="tv">📺 电视剧</option><option value="music">🎵 音乐</option></select></div>
+      <div style="font-size:13px;font-weight:600;margin:4px 0 6px">评分</div>
+      <div id="collStars" style="font-size:24px;color:var(--alert);margin-bottom:10px;letter-spacing:2px"></div>
+      <div style="font-size:13px;font-weight:600;margin:4px 0 6px">感悟（300字以内）</div>
+      <textarea class="in" id="collNote" placeholder="记录你的感悟…" maxlength="300" style="width:100%;min-height:80px;resize:vertical" oninput="document.getElementById('collNoteCount').textContent=this.value.length+'/300'"></textarea>
+      <div style="text-align:right;font-size:12px;color:var(--text3);margin-top:2px"><span id="collNoteCount">0/300</span></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-o" onclick="closeCollModal()">取消</button>
+        <button class="btn btn-p" onclick="saveColl()"><i class="fas fa-save"></i> 保存</button>
       </div>
     </div>
   </div>
@@ -3261,21 +3281,52 @@ function renderColl() {
   let f = i;
   if (q) f = f.filter(x => x.title.toLowerCase().includes(q));
   if (tf !== 'all') f = f.filter(x => x.type === tf);
-  const icons = { book: 'fa-book', movie: 'fa-film', music: 'fa-music' };
+  const icons = { book: 'fa-book', movie: 'fa-film', tv: 'fa-tv', music: 'fa-music' };
   document.getElementById('collList').innerHTML = f.length === 0
     ? '<div class="emp" style="padding:20px"><i class="fas fa-star"></i><p>还没有收藏</p></div>'
-    : f.map(x => '<div class="cb" style="cursor:default"><i class="fas ' + (icons[x.type] || 'fa-star') + '" style="color:var(--primary);width:20px;text-align:center"></i><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:14px">' + x.title + '</div></div>' + (x.rating ? '<span style="color:var(--alert)">' + '★'.repeat(x.rating) + '</span>' : '') + '<button class="btn-icon btn-o" onclick="editColl(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delColl(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : f.map(x => '<div class="cb" style="cursor:default;flex-wrap:wrap"><i class="fas ' + (icons[x.type] || 'fa-star') + '" style="color:var(--primary);width:20px;text-align:center"></i><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:14px">' + x.title + (x.rating ? ' <span style="color:var(--alert);font-size:13px">' + '★'.repeat(x.rating) + '</span>' : '') + '</div>' + (x.note ? '<div style="font-size:12px;color:var(--text3);font-weight:400;margin-top:2px">' + escHtml(x.note) + '</div>' : '') + '</div><button class="btn-icon btn-o" onclick="editColl(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delColl(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
-function addColl() { const t = prompt('名称：', ''); if (!t) return; const ty = prompt('类型（book/movie/music）：', 'book') || 'book'; const r = parseInt(prompt('评分（1-5）：', '3') || '3'); const i = Store.get('collections', []); i.unshift({ id: Date.now().toString(), title: t, type: ty, rating: Math.min(5, Math.max(1, r)), createdAt: new Date().toISOString(), updatedAt: Date.now() }); Store.set('collections', i); renderColl(); toast('✅ 已添加'); }
-function editColl(id) {
-  const i = Store.get('collections', []);
-  const x = i.find(z => z.id === id);
-  if (!x) return;
-  const t = prompt('名称：', x.title);
-  if (t === null) return;
-  const ty = prompt('类型（book/movie/music）：', x.type || 'book');
-  const r = prompt('评分（1-5）：', x.rating || 3);
-  if (t.trim()) { x.title = t.trim(); x.type = ty || x.type; x.rating = Math.min(5, Math.max(1, parseInt(r) || x.rating)); x.updatedAt = Date.now(); Store.set('collections', i); renderColl(); toast('✅ 已更新'); }
+function addColl() { openCollModal(); }
+function editColl(id) { openCollModal(id); }
+let collEditingId = null, collRatingVal = 0;
+function renderCollStars() {
+  const el = document.getElementById('collStars');
+  if (!el) return;
+  let h = '';
+  for (let i = 1; i <= 5; i++) h += '<i class="fas fa-star" style="cursor:pointer;color:' + (i <= collRatingVal ? 'var(--alert)' : 'var(--text3)') + '" onclick="setCollRating(' + i + ')"></i>' + (i < 5 ? ' ' : '');
+  el.innerHTML = h;
+}
+function setCollRating(v) { collRatingVal = v; renderCollStars(); }
+function openCollModal(id) {
+  collEditingId = id || null;
+  const x = id ? Store.get('collections', []).find(z => z.id === id) : null;
+  document.getElementById('collMaskTitle').textContent = x ? '📚 编辑收藏' : '📚 添加收藏';
+  document.getElementById('collTitle').value = x ? x.title : '';
+  document.getElementById('collType').value = x ? (x.type || 'book') : 'book';
+  collRatingVal = x ? (x.rating || 0) : 0;
+  renderCollStars();
+  document.getElementById('collNote').value = x ? (x.note || '') : '';
+  document.getElementById('collNoteCount').textContent = (x ? (x.note || '') : '').length + '/300';
+  document.getElementById('collMask').classList.remove('hide');
+}
+function closeCollModal() { document.getElementById('collMask').classList.add('hide'); collEditingId = null; }
+function saveColl() {
+  const title = document.getElementById('collTitle').value.trim();
+  if (!title) return toast('请填写名称');
+  const type = document.getElementById('collType').value;
+  const note = document.getElementById('collNote').value.trim();
+  const rating = collRatingVal;
+  const collections = Store.get('collections', []);
+  if (collEditingId) {
+    const x = collections.find(z => z.id === collEditingId);
+    if (x) { x.title = title; x.type = type; x.rating = rating; x.note = note; x.updatedAt = Date.now(); }
+  } else {
+    collections.unshift({ id: Date.now().toString(), title, type, rating, note, createdAt: new Date().toISOString(), updatedAt: Date.now() });
+  }
+  Store.set('collections', collections);
+  closeCollModal();
+  renderColl();
+  toast('✅ 已保存');
 }
 function delColl(id) { Store.set('collections', Store.get('collections', []).filter(i => i.id !== id)); renderColl(); }
 
@@ -4128,36 +4179,95 @@ function genReport(force) {
   const notes = Store.get('notes', []);
   const events = Store.get('events', []);
   const health = Store.get('health', []);
-  const wt = tasks.filter(x => x.date && x.date >= start && x.date <= end);
+  const collections = Store.get('collections', []);
+  const shopping = Store.get('shopping', []);
+  const calorie = Store.get('calorie', []);
+  const water = Store.get('water', {});
+  const moodlogs = getMoodlogs();
+  const studyBook = getBook();
+  const inWeek = (d) => d && d >= start && d <= end;
+  const dStr = (ts) => { try { return new Date(ts).toISOString().slice(0, 10); } catch (e) { return ''; } };
+  const wt = tasks.filter(x => inWeek(x.date));
   const done = wt.filter(x => x.done);
   const high = wt.filter(x => x.pri === 'h');
-  // 习惯：取本周打卡天数
-  const habitLines = habits.slice(0, 5).map(h => {
-    const days = Object.keys(h.log || {}).filter(d => d >= start && d <= end && h.log[d]).length;
-    return '  · ' + h.name + '：打卡 ' + days + ' 天';
+  // 习惯：本周打卡率
+  const habitLines = habits.map(h => {
+    const days = Object.keys(h.log || {}).filter(d => inWeek(d) && h.log[d]).length;
+    const rate = Math.round(days / 7 * 100);
+    return '  · ' + h.name + '：打卡 ' + days + '/7 天（' + rate + '%）';
   });
   // 记账
-  const exp = expenses.filter(x => x.date && x.date >= start && x.date <= end);
+  const exp = expenses.filter(x => inWeek(x.date));
   const expTotal = exp.filter(x => x.type === 'e').reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
   const incTotal = exp.filter(x => x.type === 'i').reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
   const topCat = {};
   exp.filter(x => x.type === 'e').forEach(x => { topCat[x.cat || '其他'] = (topCat[x.cat || '其他'] || 0) + (parseFloat(x.amt) || 0); });
   const topCats = Object.entries(topCat).sort((a, b) => b[1] - a[1]).slice(0, 3);
-  // 笔记/日程/健康
-  const weekNotes = notes.filter(x => x.date && x.date >= start && x.date <= end).length;
-  const weekEvents = events.filter(x => x.date && x.date >= start && x.date <= end).length;
-  const weekHealth = health.filter(x => x.date && x.date >= start && x.date <= end);
-  const latestWeight = weekHealth.length ? weekHealth[weekHealth.length - 1].weight : null;
+  // 情绪化消费
+  const emo = exp.filter(isEmotional);
+  const emoTotal = emo.reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
+  const emoPct = expTotal ? (emoTotal / expTotal * 100) : 0;
+  // 健康：体重 / 体脂率
+  const wh = health.filter(x => inWeek(x.date)).sort((a, b) => a.date.localeCompare(b.date));
+  let weightLine = '（无记录）';
+  if (wh.length) {
+    const first = wh[0], lastW = wh[wh.length - 1];
+    const diff = (lastW.weight - first.weight);
+    weightLine = wh.length + ' 次，最新 ' + lastW.weight + 'kg' + (wh.length > 1 ? '（' + first.date + ' ' + first.weight + 'kg → ' + lastW.date + ' ' + lastW.weight + 'kg，' + (diff >= 0 ? '+' : '') + diff.toFixed(1) + 'kg）' : '');
+  }
+  const latestFat = wh.length ? wh[wh.length - 1].fat : null;
+  // 书影音
+  const coll = collections.filter(x => inWeek(dStr(x.createdAt)));
+  const collByType = {};
+  coll.forEach(x => { collByType[x.type] = (collByType[x.type] || 0) + 1; });
+  const typeName = { book: '书籍', movie: '电影', tv: '电视剧', music: '音乐' };
+  const collLine = coll.length ? coll.map(x => '  · ' + (typeName[x.type] || '') + '《' + x.title + '》' + (x.rating ? ' ' + '★'.repeat(x.rating) : '')).join('\n') : '  （无）';
+  // 购物
+  const shop = shopping.filter(x => inWeek(dStr(x.updatedAt)));
+  const shopDone = shop.filter(x => x.done).length;
+  const shopByCat = {};
+  shop.forEach(x => { shopByCat[x.cat] = (shopByCat[x.cat] || 0) + 1; });
+  // 饮食
+  const cal = calorie.filter(x => inWeek(x.date));
+  const calTotal = cal.reduce((s, x) => s + (parseFloat(x.kcal) || 0), 0);
+  const calByMeal = {};
+  cal.forEach(x => { calByMeal[x.meal] = (calByMeal[x.meal] || 0) + (parseFloat(x.kcal) || 0); });
+  const mealName = { 早餐: '早餐', 午餐: '午餐', 晚餐: '晚餐', 零食: '零食', 饮料: '饮料' };
+  // 饮水计划
+  let waterDays = 0, waterTotal = 0; const wdays = [];
+  { let [y, m, d] = start.split('-').map(Number); const [ey, em, ed] = end.split('-').map(Number); let cur = new Date(y, m - 1, d); const e = new Date(ey, em - 1, ed); while (cur <= e) { const ds = cur.toISOString().slice(0, 10); wdays.push(ds); const ml = (water[ds] || []).reduce((s, x) => s + (x.ml || 0), 0); waterTotal += ml; if (ml >= WATER_GOAL) waterDays++; cur = new Date(cur.getTime() + 86400000); } }
+  const waterRate = Math.round(waterDays / wdays.length * 100);
+  // 日程
+  const evs = events.filter(x => inWeek(x.date));
+  // 心情
+  const moods = Object.keys(moodlogs).filter(inWeek).map(d => moodlogs[d]);
+  const moodCount = moods.length;
+  // 学习
+  const sb = studyBook.filter(x => inWeek(dStr(x.updatedAt)));
+  const sbCn = sb.filter(x => x.kind === 'cn').length;
+  const sbEn = sb.filter(x => x.kind === 'en').length;
+  // 笔记 / 日程
+  const weekNotes = notes.filter(x => inWeek(x.date)).length;
+  const weekEvents = evs.length;
   // 生成文本
-  let r = '📋 本周工作周报（' + start + ' ~ ' + end + '）\n━━━━━━━━━━━━━━━━━━\n';
+  let r = '📋 本周周报（' + start + ' ~ ' + end + '）\n━━━━━━━━━━━━━━━━━━\n';
   r += '📊 任务：' + done.length + ' / ' + wt.length + ' 完成' + (wt.length ? '（完成率 ' + Math.round(done.length / wt.length * 100) + '%）' : '') + '\n';
   r += '🔥 紧急任务：' + high.length + ' 项' + (high.filter(x => x.done).length ? '，已完成 ' + high.filter(x => x.done).length + ' 项' : '') + '\n\n';
   r += '📌 已完成任务：\n' + (done.length ? done.map(x => '  ✔ ' + x.title + (x.pri === 'h' ? '【紧急】' : x.pri === 'l' ? '【低优】' : '')).join('\n') : '  （暂无）') + '\n\n';
   r += '📌 待完成任务：\n' + (wt.filter(x => !x.done).length ? wt.filter(x => !x.done).map(x => '  ○ ' + x.title).join('\n') : '  （全部完成）') + '\n\n';
-  if (habitLines.length) r += '🔥 习惯打卡：\n' + habitLines.join('\n') + '\n\n';
+  if (habitLines.length) r += '🔥 习惯打卡率：\n' + habitLines.join('\n') + '\n\n';
+  r += '❤️ 健康：体重 ' + weightLine + (latestFat ? ' · 最新体脂率 ' + latestFat + '%' : '') + '\n\n';
   r += '💰 收支：收入 ¥' + incTotal.toFixed(2) + ' · 支出 ¥' + expTotal.toFixed(2) + '\n';
   if (topCats.length) r += '🏷️ 支出 TOP：' + topCats.map(([c, a]) => c + ' ¥' + a.toFixed(2)).join(' / ') + '\n';
-  r += '\n📝 本周记录：笔记 ' + weekNotes + ' 条 / 日程 ' + weekEvents + ' 场' + (latestWeight ? ' / 最新体重 ' + latestWeight + 'kg' : '') + '\n';
+  r += '😰 情绪化消费：¥' + emoTotal.toFixed(2) + '（' + emo.length + ' 笔，占支出 ' + emoPct.toFixed(1) + '%）\n\n';
+  r += '📚 书影音：本周 ' + coll.length + ' 部' + (Object.keys(collByType).length ? '（' + Object.entries(collByType).map(([t, n]) => (typeName[t] || t) + n).join(' / ') + '）' : '') + '\n' + collLine + '\n\n';
+  r += '🛒 购物：本周新增 ' + shop.length + ' 项（已完成 ' + shopDone + '）' + (Object.keys(shopByCat).length ? ' · ' + Object.entries(shopByCat).map(([c, n]) => c + n).join(' / ') : '') + '\n\n';
+  r += '🍱 饮食：本周 ' + cal.length + ' 条记录，共 ' + calTotal.toFixed(0) + ' kcal' + (Object.keys(calByMeal).length ? '\n  ' + Object.entries(calByMeal).map(([m, v]) => (mealName[m] || m) + ' ' + v.toFixed(0)).join(' · ') : '') + '\n\n';
+  r += '💧 饮水计划：达标 ' + waterDays + '/' + wdays.length + ' 天（' + waterRate + '%），本周共 ' + waterTotal + 'ml（目标 ' + (WATER_GOAL * wdays.length) + 'ml）\n\n';
+  r += '📅 日程报告：本周 ' + evs.length + ' 场' + (evs.length ? '\n  ' + evs.slice(0, 6).map(x => '  · ' + x.date + ' ' + x.title).join('\n') : '') + '\n\n';
+  r += '📓 心情报告：本周记录 ' + moodCount + ' 天' + (moodCount ? '（' + moods.map(m => m.mood || '').join(' ') + '）' : '') + '\n\n';
+  r += '📖 学习报告：本周积累 中文 ' + sbCn + ' 条 / 英语 ' + sbEn + ' 条（共 ' + sb.length + ' 条）\n\n';
+  r += '📝 概况：笔记 ' + weekNotes + ' 条 / 日程 ' + weekEvents + ' 场\n';
   r += '\n📅 ' + new Date().toLocaleString();
   document.getElementById('weeklyReport').textContent = r;
   Store.set('weeklyReportMeta', { week: weekKey, text: r, hash: currentHash, generatedAt: Date.now() });
@@ -4165,8 +4275,8 @@ function genReport(force) {
 }
 function reportHash() {
   const { start, end } = weekRange();
-  const keys = ['tasks','habits','expenses','notes','events','health'];
-  return keys.map(k => JSON.stringify(Store.get(k, []))).join('|').length + '_' + start + '_' + end;
+  const keys = ['tasks','habits','expenses','notes','events','health','collections','shopping','calorie','water','moodlogs','studyBook'];
+  return keys.map(k => JSON.stringify(Store.get(k, k === 'water' || k === 'moodlogs' ? {} : [])).length).join(',') + '_' + start + '_' + end;
 }
 function checkReportStale() {
   const meta = Store.get('weeklyReportMeta', {});
