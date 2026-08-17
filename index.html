@@ -125,6 +125,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .cb .cc{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all var(--t)}
 .cb input:checked+.cc{background:var(--primary);border-color:var(--primary)}
 .cb input:checked+.cc::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#fff;font-size:11px}
+.cb .cc.checked{background:var(--primary);border-color:var(--primary)}
+.cb .cc.checked::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#fff;font-size:11px}
 .cb .ct{flex:1;font-size:14px;min-width:0;word-break:break-word}
 .cb input:checked~.ct{text-decoration:line-through;color:var(--text3)}
 .cb-acts{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto}
@@ -2654,7 +2656,7 @@ function renderTasks() {
     list.innerHTML = filtered.map(t => {
       const pCls = t.pri === 'h' ? 't3' : t.pri === 'l' ? 't2' : 't1';
       const pLbl = t.pri === 'h' ? '紧急' : t.pri === 'l' ? '低优' : '普通';
-      return '<div class="cb" style="align-items:flex-start"><input type="checkbox"' + (t.done ? 'checked' : '') + ' onchange="toggleTask(\'' + t.id + '\')"><span class="cc"></span><div class="ct" style="flex:1;min-width:0;' + (t.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '"><div>' + t.title + '</div><div style="font-size:11px;color:var(--text3);margin-top:2px"><span class="tag ' + pCls + '" style="font-size:10px;padding:1px 5px;margin-right:4px">' + pLbl + '</span>' + (t.date === today ? '今天' : t.date || '') + '</div></div><span class="cb-acts task-acts"><button class="btn-icon btn-o" onclick="event.stopPropagation();editTask(\'' + t.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();deleteTask(\'' + t.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></span></div>';
+      return '<div class="cb" style="align-items:flex-start"><span class="cc' + (t.done ? ' checked' : '') + '" onclick="event.stopPropagation();toggleTask(\'' + t.id + '\')" style="cursor:pointer"></span><div class="ct" style="flex:1;min-width:0;' + (t.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '"><div>' + t.title + '</div><div style="font-size:11px;color:var(--text3);margin-top:2px"><span class="tag ' + pCls + '" style="font-size:10px;padding:1px 5px;margin-right:4px">' + pLbl + '</span>' + (t.date === today ? '今天' : t.date || '') + '</div></div><span class="cb-acts task-acts"><button class="btn-icon btn-o" onclick="event.stopPropagation();editTask(\'' + t.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();deleteTask(\'' + t.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></span></div>';
     }).join('');
   }
   renderTasksChart();
