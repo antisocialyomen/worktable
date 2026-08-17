@@ -82,6 +82,18 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .sc > .si:nth-child(2){width:auto;height:auto;flex:1;min-width:0;display:block;padding:0;background:transparent;color:inherit}
 .sc > .si:nth-child(2) .num{font-size:22px;font-weight:700;line-height:1.2}
 .sc > .si:nth-child(2) .label{font-size:13px;color:var(--text2);line-height:1.3}
+/* 资产负债合并控件（去图标·两行·缩小） */
+.asset-line{display:flex;align-items:baseline;gap:6px;padding:2px 0}
+.asset-net{font-size:14px}
+.asset-row2{justify-content:space-between;margin-top:3px}
+.a-grp{display:inline-flex;align-items:baseline;gap:6px}
+.a-lab{font-size:11px;color:var(--text2);flex:0 0 auto}
+.a-num{font-weight:700;color:var(--text);font-size:13px;line-height:1.2}
+.asset-net .a-num{font-size:15px}
+.a-debt{color:var(--d)}
+/* 语音记账麦克风 */
+.btn-sm.rec{background:var(--d);color:#fff;border-color:var(--d);animation:micPulse 1.1s ease-in-out infinite}
+@keyframes micPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(209,0,86,.5)}50%{transform:scale(1.08);box-shadow:0 0 0 6px rgba(209,0,86,0)}}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius-lg);font-size:14px;font-weight:500;cursor:pointer;transition:all var(--t)}
 .btn-p{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 12px rgba(255,107,138,0.25)}
 .btn-p:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 6px 16px rgba(255,107,138,0.35)}
@@ -404,7 +416,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <!-- LIFE -->
       <div class="page" id="p-life">
         <div class="ft" id="lifeTabs">
-          <span class="fb active" data-t="expense">💰 记账</span>
+          <span class="fb active" data-t="expense">💰 财务</span>
           <span class="fb" data-t="habit">🔥 习惯</span>
           <span class="fb" data-t="health">❤️ 健康</span>
           <span class="fb" data-t="shopping">🛒 购物</span>
@@ -412,24 +424,26 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb" data-t="period">🩸 经期</span>
         </div>
                 <div class="life-tab" id="l-expense" style="display:none">
-          <div class="ft" id="expTabs" style="margin-bottom:14px">
-            <span class="fb active" data-e="record">💰 记账</span>
-            <span class="fb" data-e="bill">📑 账单</span>
-            <span class="fb" data-e="stat">📊 统计</span>
-            <span class="fb" data-e="emo">😰 情绪化</span>
+          <div class="ft" id="expTabs" style="margin-bottom:14px;flex-wrap:nowrap;gap:6px">
+            <span class="fb active" data-e="record">记账</span>
+            <span class="fb" data-e="bill">账单</span>
+            <span class="fb" data-e="stat">统计</span>
+            <span class="fb" data-e="emo">情绪化消费</span>
           </div>
 
           <!-- 记账 -->
           <div class="exp-pane" id="e-record">
             <div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div>
-              <div class="ig"><input class="in" id="expNl" placeholder="例：午餐20元 / 1月1日午餐20元" style="flex:1;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()"><button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">智能填充</button></div>
+              <div class="ig"><input class="in" id="expNl" placeholder="例：午餐20元 / 说&quot;晚餐三十&quot;" style="flex:1;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()"><button class="btn-sm btn-o" id="micBtn" onclick="startVoice()" title="语音记账" style="flex:0 0 auto"><i class="fas fa-microphone"></i></button><button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">智能填充</button></div>
               <div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01" style="flex:0 0 38%"><input class="in" id="expDate" type="date" style="flex:0 0 30%"><select class="in" id="expType" onchange="onExpTypeChange()" style="flex:0 0 22%"><option value="e">支出</option><option value="i">收入</option></select></div>
               <div class="ig"><select class="in" id="expCat" onchange="onExpCatChange()" style="flex:1 1 40%"></select><select class="in" id="expSub" style="flex:1 1 34%"></select></div>
               <div class="ig"><input class="in" id="expNote" placeholder="备注" style="flex:1 1 58%"><button class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto"><i class="fas fa-cog"></i></button><button class="btn btn-p" onclick="addExpense()" style="flex:0 0 auto"><i class="fas fa-plus"></i></button></div>
-              <div class="g3" style="margin-top:12px" id="assetCards">
-                <div class="sc"><div class="si si1"><i class="fas fa-wallet"></i></div><div class="si"><div class="num" id="dispNet">¥0.00</div><div class="label">净资产 <i class="fas fa-eye" id="eyeNet" onclick="toggleAssetEye('net')" style="cursor:pointer;color:var(--text3)"></i></div></div></div>
-                <div class="sc"><div class="si si1"><i class="fas fa-piggy-bank"></i></div><div class="si"><div class="num" id="dispAssets">¥0.00</div><div class="label">总资产 <i class="fas fa-eye" id="eyeAssets" onclick="toggleAssetEye('assets')" style="cursor:pointer;color:var(--text3)"></i></div></div></div>
-                <div class="sc"><div class="si si1"><i class="fas fa-credit-card"></i></div><div class="si"><div class="num" id="dispDebts">¥0.00</div><div class="label">总负债 <i class="fas fa-eye" id="eyeDebts" onclick="toggleAssetEye('debts')" style="cursor:pointer;color:var(--text3)"></i></div></div></div>
+              <div class="card" style="padding:10px 14px;margin-top:12px" id="assetCards">
+                <div class="asset-line asset-net"><span class="a-lab">净资产</span><span class="a-num" id="dispNet">¥0.00</span></div>
+                <div class="asset-line asset-row2">
+                  <span class="a-grp"><span class="a-lab">总资产</span><span class="a-num" id="dispAssets">¥0.00</span></span>
+                  <span class="a-grp"><span class="a-lab">总负债</span><span class="a-num a-debt" id="dispDebts">¥0.00</span></span>
+                </div>
               </div>
               <div class="ig" style="margin-top:10px"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:1 1 38%"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:1 1 38%"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto">设置</button></div>
               <div style="margin-top:10px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number" style="flex:1 1 58%"><button class="btn-sm btn-a" onclick="setBudget()" style="flex:0 0 auto">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div>
@@ -2702,27 +2716,67 @@ function fillExpCats() {
 }
 
 // ---- 自然语言自动填充 ----
+function cnToNum(str) {
+  const m = { '零': 0, '一': 1, '二': 2, '两': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9 };
+  const u = { '十': 10, '百': 100, '千': 1000 };
+  if (!/[一二三四五六七八九十百千万两]/.test(str)) return null;
+  const groups = str.split('万');
+  let total = 0;
+  for (let g = 0; g < groups.length; g++) {
+    const seg = groups[g]; let sec = 0, num = 0;
+    for (const ch of seg) {
+      if (m[ch] !== undefined) { num = m[ch]; }
+      else if (u[ch] !== undefined) { if (num === 0) num = 1; sec += num * u[ch]; num = 0; }
+    }
+    sec += num;
+    total += sec * (g === groups.length - 1 ? 1 : 10000);
+  }
+  return total > 0 ? total : null;
+}
 function applyNl() {
   const raw = (document.getElementById('expNl') && document.getElementById('expNl').value || '').trim();
-  if (!raw) return toast('请输入自然语言，如：午餐20元');
+  if (!raw) return toast('请输入自然语言，如：晚餐30 / 买药20 / 演唱会两千');
   let txt = raw, date = new Date().toISOString().slice(0, 10), amt = 0, cat = '', sub = '';
   if (/昨天|昨日/.test(txt)) { const y = new Date(Date.now() - 864e5); date = y.toISOString().slice(0, 10); }
   else if (/今天|今日/.test(txt)) { date = new Date().toISOString().slice(0, 10); }
   let md = txt.match(/(\d{1,2})月(\d{1,2})[日号]/);
   if (md) { date = new Date().getFullYear() + '-' + String(md[1]).padStart(2, '0') + '-' + String(md[2]).padStart(2, '0'); txt = txt.replace(md[0], ' '); }
   else { let sl = txt.match(/(\d{1,2})\/(\d{1,2})/); if (sl) { date = new Date().getFullYear() + '-' + String(sl[1]).padStart(2, '0') + '-' + String(sl[2]).padStart(2, '0'); txt = txt.replace(sl[0], ' '); } }
-  let am = txt.match(/(\d+(?:\.\d+)?)/); if (am) amt = parseFloat(am[1]);
+  let am = txt.match(/(\d+(?:\.\d+)?)/);
+  if (am) amt = parseFloat(am[1]);
+  else { const cn = cnToNum(txt); if (cn) amt = cn; }
   const type = document.getElementById('expType').value;
   const allCats = type === 'i' ? INCOME_CATS1 : CATS1;
   for (const c of allCats) { if (raw.indexOf(c) > -1) { cat = c; break; } }
-  if (cat) {
+  const kw = type === 'i' ? NL_KW_I : NL_KW_E;
+  if (!cat) {
+    for (const row of kw) { if (raw.indexOf(row[0]) > -1) { cat = row[1]; sub = row[2] || ''; break; } }
+  } else {
     const subs = type === 'i' ? getIncomeSubs()[cat] : getExpSubs()[cat];
     for (const s of (subs || [])) { if (raw.indexOf(s) > -1) { sub = s; break; } }
   }
   if (amt > 0) document.getElementById('expAmt').value = amt;
   document.getElementById('expDate').value = date;
   if (cat) { document.getElementById('expCat').value = cat; fillExpSubs(); if (sub) document.getElementById('expSub').value = sub; }
-  toast('✅ 已智能填充' + (amt > 0 ? ' ¥' + amt : '') + (cat ? ' · ' + cat + (sub ? '·' + sub : '') : '') + (date !== new Date().toISOString().slice(0, 10) ? ' · ' + date : ''));
+  toast('✅ 已智能填充' + (amt > 0 ? ' ¥' + amt : '') + (cat ? ' · ' + cat + (sub ? '·' + sub : '') : ' · 未识别分类') + (date !== new Date().toISOString().slice(0, 10) ? ' · ' + date : ''));
+}
+function startVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { toast('当前浏览器不支持语音输入，请用 Chrome / Edge'); return; }
+  if (window.__rec && window.__rec.state === 'recording') { try { window.__rec.stop(); } catch (e) { } return; }
+  const rec = new SR();
+  rec.lang = 'zh-CN'; rec.interimResults = false; rec.maxAlternatives = 1;
+  const btn = document.getElementById('micBtn');
+  rec.onstart = () => { if (btn) btn.classList.add('rec'); toast('🎤 正在聆听，请说出账目…'); };
+  rec.onend = () => { if (btn) btn.classList.remove('rec'); window.__rec = null; };
+  rec.onerror = (e) => { if (btn) btn.classList.remove('rec'); toast('语音识别失败：' + (e.error || '未知')); };
+  rec.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    const inp = document.getElementById('expNl');
+    if (inp) { inp.value = text; applyNl(); }
+  };
+  window.__rec = rec;
+  try { rec.start(); } catch (err) { if (btn) btn.classList.remove('rec'); toast('无法启动语音：' + err.message); }
 }
 
 function expenseSum(arr, type) { return (arr || []).filter(x => x.type === type).reduce((s, x) => s + (parseFloat(x.amt) || 0), 0); }
@@ -2900,17 +2954,8 @@ function getAssets() {
 }
 function renderAssets() {
   const { assets, debts, net } = getAssets();
-  const hidden = Store.get('assetEyes', { net: false, assets: false, debts: false });
-  const mask = (v, hide) => hide ? '****' : '¥' + v.toFixed(2);
-  const set = (id, v, hide) => { const el = document.getElementById(id); if (el) el.textContent = mask(v, hide); };
-  const setEye = (id, hide) => { const el = document.getElementById(id); if (el) el.className = 'fas ' + (hide ? 'fa-eye-slash' : 'fa-eye'); };
-  set('dispNet', net, hidden.net); setEye('eyeNet', hidden.net);
-  set('dispAssets', assets, hidden.assets); setEye('eyeAssets', hidden.assets);
-  set('dispDebts', debts, hidden.debts); setEye('eyeDebts', hidden.debts);
-}
-function toggleAssetEye(k) {
-  const h = Store.get('assetEyes', { net: false, assets: false, debts: false });
-  h[k] = !h[k]; Store.set('assetEyes', h); renderAssets();
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = '¥' + v.toFixed(2); };
+  set('dispNet', net); set('dispAssets', assets); set('dispDebts', debts);
 }
 function adjustAssetsByTxn(txn, sign) {
   const a = parseFloat(txn.amt) || 0; if (a <= 0) return;
@@ -4531,6 +4576,66 @@ const EXP_SUBS_DEFAULT = {
 };
 const CATS1 = ['餐饮','交通','购物','娱乐','学习','医疗','住房','其他'];
 const INCOME_CATS1 = ['薪资','兼职','奖金','理财盈亏','收红包','中奖','借入','报销','卖二手','收礼','补贴','其他'];
+// 自然语言关键词字典：[关键词, 一级分类, 二级分类]（支出）
+const NL_KW_E = [
+  ['早饭', '餐饮', '早餐'], ['早餐', '餐饮', '早餐'],
+  ['午饭', '餐饮', '午餐'], ['中饭', '餐饮', '午餐'], ['午餐', '餐饮', '午餐'],
+  ['晚饭', '餐饮', '晚餐'], ['夜宵', '餐饮', '晚餐'], ['晚餐', '餐饮', '晚餐'],
+  ['零食', '餐饮', '零食'],
+  ['奶茶', '餐饮', '饮品'], ['咖啡', '餐饮', '饮品'], ['饮料', '餐饮', '饮品'], ['饮品', '餐饮', '饮品'],
+  ['水果', '餐饮', '果蔬'], ['买菜', '餐饮', '果蔬'], ['菜', '餐饮', '果蔬'], ['果蔬', '餐饮', '果蔬'],
+  ['生鲜', '餐饮', '生鲜'],
+  ['油盐', '餐饮', '粮油调味'], ['调料', '餐饮', '粮油调味'], ['粮油', '餐饮', '粮油调味'],
+  ['蛋糕', '餐饮', '甜品'], ['甜品', '餐饮', '甜品'], ['点心', '餐饮', '甜品'],
+  ['外卖', '餐饮', '外卖'],
+  ['公交', '交通', '公交地铁'], ['地铁', '交通', '公交地铁'], ['地铁票', '交通', '公交地铁'],
+  ['打车', '交通', '打车'], ['滴滴', '交通', '打车'], ['出租车', '交通', '打车'],
+  ['高铁', '交通', '高铁火车'], ['火车', '交通', '高铁火车'], ['动车', '交通', '高铁火车'],
+  ['机票', '交通', '飞机'], ['飞机', '交通', '飞机'], ['航班', '交通', '飞机'],
+  ['加油', '交通', '加油'], ['油价', '交通', '加油'],
+  ['停车', '交通', '停车'], ['停车费', '交通', '停车'],
+  ['单车', '交通', '共享单车'], ['共享单车', '交通', '共享单车'], ['骑行', '交通', '共享单车'],
+  ['衣服', '购物', '服饰'], ['服饰', '购物', '服饰'], ['买衣服', '购物', '服饰'],
+  ['手机', '购物', '数码'], ['电脑', '购物', '数码'], ['数码', '购物', '数码'],
+  ['化妆品', '购物', '美妆'], ['美妆', '购物', '美妆'],
+  ['日用品', '购物', '日用品'], ['杂货', '购物', '日用品'],
+  ['家居', '购物', '家居'], ['家具', '购物', '家居'],
+  ['鞋', '购物', '鞋包'], ['包', '购物', '鞋包'],
+  ['电影', '娱乐', '电影'], ['看电影', '娱乐', '电影'],
+  ['演出', '娱乐', '演出'], ['演唱会', '娱乐', '演出'], ['话剧', '娱乐', '演出'], ['音乐节', '娱乐', '演出'],
+  ['游戏', '娱乐', '游戏'], ['手游', '娱乐', '游戏'],
+  ['会员', '娱乐', '会员'], ['视频会员', '娱乐', '会员'],
+  ['旅游', '娱乐', '旅游'], ['旅行', '娱乐', '旅游'], ['出游', '娱乐', '旅游'],
+  ['健身', '娱乐', '健身'], ['健身卡', '娱乐', '健身'], ['运动', '娱乐', '健身'],
+  ['书', '学习', '书籍'], ['买书', '学习', '书籍'], ['书籍', '学习', '书籍'],
+  ['课程', '学习', '课程'], ['网课', '学习', '课程'], ['培训班', '学习', '课程'],
+  ['文具', '学习', '文具'],
+  ['考试', '学习', '考试'], ['报名费', '学习', '考试'],
+  ['培训', '学习', '培训'],
+  ['门诊', '医疗', '门诊'], ['看病', '医疗', '门诊'], ['挂号', '医疗', '门诊'],
+  ['买药', '医疗', '药品'], ['药', '医疗', '药品'], ['药品', '医疗', '药品'],
+  ['体检', '医疗', '体检'],
+  ['牙', '医疗', '牙科'], ['牙科', '医疗', '牙科'], ['看牙', '医疗', '牙科'],
+  ['房租', '住房', '房租'], ['租金', '住房', '房租'],
+  ['物业', '住房', '物业'], ['物业费', '住房', '物业'],
+  ['水电', '住房', '水电燃气'], ['燃气', '住房', '水电燃气'], ['水电费', '住房', '水电燃气'],
+  ['维修', '住房', '维修'], ['修理', '住房', '维修'],
+  ['借款', '其他', '借款'], ['借钱', '其他', '借款'], ['借给', '其他', '借款']
+];
+// 自然语言关键词字典：[关键词, 一级分类]（收入）
+const NL_KW_I = [
+  ['工资', '薪资'], ['薪水', '薪资'], ['基本工资', '薪资'],
+  ['兼职', '兼职'], ['副业', '兼职'],
+  ['奖金', '奖金'], ['年终奖', '奖金'],
+  ['理财', '理财盈亏'], ['股票', '理财盈亏'], ['基金', '理财盈亏'], ['盈利', '理财盈亏'],
+  ['红包', '收红包'],
+  ['彩票', '中奖'], ['中奖', '中奖'],
+  ['借入', '借入'], ['借到', '借入'],
+  ['报销', '报销'],
+  ['卖二手', '卖二手'], ['闲鱼', '卖二手'],
+  ['收礼', '收礼'], ['礼物', '收礼'],
+  ['补贴', '补贴']
+];
 const INCOME_SUBS_DEFAULT = {
   '薪资': ['基本工资','绩效工资','加班费','津贴'],
   '兼职': ['写作','设计','翻译','代驾','跑腿','众包','其他'],
