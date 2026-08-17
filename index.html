@@ -4774,9 +4774,21 @@ function showReadLater() {
   const favs = Store.get('hotFav', []);
   const list = document.getElementById('laterList');
   if (!list) return;
+  const sorted = [...favs].sort((a, b) => (a.read ? 1 : 0) - (b.read ? 1 : 0));
   list.innerHTML = favs.length === 0
     ? '<div class="emp" style="padding:20px"><i class="fas fa-bookmark"></i><p>稍后阅读为空</p></div>'
-    : favs.map((f, i) => '<div class="cb" style="cursor:default"><span style="font-size:12px;color:var(--text3);min-width:16px">' + (i + 1) + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="window.open(\'' + f.url + '\',\'_blank\')">' + f.title + '</div><div style="font-size:11px;color:var(--text3)">' + f.date + ' · ' + f.platform + '</div></div><button class="btn-icon btn-o" onclick="rmFav(' + i + ')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : sorted.map((f, i) => {
+        const origIdx = favs.findIndex(x => x.title === f.title);
+        const isRead = f.read;
+        return '<div class="cb" style="cursor:default;' + (isRead ? 'opacity:0.5' : '') + '"><span style="font-size:12px;color:var(--text3);min-width:16px">' + (i + 1) + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="window.open(\'' + f.url + '\',\'_blank\')">' + (isRead ? '<s>' + f.title + '</s>' : f.title) + '</div><div style="font-size:11px;color:var(--text3)">' + f.date + ' · ' + f.platform + '</div></div><button class="btn-icon btn-o" onclick="markRead(' + origIdx + ')" title="已阅"><i class="fas fa-check"></i></button><button class="btn-icon btn-o" onclick="rmFav(' + origIdx + ')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+      }).join('');
+}
+
+function markRead(idx) {
+  let favs = Store.get('hotFav', []);
+  favs[idx].read = !favs[idx].read;
+  Store.set('hotFav', favs);
+  showReadLater();
 }
 
 function rmFav(idx) {
