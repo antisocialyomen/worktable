@@ -257,6 +257,15 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .toggle{width:40px;height:22px}
   .toggle::after{width:18px;height:18px}
   .toast{bottom:72px;font-size:13px;padding:8px 16px;max-width:90%;white-space:normal;text-align:center}
+  /* 移动端：健康编辑/删除按钮缩小50%紧凑排列 */
+  #healthList .cb .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
+  #healthList .cb{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+  /* 移动端：笔记编辑/删除按钮缩小50%紧凑排列 */
+  #notesList .cb .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
+  /* 移动端：热量克数输入框缩小50% */
+  #calGrams{width:50px!important;flex:0 0 50px!important;min-width:50px!important}
+  /* 移动端：选题/素材编辑删除按钮 */
+  #topicList .cb .btn-icon,#matList .cb .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
 }
 /* ===== FOOD MODULE ===== */
 .food-tab{display:block}
@@ -465,8 +474,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <!-- 记账 -->
           <div class="exp-pane" id="e-record">
             <div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div>
-              <div class="ig"><input class="in" id="expNl" placeholder="例：午餐20元 / 说&quot;晚餐三十&quot;" style="flex:1;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()"><button class="btn-sm btn-o" id="micBtn" onclick="startVoice()" title="语音记账" style="flex:0 0 auto"><i class="fas fa-microphone"></i></button><button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">智能填充</button></div>
-              <div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01" style="flex:0 0 38%"><input class="in" id="expDate" type="date" style="flex:0 0 30%"><select class="in" id="expType" onchange="onExpTypeChange()" style="flex:0 0 22%"><option value="e">支出</option><option value="i">收入</option></select></div>
+              <div class="ig"><input class="in" id="expNl" placeholder="例：午餐20元 / 说&quot;晚餐三十&quot;" style="flex:1;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()"><button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">智能填充</button></div>
+              <div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01" style="flex:0 0 20%"><input class="in" id="expDate" type="date" style="flex:0 0 30%"><select class="in" id="expType" onchange="onExpTypeChange()" style="flex:0 0 22%"><option value="e">支出</option><option value="i">收入</option></select></div>
               <div class="ig"><select class="in" id="expCat" onchange="onExpCatChange()" style="flex:1 1 40%"></select><select class="in" id="expSub" style="flex:1 1 34%"></select></div>
               <div class="ig"><input class="in" id="expNote" placeholder="备注" style="flex:1 1 58%"><button class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto"><i class="fas fa-cog"></i></button><button class="btn btn-p" onclick="addExpense()" style="flex:0 0 auto"><i class="fas fa-plus"></i></button></div>
               <div class="card" style="padding:10px 14px;margin-top:12px" id="assetCards">
@@ -476,7 +485,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
                   <span class="a-grp"><span class="a-lab">总负债</span><span class="a-num a-debt" id="dispDebts">0.00</span></span>
                 </div>
               </div>
-              <div class="ig" style="margin-top:10px"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:1 1 38%"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:1 1 38%"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto">设置</button></div>
+              <div class="ig" style="margin-top:10px"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:0 0 23%;font-size:10px;width:auto"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:0 0 23%;font-size:10px;width:auto"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto;margin-left:0">设置</button></div>
               <div style="margin-top:10px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number" style="flex:1 1 58%"><button class="btn-sm btn-a" onclick="setBudget()" style="flex:0 0 auto">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div>
             </div>
             <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📋 最近记录</h3><button class="btn-sm btn btn-o" onclick="switchExpTab('bill')"><i class="fas fa-list"></i> 看账单</button></div><div id="expRecent"></div></div>
@@ -569,7 +578,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <div class="ig" style="margin-top:8px"><span style="font-size:13px;color:var(--text2);align-self:center">事件颜色</span><div id="cdColors" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
           <div style="text-align:right;margin-top:12px"><button class="btn btn-p" onclick="saveCountdown()"><i class="fas fa-save"></i> 保存</button></div>
         </div>
-        <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📑 我的倒数日</h3></div><div id="cdList"></div></div>
+        <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📑 我的倒数日</h3><div style="display:flex;gap:6px"><input class="in" id="cdSearch" placeholder="搜索事件名称..." oninput="renderCountdowns()" style="width:140px;padding:4px 8px;font-size:12px"><button class="btn-sm btn-o" onclick="document.getElementById('cdSearch').focus()"><i class="fas fa-search"></i></button></div></div><div id="cdList"></div></div>
       </div>
 
       <!-- NOTES -->
@@ -680,8 +689,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb active" data-c="topics">📋 选题管理</span>
           <span class="fb" data-c="materials">📎 素材库</span>
         </div>
-        <div class="c-tab" id="c-topics"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><h3 style="margin-right:auto">📋 选题管理</h3><input class="in" id="topicSearch" placeholder="🔍 搜索选题标题..." oninput="renderTopics()" style="flex:1;min-width:150px"><select class="in" id="topicStatus" style="flex:0 0 auto;width:110px" onchange="renderTopics()"><option value="all">全部</option><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select><button class="btn-sm btn-p" onclick="addTopic()"><i class="fas fa-plus"></i> 新建选题</button></div><div id="topicList" style="margin-top:8px"></div></div></div>
-        <div class="c-tab" id="c-materials" style="display:none"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><h3 style="margin-right:auto">📎 素材库</h3><input class="in" id="matSearch" placeholder="🔍 搜索素材标题..." oninput="renderMats()" style="flex:1;min-width:150px"><button class="btn-sm btn-p" onclick="addMat()"><i class="fas fa-plus"></i> 添加素材</button></div><div id="matList" style="margin-top:8px"></div></div></div>
+        <div class="c-tab" id="c-topics"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><input class="in" id="topicSearch" placeholder="🔍 搜索选题标题..." oninput="renderTopics()" style="flex:0 0 auto;width:50%;max-width:220px;padding:6px 10px;font-size:13px"><select class="in" id="topicStatus" style="flex:0 0 auto;width:100px;padding:6px 8px;font-size:13px" onchange="renderTopics()"><option value="all">全部</option><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select><button class="btn-sm btn-p" onclick="addTopic()"><i class="fas fa-plus"></i> 新建选题</button></div><div id="topicList" style="margin-top:8px"></div></div></div>
+        <div class="c-tab" id="c-materials" style="display:none"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><input class="in" id="matSearch" placeholder="🔍 搜索素材标题..." oninput="renderMats()" style="flex:0 0 auto;width:50%;max-width:220px;padding:6px 10px;font-size:13px"><button class="btn-sm btn-p" onclick="addMat()"><i class="fas fa-plus"></i> 添加素材</button></div><div id="matList" style="margin-top:8px"></div></div></div>
       </div>
 
       <!-- FOOD -->
@@ -726,6 +735,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
                 <option value="零食">🍪 零食</option>
                 <option value="饮料">🥤 饮料</option>
               </select>
+              <input class="in" id="calDate" type="date" style="flex:0 0 auto;width:120px">
               <input class="in" id="calFood" placeholder="食材/饮品（如：米饭、可乐）" style="flex:1" list="calFoodList">
               <datalist id="calFoodList"></datalist>
               <input class="in" id="calGrams" type="number" placeholder="克数/ml" style="flex:0 0 auto;width:90px">
@@ -734,10 +744,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
             <div style="font-size:12px;color:var(--text3);margin-top:6px">提示：输入食材或饮品即可自动匹配热量库（每 100g/ml 的 kcal，饮料按 1ml≈1g 计），未收录可手动填热量。</div>
             <div id="calLog" style="margin-top:10px"></div>
           </div>
-          <div class="card"><div class="card-hd"><h3>📊 今日摄入总热量</h3></div>
+          <div class="card"><div class="card-hd"><h3>📊 摄入总热量</h3><div style="display:flex;align-items:center;gap:8px"><input class="in" id="calViewDate" type="date" onchange="renderCalorie()" style="flex:0 0 auto;width:130px;padding:4px 8px;font-size:12px"></div></div>
             <div style="text-align:center;padding:6px 0">
               <div style="font-size:40px;font-weight:800;color:var(--primary)" id="calTotal">0</div>
-              <div style="font-size:13px;color:var(--text2)">千卡 (kcal) · 今日合计</div>
+              <div style="font-size:13px;color:var(--text2)" id="calDateLabel">今日合计</div>
             </div>
             <div class="g4" id="calByMeal" style="margin-top:10px"></div>
           </div>
@@ -762,7 +772,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="food-tab" id="f-shop" style="display:none">
           <div class="card"><div class="card-hd"><h3>🍽️ 探店</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-o" onclick="document.getElementById('shopSearch').focus()"><i class="fas fa-search"></i> 搜索</button><button class="btn-sm btn-p" onclick="openShopModal()"><i class="fas fa-plus"></i> 新建店名</button></div></div>
             <div class="ig" style="margin-bottom:12px"><input class="in" id="shopSearch" placeholder="搜索店名、地址、菜品或备注..." oninput="renderShops()" style="flex:1"></div>
-            <div id="shopList"></div>
+            <div id="foodShopList"></div>
           </div>
         </div>
       </div>
@@ -823,6 +833,20 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
     </div>
   <div id="eatNewCatWrap"></div>
   <div id="eatCatsList"></div>
+  </div>
+</div>
+
+<!-- 影视评分弹窗 -->
+<div class="mask hide" id="dramaRateMask" onclick="if(event.target===this)closeDramaRateModal()">
+  <div class="modal" style="max-width:420px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3>⭐ 评分</h3><span class="modal-x" onclick="closeDramaRateModal()"><i class="fas fa-times"></i></span></div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:8px" id="dramaRateTitle"></div>
+    <div class="ig"><span style="font-size:13px;color:var(--text2)">评分 (0-10)</span><input class="in" id="dramaRateVal" type="number" min="0" max="10" step="0.1" placeholder="0-10" style="flex:1"></div>
+    <div class="ig"><span style="font-size:13px;color:var(--text2)">感悟</span><textarea class="in" id="dramaRateNote" rows="3" placeholder="写下你的感悟..." style="flex:1;resize:vertical;min-height:60px"></textarea></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn btn-o" onclick="closeDramaRateModal()">取消</button>
+      <button class="btn btn-p" onclick="saveDramaRate()"><i class="fas fa-save"></i> 保存</button>
+    </div>
   </div>
 </div>
 
@@ -918,6 +942,19 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <button class="btn btn-o" onclick="closeCollModal()">取消</button>
         <button class="btn btn-p" onclick="saveColl()"><i class="fas fa-save"></i> 保存</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- 购物编辑弹窗 -->
+<div class="mask hide" id="shopEditMask" onclick="if(event.target===this)closeShopEditModal()">
+  <div class="modal" style="max-width:420px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3>🛒 编辑购物项</h3><span class="modal-x" onclick="closeShopEditModal()"><i class="fas fa-times"></i></span></div>
+    <div class="ig" style="margin-bottom:10px"><input class="in" id="shopEditName" placeholder="购物项名称" style="flex:1"></div>
+    <div class="ig"><select class="in" id="shopEditCat" style="flex:1"><option value="食品">食品</option><option value="日用品">日用品</option><option value="服饰">服饰</option><option value="数码">数码</option><option value="其他">其他</option></select></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn btn-o" onclick="closeShopEditModal()">取消</button>
+      <button class="btn btn-p" onclick="saveShopEdit()"><i class="fas fa-save"></i> 保存</button>
     </div>
   </div>
 </div>
@@ -1838,7 +1875,7 @@ function go(m) {
   if (m === 'food') switchFoodTab(foodTab);
   if (m === 'study') renderStudy();
   if (m === 'life') switchLifeTab('expense');
-  if (m === 'countdown') { renderCountdowns(); onCDCalType(); }
+  if (m === 'countdown') { renderCountdowns(); onCDCalType(); renderCDColors(window.__cdColor || CD_COLORS[0].v); }
   renderAll();
 }
 
@@ -2735,7 +2772,7 @@ function renderNotes() {
   if (cf !== 'all') f = f.filter(n => n.cat === cf);
   document.getElementById('notesList').innerHTML = f.length === 0
     ? '<div class="emp"><i class="fas fa-lightbulb"></i><p>还没有灵感笔记</p></div>'
-    : f.map(n => '<div class="cb" style="cursor:pointer" onclick="editNote(\'' + n.id + '\')"><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:14px">' + (n.title || '无标题') + '</div><div style="font-size:12px;color:var(--text3);margin-top:2px">' + (n.content || '').slice(0, 60) + ((n.content || '').length > 60 ? '...' : '') + '</div></div><span class="tag t1">' + (n.cat || '其他') + '</span><span style="font-size:11px;color:var(--text3)">' + (n.createdAt || '').slice(0, 10) + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();delNote(\'' + n.id + '\')" style="color:var(--d)"><i class="fas fa-trash"></i></button></div>').join('');
+    : f.map(n => '<div class="cb" style="cursor:pointer" onclick="editNote(\'' + n.id + '\')"><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:14px">' + (n.title || '无标题') + '</div><div style="font-size:12px;color:var(--text3);margin-top:2px">' + (n.content || '').slice(0, 60) + ((n.content || '').length > 60 ? '...' : '') + '</div></div><div class="cb-acts"><span class="tag t1" style="font-size:10px;padding:1px 6px;line-height:1.2">' + (n.cat || '其他') + '</span><span style="font-size:10px;color:var(--text3);line-height:1.2">' + (n.createdAt || '').slice(0, 10) + '</span></div><button class="btn-icon btn-o" onclick="event.stopPropagation();editNote(\'' + n.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delNote(\'' + n.id + '\')" style="color:var(--d)"><i class="fas fa-trash"></i></button></div>').join('');
 }
 let editingNoteId = null;
 function showEditor() { editingNoteId = null; document.getElementById('noteEditor').style.display = 'block'; document.getElementById('noteTitle').value = ''; document.getElementById('noteContent').value = ''; document.getElementById('noteCat').value = '其他'; document.getElementById('noteTags').value = ''; document.getElementById('noteTitle').focus(); }
@@ -2934,7 +2971,7 @@ function renderBill() {
   const te = document.getElementById('billTotals');
   if (te) te.innerHTML = [
     ['收支结余', inc - exp, 'var(--s)'], ['收入', inc, 'var(--accent)'], ['支出', exp, 'var(--d)']
-  ].map(([l, v, col]) => '<div class="sc bill-total"><div class="si"><div class="num" style="color:' + col + '">¥' + (v ? v.toFixed(2) : '0.00') + '</div><div class="label">' + l + '</div></div></div>').join('');
+  ].map(([l, v, col]) => '<div class="sc bill-total" style="text-align:left;display:flex;align-items:center;gap:8px;padding:8px 12px"><span style="font-size:13px;color:var(--text2);font-weight:600">' + l + '</span><span class="num" style="color:' + col + ';font-size:18px;font-weight:700">¥' + (v ? v.toFixed(2) : '0.00') + '</span></div>').join('');
   const el = document.getElementById('expList'); if (!el) return;
   if (!list.length) { el.innerHTML = '<div class="emp"><i class="fas fa-coins"></i><p>' + label + ' 没有收支记录</p></div>'; return; }
   const sorted = list.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.updatedAt || 0) - (a.updatedAt || 0));
@@ -3323,18 +3360,28 @@ function renderShopping() {
   const i = Store.get('shopping', []);
   document.getElementById('shopList').innerHTML = i.length === 0
     ? '<div class="emp" style="padding:20px"><i class="fas fa-shopping-cart"></i><p>购物清单为空</p></div>'
-    : i.map(x => '<div class="cb"><input type="checkbox"' + (x.done ? 'checked' : '') + ' onchange="togShop(\'' + x.id + '\')"><span class="cc"></span><span class="ct" style="' + (x.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + x.name + '</span><span class="tag t1">' + (x.cat || '其他') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editShop(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delShop(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : i.map(x => '<div class="cb"><input type="checkbox"' + (x.done ? 'checked' : '') + ' onchange="togShop(\'' + x.id + '\')"><span class="cc"></span><span class="ct" style="' + (x.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + x.name + '</span><span class="tag t1">' + (x.cat || '其他') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();openShopEditModal(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delShop(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
 function addShop() { const n = document.getElementById('shopIn').value.trim(); if (!n) return; const i = Store.get('shopping', []); i.unshift({ id: Date.now().toString(), name: n, cat: document.getElementById('shopCat').value, done: false, updatedAt: Date.now() }); Store.set('shopping', i); document.getElementById('shopIn').value = ''; renderShopping(); }
 function togShop(id) { const i = Store.get('shopping', []); const x = i.find(x => x.id === id); if (x) { x.done = !x.done; x.updatedAt = Date.now(); Store.set('shopping', i); renderShopping(); } }
-function editShop(id) {
+let shopEditId = null;
+function openShopEditModal(id) {
+  shopEditId = id;
   const i = Store.get('shopping', []);
   const x = i.find(z => z.id === id);
   if (!x) return;
-  const n = prompt('名称：', x.name);
-  if (n === null) return;
-  const c = prompt('分类（食品/日用品/服饰/数码/其他）：', x.cat || '其他');
-  if (n.trim()) { x.name = n.trim(); x.cat = c || x.cat; x.updatedAt = Date.now(); Store.set('shopping', i); renderShopping(); toast('✅ 已更新'); }
+  document.getElementById('shopEditName').value = x.name;
+  document.getElementById('shopEditCat').value = x.cat || '其他';
+  document.getElementById('shopEditMask').classList.remove('hide');
+}
+function closeShopEditModal() { document.getElementById('shopEditMask').classList.add('hide'); shopEditId = null; }
+function saveShopEdit() {
+  const n = document.getElementById('shopEditName').value.trim();
+  if (!n) return toast('请输入名称');
+  const i = Store.get('shopping', []);
+  const x = i.find(z => z.id === shopEditId);
+  if (x) { x.name = n; x.cat = document.getElementById('shopEditCat').value; x.updatedAt = Date.now(); Store.set('shopping', i); renderShopping(); toast('✅ 已更新'); }
+  closeShopEditModal();
 }
 function delShop(id) { Store.set('shopping', Store.get('shopping', []).filter(i => i.id !== id)); renderShopping(); }
 
@@ -3621,10 +3668,12 @@ function saveCountdown() {
   renderCountdowns(); renderCalendar(); renderHome();
 }
 function renderCountdowns() {
-  const cds = getCountdowns().slice().sort((a, b) => {
+  let cds = getCountdowns().slice().sort((a, b) => {
     const da = cdDaysLeft(a), db = cdDaysLeft(b);
     return (da === null ? 1e9 : da) - (db === null ? 1e9 : db);
   });
+  const q = (document.getElementById('cdSearch')?.value || '').toLowerCase();
+  if (q) cds = cds.filter(o => o.name.toLowerCase().includes(q));
   const list = document.getElementById('cdList');
   if (cds.length === 0) { list.innerHTML = '<div class="emp"><i class="fas fa-hourglass-half"></i><p>还没有倒数日，先建一个吧</p></div>'; return; }
   const now = new Date();
@@ -3789,6 +3838,8 @@ function addCalorie() {
   const meal = document.getElementById('calMeal').value;
   const name = document.getElementById('calFood').value.trim();
   const grams = parseFloat(document.getElementById('calGrams').value);
+  const dateEl = document.getElementById('calDate');
+  const date = dateEl ? dateEl.value : todayStr();
   if (!name) return toast('请输入食材');
   if (!grams || grams <= 0) return toast('请输入有效克数');
   let per100 = calMatch(name);
@@ -3800,7 +3851,7 @@ function addCalorie() {
   const kcal = Math.round(per100 * grams / 100 * 10) / 10;
   const unit = meal === '饮料' ? 'ml' : 'g';
   const list = Store.get('calorie', []);
-  list.push({ id: 'c' + Date.now(), meal, name, grams, unit, per100, kcal, date: todayStr() });
+  list.push({ id: 'c' + Date.now(), meal, name, grams, unit, per100, kcal, date: date || todayStr() });
   Store.set('calorie', list);
   document.getElementById('calFood').value = '';
   document.getElementById('calGrams').value = '';
@@ -3812,11 +3863,16 @@ function delCalorie(id) {
   Store.set('calorie', list); renderCalorie();
 }
 function renderCalorie() {
-  const list = Store.get('calorie', []).filter(x => x.date === todayStr());
+  const viewDateEl = document.getElementById('calViewDate');
+  const viewDate = viewDateEl ? viewDateEl.value : todayStr();
+  const list = Store.get('calorie', []).filter(x => x.date === viewDate);
   const meals = ['早餐', '午餐', '晚餐', '零食', '饮料'];
   const total = list.reduce((s, x) => s + (x.kcal || 0), 0);
   const elTotal = document.getElementById('calTotal');
   if (elTotal) elTotal.textContent = Math.round(total);
+  const dateLabel = viewDate === todayStr() ? '今日合计' : viewDate;
+  const dateLabelEl = document.getElementById('calDateLabel');
+  if (dateLabelEl) dateLabelEl.textContent = '千卡 (kcal) · ' + dateLabel;
   const byMealEl = document.getElementById('calByMeal');
   if (byMealEl) byMealEl.innerHTML = meals.map(m => {
     const s = list.filter(x => x.meal === m).reduce((a, x) => a + (x.kcal || 0), 0);
@@ -3840,8 +3896,11 @@ function getEatCats() {
     c = Object.keys(EAT_DEFAULT).map(k => ({ name: k, items: EAT_DEFAULT[k].slice() }));
     Store.set('eatCats', c);
   }
-  // 去重保护
+  // 去重保护：按名称去重
+  const seen = new Set();
+  c = c.filter(cat => { if (seen.has(cat.name)) return false; seen.add(cat.name); return true; });
   c.forEach(cat => { if (cat.items) cat.items = Array.from(new Set(cat.items)); });
+  Store.set('eatCats', c);
   return c;
 }
 function saveEatCats(c) { Store.set('eatCats', c); }
@@ -4015,7 +4074,7 @@ function switchFoodTab(f) {
   const tab = document.getElementById('f-' + foodTab);
   if (tab) tab.style.display = 'block';
   if (foodTab === 'water') renderWater();
-  if (foodTab === 'calorie') { renderCalorieFoodList(); renderCalorie(); }
+  if (foodTab === 'calorie') { renderCalorieFoodList(); const cd=document.getElementById('calDate'); if(cd)cd.value=todayStr(); const cvd=document.getElementById('calViewDate'); if(cvd)cvd.value=todayStr(); renderCalorie(); }
   if (foodTab === 'eat') renderEatCats();
   if (foodTab === 'shop') renderShops();
 }
@@ -4034,7 +4093,7 @@ function getShops() { return Store.get('foodShops', []) || []; }
 function saveShops(list) { Store.set('foodShops', list); }
 function starHtml(n) { return '<span style="color:#FFB347">' + '⭐'.repeat(parseInt(n || 0)) + '</span>'; }
 function renderShops() {
-  const el = document.getElementById('shopList'); if (!el) return;
+  const el = document.getElementById('foodShopList'); if (!el) return;
   const q = (document.getElementById('shopSearch')?.value || '').toLowerCase();
   let list = getShops();
   if (q) list = list.filter(s => (s.name || '').toLowerCase().includes(q) || (s.addr || '').toLowerCase().includes(q) || (s.sig || '').toLowerCase().includes(q) || (s.note || '').toLowerCase().includes(q) || (s.dishes || []).some(d => (d.name || '').toLowerCase().includes(q)));
@@ -4113,7 +4172,7 @@ function renderTopics() {
     ? '<div class="emp"><i class="fas fa-pen-fancy"></i><p>还没有选题</p></div>'
     : f.map(x => {
         const sub = [x.source, x.idea, x.note].filter(Boolean).join(' · ');
-        return '<div class="cb" style="cursor:default;flex-wrap:wrap"><div style="flex:1;min-width:0;font-weight:500">' + x.title + (sub ? '<div style="font-size:12px;color:var(--text3);font-weight:400;margin-top:2px">' + sub + '</div>' : '') + '</div><span class="tag ' + (sc[x.status] || 't1') + '">' + (x.status || '待创作') + '</span><span style="font-size:12px;color:var(--text3);margin:0 8px">' + (x.date || '') + '</span><button class="btn-icon btn-o" onclick="editTopic(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+        return '<div class="cb" style="cursor:default;flex-wrap:wrap;position:relative"><div style="flex:1;min-width:0;font-weight:500">' + x.title + (sub ? '<div style="font-size:12px;color:var(--text3);font-weight:400;margin-top:2px">' + sub + '</div>' : '') + '</div><div class="cb-acts" style="position:absolute;top:0;right:0"><button class="btn-icon btn-o" onclick="editTopic(\'' + x.id + '\')" style="color:var(--text2);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-times"></i></button></div><div class="cb-acts" style="margin-left:8px"><span class="tag ' + (sc[x.status] || 't1') + '" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (x.status || '待创作') + '</span><span style="font-size:10px;color:var(--text3);line-height:1.2">' + (x.date || '') + '</span></div></div>';
       }).join('');
 }
 let topicEditingId = null;
@@ -4163,7 +4222,7 @@ function renderMats() {
     : f.map(x => {
         const links = (x.links && x.links.length ? x.links : (x.url ? [x.url] : []));
         const linkHtml = links.map(u => '<a href="' + u + '" target="_blank" title="' + u + '" style="font-size:12px;margin-right:8px">🔗</a>').join('');
-        return '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.category || '') + '</span><span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (linkHtml ? '<div style="flex-basis:100%;margin-top:4px">' + linkHtml + '</div>' : '') + '<button class="btn-icon btn-o" onclick="editMat(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+        return '<div class="cb" style="cursor:default;position:relative"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.category || '') + '</span><span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (linkHtml ? '<div style="flex-basis:100%;margin-top:4px">' + linkHtml + '</div>' : '') + '<div class="cb-acts" style="position:absolute;top:0;right:0"><button class="btn-icon btn-o" onclick="editMat(\'' + x.id + '\')" style="color:var(--text2);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-times"></i></button></div></div>';
       }).join('');
 }
 let matEditingId = null;
@@ -4375,15 +4434,41 @@ const newsCache = {};
 function renderFinance() {
   const list = document.getElementById('newsList');
   const today = new Date().toISOString().slice(0, 10);
-  const items = [
-    ['📊 宏观', '关注今日央行公开市场操作与国债收益率走势'],
-    ['📈 A股', '上证 / 深成 / 创业板三大指数盘面与北向资金流向'],
-    ['💱 外汇', '人民币兑美元中间价及在岸 / 离岸汇率波动'],
-    ['🥇 黄金', '国际现货黄金与 COMEX 期货价格'],
-    ['🛢️ 原油', '布伦特与 WTI 原油期货走势'],
-    ['🏦 利率', 'LPR 报价与货币基金七日年化参考']
-  ];
-  list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">📅 ' + today + ' · 每日财经要点（接入行情 API 后可自动刷新）</div>' +
+  list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">📅 ' + today + ' · 正在加载实时行情...</div>';
+  fetchFinanceData();
+}
+async function fetchFinanceData() {
+  const list = document.getElementById('newsList');
+  const today = new Date().toISOString().slice(0, 10);
+  const items = [];
+  // Try to fetch real data from free APIs
+  try {
+    // A股指数 (上证/深证/创业板)
+    const stockRes = await fetch('https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&secids=1.000001,0.399001,0.399006&fields=f2,f3,f4,f12,f14').then(r => r.json()).catch(() => null);
+    if (stockRes && stockRes.data && stockRes.data.diff) {
+      const names = { '000001': '上证指数', '399001': '深证成指', '399006': '创业板指' };
+      const parts = stockRes.data.diff.map(d => names[d.f12] + ' ' + (d.f2/100).toFixed(2) + '（' + (d.f3 > 0 ? '+' : '') + d.f3.toFixed(2) + '%）').join(' · ');
+      items.push(['📈 A股', parts]);
+    }
+  } catch(e) {}
+  try {
+    // 黄金
+    const goldRes = await fetch('https://api.it120.cc/gzbd/hq/query?code=AU9999').then(r => r.json()).catch(() => null);
+    if (goldRes && goldRes.data) items.push(['🥇 黄金', 'Au99.99 ' + goldRes.data.price + ' 元/克']);
+  } catch(e) {}
+  try {
+    // 外汇 美元人民币
+    const fxRes = await fetch('https://api.it120.cc/gzbd/hq/query?code=USDCNY').then(r => r.json()).catch(() => null);
+    if (fxRes && fxRes.data) items.push(['💱 外汇', '美元/人民币 ' + fxRes.data.price]);
+  } catch(e) {}
+  // Fallback for missing items
+  if (!items.some(i => i[0] === '📊 宏观')) items.push(['📊 宏观', '央行公开市场操作与国债收益率走势']);
+  if (!items.some(i => i[0] === '📈 A股')) items.push(['📈 A股', '上证 / 深成 / 创业板三大指数']);
+  if (!items.some(i => i[0] === '💱 外汇')) items.push(['💱 外汇', '人民币兑美元中间价及汇率波动']);
+  if (!items.some(i => i[0] === '🥇 黄金')) items.push(['🥇 黄金', '国际现货黄金与 COMEX 期货']);
+  if (!items.some(i => i[0] === '🛢️ 原油')) items.push(['🛢️ 原油', '布伦特与 WTI 原油期货走势']);
+  if (!items.some(i => i[0] === '🏦 利率')) items.push(['🏦 利率', 'LPR 报价与货币基金七日年化参考']);
+  list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">📅 ' + today + ' · 每日财经要点</div>' +
     items.map(([t, d]) => '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:18px;min-width:26px;text-align:center">' + t.split(' ')[0] + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">' + t.split(' ')[1] + '</div><div style="font-size:12px;color:var(--text2);margin-top:2px">' + d + '</div></div></div>').join('');
 }
 
@@ -4406,12 +4491,16 @@ function renderNews(platform) {
     return;
   }
   const favs = Store.get('hotFav', []);
-  list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">共 ' + data.length + ' 条热点</div>' +
+  list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">共 ' + data.length + ' 条热点 · 点击标题展开内容</div>' +
     data.slice(0, 30).map((item, i) => {
       const isFav = favs.some(f => f.title === item.title);
+      const isWeibo = platform === 'weibo';
+      const isDouyin = platform === 'douyin';
+      const needsInline = isWeibo || isDouyin;
+      const content = item.content && item.content !== item.title ? item.content : '';
       return '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:13px;font-weight:700;color:var(--primary);min-width:20px;text-align:center">' + (i + 1) + '</span>' +
-        '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="window.open(\'' + item.url + '\',\'_blank\')">' + item.title + '</div>' +
-        '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + (item.content && item.content !== item.title ? item.content : '') + '</div></div>' +
+        '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="' + (needsInline ? 'var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'' : 'window.open(\'' + item.url + '\',\'_blank\')') + '">' + item.title + '</div>' +
+        (needsInline ? '<div style="display:none;font-size:12px;color:var(--text2);margin-top:6px;padding:8px;background:var(--primary-bg);border-radius:8px;line-height:1.6">' + (content || '暂无详细内容，可尝试 <a href="' + item.url + '" target="_blank" style="color:var(--accent)">打开原链接</a>') + '</div>' : '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + content + '</div>') + '</div>' +
         '<button class="btn-icon ' + (isFav ? 'btn-p' : 'btn-o') + '" onclick="togFav(\'' + item.title.replace(/'/g, "\\'") + '\',\'' + item.url.replace(/'/g, "\\'") + '\',\'' + platform + '\')" style="flex-shrink:0"><i class="fas fa-bookmark"></i></button></div>';
     }).join('');
   updateNewsBadge();
@@ -4572,13 +4661,12 @@ function togWant(title, url, type) {
   const idx = want.findIndex(w => w.title === title);
   if (idx > -1) { want.splice(idx, 1); toast('已移除想看'); }
   else {
-    // Find item in cache to get rate
     let rate = '';
     for (const t of ['tv','movie','variety']) {
       const item = dramaCache[t].find(d => d.title === title);
-      if (item) { rate = item.rate; break; }
+      if (item) { rate = item.rate || ''; break; }
     }
-    want.unshift({ title, url, type, rate, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
+    want.unshift({ title, url, type: type || 'tv', rate, date: new Date().toISOString().slice(0, 10), watched: false, note: '', updatedAt: Date.now() });
     toast('✅ 已加入想看');
   }
   Store.set('dramaWant', want); renderDrama(); updateDramaBadge();
@@ -4593,39 +4681,49 @@ function switchDramaTab(d) {
   renderDrama(d);
 }
 function renderWantList() {
-  const want = Store.get('dramaWant', []);
+  let want = Store.get('dramaWant', []);
+  // Sort: unwatched first, then watched sink to bottom
+  want = want.slice().sort((a, b) => (a.watched ? 1 : 0) - (b.watched ? 1 : 0));
   const list = document.getElementById('dramaList');
   const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
   list.innerHTML = want.length === 0
     ? '<div class="emp" style="grid-column:1/-1"><i class="fas fa-heart"></i><p>想看列表为空，去「电视剧 / 电影 / 综艺」里点 ❤ 想看吧</p></div>'
-    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer" onclick="window.open(\'' + w.url + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;color:var(--text3)"><span class="tag t1">' + (typeName[w.type] || '影视') + '</span>' + (w.rate ? '<span>⭐' + escHtml(w.rate) + '</span>' : '') + '<span>' + w.date + '</span><div style="flex:1"></div><button class="btn-sm btn-o" onclick="editWant(' + i + ')"><i class="fas fa-pen"></i> 评分</button><button class="btn-sm btn-o" onclick="rmWant(' + i + ')" style="color:var(--d)"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
+    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer;' + (w.watched ? 'text-decoration:line-through;opacity:0.6' : '') + '" onclick="window.open(\'' + (w.url || '').replace(/'/g, "\\'") + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:4px;align-items:center;margin-top:6px;font-size:11px;color:var(--text3)"><div class="cb-acts"><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (typeName[w.type] || '影视') + '</span><span style="font-size:10px;line-height:1.2">' + (w.date || '') + '</span></div>' + (w.rate ? '<span style="font-size:11px;color:var(--accent);font-weight:600">⭐' + escHtml(w.rate) + '</span>' : '') + '<div style="flex:1"></div><button class="btn-sm btn-o" onclick="event.stopPropagation();openDramaRateModal(' + i + ')" style="font-size:10px;padding:2px 6px"><i class="fas fa-star"></i> 评分</button><button class="btn-sm btn-o" onclick="event.stopPropagation();markDramaWatched(' + i + ')" style="font-size:10px;padding:2px 6px"><i class="fas fa-check"></i> 已看</button><button class="btn-sm btn-o" onclick="event.stopPropagation();rmWant(' + i + ')" style="color:var(--d);font-size:10px;padding:2px 6px"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
   updateDramaBadge();
 }
 
-function showWant() {
-  const want = Store.get('dramaWant', []);
-  const section = document.getElementById('wantSection');
-  const list = document.getElementById('wantList');
-  section.style.display = 'block';
-  const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
-  list.innerHTML = want.length === 0
-    ? '<div class="emp" style="grid-column:1/-1"><i class="fas fa-heart"></i><p>想看列表为空</p></div>'
-    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer" onclick="window.open(\'' + w.url + '\',\'_blank\')">' + w.title + '</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;color:var(--text3)"><span class="tag t1">' + (typeName[w.type] || '影视') + '</span><span style="font-size:12px;color:var(--text3)">' + (w.rate ? '⭐' + w.rate : '') + '</span><span>' + w.date + '</span><div style="flex:1"></div><button class="btn-sm btn-o" onclick="editWant(' + i + ')"><i class="fas fa-pen"></i> 评分</button><button class="btn-sm btn-o" onclick="rmWant(' + i + ')" style="color:var(--d)"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
+function markDramaWatched(idx) {
+  let want = Store.get('dramaWant', []);
+  if (idx < want.length) { want[idx].watched = !want[idx].watched; want[idx].updatedAt = Date.now(); }
+  Store.set('dramaWant', want); renderWantList();
 }
 
-function editWant(idx) {
+let dramaRateIdx = null;
+function openDramaRateModal(idx) {
+  dramaRateIdx = idx;
   let want = Store.get('dramaWant', []);
   const w = want[idx];
   if (!w) return;
-  const r = prompt('我的评分（留空则不评分）：', w.rate || '');
-  if (r === null) return;
-  w.rate = r.trim(); w.updatedAt = Date.now();
-  Store.set('dramaWant', want); showWant();
+  document.getElementById('dramaRateTitle').textContent = w.title;
+  document.getElementById('dramaRateVal').value = w.rate || '';
+  document.getElementById('dramaRateNote').value = w.note || '';
+  document.getElementById('dramaRateMask').classList.remove('hide');
+}
+function closeDramaRateModal() { document.getElementById('dramaRateMask').classList.add('hide'); dramaRateIdx = null; }
+function saveDramaRate() {
+  let want = Store.get('dramaWant', []);
+  const w = want[dramaRateIdx];
+  if (!w) return;
+  w.rate = document.getElementById('dramaRateVal').value.trim();
+  w.note = document.getElementById('dramaRateNote').value.trim();
+  w.updatedAt = Date.now();
+  Store.set('dramaWant', want); renderWantList(); closeDramaRateModal();
+  toast('✅ 评分已保存');
 }
 function rmWant(idx) {
   let want = Store.get('dramaWant', []);
   want.splice(idx, 1); Store.set('dramaWant', want);
-  showWant(); updateDramaBadge(); renderDrama();
+  renderWantList(); updateDramaBadge(); renderDrama();
 }
 
 // ============================================================
@@ -4987,7 +5085,7 @@ function fillExpSubs() {
   const cat = catEl.value;
   const subs = type === 'i' ? (getIncomeSubs()[cat] || []) : (getExpSubs()[cat] || []);
   const sel = document.getElementById('expSub');
-  let h = '<option value="">（不选二级）</option>';
+  let h = '';
   subs.forEach(s => { h += '<option value="' + s + '">' + s + '</option>'; });
   sel.innerHTML = h;
 }
