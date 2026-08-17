@@ -4788,7 +4788,8 @@ function showReadLater() {
     : sorted.map((f, i) => {
         const origIdx = favs.findIndex(x => x.title === f.title);
         const isRead = f.read;
-        return '<div class="cb" style="cursor:default;' + (isRead ? 'opacity:0.5' : '') + '"><span style="font-size:12px;color:var(--text3);min-width:16px">' + (i + 1) + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="window.open(\'' + f.url + '\',\'_blank\')">' + (isRead ? '<s>' + f.title + '</s>' : f.title) + '</div><div style="font-size:11px;color:var(--text3)">' + f.date + ' · ' + f.platform + '</div></div><button class="btn-icon btn-o" onclick="markRead(' + origIdx + ')" title="已阅"><i class="fas fa-check"></i></button><button class="btn-icon btn-o" onclick="rmFav(' + origIdx + ')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+        const linkClick = (f.url && !f.url.includes('news.orz.ai')) ? 'onclick="window.open(\'' + f.url + '\',\'_blank\')" style="cursor:pointer"' : '';
+        return '<div class="cb" style="cursor:default;' + (isRead ? 'opacity:0.5' : '') + '"><span style="font-size:12px;color:var(--text3);min-width:16px">' + (i + 1) + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500"' + linkClick + '>' + (isRead ? '<s>' + f.title + '</s>' : f.title) + '</div><div style="font-size:11px;color:var(--text3)">' + f.date + ' · ' + f.platform + '</div></div><button class="btn-icon btn-o" onclick="markRead(' + origIdx + ')" title="已阅"><i class="fas fa-check"></i></button><button class="btn-icon btn-o" onclick="rmFav(' + origIdx + ')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
       }).join('');
 }
 
