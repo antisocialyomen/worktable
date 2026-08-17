@@ -651,8 +651,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb active" data-c="topics">📋 选题管理</span>
           <span class="fb" data-c="materials">📎 素材库</span>
         </div>
-        <div class="c-tab" id="c-topics"><div class="card"><div class="card-hd"><h3>📋 选题管理</h3><button class="btn-sm btn-p" onclick="addTopic()"><i class="fas fa-plus"></i> 新建选题</button></div><div class="ig"><input class="in" id="topicSearch" placeholder="搜索选题..." oninput="renderTopics()"><select class="in" id="topicStatus" style="flex:0 0 auto;width:120px" onchange="renderTopics()"><option value="all">全部</option><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select></div><div id="topicList" style="margin-top:8px"></div></div></div>
-        <div class="c-tab" id="c-materials" style="display:none"><div class="card"><div class="card-hd"><h3>📎 素材库</h3><button class="btn-sm btn-p" onclick="addMat()"><i class="fas fa-plus"></i> 添加素材</button></div><div id="matList" style="margin-top:8px"></div></div></div>
+        <div class="c-tab" id="c-topics"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><h3 style="margin-right:auto">📋 选题管理</h3><input class="in" id="topicSearch" placeholder="🔍 搜索选题标题..." oninput="renderTopics()" style="flex:1;min-width:150px"><select class="in" id="topicStatus" style="flex:0 0 auto;width:110px" onchange="renderTopics()"><option value="all">全部</option><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select><button class="btn-sm btn-p" onclick="addTopic()"><i class="fas fa-plus"></i> 新建选题</button></div><div id="topicList" style="margin-top:8px"></div></div></div>
+        <div class="c-tab" id="c-materials" style="display:none"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><h3 style="margin-right:auto">📎 素材库</h3><input class="in" id="matSearch" placeholder="🔍 搜索素材标题..." oninput="renderMats()" style="flex:1;min-width:150px"><button class="btn-sm btn-p" onclick="addMat()"><i class="fas fa-plus"></i> 添加素材</button></div><div id="matList" style="margin-top:8px"></div></div></div>
       </div>
 
       <!-- FOOD -->
@@ -4097,9 +4097,12 @@ function saveTopic() {
 function delTopic(id) { Store.set('topics', Store.get('topics', []).filter(t => t.id !== id)); renderTopics(); }
 function renderMats() {
   const m = Store.get('materials', []);
-  document.getElementById('matList').innerHTML = m.length === 0
+  const q = (document.getElementById('matSearch')?.value || '').toLowerCase();
+  let f = m;
+  if (q) f = f.filter(x => (x.title || '').toLowerCase().includes(q));
+  document.getElementById('matList').innerHTML = f.length === 0
     ? '<div class="emp"><i class="fas fa-paperclip"></i><p>素材库为空</p></div>'
-    : m.map(x => {
+    : f.map(x => {
         const links = (x.links && x.links.length ? x.links : (x.url ? [x.url] : []));
         const linkHtml = links.map(u => '<a href="' + u + '" target="_blank" title="' + u + '" style="font-size:12px;margin-right:8px">🔗</a>').join('');
         return '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.category || '') + '</span><span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (linkHtml ? '<div style="flex-basis:100%;margin-top:4px">' + linkHtml + '</div>' : '') + '<button class="btn-icon btn-o" onclick="editMat(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
