@@ -701,13 +701,14 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
                 <option value="午餐">🍱 午餐</option>
                 <option value="晚餐">🌙 晚餐</option>
                 <option value="零食">🍪 零食</option>
+                <option value="饮料">🥤 饮料</option>
               </select>
-              <input class="in" id="calFood" placeholder="食材（如：米饭）" style="flex:1" list="calFoodList">
+              <input class="in" id="calFood" placeholder="食材/饮品（如：米饭、可乐）" style="flex:1" list="calFoodList">
               <datalist id="calFoodList"></datalist>
-              <input class="in" id="calGrams" type="number" placeholder="克数" style="flex:0 0 auto;width:80px">
+              <input class="in" id="calGrams" type="number" placeholder="克数/ml" style="flex:0 0 auto;width:90px">
               <button class="btn btn-p" onclick="addCalorie()"><i class="fas fa-plus"></i></button>
             </div>
-            <div style="font-size:12px;color:var(--text3);margin-top:6px">提示：输入食材即可自动匹配热量库（每 100g 的 kcal），未收录可手动填热量。</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:6px">提示：输入食材或饮品即可自动匹配热量库（每 100g/ml 的 kcal，饮料按 1ml≈1g 计），未收录可手动填热量。</div>
             <div id="calLog" style="margin-top:10px"></div>
           </div>
           <div class="card"><div class="card-hd"><h3>📊 今日摄入总热量</h3></div>
@@ -3632,8 +3633,9 @@ function addCalorie() {
     per100 = v; CAL_LIB[name] = v;
   }
   const kcal = Math.round(per100 * grams / 100 * 10) / 10;
+  const unit = meal === '饮料' ? 'ml' : 'g';
   const list = Store.get('calorie', []);
-  list.push({ id: 'c' + Date.now(), meal, name, grams, per100, kcal, date: todayStr() });
+  list.push({ id: 'c' + Date.now(), meal, name, grams, unit, per100, kcal, date: todayStr() });
   Store.set('calorie', list);
   document.getElementById('calFood').value = '';
   document.getElementById('calGrams').value = '';
@@ -3646,7 +3648,7 @@ function delCalorie(id) {
 }
 function renderCalorie() {
   const list = Store.get('calorie', []).filter(x => x.date === todayStr());
-  const meals = ['早餐', '午餐', '晚餐', '零食'];
+  const meals = ['早餐', '午餐', '晚餐', '零食', '饮料'];
   const total = list.reduce((s, x) => s + (x.kcal || 0), 0);
   const elTotal = document.getElementById('calTotal');
   if (elTotal) elTotal.textContent = Math.round(total);
@@ -3658,7 +3660,7 @@ function renderCalorie() {
   const log = document.getElementById('calLog');
   if (log) log.innerHTML = list.length === 0
     ? '<div class="emp" style="padding:16px"><p>还没有记录</p></div>'
-    : list.map(x => '<div class="cal-log-item"><span class="ci-meal">' + x.meal + '</span><span class="ci-k">' + x.name + ' ' + x.grams + 'g</span><span class="ci-v">' + x.kcal + ' kcal</span><span class="x" onclick="delCalorie(\'' + x.id + '\')"><i class="fas fa-times"></i></span></div>').join('');
+    : list.map(x => '<div class="cal-log-item"><span class="ci-meal">' + x.meal + '</span><span class="ci-k">' + x.name + ' ' + x.grams + (x.unit || 'g') + '</span><span class="ci-v">' + x.kcal + ' kcal</span><span class="x" onclick="delCalorie(\'' + x.id + '\')"><i class="fas fa-times"></i></span></div>').join('');
 }
 
 // ----- 吃什么（掷骰子） -----
