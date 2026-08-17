@@ -266,6 +266,9 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   #calGrams{width:50px!important;flex:0 0 50px!important;min-width:50px!important}
   /* 移动端：选题/素材编辑删除按钮 */
   #topicList .cb .btn-icon,#matList .cb .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
+  /* 移动端：健康记录输入框缩小50%紧凑排列 */
+  #hWeight,#hFat{width:70px!important;flex:0 0 70px!important;min-width:70px!important;font-size:12px!important}
+  #hDate{width:105px!important;flex:0 0 105px!important;font-size:11px!important}
 }
 /* ===== FOOD MODULE ===== */
 .food-tab{display:block}
@@ -524,7 +527,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           </div>
         </div>
         <div class="life-tab" id="l-habit" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>🔥 我的习惯</h3><button class="btn-sm btn-p" onclick="addHabit()"><i class="fas fa-plus"></i> 新建</button></div><div id="habitList"></div></div><div class="card"><div class="card-hd"><h3>📅 本月打卡</h3></div><div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div><div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text2)">本月打卡 <span id="monthCheck">0</span> 天</div></div></div></div>
-        <div class="life-tab" id="l-health" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><button class="btn btn-p" onclick="addHealth()">记录</button></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3>📈 体重趋势</h3></div><div style="height:200px"><canvas id="weightChart"></canvas></div></div></div><div class="card"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="healthList"></div></div></div>
+        <div class="life-tab" id="l-health" style="display:none"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><input class="in" id="hDate" type="date" style="flex:0 0 auto;width:125px"><button class="btn btn-p" onclick="addHealth()">记录</button></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3 id="healthTabTitle">📈 体重趋势</h3><button class="btn-sm btn-o" id="healthToggleBtn" onclick="toggleHealthView()">📋 历史记录</button></div><div id="healthChartWrap"><div style="height:200px"><canvas id="weightChart"></canvas></div></div><div id="healthListWrap" style="display:none"><div id="healthList"></div></div></div></div>
         <div class="life-tab" id="l-shopping" style="display:none"><div class="card"><div class="card-hd"><h3>🛒 购物清单</h3></div><div class="ig"><input class="in" id="shopIn" placeholder="添加购物项..." onkeydown="if(event.key==='Enter') addShop()"><select class="in" id="shopCat" style="flex:0 0 auto;width:100px"><option value="食品">食品</option><option value="日用品">日用品</option><option value="服饰">服饰</option><option value="数码">数码</option><option value="其他">其他</option></select><button class="btn btn-p" onclick="addShop()"><i class="fas fa-plus"></i></button></div><div id="shopList"></div></div></div>
         <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="card-hd"><h3>📚 书影音收藏</h3><button class="btn-sm btn-p" onclick="addColl()"><i class="fas fa-plus"></i> 添加</button></div><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="tv">📺 电视剧</option><option value="music">🎵 音乐</option></select></div><div id="collList" style="margin-top:8px"></div></div></div>
         <div class="life-tab" id="l-period" style="display:none">
@@ -655,6 +658,13 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
             <span class="fb" data-p="later">📑 稍后阅读 (<span id="laterCount">0</span>)</span>
           </div>
           <div id="newsList"><div class="emp"><i class="fas fa-newspaper"></i><p>点击「刷新」获取最新热点 🔥</p></div></div>
+          <div id="financeTabs" style="display:none;margin-bottom:12px" class="ft">
+            <span class="fb active" data-fp="market">📊 行情数据</span>
+            <span class="fb" data-fp="wallstreetcn">华尔街见闻</span>
+            <span class="fb" data-fp="yicai">第一财经</span>
+            <span class="fb" data-fp="cls">财联社</span>
+            <span class="fb" data-fp="xueqiu">雪球</span>
+          </div>
           <div id="laterPage" style="display:none"><div id="laterList"></div></div>
         </div>
       </div>
@@ -846,6 +856,45 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
       <button class="btn btn-o" onclick="closeDramaRateModal()">取消</button>
       <button class="btn btn-p" onclick="saveDramaRate()"><i class="fas fa-save"></i> 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 健康编辑弹窗 -->
+<div class="mask hide" id="healthEditMask" onclick="if(event.target===this)closeHealthEditModal()">
+  <div class="modal" style="max-width:380px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3>❤️ 编辑健康记录</h3><span class="modal-x" onclick="closeHealthEditModal()"><i class="fas fa-times"></i></span></div>
+    <div class="ig"><span style="font-size:13px;color:var(--text2);width:60px">体重</span><input class="in" id="hEditWeight" type="number" step="0.1" placeholder="kg" style="flex:1"></div>
+    <div class="ig" style="margin-top:8px"><span style="font-size:13px;color:var(--text2);width:60px">体脂率</span><input class="in" id="hEditFat" type="number" step="0.1" placeholder="%" style="flex:1"></div>
+    <div class="ig" style="margin-top:8px"><span style="font-size:13px;color:var(--text2);width:60px">日期</span><input class="in" id="hEditDate" type="date" style="flex:1"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn btn-o" onclick="closeHealthEditModal()">取消</button>
+      <button class="btn btn-p" onclick="saveHealthEdit()"><i class="fas fa-save"></i> 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 倒数日编辑弹窗 -->
+<div class="mask hide" id="cdEditMask" onclick="if(event.target===this)closeCdEditModal()">
+  <div class="modal" style="max-width:480px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3>⏳ 编辑倒数日</h3><span class="modal-x" onclick="closeCdEditModal()"><i class="fas fa-times"></i></span></div>
+    <div class="ig"><input class="in" id="cdEditName" placeholder="事件名称" style="flex:1 1 100%"></div>
+    <div class="ig" style="margin-top:8px">
+      <select class="in" id="cdEditCalType" style="flex:0 0 auto;width:120px" onchange="onCdEditCalType()">
+        <option value="solar">公历</option><option value="lunar">农历</option>
+      </select>
+      <input class="in" id="cdEditTarget" type="date" style="flex:1">
+      <div id="cdEditLunarSel" style="display:none;flex:0 0 auto;gap:6px;align-items:center">
+        <select class="in" id="cdEditLm" style="width:74px"></select>
+        <select class="in" id="cdEditLd" style="width:70px"></select>
+        <label style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:3px"><input type="checkbox" id="cdEditLleap"> 闰月</label>
+      </div>
+    </div>
+    <div class="ig" style="margin-top:10px"><span style="font-size:13px;color:var(--text2);align-self:center">重复提醒</span><select class="in" id="cdEditRepeat" style="flex:1"><option value="none">不重复</option><option value="daily">每天</option><option value="weekly">每周</option><option value="monthly">每月</option><option value="yearly">每年</option></select></div>
+    <div class="ig" style="margin-top:8px"><span style="font-size:13px;color:var(--text2);align-self:center">事件颜色</span><div id="cdEditColors" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn btn-o" onclick="closeCdEditModal()">取消</button>
+      <button class="btn btn-p" onclick="saveCdEdit()"><i class="fas fa-save"></i> 保存</button>
     </div>
   </div>
 </div>
@@ -1910,6 +1959,7 @@ document.addEventListener('DOMContentLoaded', function() {
       else if (parent === 'lifeTabs') switchLifeTab(fb.getAttribute('data-t'));
       else if (parent === 'contentTabs') switchContentTab(fb.getAttribute('data-c'));
       else if (parent === 'newsTabs') renderNews(fb.getAttribute('data-p'));
+          else if (parent === 'financeTabs') switchFinanceTab(fb.getAttribute('data-fp'));
       else if (parent === 'dramaTabs') renderDrama(fb.getAttribute('data-d'));
       else if (parent === 'foodTabs') switchFoodTab(fb.getAttribute('data-f'));
       else if (parent === 'studyTabs') switchStudyTab(fb.getAttribute('data-s'));
@@ -2817,7 +2867,7 @@ function switchLifeTab(t) {
   const tab = document.getElementById('l-' + t);
   if (tab) tab.style.display = 'block';
   if (t === 'expense') { initExpPeriods(); switchExpTab('record'); }
-  if (t === 'health') setTimeout(renderWeightChart, 100);
+  if (t === 'health') { const hd=document.getElementById('hDate'); if(hd)hd.value=new Date().toISOString().slice(0,10); renderHealth(); setTimeout(renderWeightChart, 100); }
   if (t === 'habit') renderHeatmap();
   if (t === 'period') renderPeriod();
 }
@@ -3320,7 +3370,7 @@ function renderHealth() {
   const r = Store.get('health', []);
   document.getElementById('healthList').innerHTML = r.length === 0
     ? '<div class="emp"><i class="fas fa-heartbeat"></i><p>还没有健康记录</p></div>'
-    : r.slice(0, 20).map(x => '<div class="cb" style="cursor:default"><div style="flex:1"><span style="font-weight:500">' + x.weight + 'kg</span>' + (x.fat ? ' / ' + x.fat + '%' : '') + '</div><span style="font-size:12px;color:var(--text3)">' + x.date + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editHealth(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delHealth(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : r.slice(0, 20).map(x => '<div class="cb" style="cursor:default"><div style="flex:1"><span style="font-weight:500">' + x.weight + 'kg</span>' + (x.fat ? ' / ' + x.fat + '%' : '') + '</div><span style="font-size:12px;color:var(--text3)">' + x.date + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();openHealthEditModal(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delHealth(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
   const l = r[0];
   document.getElementById('curWeight').textContent = l ? l.weight + 'kg' : '--';
   document.getElementById('curBMI').textContent = l ? (l.weight / Math.pow(1.7, 2)).toFixed(1) : '--';
@@ -3336,22 +3386,50 @@ function renderWeightChart() {
 function addHealth() {
   const w = parseFloat(document.getElementById('hWeight').value);
   if (!w) return toast('请输入体重');
+  const dateEl = document.getElementById('hDate');
   const r = Store.get('health', []);
-  r.unshift({ id: Date.now().toString(), weight: w, fat: parseFloat(document.getElementById('hFat').value) || 0, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
-  Store.set('health', r); document.getElementById('hWeight').value = ''; document.getElementById('hFat').value = ''; renderHealth();
+  r.unshift({ id: Date.now().toString(), weight: w, fat: parseFloat(document.getElementById('hFat').value) || 0, date: dateEl ? dateEl.value : new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
+  Store.set('health', r); document.getElementById('hWeight').value = ''; document.getElementById('hFat').value = ''; renderHealth(); renderWeightChart();
 }
-function editHealth(id) {
+function toggleHealthView() {
+  const chartWrap = document.getElementById('healthChartWrap');
+  const listWrap = document.getElementById('healthListWrap');
+  const btn = document.getElementById('healthToggleBtn');
+  const title = document.getElementById('healthTabTitle');
+  if (listWrap.style.display === 'none') {
+    chartWrap.style.display = 'none'; listWrap.style.display = 'block';
+    btn.innerHTML = '📈 体重趋势'; title.textContent = '📋 历史记录';
+  } else {
+    chartWrap.style.display = 'block'; listWrap.style.display = 'none';
+    btn.innerHTML = '📋 历史记录'; title.textContent = '📈 体重趋势';
+    renderWeightChart();
+  }
+}
+let healthEditId = null;
+function openHealthEditModal(id) {
+  healthEditId = id;
   const r = Store.get('health', []);
   const x = r.find(z => z.id === id);
   if (!x) return;
-  const w = prompt('体重 (kg)：', x.weight);
-  if (w === null) return;
-  const f = prompt('体脂率 (%)：', x.fat || 0);
-  const d = prompt('日期 (YYYY-MM-DD)：', x.date);
-  const weight = parseFloat(w);
-  if (!isNaN(weight) && weight > 0) { x.weight = weight; x.fat = parseFloat(f) || 0; x.date = d || x.date; x.updatedAt = Date.now(); Store.set('health', r); renderHealth(); toast('✅ 已更新'); }
+  document.getElementById('hEditWeight').value = x.weight;
+  document.getElementById('hEditFat').value = x.fat || '';
+  document.getElementById('hEditDate').value = x.date;
+  document.getElementById('healthEditMask').classList.remove('hide');
 }
-function delHealth(id) { Store.set('health', Store.get('health', []).filter(x => x.id !== id)); renderHealth(); }
+function closeHealthEditModal() { document.getElementById('healthEditMask').classList.add('hide'); healthEditId = null; }
+function saveHealthEdit() {
+  const r = Store.get('health', []);
+  const x = r.find(z => z.id === healthEditId);
+  if (!x) return;
+  const w = parseFloat(document.getElementById('hEditWeight').value);
+  if (!w || w <= 0) return toast('请输入有效体重');
+  x.weight = w;
+  x.fat = parseFloat(document.getElementById('hEditFat').value) || 0;
+  x.date = document.getElementById('hEditDate').value || x.date;
+  x.updatedAt = Date.now();
+  Store.set('health', r); closeHealthEditModal(); renderHealth(); renderWeightChart(); toast('✅ 已更新');
+}
+function delHealth(id) { Store.set('health', Store.get('health', []).filter(x => x.id !== id)); renderHealth(); renderWeightChart(); }
 
 // ============================================================
 // LIFE - Shopping
@@ -3689,10 +3767,64 @@ function renderCountdowns() {
 }
 function editCountdown(id) {
   const cds = getCountdowns(); const o = cds.find(x => x.id === id); if (!o) return;
-  const name = prompt('事件名称：', o.name); if (!name) return;
-  const repeat = prompt('重复提醒（none/daily/weekly/monthly/yearly）：', o.repeat || 'none');
-  const color = prompt('事件颜色（如 #e74c3c 红 / #e67e22 橙 / #f1c40f 黄 / #2ecc71 绿 / #3498db 蓝 / #9b59b6 靛 / #34495e 紫）：', o.color);
-  if (name.trim()) { o.name = name.trim(); o.repeat = repeat || 'none'; if (color && color.trim()) o.color = color.trim(); o.updatedAt = Date.now(); Store.set('countdowns', cds); renderCountdowns(); renderCalendar(); renderHome(); toast('✅ 已更新'); }
+  window.__cdEditId = id;
+  document.getElementById('cdEditName').value = o.name;
+  document.getElementById('cdEditCalType').value = o.calType || 'solar';
+  document.getElementById('cdEditRepeat').value = o.repeat || 'none';
+  document.getElementById('cdEditMask').classList.remove('hide');
+  onCdEditCalType();
+  renderCDEditColors(o.color);
+  // Set date
+  if (o.calType === 'lunar') {
+    document.getElementById('cdEditLm').value = o.lm || 1;
+    document.getElementById('cdEditLd').value = o.ld || 1;
+    document.getElementById('cdEditLleap').checked = o.lleap || false;
+    document.getElementById('cdEditTarget').value = '';
+  } else {
+    const d = cdDateObj(o);
+    document.getElementById('cdEditTarget').value = (d ? d.y + '-' + String(d.m).padStart(2,'0') + '-' + String(d.d).padStart(2,'0') : '');
+  }
+}
+function closeCdEditModal() { document.getElementById('cdEditMask').classList.add('hide'); window.__cdEditId = null; }
+function onCdEditCalType() {
+  const isLunar = document.getElementById('cdEditCalType').value === 'lunar';
+  document.getElementById('cdEditTarget').style.display = isLunar ? 'none' : '';
+  document.getElementById('cdEditLunarSel').style.display = isLunar ? 'flex' : 'none';
+  if (isLunar) {
+    const lm = document.getElementById('cdEditLm'), ld = document.getElementById('cdEditLd');
+    if (lm.options.length === 0) { for (let i = 1; i <= 12; i++) lm.innerHTML += '<option value="' + i + '">' + i + '月</option>'; }
+    if (ld.options.length === 0) { for (let i = 1; i <= 30; i++) ld.innerHTML += '<option value="' + i + '">' + i + '日</option>'; }
+  }
+}
+function renderCDEditColors(sel) {
+  const el = document.getElementById('cdEditColors');
+  el.innerHTML = CD_COLORS.map(c => '<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:' + c.v + ';cursor:pointer;border:3px solid ' + (c.v === sel ? 'var(--text)' : 'transparent') + '" onclick="selectCDEditColor(\'' + c.v + '\')"></span>').join('');
+}
+function selectCDEditColor(v) {
+  window.__cdEditColor = v;
+  renderCDEditColors(v);
+}
+function saveCdEdit() {
+  const cds = getCountdowns(); const o = cds.find(x => x.id === window.__cdEditId);
+  if (!o) return;
+  const name = document.getElementById('cdEditName').value.trim();
+  if (!name) return toast('请输入事件名称');
+  o.name = name;
+  const calType = document.getElementById('cdEditCalType').value;
+  o.calType = calType;
+  if (calType === 'lunar') {
+    o.lm = parseInt(document.getElementById('cdEditLm').value) || 1;
+    o.ld = parseInt(document.getElementById('cdEditLd').value) || 1;
+    o.lleap = document.getElementById('cdEditLleap').checked;
+    o.target = '';
+  } else {
+    o.target = document.getElementById('cdEditTarget').value;
+    o.lm = o.ld = o.lleap = undefined;
+  }
+  o.repeat = document.getElementById('cdEditRepeat').value;
+  o.color = window.__cdEditColor || o.color || CD_COLORS[0].v;
+  o.updatedAt = Date.now();
+  Store.set('countdowns', cds); closeCdEditModal(); renderCountdowns(); renderCalendar(); renderHome(); toast('✅ 已更新');
 }
 function delCountdown(id) { if (!confirm('删除这个倒数日？')) return; Store.set('countdowns', getCountdowns().filter(x => x.id !== id)); renderCountdowns(); renderCalendar(); renderHome(); }
 function renderCountdownHome() {
@@ -4099,8 +4231,7 @@ function renderShops() {
   if (q) list = list.filter(s => (s.name || '').toLowerCase().includes(q) || (s.addr || '').toLowerCase().includes(q) || (s.sig || '').toLowerCase().includes(q) || (s.note || '').toLowerCase().includes(q) || (s.dishes || []).some(d => (d.name || '').toLowerCase().includes(q)));
   if (list.length === 0) { el.innerHTML = '<div class="emp"><i class="fas fa-store"></i><p>' + (q ? '没有匹配的店铺' : '还没有探店记录，点击右上角「新建店名」添加') + '</p></div>'; return; }
   el.innerHTML = list.slice().reverse().map(s => {
-    const dishPreview = (s.dishes || []).slice(0, 3).map(d => d.name).join('、') || '暂无菜品';
-    return '<div class="cb" style="align-items:flex-start;cursor:default"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">' + escHtml(s.name) + ' ' + starHtml(s.rate) + '</div><div style="font-size:12px;color:var(--text3);margin-top:2px">' + (s.date || '') + (s.addr ? ' · ' + escHtml(s.addr) : '') + '</div><div style="font-size:13px;color:var(--text2);margin-top:4px">招牌：' + escHtml(s.sig || '—') + '</div><div style="font-size:12px;color:var(--text3);margin-top:4px">菜品：' + escHtml(dishPreview) + ((s.dishes || []).length > 3 ? ' 等' + s.dishes.length + '道' : '') + '</div>' + (s.note ? '<div style="font-size:12px;color:var(--text3);margin-top:4px">备注：' + escHtml(s.note) + '</div>' : '') + '</div><div style="display:flex;gap:6px;flex-shrink:0"><button class="btn-sm btn-o" onclick="openShopModal(\'' + s.id + '\')"><i class="fas fa-pen"></i></button><button class="btn-sm btn-o" style="color:var(--d)" onclick="delShop(\'' + s.id + '\')"><i class="fas fa-trash"></i></button></div></div>';
+    return '<div class="cb" style="align-items:center;cursor:default"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">' + escHtml(s.name) + ' ' + starHtml(s.rate) + '</div><div style="font-size:12px;color:var(--text3);margin-top:2px">' + (s.date || '') + '</div></div><div style="display:flex;gap:6px;flex-shrink:0"><button class="btn-sm btn-o" onclick="openShopModal(\'' + s.id + '\')"><i class="fas fa-pen"></i></button><button class="btn-sm btn-o" style="color:var(--d)" onclick="delShop(\'' + s.id + '\')"><i class="fas fa-trash"></i></button></div></div>';
   }).join('');
 }
 function openShopModal(id) {
@@ -4172,7 +4303,7 @@ function renderTopics() {
     ? '<div class="emp"><i class="fas fa-pen-fancy"></i><p>还没有选题</p></div>'
     : f.map(x => {
         const sub = [x.source, x.idea, x.note].filter(Boolean).join(' · ');
-        return '<div class="cb" style="cursor:default;flex-wrap:wrap;position:relative"><div style="flex:1;min-width:0;font-weight:500">' + x.title + (sub ? '<div style="font-size:12px;color:var(--text3);font-weight:400;margin-top:2px">' + sub + '</div>' : '') + '</div><div class="cb-acts" style="position:absolute;top:0;right:0"><button class="btn-icon btn-o" onclick="editTopic(\'' + x.id + '\')" style="color:var(--text2);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-times"></i></button></div><div class="cb-acts" style="margin-left:8px"><span class="tag ' + (sc[x.status] || 't1') + '" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (x.status || '待创作') + '</span><span style="font-size:10px;color:var(--text3);line-height:1.2">' + (x.date || '') + '</span></div></div>';
+        return '<div class="cb" style="cursor:default;align-items:flex-start"><div style="flex:1;min-width:0;font-weight:500;padding-right:8px">' + x.title + (sub ? '<div style="font-size:12px;color:var(--text3);font-weight:400;margin-top:2px">' + sub + '</div>' : '') + '</div><div class="cb-acts" style="flex-shrink:0"><span class="tag ' + (sc[x.status] || 't1') + '" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (x.status || '待创作') + '</span><span style="font-size:10px;color:var(--text3);line-height:1.2">' + (x.date || '') + '</span></div><div class="cb-acts" style="flex-shrink:0;margin-left:4px"><button class="btn-icon btn-o" onclick="editTopic(\'' + x.id + '\')" style="color:var(--text2);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-times"></i></button></div></div>';
       }).join('');
 }
 let topicEditingId = null;
@@ -4222,7 +4353,7 @@ function renderMats() {
     : f.map(x => {
         const links = (x.links && x.links.length ? x.links : (x.url ? [x.url] : []));
         const linkHtml = links.map(u => '<a href="' + u + '" target="_blank" title="' + u + '" style="font-size:12px;margin-right:8px">🔗</a>').join('');
-        return '<div class="cb" style="cursor:default;position:relative"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.category || '') + '</span><span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (linkHtml ? '<div style="flex-basis:100%;margin-top:4px">' + linkHtml + '</div>' : '') + '<div class="cb-acts" style="position:absolute;top:0;right:0"><button class="btn-icon btn-o" onclick="editMat(\'' + x.id + '\')" style="color:var(--text2);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-times"></i></button></div></div>';
+        return '<div class="cb" style="cursor:default;align-items:flex-start"><div style="flex:1;min-width:0;font-weight:500;padding-right:8px">' + x.title + (x.category ? '<span style="font-size:12px;color:var(--text3);margin-left:6px">' + x.category + '</span>' : '') + (x.note ? '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + x.note + '</div>' : '') + (linkHtml ? '<div style="margin-top:4px">' + linkHtml + '</div>' : '') + '</div><div class="cb-acts" style="flex-shrink:0;margin-left:4px"><button class="btn-icon btn-o" onclick="editMat(\'' + x.id + '\')" style="color:var(--text2);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d);width:18px;height:18px;font-size:10px;padding:0"><i class="fas fa-times"></i></button></div></div>';
       }).join('');
 }
 let matEditingId = null;
@@ -4430,20 +4561,30 @@ function updateReportButtons(generated) {
 // HOT NEWS
 // ============================================================
 const newsCache = {};
+const financeCache = {};
+let financeTab = 'market';
 
 function renderFinance() {
+  document.getElementById('financeTabs').style.display = '';
+  document.getElementById('newsList').style.display = '';
+  document.getElementById('laterPage').style.display = 'none';
+  document.getElementById('newsRefreshBtn').style.display = '';
+  document.getElementById('newsTitle').textContent = '💹 财经资讯';
+  document.querySelectorAll('#financeTabs .fb').forEach(f => f.classList.toggle('active', f.getAttribute('data-fp') === financeTab));
+  switchFinanceTab(financeTab);
+}
+function switchFinanceTab(fp) {
+  financeTab = fp;
+  document.querySelectorAll('#financeTabs .fb').forEach(f => f.classList.toggle('active', f.getAttribute('data-fp') === fp));
+  if (fp === 'market') { fetchFinanceMarket(); return; }
+  renderFinanceNews(fp);
+}
+async function fetchFinanceMarket() {
   const list = document.getElementById('newsList');
   const today = new Date().toISOString().slice(0, 10);
   list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">📅 ' + today + ' · 正在加载实时行情...</div>';
-  fetchFinanceData();
-}
-async function fetchFinanceData() {
-  const list = document.getElementById('newsList');
-  const today = new Date().toISOString().slice(0, 10);
   const items = [];
-  // Try to fetch real data from free APIs
   try {
-    // A股指数 (上证/深证/创业板)
     const stockRes = await fetch('https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&secids=1.000001,0.399001,0.399006&fields=f2,f3,f4,f12,f14').then(r => r.json()).catch(() => null);
     if (stockRes && stockRes.data && stockRes.data.diff) {
       const names = { '000001': '上证指数', '399001': '深证成指', '399006': '创业板指' };
@@ -4452,16 +4593,13 @@ async function fetchFinanceData() {
     }
   } catch(e) {}
   try {
-    // 黄金
     const goldRes = await fetch('https://api.it120.cc/gzbd/hq/query?code=AU9999').then(r => r.json()).catch(() => null);
     if (goldRes && goldRes.data) items.push(['🥇 黄金', 'Au99.99 ' + goldRes.data.price + ' 元/克']);
   } catch(e) {}
   try {
-    // 外汇 美元人民币
     const fxRes = await fetch('https://api.it120.cc/gzbd/hq/query?code=USDCNY').then(r => r.json()).catch(() => null);
     if (fxRes && fxRes.data) items.push(['💱 外汇', '美元/人民币 ' + fxRes.data.price]);
   } catch(e) {}
-  // Fallback for missing items
   if (!items.some(i => i[0] === '📊 宏观')) items.push(['📊 宏观', '央行公开市场操作与国债收益率走势']);
   if (!items.some(i => i[0] === '📈 A股')) items.push(['📈 A股', '上证 / 深成 / 创业板三大指数']);
   if (!items.some(i => i[0] === '💱 外汇')) items.push(['💱 外汇', '人民币兑美元中间价及汇率波动']);
@@ -4472,16 +4610,112 @@ async function fetchFinanceData() {
     items.map(([t, d]) => '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:18px;min-width:26px;text-align:center">' + t.split(' ')[0] + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">' + t.split(' ')[1] + '</div><div style="font-size:12px;color:var(--text2);margin-top:2px">' + d + '</div></div></div>').join('');
 }
 
+// 财经快讯渲染
+function renderFinanceNews(src) {
+  const list = document.getElementById('newsList');
+  const data = financeCache[src] || [];
+  const srcNames = { wallstreetcn: '华尔街见闻·快讯', yicai: '第一财经', cls: '财联社', xueqiu: '雪球' };
+  if (data.length === 0) {
+    list.innerHTML = '<div class="emp"><i class="fas fa-spinner fa-spin"></i><p>正在抓取' + (srcNames[src] || src) + '实时快讯...</p></div>';
+    fetchFinanceSource(src);
+    return;
+  }
+  list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">' + (srcNames[src] || src) + ' · 共 ' + data.length + ' 条快讯 · 点击标题展开</div>' +
+    data.slice(0, 30).map((item, i) => {
+      const content = item.content || item.summary || '';
+      const hasContent = content && content !== item.title;
+      return '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:13px;font-weight:700;color:var(--primary);min-width:20px;text-align:center">' + (i + 1) + '</span>' +
+        '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="' + (hasContent ? 'var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'' : 'window.open(\'' + (item.url || '#') + '\',\'_blank\')') + '">' + item.title + '</div>' +
+        (hasContent ? '<div style="display:none;font-size:12px;color:var(--text2);margin-top:6px;padding:8px;background:var(--primary-bg);border-radius:8px;line-height:1.6">' + content + (item.url ? ' <a href="' + item.url + '" target="_blank" style="color:var(--accent)">查看原文</a>' : '') + '</div>' : '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + (item.time || '') + '</div>') + '</div></div>';
+    }).join('');
+}
+
+// 抓取财经快讯来源
+async function fetchFinanceSource(src) {
+  const list = document.getElementById('newsList');
+  try {
+    let data = [];
+    if (src === 'wallstreetcn') {
+      // 华尔街见闻快讯 API
+      const r = await fetch('https://api-one.wallstcn.com/apiv1/content/lives?channel=global-channel&limit=30').then(r => r.json()).catch(() => null);
+      if (r && r.data && r.data.items) {
+        data = r.data.items.map(item => ({
+          title: (item.title || item.content_text || '').replace(/<[^>]*>/g, '').slice(0, 200),
+          content: (item.content_text || item.content || '').replace(/<[^>]*>/g, ''),
+          time: item.display_time || '',
+          url: item.uri ? 'https://wallstreetcn.com' + item.uri : ''
+        }));
+      }
+    } else if (src === 'cls') {
+      // 财联社电报 API
+      const r = await fetch('https://www.cls.cn/api/sw?app=CailianpressWeb&os=web&sv=8.4.6').then(r => r.json()).catch(() => null);
+      if (r && r.data && r.data.roll_data) {
+        data = r.data.roll_data.slice(0, 30).map(item => ({
+          title: (item.title || item.content || '').replace(/<[^>]*>/g, '').slice(0, 200),
+          content: (item.content || item.brief || '').replace(/<[^>]*>/g, ''),
+          time: item.ctime ? new Date(item.ctime * 1000).toLocaleString() : '',
+          url: item.id ? 'https://www.cls.cn/detail/' + item.id : ''
+        }));
+      }
+    } else if (src === 'xueqiu') {
+      // 雪球热帖
+      const r = await fetch('https://xueqiu.com/statuses/hot/listV2.json?since_id=-1&size=30').then(r => r.json()).catch(() => null);
+      if (r && r.items) {
+        data = r.items.map(item => {
+          const title = (item.title || item.text || '').replace(/<[^>]*>/g, '').slice(0, 150);
+          return {
+            title, content: title,
+            time: item.created_at ? new Date(item.created_at).toLocaleString() : '',
+            url: item.target ? 'https://xueqiu.com' + item.target : ''
+          };
+        });
+      }
+    } else if (src === 'yicai') {
+      // 第一财经 - 使用 brief API
+      const r = await fetch('https://www.yicai.com/api/ajax/getlistbycid?cid=48&page=1&pagesize=30').then(r => r.json()).catch(() => null);
+      if (r && Array.isArray(r)) {
+        data = r.map(item => ({
+          title: (item.title || item.NewsTitle || '').slice(0, 200),
+          content: (item.Abstraction || item.NewsContent || '').replace(/<[^>]*>/g, '').slice(0, 300),
+          time: item.CreateDate || item.Date || '',
+          url: item.url || (item.ID ? 'https://www.yicai.com/news/' + item.ID + '.html' : '')
+        }));
+      }
+    }
+    financeCache[src] = data;
+    if (data.length === 0) {
+      list.innerHTML = '<div class="emp"><i class="fas fa-exclamation-circle"></i><p>' + ({ wallstreetcn: '华尔街见闻', yicai: '第一财经', cls: '财联社', xueqiu: '雪球' })[src] + ' 暂无快讯数据，可能受到 CORS 限制</p><p style="font-size:12px;color:var(--text3)">提示：部分财经 API 需要后端代理，可使用 Cloudflare Worker 中转</p></div>';
+    } else {
+      renderFinanceNews(src);
+    }
+  } catch(e) {
+    list.innerHTML = '<div class="emp"><i class="fas fa-exclamation-circle"></i><p>抓取失败，可能受到跨域限制</p><p style="font-size:12px;color:var(--text3)">请使用 Cloudflare Worker 代理或后端中转</p></div>';
+  }
+}
+
+// 财经全部刷新
+async function fetchFinanceAll() {
+  document.getElementById('newsRefreshBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
+  const srcs = ['wallstreetcn', 'yicai', 'cls', 'xueqiu'];
+  for (const src of srcs) {
+    try { await fetchFinanceSource(src); } catch(e) {}
+  }
+  document.getElementById('newsRefreshBtn').innerHTML = '<i class="fas fa-sync"></i> 刷新';
+  toast('💹 财经快讯已刷新');
+}
+
 function renderNews(platform) {
   if (!platform) platform = document.querySelector('#newsTabs .fb.active')?.getAttribute('data-p') || 'weibo';
   const newsList = document.getElementById('newsList');
   const laterPage = document.getElementById('laterPage');
+  const financeTabs = document.getElementById('financeTabs');
   const title = document.getElementById('newsTitle');
   const refreshBtn = document.getElementById('newsRefreshBtn');
   if (newsList) newsList.style.display = platform === 'later' ? 'none' : '';
   if (laterPage) laterPage.style.display = platform === 'later' ? '' : 'none';
+  if (financeTabs) financeTabs.style.display = platform === 'finance' ? '' : 'none';
   if (refreshBtn) refreshBtn.style.display = platform === 'later' ? 'none' : '';
-  if (title) title.textContent = platform === 'later' ? '📑 稍后阅读' : '🔥 实时热点';
+  if (title) title.textContent = platform === 'later' ? '📑 稍后阅读' : platform === 'finance' ? '💹 财经资讯' : '🔥 实时热点';
   if (platform === 'later') { showReadLater(); return; }
   if (platform === 'finance') { renderFinance(); return; }
   const data = newsCache[platform] || [];
@@ -4508,6 +4742,13 @@ function renderNews(platform) {
 
 async function fetchNews() {
   const btn = document.getElementById('newsRefreshBtn');
+  const activeTab = document.querySelector('#newsTabs .fb.active')?.getAttribute('data-p');
+  if (activeTab === 'finance') {
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
+    await fetchFinanceAll();
+    btn.innerHTML = '<i class="fas fa-sync"></i> 刷新';
+    return;
+  }
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
   const platforms = ['weibo', 'douyin', 'baidu', 'zhihu', 'bilibili', 'jinritoutiao'];
   for (const p of platforms) {
