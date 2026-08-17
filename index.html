@@ -90,6 +90,8 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .a-lab{font-size:11px;color:var(--text2);flex:0 0 auto}
 .a-num{font-weight:700;color:var(--text);font-size:13px;line-height:1.2}
 .asset-net .a-num{font-size:15px}
+.asset-eye{margin-left:7px;font-size:12px;color:var(--text3);cursor:pointer;flex:0 0 auto;transition:color .15s}
+.asset-eye:hover{color:var(--primary)}
 .a-debt{color:var(--d)}
 /* 语音记账麦克风 */
 .btn-sm.rec{background:var(--d);color:#fff;border-color:var(--d);animation:micPulse 1.1s ease-in-out infinite}
@@ -439,10 +441,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
               <div class="ig"><select class="in" id="expCat" onchange="onExpCatChange()" style="flex:1 1 40%"></select><select class="in" id="expSub" style="flex:1 1 34%"></select></div>
               <div class="ig"><input class="in" id="expNote" placeholder="备注" style="flex:1 1 58%"><button class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto"><i class="fas fa-cog"></i></button><button class="btn btn-p" onclick="addExpense()" style="flex:0 0 auto"><i class="fas fa-plus"></i></button></div>
               <div class="card" style="padding:10px 14px;margin-top:12px" id="assetCards">
-                <div class="asset-line asset-net"><span class="a-lab">净资产</span><span class="a-num" id="dispNet">¥0.00</span></div>
+                <div class="asset-line asset-net"><span class="a-lab">净资产</span><span class="a-num" id="dispNet">¥0.00</span><i class="fas fa-eye asset-eye" id="eyeNet" onclick="toggleAssetEye('net')" title="显示/隐藏金额"></i></div>
                 <div class="asset-line asset-row2">
-                  <span class="a-grp"><span class="a-lab">总资产</span><span class="a-num" id="dispAssets">¥0.00</span></span>
-                  <span class="a-grp"><span class="a-lab">总负债</span><span class="a-num a-debt" id="dispDebts">¥0.00</span></span>
+                  <span class="a-grp"><span class="a-lab">总资产</span><span class="a-num" id="dispAssets">¥0.00</span><i class="fas fa-eye asset-eye" id="eyeAssets" onclick="toggleAssetEye('assets')" title="显示/隐藏金额"></i></span>
+                  <span class="a-grp"><span class="a-lab">总负债</span><span class="a-num a-debt" id="dispDebts">¥0.00</span><i class="fas fa-eye asset-eye" id="eyeDebts" onclick="toggleAssetEye('debts')" title="显示/隐藏金额"></i></span>
                 </div>
               </div>
               <div class="ig" style="margin-top:10px"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:1 1 38%"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:1 1 38%"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto">设置</button></div>
@@ -2954,8 +2956,16 @@ function getAssets() {
 }
 function renderAssets() {
   const { assets, debts, net } = getAssets();
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = '¥' + v.toFixed(2); };
-  set('dispNet', net); set('dispAssets', assets); set('dispDebts', debts);
+  const hidden = Store.get('assetEyes', { net: false, assets: false, debts: false });
+  const set = (id, v, hide) => { const el = document.getElementById(id); if (el) el.textContent = hide ? '¥****' : '¥' + v.toFixed(2); };
+  const setEye = (id, hide) => { const el = document.getElementById(id); if (el) el.className = 'fas ' + (hide ? 'fa-eye-slash' : 'fa-eye') + ' asset-eye'; };
+  set('dispNet', net, hidden.net); setEye('eyeNet', hidden.net);
+  set('dispAssets', assets, hidden.assets); setEye('eyeAssets', hidden.assets);
+  set('dispDebts', debts, hidden.debts); setEye('eyeDebts', hidden.debts);
+}
+function toggleAssetEye(k) {
+  const h = Store.get('assetEyes', { net: false, assets: false, debts: false });
+  h[k] = !h[k]; Store.set('assetEyes', h); renderAssets();
 }
 function adjustAssetsByTxn(txn, sign) {
   const a = parseFloat(txn.amt) || 0; if (a <= 0) return;
@@ -3588,7 +3598,16 @@ const CAL_LIB = {
   '西兰花':34,'西红柿':20,'黄瓜':16,'胡萝卜':39,'菠菜':24,'白菜':17,'生菜':15,'芹菜':20,'茄子':25,'青椒':22,'豆角':30,'冬瓜':12,'南瓜':23,'洋葱':40,'韭菜':26,'花菜':24,'莲藕':73,'木耳':21,'蘑菇':20,'金针菇':26,'香菇':19,'海带':13,'紫菜':207,'魔芋':5,
   '苹果':53,'香蕉':93,'草莓':32,'西瓜':31,'葡萄':44,'橙子':48,'梨':44,'桃子':48,'樱桃':46,'芒果':60,'火龙果':55,'牛油果':160,'榴莲':147,
   '巧克力':550,'薯片':500,'饼干':450,'花生':580,'杏仁':575,'腰果':560,'冰淇淋':250,'奶茶':350,'可乐':42,'橙汁':45,'啤酒':43,
-  '橄榄油':900,'黄油':720,'沙拉酱':700
+  '橄榄油':900,'黄油':720,'沙拉酱':700,
+  // 饮料类（每 100ml kcal，密度≈1 即每 100g）
+  '雪碧':41,'芬达':47,'七喜':39,'美年达':46,'零度可乐':0,'健怡可乐':0,'苏打水':0,'气泡水':0,'干姜水':36,
+  '苹果汁':46,'葡萄汁':60,'桃汁':42,'菠萝汁':50,'西瓜汁':30,'柠檬汁':25,'椰子水':19,'番茄汁':18,'蔓越莓汁':45,'石榴汁':54,'芒果汁':53,'百香果汁':48,'葡萄柚汁':39,'梨汁':47,'酸梅汤':40,'凉茶':40,'王老吉':45,'加多宝':45,'蜂蜜水':30,
+  '绿茶':0,'红茶':0,'乌龙茶':0,'茉莉花茶':0,'无糖奶茶':30,'珍珠奶茶':380,'港式奶茶':80,'柠檬茶':38,'冰红茶':39,'抹茶拿铁':60,'阿萨姆奶茶':70,'蜂蜜柚子茶':60,'果茶':120,
+  '美式咖啡':2,'拿铁':66,'卡布奇诺':40,'摩卡':90,'焦糖玛奇朵':80,'冷萃咖啡':2,'速溶咖啡':450,'白咖啡':460,'浓缩咖啡':5,
+  '豆奶':31,'豆浆':31,'杏仁奶':17,'椰奶':20,'脱脂牛奶':35,'全脂牛奶':64,'巧克力奶':80,'养乐多':72,'优酸乳':70,'乳酸菌饮料':65,'椰汁':20,
+  '红酒':85,'白酒':290,'威士忌':250,'伏特加':230,'清酒':134,'梅酒':110,'鸡尾酒':100,'香槟':80,'黄酒':100,'米酒':102,'起泡酒':80,'朗姆酒':230,
+  '红牛':45,'脉动':26,'佳得乐':25,'宝矿力水特':25,'能量饮料':45,'电解质水':0,'运动饮料':25,
+  '龟苓膏':60,'蛋白粉':350
 };
 function calMatch(name) {
   if (CAL_LIB[name] !== undefined) return CAL_LIB[name];
