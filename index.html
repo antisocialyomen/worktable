@@ -839,6 +839,46 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   </div>
 </div>
 
+<!-- 素材编辑弹窗 -->
+<div class="mask hide" id="matMask" onclick="if(event.target===this)closeMatModal()">
+  <div class="modal" style="max-width:520px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3 id="matMaskTitle">📎 添加素材</h3><span class="modal-x" onclick="closeMatModal()"><i class="fas fa-times"></i></span></div>
+    <div id="matMaskBody">
+      <div class="ig" style="margin-bottom:10px"><input class="in" id="matTitle" placeholder="标题 *" style="flex:1"></div>
+      <div class="ig" style="margin-bottom:10px"><input class="in" id="matCat" placeholder="分类（如：参考 / 金句 / 案例）" style="flex:1" value="参考"></div>
+      <div style="font-size:13px;font-weight:600;margin:4px 0 6px">备注</div>
+      <textarea class="in" id="matNote" placeholder="备注（选填）" style="width:100%;min-height:64px;resize:vertical"></textarea>
+      <div style="font-size:13px;font-weight:600;margin:12px 0 6px">链接（可多个）</div>
+      <div id="matLinks"></div>
+      <div class="ig" style="margin-top:8px"><button class="btn-sm btn-p" onclick="addMatLinkRow()"><i class="fas fa-plus"></i> 添加链接</button></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-o" onclick="closeMatModal()">取消</button>
+        <button class="btn btn-p" onclick="saveMat()"><i class="fas fa-save"></i> 保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 选题编辑弹窗 -->
+<div class="mask hide" id="topicMask" onclick="if(event.target===this)closeTopicModal()">
+  <div class="modal" style="max-width:520px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3 id="topicMaskTitle">📋 新建选题</h3><span class="modal-x" onclick="closeTopicModal()"><i class="fas fa-times"></i></span></div>
+    <div id="topicMaskBody">
+      <div class="ig" style="margin-bottom:10px"><input class="in" id="topicEditTitle" placeholder="选题标题 *" style="flex:1"></div>
+      <div class="ig" style="margin-bottom:10px"><input class="in" id="topicEditSource" placeholder="来源（选填）" style="flex:1"></div>
+      <div style="font-size:13px;font-weight:600;margin:4px 0 6px">思路</div>
+      <textarea class="in" id="topicEditIdea" placeholder="选题思路 / 切入点（选填）" style="width:100%;min-height:64px;resize:vertical"></textarea>
+      <div style="font-size:13px;font-weight:600;margin:12px 0 6px">备注</div>
+      <textarea class="in" id="topicEditNote" placeholder="备注（选填）" style="width:100%;min-height:54px;resize:vertical"></textarea>
+      <div class="ig" style="margin-top:10px"><select class="in" id="topicEditStatus" style="flex:1 1 45%"><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select><input class="in" id="topicEditDate" type="date" style="flex:1 1 45%"></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-o" onclick="closeTopicModal()">取消</button>
+        <button class="btn btn-p" onclick="saveTopic()"><i class="fas fa-save"></i> 保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 通用弹窗（分类管理 / 分类明细） -->
 <div class="mask hide" id="genMask" onclick="if(event.target===this)closeGenMask()">
   <div class="modal" style="max-width:520px" onclick="event.stopPropagation()">
@@ -3946,38 +3986,99 @@ function renderTopics() {
   const sc = { 待创作: 't3', 进行中: 't1', 已发布: 't2' };
   document.getElementById('topicList').innerHTML = f.length === 0
     ? '<div class="emp"><i class="fas fa-pen-fancy"></i><p>还没有选题</p></div>'
-    : f.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '</div><span class="tag ' + (sc[x.status] || 't1') + '">' + (x.status || '待创作') + '</span><span style="font-size:12px;color:var(--text3);margin:0 8px">' + (x.date || '') + '</span><button class="btn-icon btn-o" onclick="editTopic(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : f.map(x => {
+        const sub = [x.source, x.idea, x.note].filter(Boolean).join(' · ');
+        return '<div class="cb" style="cursor:default;flex-wrap:wrap"><div style="flex:1;min-width:0;font-weight:500">' + x.title + (sub ? '<div style="font-size:12px;color:var(--text3);font-weight:400;margin-top:2px">' + sub + '</div>' : '') + '</div><span class="tag ' + (sc[x.status] || 't1') + '">' + (x.status || '待创作') + '</span><span style="font-size:12px;color:var(--text3);margin:0 8px">' + (x.date || '') + '</span><button class="btn-icon btn-o" onclick="editTopic(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delTopic(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+      }).join('');
 }
-function addTopic() { const t = prompt('选题标题：', ''); if (!t) return; const topics = Store.get('topics', []); topics.unshift({ id: Date.now().toString(), title: t, source: prompt('来源：', ''), status: '待创作', date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() }); Store.set('topics', topics); renderTopics(); toast('✅ 已添加'); }
-function editTopic(id) {
+let topicEditingId = null;
+function addTopic() { openTopicModal(); }
+function editTopic(id) { openTopicModal(id); }
+function openTopicModal(id) {
+  topicEditingId = id || null;
+  const x = id ? Store.get('topics', []).find(z => z.id === id) : null;
+  document.getElementById('topicMaskTitle').textContent = x ? '📋 编辑选题' : '📋 新建选题';
+  document.getElementById('topicEditTitle').value = x ? x.title : '';
+  document.getElementById('topicEditSource').value = x ? (x.source || '') : '';
+  document.getElementById('topicEditIdea').value = x ? (x.idea || '') : '';
+  document.getElementById('topicEditNote').value = x ? (x.note || '') : '';
+  document.getElementById('topicEditStatus').value = x ? (x.status || '待创作') : '待创作';
+  document.getElementById('topicEditDate').value = x ? (x.date || '') : new Date().toISOString().slice(0, 10);
+  document.getElementById('topicMask').classList.remove('hide');
+}
+function closeTopicModal() { document.getElementById('topicMask').classList.add('hide'); topicEditingId = null; }
+function saveTopic() {
+  const title = document.getElementById('topicEditTitle').value.trim();
+  if (!title) return toast('请填写选题标题');
+  const source = document.getElementById('topicEditSource').value.trim();
+  const idea = document.getElementById('topicEditIdea').value.trim();
+  const note = document.getElementById('topicEditNote').value.trim();
+  const status = document.getElementById('topicEditStatus').value;
+  const date = document.getElementById('topicEditDate').value || new Date().toISOString().slice(0, 10);
   const topics = Store.get('topics', []);
-  const x = topics.find(z => z.id === id);
-  if (!x) return;
-  const t = prompt('选题标题：', x.title);
-  if (t === null) return;
-  const src = prompt('来源：', x.source || '');
-  const st = prompt('状态（待创作/进行中/已发布）：', x.status || '待创作');
-  const d = prompt('日期 (YYYY-MM-DD)：', x.date || new Date().toISOString().slice(0, 10));
-  if (t.trim()) { x.title = t.trim(); x.source = src; x.status = st || x.status; x.date = d || x.date; x.updatedAt = Date.now(); Store.set('topics', topics); renderTopics(); toast('✅ 已更新'); }
+  if (topicEditingId) {
+    const x = topics.find(z => z.id === topicEditingId);
+    if (x) { x.title = title; x.source = source; x.idea = idea; x.note = note; x.status = status; x.date = date; x.updatedAt = Date.now(); }
+  } else {
+    topics.unshift({ id: Date.now().toString(), title, source, idea, note, status, date, updatedAt: Date.now() });
+  }
+  Store.set('topics', topics);
+  closeTopicModal();
+  renderTopics();
+  toast('✅ 已保存');
 }
 function delTopic(id) { Store.set('topics', Store.get('topics', []).filter(t => t.id !== id)); renderTopics(); }
 function renderMats() {
   const m = Store.get('materials', []);
   document.getElementById('matList').innerHTML = m.length === 0
     ? '<div class="emp"><i class="fas fa-paperclip"></i><p>素材库为空</p></div>'
-    : m.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (x.url ? '<a href="' + x.url + '" target="_blank" style="font-size:12px;margin-right:8px">🔗</a>' : '') + '<button class="btn-icon btn-o" onclick="editMat(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : m.map(x => {
+        const links = (x.links && x.links.length ? x.links : (x.url ? [x.url] : []));
+        const linkHtml = links.map(u => '<a href="' + u + '" target="_blank" title="' + u + '" style="font-size:12px;margin-right:8px">🔗</a>').join('');
+        return '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.category || '') + '</span><span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div>' + (linkHtml ? '<div style="flex-basis:100%;margin-top:4px">' + linkHtml + '</div>' : '') + '<button class="btn-icon btn-o" onclick="editMat(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delMat(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+      }).join('');
 }
-function addMat() { const t = prompt('素材标题：', ''); if (!t) return; const m = Store.get('materials', []); m.unshift({ id: Date.now().toString(), title: t, note: prompt('备注：', ''), category: prompt('分类：', '参考'), url: prompt('链接：', ''), updatedAt: Date.now() }); Store.set('materials', m); renderMats(); toast('✅ 已添加'); }
-function editMat(id) {
-  const m = Store.get('materials', []);
-  const x = m.find(z => z.id === id);
-  if (!x) return;
-  const t = prompt('素材标题：', x.title);
-  if (t === null) return;
-  const note = prompt('备注：', x.note || '');
-  const cat = prompt('分类：', x.category || '参考');
-  const url = prompt('链接：', x.url || '');
-  if (t.trim()) { x.title = t.trim(); x.note = note; x.category = cat || x.category; x.url = url; x.updatedAt = Date.now(); Store.set('materials', m); renderMats(); toast('✅ 已更新'); }
+let matEditingId = null;
+function addMat() { openMatModal(); }
+function editMat(id) { openMatModal(id); }
+function addMatLinkRow(val) {
+  const wrap = document.getElementById('matLinks');
+  const row = document.createElement('div');
+  row.className = 'ig';
+  row.style.marginBottom = '6px';
+  row.innerHTML = '<input class="in mat-link" placeholder="https://..." style="flex:1" value="' + (val || '') + '"><button class="btn-icon btn-o" onclick="this.parentNode.remove()" style="color:var(--d)"><i class="fas fa-times"></i></button>';
+  wrap.appendChild(row);
+}
+function openMatModal(id) {
+  matEditingId = id || null;
+  const x = id ? Store.get('materials', []).find(z => z.id === id) : null;
+  document.getElementById('matMaskTitle').textContent = x ? '📎 编辑素材' : '📎 添加素材';
+  document.getElementById('matTitle').value = x ? x.title : '';
+  document.getElementById('matCat').value = x ? (x.category || '参考') : '参考';
+  document.getElementById('matNote').value = x ? (x.note || '') : '';
+  const wrap = document.getElementById('matLinks'); wrap.innerHTML = '';
+  const links = x ? (x.links && x.links.length ? x.links : (x.url ? [x.url] : [])) : [];
+  if (!links.length) addMatLinkRow(); else links.forEach(l => addMatLinkRow(l));
+  document.getElementById('matMask').classList.remove('hide');
+}
+function closeMatModal() { document.getElementById('matMask').classList.add('hide'); matEditingId = null; }
+function saveMat() {
+  const title = document.getElementById('matTitle').value.trim();
+  if (!title) return toast('请填写标题');
+  const category = document.getElementById('matCat').value.trim() || '参考';
+  const note = document.getElementById('matNote').value.trim();
+  const links = Array.from(document.querySelectorAll('#matLinks .mat-link')).map(i => i.value.trim()).filter(Boolean);
+  const materials = Store.get('materials', []);
+  if (matEditingId) {
+    const x = materials.find(z => z.id === matEditingId);
+    if (x) { x.title = title; x.category = category; x.note = note; x.links = links; x.url = links[0] || ''; x.updatedAt = Date.now(); }
+  } else {
+    materials.unshift({ id: Date.now().toString(), title, category, note, links, url: links[0] || '', updatedAt: Date.now() });
+  }
+  Store.set('materials', materials);
+  closeMatModal();
+  renderMats();
+  toast('✅ 已保存');
 }
 function delMat(id) { Store.set('materials', Store.get('materials', []).filter(m => m.id !== id)); renderMats(); }
 
