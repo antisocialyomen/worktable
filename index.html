@@ -91,6 +91,8 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .btn-o:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-bg)}
 .btn-sm{padding:5px 10px;font-size:12px}
 .btn-icon{width:32px;height:32px;padding:0;justify-content:center;border-radius:8px}
+.cb-acts.task-acts{flex-direction:row;align-items:center;gap:4px;margin-left:8px}
+.cb-acts.task-acts .btn-icon{width:22px;height:22px;font-size:11px;border-radius:5px}
 .ig{display:flex;gap:8px;margin-bottom:12px}
 .in{flex:1;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px}
 .in:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(223,48,28,0.1)}
@@ -194,11 +196,15 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .cb .cc{width:18px;height:18px}
   .cb .ct{font-size:13px}
   .cb-acts{flex-direction:column;align-items:flex-end;gap:2px;margin-left:6px;flex:0 0 auto}
-  .cb-acts .btn-icon{width:28px;height:28px}
+  .cb-acts.task-acts{flex-direction:row;align-items:center;gap:2px}
+  .cb-acts.task-acts .btn-icon{width:20px;height:20px;font-size:10px;border-radius:5px}
   .cb-acts .tag{padding:1px 6px;font-size:11px}
   .page.active{padding-bottom:4px}
   #homeStats{grid-template-columns:repeat(2,1fr)!important}
   #homeStats .sc{flex-direction:row}
+  #calGrid{font-size:11px;gap:1px}
+  #calGrid>div{min-height:44px!important;padding:3px!important;overflow:hidden}
+  #calGrid .cal-emo{font-size:11px!important}
   h1#greeting{font-size:20px}
   .emp{padding:24px 12px}
   .emp i{font-size:36px}
@@ -211,7 +217,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 }
 /* ===== FOOD MODULE ===== */
 .food-tab{display:block}
-.w-btn{display:inline-flex;align-items:center;justify-content:center;min-width:64px;padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:var(--bg-card);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;transition:all var(--t)}
+.w-btn{display:inline-flex;align-items:center;justify-content:center;min-width:56px;padding:6px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg-card);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;transition:all var(--t)}
 .w-btn:hover{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);transform:translateY(-2px)}
 .w-btn:active{transform:scale(.95)}
 .w-log-item{display:inline-flex;align-items:center;gap:6px;background:var(--primary-bg);color:var(--primary);border-radius:8px;padding:3px 8px;margin:3px 4px 0 0;font-size:12px}
@@ -223,8 +229,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .cal-log-item .ci-v{font-weight:700;color:var(--primary)}
 .cal-log-item .x{cursor:pointer;color:var(--text3);margin-left:4px}
 .cal-log-item .x:hover{color:var(--d)}
-.eat-cat{display:inline-block;padding:6px 14px;border-radius:20px;background:var(--bg-card);border:1px solid var(--border);color:var(--text2);font-size:13px;cursor:pointer;margin:3px}
+.eat-cat{display:inline-block;padding:5px 12px;border-radius:20px;background:var(--bg-card);border:1px solid var(--border);color:var(--text2);font-size:13px;cursor:pointer;margin:3px;white-space:nowrap;flex:0 0 auto}
 .eat-cat.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.eat-cats-row{flex-wrap:nowrap !important;overflow-x:auto;padding-bottom:4px}
+.eat-cats-row::-webkit-scrollbar{display:none}
 .eat-item{display:inline-block;padding:4px 10px;border-radius:8px;background:var(--primary-bg);color:var(--text);font-size:13px;cursor:pointer}
 .eat-item:hover{background:var(--primary);color:#fff}
 .eat-item .x{margin-left:6px;opacity:.5;cursor:pointer}
@@ -233,15 +241,15 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 @keyframes pulse{from{opacity:.5}to{opacity:1}}
 
 /* ===== 年度/月度 点阵进度条 ===== */
-.yb-wrap{margin-top:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)}
-.yb-row{margin:0 0 16px}
+.yb-wrap{margin-top:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 12px;box-shadow:var(--shadow)}
+.yb-row{margin:0 0 10px}
 .yb-row:last-child{margin-bottom:0}
-.yb-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font);font-size:14px;color:var(--text);margin-bottom:9px}
-.yb-label{font-weight:600;font-size:15px;white-space:nowrap}
-.yb-data{font-size:12px;color:var(--text2);white-space:nowrap}
-.pixel{font-family:'VT323','DotGothic16',monospace;font-size:23px;line-height:1;color:#D10056;font-weight:400;letter-spacing:1px;vertical-align:middle;padding:0 1px}
-.dotbar{position:relative;display:flex;gap:5px;padding:6px;border-radius:25%;width:fit-content;overflow:hidden}
-.dotbar .dot{width:12px;height:12px;border-radius:25%;background:#EADDE2;flex:0 0 auto;transition:background .35s,box-shadow .35s}
+.yb-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font);font-size:13px;color:var(--text);margin-bottom:5px}
+.yb-label{font-weight:600;font-size:14px;white-space:nowrap}
+.yb-data{font-size:13px;color:var(--text2);white-space:nowrap;line-height:1.2}
+.pixel{font-family:'VT323','DotGothic16',monospace;font-size:13px;line-height:1.2;color:#D10056;font-weight:400;letter-spacing:1px;vertical-align:baseline;padding:0 1px}
+.dotbar{position:relative;display:flex;gap:4px;padding:3px;border-radius:35%;width:fit-content;overflow:hidden}
+.dotbar .dot{width:9px;height:9px;border-radius:35%;background:#EADDE2;flex:0 0 auto;transition:background .35s,box-shadow .35s}
 .dotbar .dot.on{background:#D10056;box-shadow:0 0 6px rgba(209,0,86,0.55)}
 [data-theme=dark] .dotbar .dot{background:#4A3038}
 [data-theme=dark] .dotbar .dot.on{background:#D10056;box-shadow:0 0 7px rgba(255,70,130,0.65)}
@@ -317,6 +325,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="nav-item" data-mod="schedule"><i class="fas fa-calendar"></i><span>日程</span></div>
       <div class="nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>笔记</span></div>
       <div class="nav-item" data-mod="study"><i class="fas fa-graduation-cap"></i><span>学习</span></div>
+      <div class="nav-item" data-mod="countdown"><i class="fas fa-hourglass-half"></i><span>倒数</span></div>
       <div class="nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
       <div class="nav-item" data-mod="drama"><i class="fas fa-film"></i><span>热播</span></div>
       <div class="nav-item" data-mod="data"><i class="fas fa-chart-bar"></i><span>数据</span></div>
@@ -341,10 +350,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
     <div class="content" id="contentArea">
       <!-- HOME -->
       <div class="page active" id="p-home">
-        <div style="margin-bottom:24px;position:relative">
-          <img src="assets/labubu-avatar.png" alt="Labubu" style="position:absolute;top:-10px;right:20px;width:48px;height:48px;border-radius:50%;object-fit:cover;opacity:0.85;pointer-events:none;user-select:none">
-          <h1 id="greeting" style="font-size:24px;font-weight:700">早上好 👋</h1>
-          <p style="color:var(--text2);margin-top:4px">今天也要高效工作，享受生活 ✨</p>
+        <div style="margin-bottom:16px;position:relative">
+          <img src="assets/labubu-avatar.png" alt="Labubu" style="position:absolute;top:-4px;right:14px;width:40px;height:40px;border-radius:50%;object-fit:cover;opacity:0.85;pointer-events:none;user-select:none">
+          <h1 id="greeting" style="font-size:21px;font-weight:700">早上好 👋</h1>
+          <p style="color:var(--text2);margin-top:2px;font-size:13px">今天也要高效工作，享受生活 ✨</p>
           <div class="yb-wrap">
             <div class="yb-row">
               <div class="yb-top"><span class="yb-label" id="ybYearLabel">2026年</span><span class="yb-data"><span class="pixel" id="ybYearPct">0%</span> / 2027还有<span class="pixel" id="ybYearDays">0</span>天</span></div>
@@ -355,31 +364,30 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
               <div class="dotbar" id="ybMonFill"></div>
             </div>
           </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
             <button class="btn btn-p" onclick="go('tasks')"><i class="fas fa-plus"></i> 快速新建任务</button>
             <button class="btn btn-a" onclick="go('life')"><i class="fas fa-coins"></i> 记一笔</button>
             <button class="btn btn-o" onclick="go('notes')"><i class="fas fa-lightbulb"></i> 灵感速记</button>
           </div>
         </div>
-        <div class="g4" id="homeStats">
-          <div class="sc"><div class="si si1"><i class="fas fa-tasks"></i></div><div class="si"><div class="num" id="hTasks">0</div><div class="label">今日待办</div></div></div>
-          <div class="sc"><div class="si si2"><i class="fas fa-check-circle"></i></div><div class="si"><div class="num" id="hDone">0</div><div class="label">已完成</div></div></div>
-          <div class="sc"><div class="si si3"><i class="fas fa-fire"></i></div><div class="si"><div class="num" id="hStreak">0</div><div class="label">连续打卡</div></div></div>
-          <div class="sc"><div class="si si4"><i class="fas fa-star"></i></div><div class="si"><div class="num" id="hNotes">0</div><div class="label">灵感笔记</div></div></div>
+        <div class="card" id="homeCombo">
+          <div class="ft" id="homeComboTabs" style="margin-bottom:10px">
+            <span class="fb active" data-h="tasks">📌 今日任务</span>
+            <span class="fb" data-h="habit">🔥 习惯</span>
+            <span class="fb" data-h="event">📅 日程</span>
+            <span class="fb" data-h="undo">📥 未完成</span>
+          </div>
+          <div id="homeComboBody"></div>
         </div>
-        <div class="g2" style="margin-top:16px">
-          <div class="card"><div class="card-hd"><h3>📌 今日任务</h3><span class="btn-sm btn-o" onclick="go('tasks')">查看全部 →</span></div><div id="homeTasks"></div></div>
-          <div class="card"><div class="card-hd"><h3>🔥 习惯打卡</h3><span class="btn-sm btn-o" onclick="go('life')">查看全部 →</span></div><div id="homeHabits"></div></div>
-        </div>
-        <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📅 今日日程</h3><span class="btn-sm btn-o" onclick="go('schedule')">查看全部 →</span></div><div id="homeEvents"></div></div>
-        <div class="card" id="homePeriod" style="margin-top:16px;display:none;border-left:4px solid var(--primary);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>🩸 经期提醒</h3><span class="btn-sm btn-o" onclick="go('life')">记录 / 详情 →</span></div><div id="homePeriodTip" style="font-size:14px;line-height:1.7"></div></div>
-        <div class="card" id="homeCountdown" style="margin-top:16px;display:none;border-left:4px solid var(--s);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>⏳ 倒数日提醒</h3><span class="btn-sm btn-o" onclick="go('schedule');switchSchedTab('cd')">管理 →</span></div><div id="homeCountdownTip" style="font-size:14px;line-height:1.6"></div></div>
+        <div class="card" id="homePeriod" style="margin-top:12px;display:none;border-left:4px solid var(--primary);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>🩸 经期提醒</h3><span class="btn-sm btn-o" onclick="go('life')">记录 / 详情 →</span></div><div id="homePeriodTip" style="font-size:14px;line-height:1.7"></div></div>
+        <div class="card" id="homeCountdown" style="margin-top:12px;display:none;border-left:4px solid var(--s);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>⏳ 倒数日提醒</h3><span class="btn-sm btn-o" onclick="go('countdown')">管理 →</span></div><div id="homeCountdownTip" style="font-size:14px;line-height:1.6"></div></div>
+        <div class="card" id="homeReminder" style="margin-top:12px;border-left:4px solid var(--w);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>🔔 提醒中心</h3><div style="margin-left:auto;display:flex;gap:6px"><button class="btn-sm btn-o" id="remNotifBtn" onclick="toggleRemNotif()"><i class="fas fa-bell"></i> 通知</button><button class="btn-sm btn-o" onclick="openReminderSettings()"><i class="fas fa-cog"></i> 设置</button></div></div><div id="reminderList" style="font-size:14px;line-height:1.6"></div></div>
       </div>
 
       <!-- TASKS -->
       <div class="page" id="p-tasks">
         <div class="card">
-          <div class="ig"><input class="in" id="taskInput" placeholder="输入新任务，按 Enter 添加..." onkeydown="if(event.key==='Enter') addTask()"><select class="in" id="taskPri" style="flex:0 0 auto;width:100px"><option value="m">普通</option><option value="h">紧急</option><option value="l">低优</option></select><button class="btn btn-p" onclick="addTask()"><i class="fas fa-plus"></i> 添加</button></div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn btn-p" onclick="openTaskModal()"><i class="fas fa-plus"></i> 添加</button></div>
           <div class="ft" id="taskFilter">
             <span class="fb active" data-f="all">全部</span>
             <span class="fb" data-f="today">今天</span>
@@ -403,25 +411,82 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb" data-t="collection">📚 书影音</span>
           <span class="fb" data-t="period">🩸 经期</span>
         </div>
-        <div class="life-tab" id="l-expense">
-          <div class="g2"><div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div><div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01"><select class="in" id="expType" style="flex:0 0 auto;width:80px"><option value="e">支出</option><option value="i">收入</option></select></div><div class="ig"><select class="in" id="expCat" onchange="onExpCatChange()"><option value="餐饮">🍜 餐饮</option><option value="交通">🚗 交通</option><option value="购物">🛍️ 购物</option><option value="娱乐">🎮 娱乐</option><option value="学习">📚 学习</option><option value="医疗">💊 医疗</option><option value="住房">🏠 住房</option><option value="薪资">💰 薪资</option><option value="其他">📦 其他</option></select><select class="in" id="expSub" style="flex:0 0 auto;width:120px"></select><input class="in" id="expNote" placeholder="备注"><button class="btn-sm btn-o" onclick="manageExpSubs()" title="管理二级分类" style="flex:0 0 auto"><i class="fas fa-cog"></i></button><button class="btn btn-p" onclick="addExpense()"><i class="fas fa-plus"></i></button></div><div style="margin-top:8px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number"><button class="btn-sm btn-a" onclick="setBudget()">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div></div><div class="card"><div class="card-hd"><h3>📊 月度分析</h3><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expMonthLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="month" id="expMonth" onchange="renderExpChart()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"></div></div><div style="height:200px"><canvas id="expChart"></canvas></div></div></div>
-          <div class="card"><div class="card-hd"><h3>📈 年度分析 <span id="annYearLabel" style="font-size:13px;color:var(--text2)"></span></h3><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expYearLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="number" id="expYear" onchange="renderAnnual()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px;width:90px"></div></div><div class="g2" style="margin-top:8px"><div style="height:240px"><canvas id="annChart"></canvas></div><div id="annSummary" style="min-height:200px;display:flex;align-items:center"></div></div></div>
-          <div class="card"><div class="card-hd"><h3>📋 收支明细</h3><button class="btn-sm btn btn-o" onclick="exportCSV()"><i class="fas fa-download"></i> 导出CSV</button></div><div class="g4" id="expTotals" style="margin:8px 0 12px"></div><div class="ft" id="expPeriodTabs" style="margin-bottom:10px"><span class="fb active" data-p="all">全部</span><span class="fb" data-p="day">按天</span><span class="fb" data-p="month">按月</span><span class="fb" data-p="year">按年</span></div><div id="expList"></div></div>
-          <div class="card" style="margin-top:12px"><div class="card-hd"><h3>😰 情绪化消费</h3><span class="tag t3">自动识别</span></div><div id="emoStat" style="margin-bottom:12px"></div><div id="emoList"></div></div>
+                <div class="life-tab" id="l-expense" style="display:none">
+          <div class="ft" id="expTabs" style="margin-bottom:14px">
+            <span class="fb active" data-e="record">💰 记账</span>
+            <span class="fb" data-e="bill">📑 账单</span>
+            <span class="fb" data-e="stat">📊 统计</span>
+            <span class="fb" data-e="emo">😰 情绪化</span>
+          </div>
+
+          <!-- 记账 -->
+          <div class="exp-pane" id="e-record">
+            <div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div>
+              <div class="ig"><input class="in" id="expNl" placeholder="例：午餐20元 / 1月1日午餐20元" style="flex:1;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()"><button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">智能填充</button></div>
+              <div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01" style="flex:0 0 38%"><input class="in" id="expDate" type="date" style="flex:0 0 30%"><select class="in" id="expType" onchange="onExpTypeChange()" style="flex:0 0 22%"><option value="e">支出</option><option value="i">收入</option></select></div>
+              <div class="ig"><select class="in" id="expCat" onchange="onExpCatChange()" style="flex:1 1 40%"></select><select class="in" id="expSub" style="flex:1 1 34%"></select></div>
+              <div class="ig"><input class="in" id="expNote" placeholder="备注" style="flex:1 1 58%"><button class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto"><i class="fas fa-cog"></i></button><button class="btn btn-p" onclick="addExpense()" style="flex:0 0 auto"><i class="fas fa-plus"></i></button></div>
+              <div class="g3" style="margin-top:12px" id="assetCards">
+                <div class="sc"><div class="si si1"><i class="fas fa-wallet"></i></div><div class="si"><div class="num" id="dispNet">¥0.00</div><div class="label">净资产 <i class="fas fa-eye" id="eyeNet" onclick="toggleAssetEye('net')" style="cursor:pointer;color:var(--text3)"></i></div></div></div>
+                <div class="sc"><div class="si si1"><i class="fas fa-piggy-bank"></i></div><div class="si"><div class="num" id="dispAssets">¥0.00</div><div class="label">总资产 <i class="fas fa-eye" id="eyeAssets" onclick="toggleAssetEye('assets')" style="cursor:pointer;color:var(--text3)"></i></div></div></div>
+                <div class="sc"><div class="si si1"><i class="fas fa-credit-card"></i></div><div class="si"><div class="num" id="dispDebts">¥0.00</div><div class="label">总负债 <i class="fas fa-eye" id="eyeDebts" onclick="toggleAssetEye('debts')" style="cursor:pointer;color:var(--text3)"></i></div></div></div>
+              </div>
+              <div class="ig" style="margin-top:10px"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:1 1 38%"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:1 1 38%"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto">设置</button></div>
+              <div style="margin-top:10px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number" style="flex:1 1 58%"><button class="btn-sm btn-a" onclick="setBudget()" style="flex:0 0 auto">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div>
+            </div>
+            <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📋 最近记录</h3><button class="btn-sm btn btn-o" onclick="switchExpTab('bill')"><i class="fas fa-list"></i> 看账单</button></div><div id="expRecent"></div></div>
+          </div>
+
+          <!-- 账单 -->
+          <div class="exp-pane" id="e-bill" style="display:none">
+            <div class="card"><div class="card-hd"><h3>📑 账单</h3>
+              <select id="billDim" onchange="renderBill()" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><option value="day">日</option><option value="month" selected>月</option><option value="year">年</option></select>
+            </div>
+              <div class="g4" id="billTotals" style="margin:8px 0 12px"></div>
+              <div id="expList"></div>
+              <div style="text-align:right;margin-top:10px"><button class="btn-sm btn btn-o" onclick="exportCSV()"><i class="fas fa-download"></i> 导出CSV</button></div>
+            </div>
+          </div>
+
+          <!-- 统计 -->
+          <div class="exp-pane" id="e-stat" style="display:none">
+            <div class="card"><div class="card-hd"><h3>📊 统计分析</h3>
+              <div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="statScopeTabs" style="margin:0"><span class="fb active" data-s="month">月度</span><span class="fb" data-s="year">年度</span></div></div>
+            </div>
+            <div id="statMonthWrap">
+              <div class="card-hd" style="margin-top:6px"><h3 style="font-size:14px">月度分析</h3><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expMonthLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="month" id="expMonth" onchange="renderStat()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"></div></div>
+              <div class="g2" style="margin-top:8px"><div style="height:240px"><canvas id="expChart"></canvas></div><div id="statMonthSummary" style="min-height:200px;display:flex;align-items:center"></div></div>
+            </div>
+            <div id="statYearWrap" style="display:none">
+              <div class="card-hd" style="margin-top:6px"><h3 style="font-size:14px">年度分析 <span id="annYearLabel" style="font-size:13px;color:var(--text2)"></span></h3><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expYearLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="number" id="expYear" onchange="renderStat()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px;width:90px"></div></div>
+              <div class="g2" style="margin-top:8px"><div style="height:240px"><canvas id="annChart"></canvas></div><div id="statYearSummary" style="min-height:200px;display:flex;align-items:center"></div></div>
+            </div>
+          </div>
+        </div>
+
+          <!-- 情绪化 -->
+          <div class="exp-pane" id="e-emo" style="display:none">
+            <div class="card"><div class="card-hd"><h3>😰 情绪化消费</h3><span class="tag t3">自动识别</span></div><div id="emoStat" style="margin-bottom:12px"></div><div id="emoList"></div></div>
+          </div>
         </div>
         <div class="life-tab" id="l-habit" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>🔥 我的习惯</h3><button class="btn-sm btn-p" onclick="addHabit()"><i class="fas fa-plus"></i> 新建</button></div><div id="habitList"></div></div><div class="card"><div class="card-hd"><h3>📅 本月打卡</h3></div><div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div><div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text2)">本月打卡 <span id="monthCheck">0</span> 天</div></div></div></div>
         <div class="life-tab" id="l-health" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><button class="btn btn-p" onclick="addHealth()">记录</button></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3>📈 体重趋势</h3></div><div style="height:200px"><canvas id="weightChart"></canvas></div></div></div><div class="card"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="healthList"></div></div></div>
         <div class="life-tab" id="l-shopping" style="display:none"><div class="card"><div class="card-hd"><h3>🛒 购物清单</h3></div><div class="ig"><input class="in" id="shopIn" placeholder="添加购物项..." onkeydown="if(event.key==='Enter') addShop()"><select class="in" id="shopCat" style="flex:0 0 auto;width:100px"><option value="食品">食品</option><option value="日用品">日用品</option><option value="服饰">服饰</option><option value="数码">数码</option><option value="其他">其他</option></select><button class="btn btn-p" onclick="addShop()"><i class="fas fa-plus"></i></button></div><div id="shopList"></div></div></div>
         <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="card-hd"><h3>📚 书影音收藏</h3><button class="btn-sm btn-p" onclick="addColl()"><i class="fas fa-plus"></i> 添加</button></div><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="music">🎵 音乐</option></select></div><div id="collList" style="margin-top:8px"></div></div></div>
         <div class="life-tab" id="l-period" style="display:none">
-          <div class="g2">
-            <div class="card"><div class="card-hd"><h3>🩸 记录经期</h3></div>
-              <div class="ig"><input class="in" id="perStart" type="date" style="flex:1"><input class="in" id="perLen" type="number" min="1" placeholder="天数" style="flex:0 0 auto;width:72px;margin-left:6px"></div>
-              <div style="font-size:12px;color:var(--text3);margin-top:6px">或填结束日（自动算天数）：<input class="in" id="perEnd" type="date" style="display:inline-block;width:auto;margin-left:4px"></div>
-              <div class="ig" style="margin-top:10px"><input class="in" id="perNote" placeholder="备注（如量/身体感受）"><button class="btn btn-p" onclick="addPeriod()"><i class="fas fa-plus"></i> 记录</button></div>
+          <div class="card">
+            <div class="card-hd"><h3>🩸 经期日历</h3>
+              <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+                <button class="btn-sm btn-o" onclick="chPerMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                <span id="perCalLabel" style="font-weight:600;font-size:15px;min-width:84px;text-align:center"></span>
+                <button class="btn-sm btn-o" onclick="chPerMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                <button class="btn-sm btn-a" onclick="perDate=new Date();renderPeriodCalendar()">今天</button>
+              </div>
             </div>
-            <div class="card"><div class="card-hd"><h3>🔮 周期预测</h3></div><div id="perPredict"></div></div>
+            <div id="perCalGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px"></div>
+            <div style="font-size:12px;color:var(--text3);margin-top:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span>经量：</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#FFB3C6"></span>少</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#FF6B8A"></span>中</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#D10056"></span>多</span><span style="margin-left:auto">点击日期记录 / 编辑</span></div>
           </div>
+          <div class="card" style="margin-top:16px"><div class="card-hd"><h3>🔮 周期预测</h3></div><div id="perPredict"></div></div>
           <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="periodList"></div></div>
         </div>
 
@@ -429,8 +494,6 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
       <!-- SCHEDULE -->
       <div class="page" id="p-schedule">
-        <div class="ft" id="schedTabs" style="margin-bottom:16px"><span class="fb active" data-s="cal">📅 日历</span><span class="fb" data-s="cd">⏳ 倒数日</span></div>
-
         <!-- 日历 + 近期日程 -->
         <div class="sched-tab" id="s-cal">
           <div class="card"><div class="card-hd"><h3>📅 日程</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="addEvent()"><i class="fas fa-plus"></i> 新建日程</button><button class="btn-sm btn-a" onclick="openMoodModal()" style="margin-left:6px"><i class="fas fa-plus"></i> 新建日志</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
@@ -438,29 +501,30 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📓 心情日志</h3><button class="btn-sm btn-a" onclick="openMoodModal()"><i class="fas fa-plus"></i> 写日志</button></div><div id="moodLogList"></div></div>
         </div>
 
-        <!-- 倒数日 -->
-        <div class="sched-tab" id="s-cd" style="display:none">
-          <div class="card"><div class="card-hd"><h3>⏳ 新建倒数日</h3></div>
-            <div class="ig"><input class="in" id="cdName" placeholder="事件名称（如：生日、纪念日）" style="flex:1 1 100%"></div>
-            <div class="ig" style="margin-top:8px">
-              <select class="in" id="cdCalType" style="flex:0 0 auto;width:120px" onchange="onCDCalType()">
-                <option value="solar">公历</option>
-                <option value="lunar">农历</option>
-              </select>
-              <input class="in" id="cdTarget" type="date" style="flex:1">
-              <div id="cdLunarSel" style="display:none;flex:0 0 auto;gap:6px;align-items:center">
-                <select class="in" id="cdLm" style="width:74px"></select>
-                <select class="in" id="cdLd" style="width:70px"></select>
-                <label style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:3px"><input type="checkbox" id="cdLleap"> 闰月</label>
-              </div>
+      </div>
+
+      <!-- COUNTDOWN -->
+      <div class="page" id="p-countdown">
+        <div class="card"><div class="card-hd"><h3>⏳ 新建倒数日</h3></div>
+          <div class="ig"><input class="in" id="cdName" placeholder="事件名称（如：生日、纪念日）" style="flex:1 1 100%"></div>
+          <div class="ig" style="margin-top:8px">
+            <select class="in" id="cdCalType" style="flex:0 0 auto;width:120px" onchange="onCDCalType()">
+              <option value="solar">公历</option>
+              <option value="lunar">农历</option>
+            </select>
+            <input class="in" id="cdTarget" type="date" style="flex:1">
+            <div id="cdLunarSel" style="display:none;flex:0 0 auto;gap:6px;align-items:center">
+              <select class="in" id="cdLm" style="width:74px"></select>
+              <select class="in" id="cdLd" style="width:70px"></select>
+              <label style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:3px"><input type="checkbox" id="cdLleap"> 闰月</label>
             </div>
-            <div style="font-size:12px;color:var(--text3);margin-top:6px" id="cdTargetHint"></div>
-            <div class="ig" style="margin-top:10px"><span style="font-size:13px;color:var(--text2);align-self:center">重复提醒</span><select class="in" id="cdRepeat" style="flex:1"><option value="none">不重复</option><option value="daily">每天</option><option value="weekly">每周</option><option value="monthly">每月</option><option value="yearly">每年</option></select></div>
-            <div class="ig" style="margin-top:8px"><span style="font-size:13px;color:var(--text2);align-self:center">事件颜色</span><div id="cdColors" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
-            <div style="text-align:right;margin-top:12px"><button class="btn btn-p" onclick="saveCountdown()"><i class="fas fa-save"></i> 保存</button></div>
           </div>
-          <div class="card"><div class="card-hd"><h3>📑 我的倒数日</h3></div><div id="cdList"></div></div>
+          <div style="font-size:12px;color:var(--text3);margin-top:6px" id="cdTargetHint"></div>
+          <div class="ig" style="margin-top:10px"><span style="font-size:13px;color:var(--text2);align-self:center">重复提醒</span><select class="in" id="cdRepeat" style="flex:1"><option value="none">不重复</option><option value="daily">每天</option><option value="weekly">每周</option><option value="monthly">每月</option><option value="yearly">每年</option></select></div>
+          <div class="ig" style="margin-top:8px"><span style="font-size:13px;color:var(--text2);align-self:center">事件颜色</span><div id="cdColors" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
+          <div style="text-align:right;margin-top:12px"><button class="btn btn-p" onclick="saveCountdown()"><i class="fas fa-save"></i> 保存</button></div>
         </div>
+        <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📑 我的倒数日</h3></div><div id="cdList"></div></div>
       </div>
 
       <!-- NOTES -->
@@ -517,7 +581,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <!-- 积累本 -->
         <div class="study-tab" id="s-book" style="display:none">
           <div class="card">
-            <div class="card-hd"><h3>📚 我的积累本</h3><span class="btn-sm btn-o" onclick="clearBook()" style="color:var(--d)"><i class="fas fa-trash"></i> 清空</span></div>
+            <div class="card-hd"><h3>📚 我的积累本</h3><div style="display:flex;gap:6px;align-items:center"><input class="in" id="bookSearch" placeholder="搜索积累本..." oninput="renderBook()" style="width:140px;font-size:12px;padding:5px 10px"><span class="btn-sm btn-o" onclick="clearBook()" style="color:var(--d)"><i class="fas fa-trash"></i> 清空</span></div></div>
             <div id="bookList"></div>
           </div>
         </div>
@@ -525,23 +589,29 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
       <!-- HOT NEWS -->
       <div class="page" id="p-hotnews">
-        <div class="card"><div class="card-hd"><h3>🔥 实时热点</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-p" id="newsRefreshBtn" onclick="fetchNews()"><i class="fas fa-sync"></i> 刷新</button><button class="btn-sm btn-o" onclick="showReadLater()"><i class="fas fa-bookmark"></i> 稍后阅读 (<span id="laterCount">0</span>)</button></div></div><div class="ft" id="newsTabs">
-          <span class="fb active" data-p="weibo">微博</span>
-          <span class="fb" data-p="douyin">抖音</span>
-          <span class="fb" data-p="baidu">百度</span>
-          <span class="fb" data-p="zhihu">知乎</span>
-          <span class="fb" data-p="bilibili">B站</span>
-          <span class="fb" data-p="jinritoutiao">头条</span>
-        </div><div id="newsList"><div class="emp"><i class="fas fa-newspaper"></i><p>点击「刷新」获取最新热点 🔥</p></div></div></div>
-        <div class="card" id="laterSection" style="display:none"><div class="card-hd"><h3>📑 稍后阅读</h3></div><div id="laterList"></div></div>
+        <div class="card"><div class="card-hd"><h3 id="newsTitle">🔥 实时热点</h3><button class="btn-sm btn-p" id="newsRefreshBtn" onclick="fetchNews()"><i class="fas fa-sync"></i> 刷新</button></div>
+          <div class="ft" id="newsTabs">
+            <span class="fb active" data-p="weibo">微博</span>
+            <span class="fb" data-p="douyin">抖音</span>
+            <span class="fb" data-p="baidu">百度</span>
+            <span class="fb" data-p="zhihu">知乎</span>
+            <span class="fb" data-p="bilibili">B站</span>
+            <span class="fb" data-p="jinritoutiao">头条</span>
+            <span class="fb" data-p="finance">💹 财经</span>
+            <span class="fb" data-p="later">📑 稍后阅读 (<span id="laterCount">0</span>)</span>
+          </div>
+          <div id="newsList"><div class="emp"><i class="fas fa-newspaper"></i><p>点击「刷新」获取最新热点 🔥</p></div></div>
+          <div id="laterPage" style="display:none"><div id="laterList"></div></div>
+        </div>
       </div>
 
       <!-- DRAMA -->
       <div class="page" id="p-drama">
-        <div class="card"><div class="card-hd"><h3>🎬 热播剧集</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-a" id="dramaRefreshBtn" onclick="fetchDramas()"><i class="fas fa-sync"></i> 刷新</button><button class="btn-sm btn-o" onclick="showWant()"><i class="fas fa-heart"></i> 想看 (<span id="wantCount">0</span>)</button></div></div><div class="ft" id="dramaTabs">
+        <div class="card"><div class="card-hd"><h3>🎬 热播剧集</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-a" id="dramaRefreshBtn" onclick="fetchDramas()"><i class="fas fa-sync"></i> 刷新</button><button class="btn-sm btn-o" onclick="switchDramaTab('want')"><i class="fas fa-heart"></i> 想看 (<span id="wantCount">0</span>)</button></div></div>        <div class="ft" id="dramaTabs">
           <span class="fb active" data-d="tv">📺 电视剧</span>
           <span class="fb" data-d="movie">🎬 电影</span>
           <span class="fb" data-d="variety">🎪 综艺</span>
+          <span class="fb" data-d="want">💖 想看</span>
         </div><div class="mg" id="dramaList"><div class="emp" style="grid-column:1/-1"><i class="fas fa-film"></i><p>点击「刷新」获取热播剧集 🎬</p></div></div></div>
         <div class="card" id="wantSection" style="display:none"><div class="card-hd"><h3>💖 想看</h3></div><div class="mg" id="wantList"></div></div>
       </div>
@@ -555,7 +625,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <div class="sc"><div class="si si4"><i class="fas fa-trophy"></i></div><div class="si"><div class="num" id="dRate">0%</div><div class="label">完成率</div></div></div>
         </div>
         <div class="g2"><div class="card"><div class="card-hd"><h3>📈 任务完成趋势</h3></div><div style="height:220px"><canvas id="trendChart"></canvas></div></div><div class="card"><div class="card-hd"><h3>🎯 任务分类分布</h3></div><div style="height:220px"><canvas id="distChart"></canvas></div></div></div>
-        <div class="card"><div class="card-hd"><h3>📋 周报生成</h3><button class="btn-sm btn-p" onclick="genReport()"><i class="fas fa-file-alt"></i> 生成周报</button></div><div id="weeklyReport" style="font-size:14px;color:var(--text2);white-space:pre-wrap;margin-top:8px"></div></div>
+        <div class="card"><div class="card-hd"><h3>📋 周报生成</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-p" id="genReportBtn" onclick="genReport()"><i class="fas fa-file-alt"></i> 生成周报</button><button class="btn-sm btn-o" id="reGenReportBtn" onclick="genReport(true)" style="display:none"><i class="fas fa-redo"></i> 重新生成</button></div></div><div id="weeklyReport" style="font-size:14px;color:var(--text2);white-space:pre-wrap;margin-top:8px"></div></div>
       </div>
 
       <!-- FILES -->
@@ -581,6 +651,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb active" data-f="water">💧 饮水计划</span>
           <span class="fb" data-f="calorie">🔥 热量计算</span>
           <span class="fb" data-f="eat">🎲 吃什么</span>
+          <span class="fb" data-f="shop">🍽️ 探店</span>
         </div>
 
         <!-- 饮水计划 -->
@@ -635,15 +706,23 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <!-- 吃什么 -->
         <div class="food-tab" id="f-eat" style="display:none">
           <div class="card"><div class="card-hd"><h3>🎲 吃什么</h3><button class="btn-sm btn-o" onclick="openEatCatsModal()"><i class="fas fa-cog"></i> 管理分类</button></div>
-            <div class="ft" id="eatCats" style="margin-bottom:12px;flex-wrap:wrap"></div>
-            <div id="eatItems" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;align-items:center"></div>
-            <div style="text-align:center;padding:14px 0">
-              <div id="eatRoulette" style="min-height:90px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:var(--primary);padding:14px;border:2px dashed var(--border);border-radius:14px;background:var(--primary-bg)">选个分类，开始掷骰子 🎲</div>
-              <div style="margin-top:14px">
-                <button class="btn btn-p" id="eatRollBtn" onclick="startRoll()" style="font-size:15px;padding:10px 24px"><i class="fas fa-dice"></i> 开始</button>
+            <div class="ft eat-cats-row" id="eatCats" style="margin-bottom:12px;flex-wrap:nowrap;overflow-x:auto"></div>
+            <div style="text-align:center;padding:10px 0">
+              <div id="eatRoulette" style="min-height:72px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--primary);padding:10px;border:2px dashed var(--border);border-radius:14px;background:var(--primary-bg)">选个分类，开始掷骰子 🎲</div>
+              <div style="margin-top:10px">
+                <button class="btn btn-p" id="eatRollBtn" onclick="startRoll()" style="font-size:14px;padding:8px 20px"><i class="fas fa-dice"></i> 开始</button>
               </div>
-              <div style="font-size:12px;color:var(--text3);margin-top:8px">点击「开始」随机闪现词条，再点「停止」留下一个。</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:6px">点击「开始」随机闪现词条，再点「停止」留下一个。</div>
             </div>
+            <div id="eatItems" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center"></div>
+          </div>
+        </div>
+
+        <!-- 探店 -->
+        <div class="food-tab" id="f-shop" style="display:none">
+          <div class="card"><div class="card-hd"><h3>🍽️ 探店</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-o" onclick="document.getElementById('shopSearch').focus()"><i class="fas fa-search"></i> 搜索</button><button class="btn-sm btn-p" onclick="openShopModal()"><i class="fas fa-plus"></i> 新建店名</button></div></div>
+            <div class="ig" style="margin-bottom:12px"><input class="in" id="shopSearch" placeholder="搜索店名、地址、菜品或备注..." oninput="renderShops()" style="flex:1"></div>
+            <div id="shopList"></div>
           </div>
         </div>
       </div>
@@ -666,6 +745,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <div class="m-nav-item" data-mod="food"><i class="fas fa-utensils"></i><span>吃啥</span></div>
         <div class="m-nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>灵感</span></div>
         <div class="m-nav-item" data-mod="study"><i class="fas fa-graduation-cap"></i><span>学习</span></div>
+        <div class="m-nav-item" data-mod="countdown"><i class="fas fa-hourglass-half"></i><span>倒数</span></div>
         <div class="m-nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
         <div class="m-nav-item" data-mod="drama"><i class="fas fa-film"></i><span>剧集</span></div>
         <div class="m-nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>设置</span></div>
@@ -701,8 +781,52 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         <span class="modal-x" onclick="closeEatCatsModal()"><i class="fas fa-times"></i></span>
       </div>
     </div>
-    <div id="eatNewCatWrap"></div>
-    <div id="eatCatsList"></div>
+  <div id="eatNewCatWrap"></div>
+  <div id="eatCatsList"></div>
+  </div>
+</div>
+
+<!-- 探店编辑弹窗 -->
+<div class="mask hide" id="shopMask" onclick="if(event.target===this)closeShopModal()">
+  <div class="modal" style="max-width:520px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3 id="shopMaskTitle">🍽️ 新增店铺</h3><span class="modal-x" onclick="closeShopModal()"><i class="fas fa-times"></i></span></div>
+    <div id="shopMaskBody">
+      <div class="ig"><input class="in" id="shopName" placeholder="店名 *" style="flex:1"></div>
+      <div class="ig"><input class="in" id="shopAddr" placeholder="地址（选填）" style="flex:1"></div>
+      <div class="ig"><input class="in" id="shopSig" placeholder="招牌菜（选填）" style="flex:1"></div>
+      <div class="ig"><input class="in" id="shopDate" type="date" style="flex:1 1 45%"><select class="in" id="shopRate" style="flex:1 1 45%"><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option><option value="2">⭐⭐</option><option value="1">⭐</option></select></div>
+      <div class="ig"><input class="in" id="shopNote" placeholder="备注（选填）" style="flex:1"></div>
+      <div style="font-size:13px;font-weight:600;margin:10px 0 6px">菜品打分</div>
+      <div id="shopDishList"></div>
+      <div class="ig" style="margin-top:8px"><input class="in" id="shopNewDish" placeholder="新增菜名" style="flex:1"><button class="btn-sm btn-p" onclick="addShopDish()">添加</button></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-o" onclick="closeShopModal()">取消</button>
+        <button class="btn btn-p" onclick="saveShop()"><i class="fas fa-save"></i> 保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 任务编辑弹窗 -->
+<div class="mask hide" id="taskMask" onclick="if(event.target===this)closeTaskModal()">
+  <div class="modal" style="max-width:420px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3 id="taskMaskTitle">📝 添加任务</h3><span class="modal-x" onclick="closeTaskModal()"><i class="fas fa-times"></i></span></div>
+    <div id="taskMaskBody">
+      <div class="ig" style="margin-bottom:10px"><input class="in" id="taskEditTitle" placeholder="输入任务事项..." style="flex:1"></div>
+      <div class="ig"><select class="in" id="taskEditPri" style="flex:1"><option value="m">普通</option><option value="h">紧急</option><option value="l">低优</option></select></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-o" onclick="closeTaskModal()">取消</button>
+        <button class="btn btn-p" onclick="saveTask()"><i class="fas fa-save"></i> 保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 通用弹窗（分类管理 / 分类明细） -->
+<div class="mask hide" id="genMask" onclick="if(event.target===this)closeGenMask()">
+  <div class="modal" style="max-width:520px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3 id="genMaskTitle">弹窗</h3><span class="modal-x" onclick="closeGenMask()"><i class="fas fa-times"></i></span></div>
+    <div id="genMaskBody"></div>
   </div>
 </div>
 
@@ -1566,12 +1690,12 @@ function toast(msg) {
 // ===== NAVIGATION =====
 const MOD_NAMES = {
   home:'首页', tasks:'任务', life:'日常', schedule:'日程',
-  notes:'笔记', study:'学习', hotnews:'热点', drama:'热播', data:'数据',
+  notes:'笔记', study:'学习', countdown:'倒数', hotnews:'热点', drama:'热播', data:'数据',
   content:'创作', food:'吃啥', settings:'设置'
 };
 const MOD_ICONS = {
   home:'fa-home', tasks:'fa-tasks', life:'fa-heart', schedule:'fa-calendar',
-  notes:'fa-lightbulb', study:'fa-graduation-cap', hotnews:'fa-fire', drama:'fa-film', data:'fa-chart-bar',
+  notes:'fa-lightbulb', study:'fa-graduation-cap', countdown:'fa-hourglass-half', hotnews:'fa-fire', drama:'fa-film', data:'fa-chart-bar',
   content:'fa-pen-fancy', food:'fa-utensils', settings:'fa-cog'
 };
 
@@ -1593,10 +1717,12 @@ function go(m) {
   document.getElementById('modTitle').textContent = MOD_NAMES[m] || m;
   document.getElementById('modIcon').className = 'fas ' + (MOD_ICONS[m] || 'fa-home') + ' mi';
   // Render module
-  if (m === 'data') setTimeout(renderDataCharts, 100);
+  if (m === 'data') { setTimeout(renderDataCharts, 100); setTimeout(checkReportStale, 150); }
   if (m === 'schedule') switchSchedTab((typeof schedTab !== 'undefined' && schedTab) || 'cal');
   if (m === 'food') switchFoodTab(foodTab);
   if (m === 'study') renderStudy();
+  if (m === 'life') switchLifeTab('expense');
+  if (m === 'countdown') { renderCountdowns(); onCDCalType(); }
   renderAll();
 }
 
@@ -1627,17 +1753,17 @@ document.addEventListener('DOMContentLoaded', function() {
       // Dispatch
       const parent = this.id;
       if (parent === 'taskFilter') renderTasks();
+      else if (parent === 'homeComboTabs') { homeComboTab = fb.getAttribute('data-h'); renderHomeCombo(); }
       else if (parent === 'lifeTabs') switchLifeTab(fb.getAttribute('data-t'));
       else if (parent === 'contentTabs') switchContentTab(fb.getAttribute('data-c'));
       else if (parent === 'newsTabs') renderNews(fb.getAttribute('data-p'));
       else if (parent === 'dramaTabs') renderDrama(fb.getAttribute('data-d'));
-      else if (parent === 'expPeriodTabs') switchExpPeriod(fb.getAttribute('data-p'));
       else if (parent === 'foodTabs') switchFoodTab(fb.getAttribute('data-f'));
-      else if (parent === 'schedTabs') switchSchedTab(fb.getAttribute('data-s'));
       else if (parent === 'studyTabs') switchStudyTab(fb.getAttribute('data-s'));
-      else if (parent === 'expMonthLevelTabs') { expMonthLevel = fb.getAttribute('data-l'); renderExpChart(); }
-      else if (parent === 'expYearLevelTabs') { expYearLevel = fb.getAttribute('data-l'); renderAnnual(); }
-      else if (parent === 'studyTabs') switchStudyTab(fb.getAttribute('data-s'));
+      else if (parent === 'expTabs') switchExpTab(fb.getAttribute('data-e'));
+      else if (parent === 'statScopeTabs') { expScope = fb.getAttribute('data-s'); renderStat(); }
+      else if (parent === 'expMonthLevelTabs') { expMonthLevel = fb.getAttribute('data-l'); renderStat(); }
+      else if (parent === 'expYearLevelTabs') { expYearLevel = fb.getAttribute('data-l'); renderStat(); }
     });
   });
   // Init
@@ -1748,6 +1874,8 @@ function initApp() {
   initGreeting();
   initTheme();
   WebDAV.init();
+  migratePeriods();
+  initReminders();
   const evDateEl = document.getElementById('evDate');
   if (evDateEl && !evDateEl.value) evDateEl.value = new Date().toISOString().slice(0, 10);
   renderAll();
@@ -1784,7 +1912,7 @@ function initTheme() {
 
 // ===== WEBDAV =====
 function readSyncData() {
-  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs'];
+  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs','incomeSubs','totalAssets','totalDebts','assetEyes','foodShops'];
   const d = {};
   keys.forEach(k => { d[k] = Store.get(k, null); });
   return d;
@@ -1835,8 +1963,10 @@ function mergeRecords(local, remote) {
     const rem = remote ? remote[key] : undefined;
     if (arrayKeys.includes(key) && Array.isArray(loc) && Array.isArray(rem)) {
       result[key] = mergeArrayById(loc, rem);
-    } else if (key === 'moodlogs' || key === 'expSubs') {
+    } else if (key === 'moodlogs' || key === 'expSubs' || key === 'incomeSubs') {
       // 对象按日期/分类键浅合并，避免单端覆盖另一端的键
+      result[key] = Object.assign({}, loc || {}, rem || {});
+    } else if (key === 'assetEyes') {
       result[key] = Object.assign({}, loc || {}, rem || {});
     } else {
       result[key] = rem !== undefined ? rem : loc;
@@ -2023,11 +2153,11 @@ function doSync() {
 
 // ===== RENDER ALL =====
 function renderAll() {
-  renderHome(); renderTasks(); renderNotes(); renderExpenses();
+  renderHome(); renderTasks(); renderNotes(); refreshExpense();
   renderHabits(); renderHealth(); renderShopping(); renderColl();
   renderTopics(); renderMats(); renderCalendar(); renderEvents();
   renderFood(); renderFiles(); updateBadge(); updateNewsBadge(); updateDramaBadge();
-  renderMoodLogs();
+  renderMoodLogs(); renderReminderCenter(); renderCountdowns(); renderCountdownHome();
 }
 
 // ===== BADGE =====
@@ -2043,33 +2173,33 @@ function updateBadge() {
 // HOME
 // ============================================================
 function renderHome() {
-  const tasks = Store.get('tasks', []);
-  const today = new Date().toISOString().slice(0, 10);
-  const tt = tasks.filter(t => t.date === today);
-  document.getElementById('hTasks').textContent = tt.length;
-  document.getElementById('hDone').textContent = tt.filter(t => t.done).length;
-  const habits = Store.get('habits', []);
-  let s = 0;
-  habits.forEach(h => { if (h.records && h.records.includes(today)) s++; });
-  document.getElementById('hStreak').textContent = s;
-  document.getElementById('hNotes').textContent = Store.get('notes', []).length;
-
-  const p = tt.filter(t => !t.done);
-  document.getElementById('homeTasks').innerHTML = p.length === 0
-    ? '<div class="emp" style="padding:20px"><p>🎉 今日任务已全部完成</p></div>'
-    : p.slice(0, 5).map(t => '<div class="cb" onclick="toggleTask(\'' + t.id + '\')"><input type="checkbox"' + (t.done ? 'checked' : '') + '><span class="cc"></span><span class="ct">' + t.title + '</span></div>').join('');
-
-  document.getElementById('homeHabits').innerHTML = habits.length === 0
-    ? '<div class="emp" style="padding:20px"><p>还没有习惯</p></div>'
-    : habits.slice(0, 4).map(h => '<div class="cb" onclick="toggleHabit(\'' + h.id + '\')"><input type="checkbox"' + (h.records && h.records.includes(today) ? 'checked' : '') + '><span class="cc"></span><span class="ct">' + h.name + '</span><span style="font-size:12px;color:var(--text3)">🔥 ' + (h.records ? h.records.length : 0) + '天</span></div>').join('');
-
-  const evToday = Store.get('events', []).filter(x => x.date === today);
-  document.getElementById('homeEvents').innerHTML = evToday.length === 0
-    ? '<div class="emp" style="padding:20px"><p>📭 今天没有日程安排</p></div>'
-    : evToday.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:12px;color:var(--text2)">📅 今日</span></div>').join('');
+  renderHomeCombo();
   renderPeriodHome();
   renderCountdownHome();
   renderYearBars();
+}
+let homeComboTab = 'tasks';
+function renderHomeCombo() {
+  const el = document.getElementById('homeComboBody');
+  if (!el) return;
+  const today = new Date().toISOString().slice(0, 10);
+  if (homeComboTab === 'tasks') {
+    const p = Store.get('tasks', []).filter(t => t.date === today && !t.done);
+    el.innerHTML = p.length === 0 ? '<div class="emp" style="padding:14px"><p>🎉 今日任务已全部完成</p></div>'
+      : p.map(t => '<div class="cb" onclick="toggleTask(\'' + t.id + '\')"><input type="checkbox"><span class="cc"></span><span class="ct">' + escHtml(t.title) + (t.pri === 'h' ? ' <span class="tag t3">紧急</span>' : '') + '</span></div>').join('') + '<div style="text-align:right;margin-top:6px"><span class="btn-sm btn-o" onclick="go(\'tasks\')">查看全部 →</span></div>';
+  } else if (homeComboTab === 'habit') {
+    const habits = Store.get('habits', []);
+    el.innerHTML = habits.length === 0 ? '<div class="emp" style="padding:14px"><p>还没有习惯</p></div>'
+      : habits.map(h => '<div class="cb" onclick="toggleHabit(\'' + h.id + '\')"><input type="checkbox"' + (h.records && h.records.includes(today) ? 'checked' : '') + '><span class="cc"></span><span class="ct">' + escHtml(h.name) + '</span><span style="font-size:12px;color:var(--text3)">🔥 ' + (h.records ? h.records.length : 0) + '天</span></div>').join('');
+  } else if (homeComboTab === 'event') {
+    const evToday = Store.get('events', []).filter(x => x.date === today);
+    el.innerHTML = evToday.length === 0 ? '<div class="emp" style="padding:14px"><p>📭 今天没有日程安排</p></div>'
+      : evToday.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + escHtml(x.title) + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + escHtml(x.note || '') + '</span></div><span style="font-size:12px;color:var(--text2)">📅 今日</span></div>').join('');
+  } else if (homeComboTab === 'undo') {
+    const all = Store.get('tasks', []).filter(t => !t.done && t.date && t.date < today).sort((a, b) => a.date.localeCompare(b.date));
+    el.innerHTML = all.length === 0 ? '<div class="emp" style="padding:14px"><p>✅ 没有历史未完成的任务</p></div>'
+      : '<div style="font-size:13px;color:var(--text2);margin-bottom:6px">共 ' + all.length + ' 条历史未完成任务（按截止日期排序）</div>' + all.map(t => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + escHtml(t.title) + '<span style="font-size:12px;color:var(--text3);margin-left:6px">截止 ' + t.date + '</span></div><span class="btn-sm btn-o" onclick="go(\'tasks\')">去处理 →</span></div>').join('');
+  }
 }
 
 // 年度 / 月度 点阵进度条（随现实时间同步）
@@ -2119,45 +2249,46 @@ function pAddDays(d, n) { const dt = new Date(Date.parse(d) + n * 86400000); ret
 function pDiff(a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 86400000); }
 function pMD(s) { if (!s) return ''; const p = s.split('-'); return parseInt(p[1]) + '月' + parseInt(p[2]) + '日'; }
 
-function predictPeriod() {
-  const ps = (Store.get('periods', []) || []).slice().sort((a, b) => a.start < b.start ? -1 : 1);
-  if (ps.length < 2) return null;
-  const cycles = [];
-  for (let i = 1; i < ps.length; i++) {
-    const c = pDiff(ps[i - 1].start, ps[i].start);
-    if (c > 0) cycles.push(c);
+function periodRuns(pd) {
+  const days = Object.keys(pd || {}).filter(d => pd[d] && pd[d].flow && pd[d].flow !== 'none').sort();
+  const runs = [];
+  let cur = null;
+  for (const d of days) {
+    if (cur && pDiff(cur.end, d) === 1) { cur.end = d; cur.days.push(d); }
+    else { cur = { start: d, end: d, days: [d] }; runs.push(cur); }
   }
+  return runs;
+}
+
+function predictPeriod() {
+  const runs = periodRuns(Store.get('periodDays', {}));
+  if (runs.length < 2) return null;
+  const cycles = [];
+  for (let i = 1; i < runs.length; i++) { const c = pDiff(runs[i - 1].start, runs[i].start); if (c > 0) cycles.push(c); }
   if (!cycles.length) return null;
   const last3 = cycles.slice(-3);
   const avgCycle = Math.round(last3.reduce((a, b) => a + b, 0) / last3.length);
-  const avgLen = Math.round(ps.reduce((a, b) => a + (b.length || 7), 0) / ps.length);
-  const lastStart = ps[ps.length - 1].start;
-  const nextStart = pAddDays(lastStart, avgCycle);
+  const avgLen = Math.round(runs.reduce((a, b) => a + b.days.length, 0) / runs.length);
+  const last = runs[runs.length - 1];
+  const nextStart = pAddDays(last.start, avgCycle);
   const nextEnd = pAddDays(nextStart, avgLen - 1);
-  return { avgCycle, avgLen, lastStart, nextStart, nextEnd, count: ps.length };
+  return { avgCycle, avgLen, lastStart: last.start, nextStart, nextEnd, count: runs.length };
 }
 
 function periodTip() {
-  const ps = Store.get('periods', []) || [];
-  if (!ps.length) return '';
+  const runs = periodRuns(Store.get('periodDays', {}));
+  if (!runs.length) return '';
   const today = new Date().toISOString().slice(0, 10);
-  const sorted = ps.slice().sort((a, b) => a.start < b.start ? 1 : -1);
-  const last = sorted[0];
-  const lastLen = last.length || 7;
-  const lastEnd = pAddDays(last.start, lastLen - 1);
-  if (today >= last.start && today <= lastEnd) {
-    const remain = pDiff(today, lastEnd) + 1;
+  const last = runs[runs.length - 1];
+  if (today >= last.start && today <= last.end) {
+    const remain = pDiff(today, last.end) + 1;
     return '🩸 经期进行中，预计还有 <b>' + remain + ' 天</b>结束，注意休息与保暖～';
   }
   const pr = predictPeriod();
   if (pr) {
     const days = pDiff(today, pr.nextStart);
-    if (days >= 0 && days <= 3) {
-      return '🩸 预计 <b>' + pMD(pr.nextStart) + '</b> 来潮，还有 <b>' + days + ' 天</b>，记得备好卫生用品～';
-    }
-    if (days < 0 && today <= pr.nextEnd) {
-      return '🩸 预测经期应在 <b>' + pMD(pr.nextStart) + '</b> 开始，若已开始请到「生活管理」记录一下';
-    }
+    if (days >= 0 && days <= 3) return '🩸 预计 <b>' + pMD(pr.nextStart) + '</b> 来潮，还有 <b>' + days + ' 天</b>，记得备好卫生用品～';
+    if (days < 0 && today <= pr.nextEnd) return '🩸 预测经期应在 <b>' + pMD(pr.nextStart) + '</b> 开始，若已开始请到「生活管理」记录一下';
   }
   return '';
 }
@@ -2170,47 +2301,223 @@ function renderPeriodHome() {
   else card.style.display = 'none';
 }
 
-function addPeriod() {
-  const start = document.getElementById('perStart').value;
-  if (!start) { toast('请选择经期开始日期'); return; }
-  let end = document.getElementById('perEnd').value;
-  let len = parseInt(document.getElementById('perLen').value) || 0;
-  if (end) { len = pDiff(start, end) + 1; if (len < 1) len = 1; }
-  else if (!len || len < 1) len = 7;
-  const ps = Store.get('periods', []) || [];
-  ps.push({ id: Date.now().toString(), start, length: len, note: (document.getElementById('perNote').value || '').trim(), updatedAt: Date.now() });
-  Store.set('periods', ps);
-  renderPeriod(); renderPeriodHome(); toast('🩸 已记录经期');
+function migratePeriods() {
+  const pd = Store.get('periodDays', null);
+  if (pd !== null) return;
+  const arr = Store.get('periods', []);
+  const npd = {};
+  if (Array.isArray(arr) && arr.length) {
+    arr.forEach(p => { const len = p.length || 7; for (let i = 0; i < len; i++) { const d = pAddDays(p.start, i); if (!npd[d]) npd[d] = { flow: 'medium', note: p.note || '', updatedAt: Date.now() }; } });
+  }
+  Store.set('periodDays', npd);
 }
 
-function editPeriod(id) {
-  const ps = Store.get('periods', []) || [];
-  const p = ps.find(x => x.id === id); if (!p) return;
-  const s = prompt('经期开始日期 (YYYY-MM-DD)：', p.start); if (!s) return;
-  const l = prompt('持续天数：', p.length); if (!l) return;
-  p.start = s; p.length = Math.max(1, parseInt(l) || p.length); p.updatedAt = Date.now();
-  Store.set('periods', ps); renderPeriod(); renderPeriodHome(); toast('✅ 已更新');
-}
-
-function delPeriod(id) {
-  if (!confirm('删除这条经期记录？')) return;
-  Store.set('periods', (Store.get('periods', []) || []).filter(x => x.id !== id));
-  renderPeriod(); renderPeriodHome(); toast('已删除');
-}
-
+let perDate = new Date();
+const PER_FLOW = { light: '#FFB3C6', medium: '#FF6B8A', heavy: '#D10056' };
 function renderPeriod() {
-  const startEl = document.getElementById('perStart');
-  if (startEl && !startEl.value) startEl.value = new Date().toISOString().slice(0, 10);
-  const periods = (Store.get('periods', []) || []).slice().sort((a, b) => a.start < b.start ? 1 : -1);
+  renderPeriodCalendar();
   const pr = predictPeriod();
-  document.getElementById('perPredict').innerHTML = pr
+  const pe = document.getElementById('perPredict');
+  if (pe) pe.innerHTML = pr
     ? '<div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px"><div><span style="font-size:12px;color:var(--text3)">平均周期</span><div style="font-size:22px;font-weight:700">' + pr.avgCycle + '<span style="font-size:13px;font-weight:400;color:var(--text2)"> 天</span></div></div><div><span style="font-size:12px;color:var(--text3)">平均经期</span><div style="font-size:22px;font-weight:700">' + pr.avgLen + '<span style="font-size:13px;font-weight:400;color:var(--text2)"> 天</span></div></div><div><span style="font-size:12px;color:var(--text3)">预测下次来潮</span><div style="font-size:22px;font-weight:700;color:var(--primary)">' + pMD(pr.nextStart) + '</div></div></div><div style="font-size:13px;color:var(--text2)">基于 ' + pr.count + ' 次记录推算（取最近周期均值），仅供参考</div>'
-    : '<div style="font-size:14px;color:var(--text2);line-height:1.8">📝 至少记录 <b>2 次</b> 经期后，即可预测下次来潮日期。<br>当前已记录 <b>' + periods.length + '</b> 次。<br><span style="font-size:12px;color:var(--text3)">越早开始记录，预测越准</span></div>';
-  document.getElementById('periodList').innerHTML = periods.length === 0
+    : '<div style="font-size:14px;color:var(--text2);line-height:1.8">📝 至少记录 <b>2 次</b> 经期后，即可预测下次来潮日期。<br><span style="font-size:12px;color:var(--text3)">点击日历日期记录「是否经期 / 经量」即可</span></div>';
+  const runs = periodRuns(Store.get('periodDays', {}));
+  const pl = document.getElementById('periodList');
+  if (pl) pl.innerHTML = runs.length === 0
     ? '<div class="emp" style="padding:16px"><p>还没有记录</p></div>'
-    : periods.map(p => '<div class="cb" style="align-items:center"><div style="flex:1"><div style="font-weight:500">' + pMD(p.start) + ' 起 · 共 ' + p.length + ' 天</div>' + (p.note ? '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + p.note + '</div>' : '') + '</div><span class="btn-sm btn-o" onclick="editPeriod(\'' + p.id + '\')"><i class="fas fa-edit"></i></span><span class="btn-sm btn-o" style="color:var(--d)" onclick="delPeriod(\'' + p.id + '\')"><i class="fas fa-trash"></i></span></div>').join('');
+    : runs.slice().reverse().map(r => '<div class="cb" style="align-items:center"><div style="flex:1"><div style="font-weight:500">' + pMD(r.start) + ' – ' + pMD(r.end) + ' · 共 ' + r.days.length + ' 天</div></div><button class="btn-sm btn-o" style="color:var(--d)" onclick="clearPeriodRun(\'' + r.start + '\')"><i class="fas fa-trash"></i></button></div>').join('');
 }
 
+function renderPeriodCalendar() {
+  const grid = document.getElementById('perCalGrid'); if (!grid) return;
+  const y = perDate.getFullYear(), m = perDate.getMonth();
+  const lbl = document.getElementById('perCalLabel'); if (lbl) lbl.textContent = y + '年' + (m + 1) + '月';
+  const first = new Date(y, m, 1), sd = first.getDay();
+  const days = new Date(y, m + 1, 0).getDate();
+  const pd = Store.get('periodDays', {});
+  const today = new Date().toISOString().slice(0, 10);
+  const pr = predictPeriod();
+  const predSet = new Set();
+  if (pr) { for (let d = new Date(pr.nextStart); d <= new Date(pr.nextEnd); d.setDate(d.getDate() + 1)) { predSet.add(d.toISOString().slice(0, 10)); } }
+  let h = '';
+  ['日', '一', '二', '三', '四', '五', '六'].forEach(w => { h += '<div style="text-align:center;font-size:12px;color:var(--text3);padding:4px 0">' + w + '</div>'; });
+  for (let i = 0; i < sd; i++) h += '<div></div>';
+  for (let d = 1; d <= days; d++) {
+    const ds = y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+    const rec = pd[ds];
+    const isPer = rec && rec.flow && rec.flow !== 'none';
+    const isToday = ds === today;
+    const isPred = predSet.has(ds);
+    h += '<div class="per-cell" onclick="openPeriodDay(\'' + ds + '\')" style="min-height:46px;background:var(--bg-card);border:1px solid ' + (isToday ? 'var(--primary)' : isPred ? 'var(--alert)' : 'var(--border)') + ';border-radius:8px;padding:4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative">' +
+      '<div style="font-size:14px;font-weight:' + (isToday ? 700 : 500) + '">' + d + '</div>' +
+      '<div style="width:60%;height:5px;border-radius:3px;margin-top:3px;background:' + (isPer ? PER_FLOW[rec.flow] : isPred ? 'var(--alert)' : 'transparent') + '"></div>' +
+      (isPred ? '<div style="position:absolute;top:2px;right:2px;font-size:9px;color:var(--alert)">🔮</div>' : '') +
+      '</div>';
+  }
+  grid.innerHTML = h;
+}
+function chPerMonth(dir) { perDate = new Date(perDate.getFullYear(), perDate.getMonth() + dir, 1); renderPeriodCalendar(); }
+
+function openPeriodDay(date) {
+  const pd = Store.get('periodDays', {});
+  const rec = pd[date] || { flow: 'none', note: '' };
+  let h = '<div style="font-size:13px;color:var(--text2);margin-bottom:8px">📅 ' + date + '</div>';
+  h += '<div style="margin-bottom:12px"><label style="font-size:13px">是否经期：</label><div class="ig" style="margin:6px 0 0"><select class="in" id="pdFlow" style="flex:1"><option value="none"' + (rec.flow === 'none' ? ' selected' : '') + '>否</option><option value="light"' + (rec.flow === 'light' ? ' selected' : '') + '>是 · 量少</option><option value="medium"' + (rec.flow === 'medium' ? ' selected' : '') + '>是 · 量中</option><option value="heavy"' + (rec.flow === 'heavy' ? ' selected' : '') + '>是 · 量多</option></select></div></div>';
+  h += '<div style="margin-bottom:12px"><label style="font-size:13px">备注：</label><div class="ig" style="margin:6px 0 0"><input class="in" id="pdNote" placeholder="身体感受等" style="flex:1" value="' + escHtml(rec.note || '') + '"></div></div>';
+  h += '<div style="text-align:right"><button class="btn btn-o" onclick="closeGenMask()">取消</button><button class="btn btn-p" onclick="savePeriodDay(\'' + date + '\')" style="margin-left:8px"><i class="fas fa-save"></i> 保存</button></div>';
+  openGenMask('🩸 经期记录', h);
+}
+function savePeriodDay(date) {
+  const flow = document.getElementById('pdFlow').value;
+  const note = (document.getElementById('pdNote').value || '').trim();
+  const pd = Store.get('periodDays', {});
+  if (flow === 'none') { delete pd[date]; }
+  else { pd[date] = { flow: flow, note: note, updatedAt: Date.now() }; }
+  Store.set('periodDays', pd);
+  closeGenMask();
+  renderPeriod(); renderPeriodHome();
+  toast('✅ 已保存');
+}
+function clearPeriodRun(start) {
+  if (!confirm('删除这一整段经期记录？')) return;
+  const pd = Store.get('periodDays', {});
+  const runs = periodRuns(pd);
+  const run = runs.find(r => r.start === start);
+  if (run) run.days.forEach(d => delete pd[d]);
+  Store.set('periodDays', pd); renderPeriod(); renderPeriodHome(); toast('已删除');
+}
+// ============================================================
+// REMINDER SYSTEM (应用内提醒中心 + 浏览器通知 + 免打扰)
+// 说明：纯静态站点无法发送系统级锁屏悬浮通知；通过浏览器 Notification API
+// （安装为 PWA 后可收本地通知）+ 应用内提醒中心实现主动提醒。
+// ============================================================
+const REM_DEFAULT = { enabled: true, waterOn: true, waterInterval: 60, studyOn: true, studyTime: '20:00', dndOn: false, dndStart: '22:00', dndEnd: '08:00', notifOn: false, lastFired: {} };
+function getRem() { return Object.assign({}, REM_DEFAULT, Store.get('reminders', {})); }
+function setRem(r) { Store.set('reminders', r); }
+
+function remInDND(r) {
+  if (!r.dndOn) return false;
+  const now = new Date(); const hm = now.getHours() * 60 + now.getMinutes();
+  const [sh, sm] = r.dndStart.split(':').map(Number); const [eh, em] = r.dndEnd.split(':').map(Number);
+  const s = sh * 60 + sm, e = eh * 60 + em;
+  if (s <= e) return hm >= s && hm < e;
+  return hm >= s || hm < e;
+}
+
+function stripHtml(s) { return (s || '').replace(/<[^>]+>/g, ''); }
+
+function fireReminder(key, title, body) {
+  const r = getRem();
+  const today = new Date().toISOString().slice(0, 10);
+  const lf = r.lastFired || {};
+  if (lf[key] === today) return;
+  lf[key] = today; r.lastFired = lf; setRem(r);
+  addReminderLog(title, body);
+  toast('🔔 ' + title);
+  if (r.notifOn && 'Notification' in window && Notification.permission === 'granted') {
+    try { new Notification(title, { body: stripHtml(body), icon: 'assets/labubu-avatar.png' }); } catch (e) {}
+  }
+}
+
+function addReminderLog(title, body) {
+  const log = Store.get('remLog', []);
+  log.unshift({ title: title, body: body, t: new Date().toTimeString().slice(0, 5), d: new Date().toISOString().slice(0, 10) });
+  Store.set('remLog', log.slice(0, 8));
+  renderReminderLog();
+}
+
+function renderReminderLog() {
+  const list = document.getElementById('reminderList'); if (!list) return;
+  const log = Store.get('remLog', []);
+  if (!log.length) { list.innerHTML = '<div class="emp" style="padding:12px"><p>暂无提醒。开启后会在 17:00 推送未完成任务、按时喝水 / 学习提醒，并预警经期。</p></div>'; return; }
+  list.innerHTML = log.map(it => '<div class="cb" style="align-items:flex-start;margin-bottom:8px"><div style="flex:1"><div style="font-weight:600">' + escHtml(it.title) + '</div><div style="font-size:12px;color:var(--text2);margin-top:2px">' + escHtml(it.body) + '</div></div><span style="font-size:11px;color:var(--text3);white-space:nowrap">' + it.t + '</span></div>').join('');
+}
+
+function renderReminderCenter() {
+  const r = getRem();
+  const btn = document.getElementById('remNotifBtn');
+  if (btn) {
+    const on = r.notifOn && 'Notification' in window && Notification.permission === 'granted';
+    btn.className = 'btn-sm ' + (on ? 'btn-a' : 'btn-o');
+    btn.innerHTML = '<i class="fas fa-bell"></i> 通知' + (on ? ' 开' : '');
+  }
+  renderReminderLog();
+}
+
+function toggleRemNotif() {
+  const r = getRem();
+  if (!('Notification' in window)) { toast('当前浏览器不支持通知'); return; }
+  if (Notification.permission === 'granted') {
+    r.notifOn = !r.notifOn; setRem(r); renderReminderCenter();
+    toast(r.notifOn ? '✅ 已开启浏览器通知' : '已关闭浏览器通知');
+  } else if (Notification.permission !== 'denied') {
+    Notification.requestPermission().then(p => { r.notifOn = (p === 'granted'); setRem(r); renderReminderCenter(); toast(r.notifOn ? '✅ 已授权浏览器通知' : '未授权通知'); });
+  } else { toast('通知已被浏览器阻止，请在站点设置中允许'); }
+}
+
+function openReminderSettings() {
+  const r = getRem();
+  let h = '<div style="font-size:12px;color:var(--text3);margin-bottom:10px">纯静态站点无法发送系统级锁屏通知；开启「通知」并安装为 App（PWA）后，可在页面运行时收到浏览器本地通知。应用内提醒中心始终可用。</div>';
+  h += '<div class="ig" style="align-items:center;margin-bottom:10px"><label style="flex:1;font-size:14px">启用主动提醒</label><input type="checkbox" id="remEnabled" ' + (r.enabled ? 'checked' : '') + ' style="width:18px;height:18px"></div>';
+  h += '<div class="card" style="margin-bottom:10px;padding:10px"><div style="font-weight:600;margin-bottom:8px">💧 喝水提醒</div><div class="ig" style="align-items:center"><label style="flex:1;font-size:13px">开启</label><input type="checkbox" id="remWaterOn" ' + (r.waterOn ? 'checked' : '') + ' style="width:16px;height:16px"></div><div class="ig" style="margin-top:6px"><input class="in" id="remWaterInt" type="number" min="15" step="5" value="' + r.waterInterval + '" style="flex:1"><span style="font-size:13px;color:var(--text2)">分钟 / 次（仅 08:00–22:00）</span></div></div>';
+  h += '<div class="card" style="margin-bottom:10px;padding:10px"><div style="font-weight:600;margin-bottom:8px">📚 学习提醒</div><div class="ig" style="align-items:center"><label style="flex:1;font-size:13px">开启</label><input type="checkbox" id="remStudyOn" ' + (r.studyOn ? 'checked' : '') + ' style="width:16px;height:16px"></div><div class="ig" style="margin-top:6px"><input class="in" id="remStudyTime" type="time" value="' + r.studyTime + '" style="flex:0 0 auto;width:120px"></div></div>';
+  h += '<div class="card" style="margin-bottom:10px;padding:10px"><div style="font-weight:600;margin-bottom:8px">🌙 免打扰时段</div><div class="ig" style="align-items:center"><label style="flex:1;font-size:13px">开启（期间不提醒）</label><input type="checkbox" id="remDndOn" ' + (r.dndOn ? 'checked' : '') + ' style="width:16px;height:16px"></div><div class="ig" style="margin-top:6px"><input class="in" id="remDndStart" type="time" value="' + r.dndStart + '" style="flex:1"><span style="font-size:13px;color:var(--text2)">至</span><input class="in" id="remDndEnd" type="time" value="' + r.dndEnd + '" style="flex:1"></div></div>';
+  h += '<div style="text-align:right"><button class="btn btn-o" onclick="closeGenMask()">取消</button><button class="btn btn-p" onclick="saveReminderSettings()" style="margin-left:8px"><i class="fas fa-save"></i> 保存</button></div>';
+  openGenMask('🔔 提醒设置', h);
+}
+
+function saveReminderSettings() {
+  const r = getRem();
+  r.enabled = document.getElementById('remEnabled').checked;
+  r.waterOn = document.getElementById('remWaterOn').checked;
+  r.waterInterval = Math.max(15, parseInt(document.getElementById('remWaterInt').value) || 60);
+  r.studyOn = document.getElementById('remStudyOn').checked;
+  r.studyTime = document.getElementById('remStudyTime').value || '20:00';
+  r.dndOn = document.getElementById('remDndOn').checked;
+  r.dndStart = document.getElementById('remDndStart').value || '22:00';
+  r.dndEnd = document.getElementById('remDndEnd').value || '08:00';
+  setRem(r); closeGenMask(); renderReminderCenter(); toast('✅ 提醒设置已保存');
+}
+
+function reminderTick() {
+  const r = getRem();
+  if (!r.enabled) return;
+  if (remInDND(r)) return;
+  const now = new Date();
+  const hm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+  const today = now.toISOString().slice(0, 10);
+  // 17:00 未完成待办
+  if (hm === '17:00') {
+    const tasks = Store.get('tasks', []);
+    const undone = tasks.filter(t => !t.done && (!t.date || t.date <= today));
+    if (undone.length) fireReminder('todo17', '今日未完成任务', '还有 ' + undone.length + ' 项待办未完成，趁现在处理一下吧');
+  }
+  // 学习提醒
+  if (r.studyOn && hm === r.studyTime) {
+    fireReminder('study', '学习时间到', '该完成今天的打卡 / 学习计划啦 📚');
+  }
+  // 喝水提醒（按间隔，仅白天）
+  if (r.waterOn) {
+    const mins = now.getHours() * 60 + now.getMinutes();
+    if (mins >= 8 * 60 && mins <= 22 * 60 && mins % r.waterInterval === 0) {
+      fireReminder('water' + Math.floor(mins / r.waterInterval), '该喝水啦 💧', '每小时喝点水，保持身体水分');
+    }
+  }
+  // 经期提前预警（每天一次）
+  if (typeof periodTip === 'function') {
+    const tip = stripHtml(periodTip());
+    const m = tip.match(/还有\s*(\d+)\s*天/);
+    if (tip.indexOf('来潮') >= 0 && m) {
+      fireReminder('period', '🩸 经期预警', '距离下次来潮还有 ' + m[1] + ' 天，记得备好用品～');
+    }
+  }
+}
+
+function initReminders() {
+  renderReminderCenter();
+  reminderTick();
+  setInterval(reminderTick, 30000);
+}
 // ============================================================
 // TASKS
 // ============================================================
@@ -2231,7 +2538,7 @@ function renderTasks() {
     list.innerHTML = filtered.map(t => {
       const pCls = t.pri === 'h' ? 't3' : t.pri === 'l' ? 't2' : 't1';
       const pLbl = t.pri === 'h' ? '紧急' : t.pri === 'l' ? '低优' : '普通';
-      return '<div class="cb"><input type="checkbox"' + (t.done ? 'checked' : '') + ' onchange="toggleTask(\'' + t.id + '\')"><span class="cc"></span><span class="ct" style="' + (t.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + t.title + '</span><span class="cb-acts"><span class="tag ' + pCls + '">' + pLbl + '</span><span style="font-size:12px;color:var(--text3)">' + (t.date === today ? '今天' : t.date || '') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editTask(\'' + t.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();deleteTask(\'' + t.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></span></div>';
+      return '<div class="cb" style="align-items:flex-start"><input type="checkbox"' + (t.done ? 'checked' : '') + ' onchange="toggleTask(\'' + t.id + '\')"><span class="cc"></span><div class="ct" style="flex:1;min-width:0;' + (t.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '"><div>' + t.title + '</div><div style="font-size:11px;color:var(--text3);margin-top:2px"><span class="tag ' + pCls + '" style="font-size:10px;padding:1px 5px;margin-right:4px">' + pLbl + '</span>' + (t.date === today ? '今天' : t.date || '') + '</div></div><span class="cb-acts task-acts"><button class="btn-icon btn-o" onclick="event.stopPropagation();editTask(\'' + t.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();deleteTask(\'' + t.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></span></div>';
     }).join('');
   }
   renderTasksChart();
@@ -2262,14 +2569,30 @@ function renderTasksChart() {
   });
 }
 
-function addTask() {
-  const i = document.getElementById('taskInput');
-  const t = i.value.trim();
-  if (!t) return toast('请输入任务内容');
+let taskEditingId = null;
+function openTaskModal(id) {
+  taskEditingId = id || null;
+  const t = id ? Store.get('tasks', []).find(x => x.id === id) : null;
+  document.getElementById('taskMaskTitle').textContent = t ? '📝 编辑任务' : '📝 添加任务';
+  document.getElementById('taskEditTitle').value = t ? t.title : '';
+  document.getElementById('taskEditPri').value = t ? (t.pri || 'm') : 'm';
+  document.getElementById('taskMask').classList.remove('hide');
+  setTimeout(() => document.getElementById('taskEditTitle').focus(), 50);
+}
+function closeTaskModal() { document.getElementById('taskMask').classList.add('hide'); taskEditingId = null; }
+function saveTask() {
+  const title = document.getElementById('taskEditTitle').value.trim();
+  if (!title) return toast('请输入任务内容');
+  const pri = document.getElementById('taskEditPri').value || 'm';
   const tasks = Store.get('tasks', []);
-  tasks.unshift({ id: Date.now().toString(), title: t, pri: document.getElementById('taskPri').value, done: false, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
+  if (taskEditingId) {
+    const t = tasks.find(x => x.id === taskEditingId);
+    if (t) { t.title = title; t.pri = pri; t.updatedAt = Date.now(); }
+  } else {
+    tasks.unshift({ id: Date.now().toString(), title: title, pri: pri, done: false, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() });
+  }
   Store.set('tasks', tasks);
-  i.value = ''; renderTasks(); renderHome(); updateBadge();
+  closeTaskModal(); renderTasks(); renderHome(); updateBadge(); toast(taskEditingId ? '✅ 已更新' : '✅ 已添加');
 }
 function toggleTask(id) {
   const tasks = Store.get('tasks', []);
@@ -2280,22 +2603,7 @@ function deleteTask(id) {
   Store.set('tasks', Store.get('tasks', []).filter(t => t.id !== id));
   renderTasks(); renderHome(); updateBadge();
 }
-function editTask(id) {
-  const tasks = Store.get('tasks', []);
-  const t = tasks.find(x => x.id === id);
-  if (!t) return;
-  const title = prompt('任务内容：', t.title);
-  if (title === null) return;
-  const pri = prompt('优先级（h 紧急 / m 普通 / l 低优）：', t.pri || 'm');
-  const date = prompt('日期 (YYYY-MM-DD)：', t.date || new Date().toISOString().slice(0, 10));
-  if (title.trim()) {
-    t.title = title.trim();
-    t.pri = (pri || 'm').trim();
-    t.date = date || t.date;
-    t.updatedAt = Date.now();
-    Store.set('tasks', tasks); renderTasks(); renderHome(); updateBadge(); toast('✅ 已更新');
-  }
-}
+function editTask(id) { openTaskModal(id); }
 
 // ============================================================
 // NOTES
@@ -2344,67 +2652,200 @@ function editNote(id) {
 function delNote(id) { Store.set('notes', Store.get('notes', []).filter(n => n.id !== id)); renderNotes(); renderHome(); }
 
 // ============================================================
-// LIFE - Expenses
+// LIFE - Expenses（记账 / 账单 / 统计 / 情绪化）
 // ============================================================
+const CAT_ICON = {'餐饮':'🍜','交通':'🚗','购物':'🛍️','娱乐':'🎮','学习':'📚','医疗':'💊','住房':'🏠','其他':'📦'};
+const INCOME_ICON = {'薪资':'💰','兼职':'💼','奖金':'🎁','理财盈亏':'📈','收红包':'🧧','中奖':'🎰','借入':'💳','报销':'🧾','卖二手':'📦','收礼':'🎀','补贴':'🎟️','其他':'📦'};
+
 function switchLifeTab(t) {
   document.querySelectorAll('.life-tab').forEach(el => el.style.display = 'none');
   const tab = document.getElementById('l-' + t);
   if (tab) tab.style.display = 'block';
-  if (t === 'expense') { initExpPeriods(); setTimeout(() => { renderExpChart(); renderAnnual(); }, 100); }
+  if (t === 'expense') { initExpPeriods(); switchExpTab('record'); }
   if (t === 'health') setTimeout(renderWeightChart, 100);
   if (t === 'habit') renderHeatmap();
   if (t === 'period') renderPeriod();
 }
 
-let expPeriod = 'all';
-function switchExpPeriod(p) { expPeriod = p || 'all'; renderExpenses(); }
+let expScope = 'month';
+let curExpTab = 'record';
+function switchExpTab(e) {
+  curExpTab = e;
+  ['record','bill','stat','emo'].forEach(k => {
+    const p = document.getElementById('e-' + k);
+    if (p) p.style.display = (k === e) ? '' : 'none';
+  });
+  document.querySelectorAll('#expTabs .fb').forEach(f => f.classList.toggle('active', f.getAttribute('data-e') === e));
+  if (e === 'record') { renderRecent(); renderBudget(); renderAssets(); }
+  else if (e === 'bill') renderBill();
+  else if (e === 'stat') renderStat();
+  else if (e === 'emo') renderEmotional();
+}
 function initExpPeriods() {
   const m = document.getElementById('expMonth'); if (m && !m.value) m.value = new Date().toISOString().slice(0, 7);
   const y = document.getElementById('expYear'); if (y && !y.value) y.value = new Date().getFullYear();
+  const d = document.getElementById('expDate'); if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+  fillExpCatOptions();
 }
-function expenseSum(arr, type) { return arr.filter(x => x.type === type).reduce((s, x) => s + (parseFloat(x.amt) || 0), 0); }
-function renderExpenses() {
+function getExpCats1() {
+  let c = Store.get('expCats1', null);
+  if (!Array.isArray(c) || !c.length) { c = CATS1.slice(); Store.set('expCats1', c); }
+  return c;
+}
+function fillExpCats() {
+  const sel = document.getElementById('expCat'); if (!sel) return;
+  const cats = getExpCats1();
+  let h = '';
+  cats.forEach(c => { h += '<option value="' + c + '">' + (CAT_ICON[c] || '📦') + ' ' + c + '</option>'; });
+  sel.innerHTML = h;
+  fillExpSubs();
+}
+
+// ---- 自然语言自动填充 ----
+function applyNl() {
+  const raw = (document.getElementById('expNl') && document.getElementById('expNl').value || '').trim();
+  if (!raw) return toast('请输入自然语言，如：午餐20元');
+  let txt = raw, date = new Date().toISOString().slice(0, 10), amt = 0, cat = '', sub = '';
+  if (/昨天|昨日/.test(txt)) { const y = new Date(Date.now() - 864e5); date = y.toISOString().slice(0, 10); }
+  else if (/今天|今日/.test(txt)) { date = new Date().toISOString().slice(0, 10); }
+  let md = txt.match(/(\d{1,2})月(\d{1,2})[日号]/);
+  if (md) { date = new Date().getFullYear() + '-' + String(md[1]).padStart(2, '0') + '-' + String(md[2]).padStart(2, '0'); txt = txt.replace(md[0], ' '); }
+  else { let sl = txt.match(/(\d{1,2})\/(\d{1,2})/); if (sl) { date = new Date().getFullYear() + '-' + String(sl[1]).padStart(2, '0') + '-' + String(sl[2]).padStart(2, '0'); txt = txt.replace(sl[0], ' '); } }
+  let am = txt.match(/(\d+(?:\.\d+)?)/); if (am) amt = parseFloat(am[1]);
+  const type = document.getElementById('expType').value;
+  const allCats = type === 'i' ? INCOME_CATS1 : CATS1;
+  for (const c of allCats) { if (raw.indexOf(c) > -1) { cat = c; break; } }
+  if (cat) {
+    const subs = type === 'i' ? getIncomeSubs()[cat] : getExpSubs()[cat];
+    for (const s of (subs || [])) { if (raw.indexOf(s) > -1) { sub = s; break; } }
+  }
+  if (amt > 0) document.getElementById('expAmt').value = amt;
+  document.getElementById('expDate').value = date;
+  if (cat) { document.getElementById('expCat').value = cat; fillExpSubs(); if (sub) document.getElementById('expSub').value = sub; }
+  toast('✅ 已智能填充' + (amt > 0 ? ' ¥' + amt : '') + (cat ? ' · ' + cat + (sub ? '·' + sub : '') : '') + (date !== new Date().toISOString().slice(0, 10) ? ' · ' + date : ''));
+}
+
+function expenseSum(arr, type) { return (arr || []).filter(x => x.type === type).reduce((s, x) => s + (parseFloat(x.amt) || 0), 0); }
+
+function expItemHtml(x) {
+  const emo = isEmotional(x);
+  const catLabel = (x.cat || '其他') + (x.sub ? ' · ' + x.sub : '');
+  const id = x.id;
+  return '<div class="cb" style="cursor:default"><div style="font-size:14px;font-weight:500;flex:1">' + catLabel + (emo ? ' <span title="情绪化消费">😰</span>' : '') +
+    '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.date || '') + ' ' + escHtml(x.note || '') + '</span></div>' +
+    '<span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + '">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span>' +
+    '<button class="btn-icon btn-o" onclick="event.stopPropagation();editExpense(\'' + id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button>' +
+    '<button class="btn-icon btn-o" onclick="event.stopPropagation();delExpense(\'' + id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+}
+
+function renderRecent() {
+  const el = document.getElementById('expRecent'); if (!el) return;
   const e = Store.get('expenses', []);
-  const today = new Date().toISOString().slice(0, 10);
-  const ym = today.slice(0, 7);
-  const y = today.slice(0, 4);
-  let list = e;
-  if (expPeriod === 'day') list = e.filter(x => x.date === today);
-  else if (expPeriod === 'month') list = e.filter(x => (x.date || '').startsWith(ym));
-  else if (expPeriod === 'year') list = e.filter(x => (x.date || '').startsWith(y));
-  document.getElementById('expList').innerHTML = list.length === 0
-    ? '<div class="emp"><i class="fas fa-coins"></i><p>该区间没有收支记录</p></div>'
-    : list.slice(0, 100).map(x => {
-        const emo = isEmotional(x);
-        const catLabel = (x.cat || '其他') + (x.sub ? ' · ' + x.sub : '');
-        return '<div class="cb" style="cursor:default"><div style="font-size:14px;font-weight:500;flex:1">' + catLabel + (emo ? ' <span title="情绪化消费" style="font-size:13px">😰</span>' : '') + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.date || '') + ' ' + (x.note || '') + '</span></div><span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + '">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();editExpense(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delExpense(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
-      }).join('');
-  renderExpTotals(e, today, ym, y);
-  renderEmotional();
+  if (!e.length) { el.innerHTML = '<div class="emp"><i class="fas fa-coins"></i><p>还没有记账，去记一笔吧</p></div>'; return; }
+  el.innerHTML = e.slice(0, 10).map(expItemHtml).join('');
+}
+function renderBudget() {
   const b = Store.get('budget', 0);
-  document.getElementById('budTotal').textContent = b ? '¥' + b : '未设置';
+  const t = document.getElementById('budTotal'); if (t) t.textContent = b ? '¥' + b : '未设置';
   if (b > 0) {
+    const e = Store.get('expenses', []);
+    const ym = new Date().toISOString().slice(0, 7);
     const te = e.filter(x => x.type === 'e' && (x.date || '').startsWith(ym)).reduce((s, x) => s + parseFloat(x.amt), 0);
-    document.getElementById('budUsed').textContent = '¥' + te.toFixed(0);
+    const u = document.getElementById('budUsed'); if (u) u.textContent = '¥' + te.toFixed(0);
     const pct = Math.min(te / b * 100, 100);
-    const f = document.getElementById('budFill');
-    f.style.width = pct + '%';
-    f.style.background = pct > 90 ? 'var(--d)' : pct > 70 ? 'var(--alert)' : 'var(--s)';
+    const f = document.getElementById('budFill'); if (f) { f.style.width = pct + '%'; f.style.background = pct > 90 ? 'var(--d)' : pct > 70 ? 'var(--alert)' : 'var(--s)'; }
+  } else {
+    const u = document.getElementById('budUsed'); if (u) u.textContent = '0';
+    const f = document.getElementById('budFill'); if (f) f.style.width = '0%';
   }
 }
-function renderExpTotals(e, today, ym, y) {
-  const tE = expenseSum(e.filter(x => x.date === today), 'e'), tI = expenseSum(e.filter(x => x.date === today), 'i');
-  const mE = expenseSum(e.filter(x => (x.date || '').startsWith(ym)), 'e'), mI = expenseSum(e.filter(x => (x.date || '').startsWith(ym)), 'i');
-  const yE = expenseSum(e.filter(x => (x.date || '').startsWith(y)), 'e'), yI = expenseSum(e.filter(x => (x.date || '').startsWith(y)), 'i');
-  document.getElementById('expTotals').innerHTML = [
-    ['今日支出', tE, 'var(--d)'], ['今日收入', tI, 'var(--accent)'],
-    ['本月支出', mE, 'var(--d)'], ['本月收入', mI, 'var(--accent)'],
-    ['本年支出', yE, 'var(--d)'], ['本年收入', yI, 'var(--accent)']
-  ].map(([l, v, col]) => '<div class="sc"><div class="si si1"><i class="fas fa-yen-sign"></i></div><div class="si"><div class="num" style="color:' + col + '">¥' + (v ? v.toFixed(2) : '0.00') + '</div><div class="label">' + l + '</div></div></div>').join('');
+
+// ---- 账单 ----
+function renderBill() {
+  const dimEl = document.getElementById('billDim');
+  const dim = (dimEl && dimEl.value) || 'month';
+  const e = Store.get('expenses', []);
+  const now = new Date();
+  let list, label;
+  if (dim === 'day') { const d = now.toISOString().slice(0, 10); list = e.filter(x => x.date === d); label = d; }
+  else if (dim === 'month') { const m = now.toISOString().slice(0, 7); list = e.filter(x => (x.date || '').startsWith(m)); label = m; }
+  else { const y = now.getFullYear().toString(); list = e.filter(x => (x.date || '').startsWith(y)); label = y; }
+  const inc = expenseSum(list, 'i'), exp = expenseSum(list, 'e');
+  const te = document.getElementById('billTotals');
+  if (te) te.innerHTML = [
+    ['收支结余', inc - exp, 'var(--s)'], ['收入', inc, 'var(--accent)'], ['支出', exp, 'var(--d)'], ['笔数', list.length, 'var(--text)']
+  ].map(([l, v, col]) => '<div class="sc"><div class="si si1"><i class="fas fa-yen-sign"></i></div><div class="si"><div class="num" style="color:' + col + '">' + (l === '笔数' ? v : '¥' + (v ? v.toFixed(2) : '0.00')) + '</div><div class="label">' + l + '</div></div></div>').join('');
+  const el = document.getElementById('expList'); if (!el) return;
+  if (!list.length) { el.innerHTML = '<div class="emp"><i class="fas fa-coins"></i><p>' + label + ' 没有收支记录</p></div>'; return; }
+  const sorted = list.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.updatedAt || 0) - (a.updatedAt || 0));
+  const groups = {};
+  sorted.forEach(x => { const d = x.date || '未知'; (groups[d] = groups[d] || []).push(x); });
+  el.innerHTML = Object.keys(groups).sort().reverse().map(d => {
+    const sub = groups[d];
+    const dInc = expenseSum(sub, 'i'), dExp = expenseSum(sub, 'e');
+    return '<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);padding:4px 0;border-bottom:1px solid var(--border)"><span>' + d + '</span><span>收 ¥' + dInc.toFixed(2) + ' · 支 ¥' + dExp.toFixed(2) + '</span></div>' + sub.map(expItemHtml).join('') + '</div>';
+  }).join('');
 }
+
+// ---- 统计 ----
+function renderStat() {
+  const mw = document.getElementById('statMonthWrap'), yw = document.getElementById('statYearWrap');
+  if (!mw || !yw) return;
+  mw.style.display = expScope === 'month' ? '' : 'none';
+  yw.style.display = expScope === 'year' ? '' : 'none';
+  const e = Store.get('expenses', []);
+  if (expScope === 'month') {
+    renderExpChart();
+    const m = (document.getElementById('expMonth') && document.getElementById('expMonth').value) || new Date().toISOString().slice(0, 7);
+    const arr = e.filter(x => x.type === 'e' && (x.date || '').startsWith(m));
+    fillStatSummary('statMonthSummary', arr, expMonthLevel, m);
+  } else {
+    renderAnnual();
+    const y = ((document.getElementById('expYear') && document.getElementById('expYear').value) || new Date().getFullYear()).toString();
+    const arr = e.filter(x => x.type === 'e' && (x.date || '').startsWith(y));
+    fillStatSummary('statYearSummary', arr, expYearLevel, y);
+  }
+}
+function fillStatSummary(elId, arr, level, scope) {
+  const el = document.getElementById(elId); if (!el) return;
+  const e = Store.get('expenses', []);
+  const inc = expenseSum(e.filter(x => x.type === 'i' && (x.date || '').startsWith(scope)), 'i');
+  const exp = arr.reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
+  let h = '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px">' +
+    '<div><span style="font-size:12px;color:var(--text3)">收入</span><div style="font-size:18px;font-weight:700;color:var(--accent)">¥' + inc.toFixed(2) + '</div></div>' +
+    '<div><span style="font-size:12px;color:var(--text3)">支出</span><div style="font-size:18px;font-weight:700;color:var(--d)">¥' + exp.toFixed(2) + '</div></div>' +
+    '<div><span style="font-size:12px;color:var(--text3)">结余</span><div style="font-size:18px;font-weight:700;color:var(--s)">¥' + (inc - exp).toFixed(2) + '</div></div></div>';
+  if (!arr.length) { el.innerHTML = h + '<div style="font-size:13px;color:var(--text3)">该区间暂无支出记录</div>'; return; }
+  const total = exp;
+  const g = {};
+  arr.forEach(x => { const key = level === 'l2' ? ((x.cat || '其他') + (x.sub ? '·' + x.sub : '')) : (x.cat || '其他'); if (!g[key]) g[key] = { amt: 0, n: 0 }; g[key].amt += parseFloat(x.amt); g[key].n++; });
+  const entries = Object.entries(g).sort((a, b) => b[1].amt - a[1].amt);
+  h += entries.map(([k, v]) => {
+    const pct = total ? (v.amt / total * 100) : 0;
+    const kk = k.replace(/'/g, "\\'");
+    return '<div class="cb" style="cursor:pointer" onclick="showCatDetail(\'' + scope + '\',\'' + level + '\',\'' + kk + '\')">' +
+      '<div style="flex:1"><div style="font-size:14px;font-weight:500">' + k + ' <span style="font-size:12px;color:var(--text3)">（' + v.n + '笔）</span></div>' +
+      '<div style="font-size:12px;color:var(--text2)">占比 ' + pct.toFixed(1) + '%</div></div>' +
+      '<span style="font-weight:600;color:var(--d)">¥' + v.amt.toFixed(2) + '</span>' +
+      '<i class="fas fa-chevron-right" style="color:var(--text3);align-self:center"></i></div>';
+  }).join('');
+  el.innerHTML = h;
+}
+function showCatDetail(scope, level, key) {
+  const e = Store.get('expenses', []);
+  let list;
+  if (level === 'l1') list = e.filter(x => x.type === 'e' && (x.cat || '其他') === key && (x.date || '').startsWith(scope));
+  else { const parts = key.split('·'); const c = parts[0], s = parts[1] || ''; list = e.filter(x => x.type === 'e' && (x.cat || '其他') === c && (x.sub || '') === s && (x.date || '').startsWith(scope)); }
+  const total = list.reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
+  let h = '<div style="font-size:13px;color:var(--text2);margin-bottom:8px">' + key + ' · 共 ' + list.length + ' 笔 · ¥' + total.toFixed(2) + '</div>';
+  if (!list.length) h += '<div class="emp"><i class="fas fa-coins"></i><p>该分类下没有记录</p></div>';
+  else h += list.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.updatedAt || 0) - (a.updatedAt || 0)).map(expItemHtml).join('');
+  openGenMask('🔍 ' + key + ' 明细', h);
+}
+
 function renderExpChart() {
   const e = Store.get('expenses', []);
-  const m = document.getElementById('expMonth')?.value || new Date().toISOString().slice(0, 7);
+  const m = (document.getElementById('expMonth') && document.getElementById('expMonth').value) || new Date().toISOString().slice(0, 7);
   const g = expGroupByLevel(e.filter(x => x.type === 'e' && (x.date || '').startsWith(m)), expMonthLevel);
   const ctx = document.getElementById('expChart');
   if (!ctx) return;
@@ -2413,7 +2854,7 @@ function renderExpChart() {
 }
 function renderAnnual() {
   const e = Store.get('expenses', []);
-  const y = (document.getElementById('expYear')?.value || new Date().getFullYear()).toString();
+  const y = ((document.getElementById('expYear') && document.getElementById('expYear').value) || new Date().getFullYear()).toString();
   const inYear = e.filter(x => (x.date || '').startsWith(y));
   const g = expGroupByLevel(inYear.filter(x => x.type === 'e'), expYearLevel);
   const ctx = document.getElementById('annChart');
@@ -2421,32 +2862,79 @@ function renderAnnual() {
     if (charts.ann) charts.ann.destroy();
     charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', layout: { padding: 16 }, plugins: { legend: { display: false }, title: { display: true, text: y + (expYearLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: 12 } }, tooltip: pctTooltip } }, plugins: [doughnutOutsideLabels] });
   }
-  const inc = expenseSum(inYear, 'i'), exp = expenseSum(inYear, 'e');
-  const el = document.getElementById('annSummary');
-  if (el) el.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;width:100%">' +
-    '<div><span style="font-size:12px;color:var(--text3)">年收入</span><div style="font-size:22px;font-weight:700;color:var(--accent)">¥' + inc.toFixed(2) + '</div></div>' +
-    '<div><span style="font-size:12px;color:var(--text3)">年支出</span><div style="font-size:22px;font-weight:700;color:var(--d)">¥' + exp.toFixed(2) + '</div></div>' +
-    '<div><span style="font-size:12px;color:var(--text3)">年结余</span><div style="font-size:22px;font-weight:700;color:var(--s)">¥' + (inc - exp).toFixed(2) + '</div></div>' +
-    '<div style="font-size:12px;color:var(--text3)">' + y + ' 年共 ' + inYear.length + ' 笔记录</div></div>';
   const lbl = document.getElementById('annYearLabel'); if (lbl) lbl.textContent = '· ' + y;
 }
+
+// ---- 增删改 ----
 function addExpense() {
-  const a = parseFloat(document.getElementById('expAmt').value);
+  const aEl = document.getElementById('expAmt');
+  const a = parseFloat(aEl && aEl.value);
   if (!a || a <= 0) return toast('请输入有效金额');
+  const date = (document.getElementById('expDate') && document.getElementById('expDate').value) || new Date().toISOString().slice(0, 10);
+  const type = document.getElementById('expType').value;
+  const cat = document.getElementById('expCat').value;
+  const sub = document.getElementById('expSub').value || '';
+  const note = (document.getElementById('expNote') && document.getElementById('expNote').value || '').trim() || '';
   const e = Store.get('expenses', []);
   const now = Date.now();
-  e.unshift({ id: Date.now().toString(), amt: a, type: document.getElementById('expType').value, cat: document.getElementById('expCat').value, sub: document.getElementById('expSub').value || '', note: document.getElementById('expNote').value.trim() || '', date: new Date().toISOString().slice(0, 10), createdAt: now, updatedAt: now });
+  e.unshift({ id: now.toString(), amt: a, type: type, cat: cat, sub: sub, note: note, date: date, createdAt: now, updatedAt: now });
   Store.set('expenses', e);
-  document.getElementById('expAmt').value = ''; document.getElementById('expNote').value = '';
-  renderExpenses(); renderExpChart(); renderAnnual();
+  adjustAssetsByTxn({ type, cat, sub, amt: a }, 1);
+  if (aEl) aEl.value = '';
+  const nEl = document.getElementById('expNote'); if (nEl) nEl.value = '';
+  toast('✅ 已记账');
+  refreshExpense();
 }
-function setBudget() { const v = parseFloat(document.getElementById('budgetIn').value); if (v > 0) { Store.set('budget', v); renderExpenses(); toast('✅ 预算已设置'); } }
+function setBudget() { const v = parseFloat(document.getElementById('budgetIn').value); if (v > 0) { Store.set('budget', v); renderBudget(); toast('✅ 预算已设置'); } }
+function setAssets() {
+  const a = parseFloat(document.getElementById('assetIn').value);
+  const d = parseFloat(document.getElementById('debtIn').value);
+  if (!isNaN(a)) Store.set('totalAssets', a);
+  if (!isNaN(d)) Store.set('totalDebts', d);
+  renderAssets(); toast('✅ 资产已设置');
+}
+function getAssets() {
+  const assets = parseFloat(Store.get('totalAssets', 0)) || 0;
+  const debts = parseFloat(Store.get('totalDebts', 0)) || 0;
+  return { assets, debts, net: assets - debts };
+}
+function renderAssets() {
+  const { assets, debts, net } = getAssets();
+  const hidden = Store.get('assetEyes', { net: false, assets: false, debts: false });
+  const mask = (v, hide) => hide ? '****' : '¥' + v.toFixed(2);
+  const set = (id, v, hide) => { const el = document.getElementById(id); if (el) el.textContent = mask(v, hide); };
+  const setEye = (id, hide) => { const el = document.getElementById(id); if (el) el.className = 'fas ' + (hide ? 'fa-eye-slash' : 'fa-eye'); };
+  set('dispNet', net, hidden.net); setEye('eyeNet', hidden.net);
+  set('dispAssets', assets, hidden.assets); setEye('eyeAssets', hidden.assets);
+  set('dispDebts', debts, hidden.debts); setEye('eyeDebts', hidden.debts);
+}
+function toggleAssetEye(k) {
+  const h = Store.get('assetEyes', { net: false, assets: false, debts: false });
+  h[k] = !h[k]; Store.set('assetEyes', h); renderAssets();
+}
+function adjustAssetsByTxn(txn, sign) {
+  const a = parseFloat(txn.amt) || 0; if (a <= 0) return;
+  let assets = parseFloat(Store.get('totalAssets', 0)) || 0;
+  let debts = parseFloat(Store.get('totalDebts', 0)) || 0;
+  const type = txn.type;
+  const cat = txn.cat || '';
+  const sub = txn.sub || '';
+  if (type === 'e') {
+    if (cat === '其他' && sub === '借款') { debts += sign * a; }
+    else { assets -= sign * a; }
+  } else {
+    if (cat === '借入') { assets += sign * a; debts += sign * a; }
+    else { assets += sign * a; }
+  }
+  Store.set('totalAssets', assets);
+  Store.set('totalDebts', debts);
+  renderAssets();
+}
 function editExpense(id) {
   const e = Store.get('expenses', []);
-  const x = e.find(z => z.id === id);
-  if (!x) return;
-  const a = prompt('金额：', x.amt);
-  if (a === null) return;
+  const x = e.find(z => z.id === id); if (!x) return;
+  const old = { type: x.type, cat: x.cat, sub: x.sub, amt: x.amt };
+  const a = prompt('金额：', x.amt); if (a === null) return;
   const type = prompt('类型（e 支出 / i 收入）：', x.type || 'e');
   const cat = prompt('一级分类：', x.cat || '其他');
   const sub = prompt('二级分类（可留空）：', x.sub || '');
@@ -2454,19 +2942,109 @@ function editExpense(id) {
   const date = prompt('日期 (YYYY-MM-DD)：', x.date || new Date().toISOString().slice(0, 10));
   const amt = parseFloat(a);
   if (!isNaN(amt) && amt > 0) {
+    adjustAssetsByTxn(old, -1);
     x.amt = amt; x.type = (type || 'e').trim(); x.cat = cat || x.cat; x.sub = (sub || '').trim(); x.note = note; x.date = date || x.date; x.updatedAt = Date.now();
-    Store.set('expenses', e); renderExpenses(); renderExpChart(); renderAnnual(); toast('✅ 已更新');
+    Store.set('expenses', e);
+    adjustAssetsByTxn(x, 1);
+    toast('✅ 已更新');
+    closeGenMask();
+    refreshExpense();
   }
 }
-function delExpense(id) { Store.set('expenses', Store.get('expenses', []).filter(x => x.id !== id)); renderExpenses(); renderExpChart(); renderAnnual(); }
+function delExpense(id) {
+  const e = Store.get('expenses', []);
+  const x = e.find(z => z.id === id);
+  Store.set('expenses', e.filter(x => x.id !== id));
+  if (x) adjustAssetsByTxn(x, -1);
+  closeGenMask();
+  refreshExpense();
+  toast('🗑️ 已删除');
+}
 function exportCSV() {
   const e = Store.get('expenses', []);
-  let c = '日期,类型,分类,金额,备注\n';
-  e.forEach(x => { c += x.date + ',' + x.type + ',' + x.cat + ',' + x.amt + ',' + (x.note || '') + '\n'; });
+  let c = '日期,类型,分类,二级,金额,备注\n';
+  e.forEach(x => { c += (x.date || '') + ',' + x.type + ',' + (x.cat || '') + ',' + (x.sub || '') + ',' + x.amt + ',' + (x.note || '') + '\n'; });
   const b = new Blob(['\ufeff' + c], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = '收支明细.csv'; a.click(); toast('✅ 已导出');
 }
 
+// ---- 分类管理弹窗 ----
+function openCatManager() {
+  const esubs = getExpSubs();
+  let h = '<div style="font-weight:600;font-size:14px;margin-bottom:8px;color:var(--text)">支出分类</div><div style="display:flex;flex-direction:column;gap:10px">';
+  getExpCats1().forEach(cat => {
+    const listHtml = (esubs[cat] && esubs[cat].length)
+      ? esubs[cat].map(s => '<span class="tag" style="margin:3px;cursor:pointer" onclick="delSub(\'e\',\'' + cat + '\',\'' + s + '\')">' + s + ' <i class="fas fa-times" style="font-size:10px"></i></span>').join('')
+      : '<span style="font-size:12px;color:var(--text3)">（无二级分类）</span>';
+    h += '<div class="cb" style="cursor:default;align-items:flex-start"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">' + (CAT_ICON[cat] || '📦') + ' ' + cat + '</div>' +
+      '<div id="subWrap_e_' + cat + '" style="margin-top:6px;display:none">' +
+      '<div style="margin-bottom:6px">' + listHtml + '</div>' +
+      '<div class="ig" style="margin:0"><input class="in" id="newSub_e_' + cat + '" placeholder="新增二级分类" style="flex:1"><button class="btn-sm btn-p" onclick="addSub(\'e\',\'' + cat + '\')">添加</button></div>' +
+      '</div></div>' +
+      '<div style="display:flex;gap:6px;flex-shrink:0"><button class="btn-sm btn-o" onclick="toggleSubWrap(\'e\',\'' + cat + '\')"><i class="fas fa-edit"></i> 编辑</button>' +
+      '<button class="btn-sm btn-o" style="color:var(--d)" onclick="delCat(\'' + cat + '\')"><i class="fas fa-trash"></i></button></div></div>';
+  });
+  h += '</div>';
+  const isubs = getIncomeSubs();
+  h += '<div style="font-weight:600;font-size:14px;margin:16px 0 8px;color:var(--text)">收入分类</div><div style="display:flex;flex-direction:column;gap:10px">';
+  INCOME_CATS1.forEach(cat => {
+    const listHtml = (isubs[cat] && isubs[cat].length)
+      ? isubs[cat].map(s => '<span class="tag" style="margin:3px;cursor:pointer" onclick="delSub(\'i\',\'' + cat + '\',\'' + s + '\')">' + s + ' <i class="fas fa-times" style="font-size:10px"></i></span>').join('')
+      : '<span style="font-size:12px;color:var(--text3)">（无二级分类）</span>';
+    h += '<div class="cb" style="cursor:default;align-items:flex-start"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">' + (INCOME_ICON[cat] || '📦') + ' ' + cat + '</div>' +
+      '<div id="subWrap_i_' + cat + '" style="margin-top:6px;display:none">' +
+      '<div style="margin-bottom:6px">' + listHtml + '</div>' +
+      '<div class="ig" style="margin:0"><input class="in" id="newSub_i_' + cat + '" placeholder="新增二级分类" style="flex:1"><button class="btn-sm btn-p" onclick="addSub(\'i\',\'' + cat + '\')">添加</button></div>' +
+      '</div></div>' +
+      '<div style="display:flex;gap:6px;flex-shrink:0"><button class="btn-sm btn-o" onclick="toggleSubWrap(\'i\',\'' + cat + '\')"><i class="fas fa-edit"></i> 编辑</button></div></div>';
+  });
+  h += '</div>';
+  openGenMask('🗂️ 分类管理', h);
+}
+function toggleSubWrap(type, cat) { const w = document.getElementById('subWrap_' + type + '_' + cat); if (w) w.style.display = w.style.display === 'none' ? 'block' : 'none'; }
+function addSub(type, cat) {
+  const inp = document.getElementById('newSub_' + type + '_' + cat); if (!inp) return;
+  const n = inp.value.trim(); if (!n) return;
+  const subs = type === 'i' ? getIncomeSubs() : getExpSubs();
+  if (!subs[cat]) subs[cat] = [];
+  if (subs[cat].includes(n)) return toast('已存在');
+  subs[cat].push(n); Store.set(type === 'i' ? 'incomeSubs' : 'expSubs', subs);
+  openCatManager(); toast('已添加「' + n + '」');
+}
+function delSub(type, cat, s) {
+  const subs = type === 'i' ? getIncomeSubs() : getExpSubs();
+  subs[cat] = (subs[cat] || []).filter(x => x !== s);
+  Store.set(type === 'i' ? 'incomeSubs' : 'expSubs', subs);
+  openCatManager(); toast('已删除「' + s + '」');
+}
+function delCat(cat) {
+  if (cat === '其他') return toast('「其他」不可删除');
+  const e = Store.get('expenses', []);
+  const used = e.filter(x => x.cat === cat).length;
+  if (used > 0) { if (!confirm('「' + cat + '」下还有 ' + used + ' 笔记录，删除后这些记录将归入「其他」。确定？')) return; e.forEach(x => { if (x.cat === cat) { x.cat = '其他'; x.updatedAt = Date.now(); } }); Store.set('expenses', e); }
+  const cats = getExpCats1().filter(c => c !== cat);
+  Store.set('expCats1', cats);
+  const subs = getExpSubs(); delete subs[cat]; Store.set('expSubs', subs);
+  fillExpCatOptions(); openCatManager(); toast('已删除「' + cat + '」');
+}
+
+// ---- 通用弹窗 ----
+function openGenMask(title, html) {
+  const t = document.getElementById('genMaskTitle'), b = document.getElementById('genMaskBody'), m = document.getElementById('genMask');
+  if (t) t.textContent = title; if (b) b.innerHTML = html; if (m) m.classList.remove('hide');
+}
+function closeGenMask() { const m = document.getElementById('genMask'); if (m) m.classList.add('hide'); }
+
+// ---- 刷新当前记账面板 ----
+function refreshExpense() {
+  const t = curExpTab || 'record';
+  const pane = document.getElementById('e-' + t);
+  if (!pane || pane.style.display === 'none') return;
+  if (t === 'record') { renderRecent(); renderBudget(); }
+  else if (t === 'bill') renderBill();
+  else if (t === 'stat') renderStat();
+  else if (t === 'emo') renderEmotional();
+}
 // ============================================================
 // LIFE - Habits
 // ============================================================
@@ -2615,17 +3193,17 @@ function renderCalendar() {
   const ev = Store.get('events', []);
   const cds = cdOnDate ? cdOnDate(y, m) : [];
   let h = ['日', '一', '二', '三', '四', '五', '六'].map(d => '<div style="font-weight:600;text-align:center;padding:6px;font-size:12px;color:var(--text2);background:var(--bg-card)">' + d + '</div>').join('');
-  for (let i = 0; i < fd; i++) h += '<div style="background:var(--bg-card);padding:8px;min-height:60px;color:var(--text3)"></div>';
+  for (let i = 0; i < fd; i++) h += '<div style="background:var(--bg-card);padding:6px;min-height:54px;color:var(--text3)"></div>';
   for (let i = 1; i <= dim; i++) {
     const ds = y + '-' + String(m + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
     const it = ds === t;
     const de = ev.filter(x => x.date === ds);
     const dayCd = cds.filter(x => x.ds === ds);
     const ml = (Store.get('moodlogs', {}) || {})[ds];
-    const dayStyle = it ? 'background:var(--primary);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center' : '';
-    const dots = de.slice(0, 2).map(x => '<div onclick="event.stopPropagation();editEvent(\'' + x.id + '\')" style="font-size:10px;background:var(--primary);color:#fff;padding:1px 4px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer">' + x.title + '</div>').join('');
-    const cdDots = dayCd.slice(0, 2).map(x => '<div onclick="event.stopPropagation();go(\'schedule\');switchSchedTab(\'cd\')" style="font-size:10px;color:#fff;padding:1px 4px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;background:' + x.color + '">' + x.name + '</div>').join('');
-    h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:8px;min-height:60px;font-size:13px"><div onclick="openEventForDate(\'' + ds + '\')" style="font-weight:600;margin-bottom:2px;cursor:pointer;display:flex;align-items:center;gap:4px;' + dayStyle + '">' + i + (ml ? ' <span style="font-size:14px;line-height:1">' + ml.mood + '</span>' : '') + '</div>' + dots + cdDots + ((de.length + dayCd.length) > 4 ? '<div style="font-size:10px;color:var(--text3)">+' + ((de.length + dayCd.length) - 4) + '更多</div>' : '') + '</div>';
+    const numStyle = it ? 'background:var(--primary);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin:0 auto' : 'margin:0 auto;text-align:center';
+    const dots = de.slice(0, 2).map(x => '<div onclick="event.stopPropagation();editEvent(\'' + x.id + '\')" style="font-size:9px;background:var(--primary);color:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer">' + x.title + '</div>').join('');
+    const cdDots = dayCd.slice(0, 2).map(x => '<div onclick="event.stopPropagation();go(\'schedule\');switchSchedTab(\'cd\')" style="font-size:9px;color:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;background:' + x.color + '">' + x.name + '</div>').join('');
+    h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:6px;min-height:54px;font-size:13px"><div onclick="openEventForDate(\'' + ds + '\')" style="font-weight:600;cursor:pointer;' + numStyle + '">' + i + '</div>' + (ml ? '<div class="cal-emo" style="text-align:center;font-size:13px;line-height:1.1;margin-top:1px">' + ml.mood + '</div>' : '') + dots + cdDots + ((de.length + dayCd.length) > 4 ? '<div style="font-size:10px;color:var(--text3)">+' + ((de.length + dayCd.length) - 4) + '更多</div>' : '') + '</div>';
   }
   document.getElementById('calGrid').innerHTML = h;
 }
@@ -2769,7 +3347,6 @@ function switchSchedTab(s) {
   const tab = document.getElementById('s-' + schedTab);
   if (tab) tab.style.display = 'block';
   if (schedTab === 'cal') { renderCalendar(); renderEvents(); renderMoodLogs(); }
-  if (schedTab === 'cd') { if (!window.__cdColor) { window.__cdColor = CD_COLORS[0].v; } renderCDColors(window.__cdColor); onCDCalType(); renderCountdowns(); }
 }
 function onCDCalType() {
   const type = document.getElementById('cdCalType').value;
@@ -2904,7 +3481,7 @@ function uploadFile(i) {
 // FOOD MODULE (吃啥)
 // ============================================================
 const WATER_GOAL = 2000;
-const WATER_TAGS = [100, 150, 200, 250, 300, 450, 500];
+const WATER_TAGS = [[100, 150, 200, 250], [300, 450, 500]];
 function todayStr() { return new Date().toISOString().slice(0, 10); }
 
 // ----- 饮水计划 -----
@@ -2930,7 +3507,7 @@ function renderWater() {
   if (elPct) elPct.textContent = pct + '%';
   // 标签按钮
   const btns = document.getElementById('wBtns');
-  if (btns) btns.innerHTML = WATER_TAGS.map(m => '<button class="w-btn" onclick="addWater(' + m + ')">' + m + 'ml</button>').join('');
+  if (btns) btns.innerHTML = WATER_TAGS.map(row => '<div style="display:flex;gap:6px;justify-content:center">' + row.map(m => '<button class="w-btn" onclick="addWater(' + m + ')">' + m + 'ml</button>').join('') + '</div>').join('<div style="height:6px"></div>');
   // 今日记录
   const log = document.getElementById('wLog');
   if (log) log.innerHTML = day.length === 0
@@ -3209,13 +3786,84 @@ function switchFoodTab(f) {
   if (foodTab === 'water') renderWater();
   if (foodTab === 'calorie') { renderCalorieFoodList(); renderCalorie(); }
   if (foodTab === 'eat') renderEatCats();
+  if (foodTab === 'shop') renderShops();
 }
 function renderFood() {
   renderWater();
   renderCalorieFoodList();
   renderCalorie();
   renderEatCats();
+  renderShops();
 }
+
+// ---- 探店 ----
+let shopEditingId = null;
+let shopTempDishes = [];
+function getShops() { return Store.get('foodShops', []) || []; }
+function saveShops(list) { Store.set('foodShops', list); }
+function starHtml(n) { return '<span style="color:#FFB347">' + '⭐'.repeat(parseInt(n || 0)) + '</span>'; }
+function renderShops() {
+  const el = document.getElementById('shopList'); if (!el) return;
+  const q = (document.getElementById('shopSearch')?.value || '').toLowerCase();
+  let list = getShops();
+  if (q) list = list.filter(s => (s.name || '').toLowerCase().includes(q) || (s.addr || '').toLowerCase().includes(q) || (s.sig || '').toLowerCase().includes(q) || (s.note || '').toLowerCase().includes(q) || (s.dishes || []).some(d => (d.name || '').toLowerCase().includes(q)));
+  if (list.length === 0) { el.innerHTML = '<div class="emp"><i class="fas fa-store"></i><p>' + (q ? '没有匹配的店铺' : '还没有探店记录，点击右上角「新建店名」添加') + '</p></div>'; return; }
+  el.innerHTML = list.slice().reverse().map(s => {
+    const dishPreview = (s.dishes || []).slice(0, 3).map(d => d.name).join('、') || '暂无菜品';
+    return '<div class="cb" style="align-items:flex-start;cursor:default"><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">' + escHtml(s.name) + ' ' + starHtml(s.rate) + '</div><div style="font-size:12px;color:var(--text3);margin-top:2px">' + (s.date || '') + (s.addr ? ' · ' + escHtml(s.addr) : '') + '</div><div style="font-size:13px;color:var(--text2);margin-top:4px">招牌：' + escHtml(s.sig || '—') + '</div><div style="font-size:12px;color:var(--text3);margin-top:4px">菜品：' + escHtml(dishPreview) + ((s.dishes || []).length > 3 ? ' 等' + s.dishes.length + '道' : '') + '</div>' + (s.note ? '<div style="font-size:12px;color:var(--text3);margin-top:4px">备注：' + escHtml(s.note) + '</div>' : '') + '</div><div style="display:flex;gap:6px;flex-shrink:0"><button class="btn-sm btn-o" onclick="openShopModal(\'' + s.id + '\')"><i class="fas fa-pen"></i></button><button class="btn-sm btn-o" style="color:var(--d)" onclick="delShop(\'' + s.id + '\')"><i class="fas fa-trash"></i></button></div></div>';
+  }).join('');
+}
+function openShopModal(id) {
+  shopEditingId = id || null;
+  shopTempDishes = [];
+  const s = id ? getShops().find(x => x.id === id) : null;
+  document.getElementById('shopMaskTitle').textContent = s ? '🍽️ 编辑店铺' : '🍽️ 新增店铺';
+  document.getElementById('shopName').value = s ? s.name : '';
+  document.getElementById('shopAddr').value = s ? s.addr || '' : '';
+  document.getElementById('shopSig').value = s ? s.sig || '' : '';
+  document.getElementById('shopDate').value = s ? s.date : new Date().toISOString().slice(0, 10);
+  document.getElementById('shopRate').value = s ? (s.rate || 5) : 5;
+  document.getElementById('shopNote').value = s ? s.note || '' : '';
+  if (s && s.dishes) shopTempDishes = JSON.parse(JSON.stringify(s.dishes));
+  renderShopDishes();
+  document.getElementById('shopMask').classList.remove('hide');
+}
+function closeShopModal() { document.getElementById('shopMask').classList.add('hide'); shopEditingId = null; shopTempDishes = []; }
+function renderShopDishes() {
+  const el = document.getElementById('shopDishList');
+  if (!el) return;
+  if (shopTempDishes.length === 0) { el.innerHTML = '<span style="font-size:12px;color:var(--text3)">暂无菜品，可在下方添加</span>'; return; }
+  el.innerHTML = shopTempDishes.map((d, i) => '<div class="ig" style="margin:4px 0"><input class="in" value="' + escHtml(d.name) + '" onchange="editShopDishName(' + i + ',this.value)" style="flex:1"><select class="in" onchange="editShopDishRate(' + i + ',this.value)" style="flex:0 0 auto;width:90px">' + [5,4,3,2,1].map(n => '<option value="' + n + '"' + ((d.rate || 5) == n ? ' selected' : '') + '>' + '⭐'.repeat(n) + '</option>').join('') + '</select><button class="btn-sm btn-o" style="color:var(--d)" onclick="delShopDish(' + i + ')"><i class="fas fa-times"></i></button></div>').join('');
+}
+function addShopDish() {
+  const inp = document.getElementById('shopNewDish'); const n = inp.value.trim(); if (!n) return;
+  shopTempDishes.push({ name: n, rate: 5 }); inp.value = ''; renderShopDishes();
+}
+function editShopDishName(i, v) { if (shopTempDishes[i]) shopTempDishes[i].name = v; }
+function editShopDishRate(i, v) { if (shopTempDishes[i]) shopTempDishes[i].rate = parseInt(v) || 5; }
+function delShopDish(i) { shopTempDishes.splice(i, 1); renderShopDishes(); }
+function saveShop() {
+  const name = document.getElementById('shopName').value.trim();
+  if (!name) return toast('请输入店名');
+  const s = {
+    id: shopEditingId || 'shop_' + Date.now(),
+    name: name,
+    addr: document.getElementById('shopAddr').value.trim(),
+    sig: document.getElementById('shopSig').value.trim(),
+    date: document.getElementById('shopDate').value || new Date().toISOString().slice(0, 10),
+    rate: parseInt(document.getElementById('shopRate').value) || 5,
+    note: document.getElementById('shopNote').value.trim(),
+    dishes: shopTempDishes.filter(d => d.name.trim()).map(d => ({ name: d.name.trim(), rate: d.rate || 5 })),
+    updatedAt: Date.now()
+  };
+  const list = getShops();
+  if (shopEditingId) {
+    const idx = list.findIndex(x => x.id === shopEditingId);
+    if (idx > -1) list[idx] = s; else list.unshift(s);
+  } else { list.unshift(s); }
+  saveShops(list); closeShopModal(); renderShops(); toast('✅ 已保存');
+}
+function delShop(id) { if (!confirm('删除这家店铺？')) return; saveShops(getShops().filter(x => x.id !== id)); renderShops(); toast('🗑️ 已删除'); }
 
 function switchContentTab(t) {
   document.querySelectorAll('.c-tab').forEach(el => el.style.display = 'none');
@@ -3271,6 +3919,12 @@ function delMat(id) { Store.set('materials', Store.get('materials', []).filter(m
 // DATA
 // ============================================================
 function renderDataCharts() {
+  const { start, end } = weekRange();
+  const meta = Store.get('weeklyReportMeta', {});
+  if (meta.week === (start + '_' + end) && meta.text) {
+    document.getElementById('weeklyReport').textContent = meta.text;
+    updateReportButtons(true);
+  } else { updateReportButtons(false); }
   const tasks = Store.get('tasks', []);
   const t = new Date(), ws = new Date(t); ws.setDate(t.getDate() - t.getDay());
   const wt = tasks.filter(x => { if (!x.date) return false; const d = new Date(x.date); return d >= ws && d <= t; });
@@ -3287,13 +3941,79 @@ function renderDataCharts() {
   const ctx2 = document.getElementById('distChart');
   if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 8, font: { size: 11 } } } } } }); }
 }
-function genReport() {
-  const tasks = Store.get('tasks', []);
+function weekRange() {
   const t = new Date(), ws = new Date(t); ws.setDate(t.getDate() - t.getDay());
-  const wt = tasks.filter(x => { if (!x.date) return false; const d = new Date(x.date); return d >= ws && d <= t; });
-  const d = wt.filter(x => x.done);
-  const r = '📋 本周工作周报\n━━━━━━━━━━━━━━━━━━\n📊 本周完成：' + d.length + ' / ' + wt.length + ' 项任务\n✅ 完成率：' + (wt.length ? Math.round(d.length / wt.length * 100) : 0) + '%\n\n📌 已完成：\n' + (d.map(x => '  ✔ ' + x.title).join('\n') || '  （暂无）') + '\n\n📌 待完成：\n' + (wt.filter(x => !x.done).map(x => '  ○ ' + x.title).join('\n') || '  （全部完成）') + '\n\n📅 ' + new Date().toLocaleString();
-  document.getElementById('weeklyReport').textContent = r; toast('✅ 周报已生成');
+  const we = new Date(ws); we.setDate(ws.getDate() + 6);
+  return { start: ws.toISOString().slice(0, 10), end: we.toISOString().slice(0, 10) };
+}
+function genReport(force) {
+  const { start, end } = weekRange();
+  const weekKey = start + '_' + end;
+  const last = Store.get('weeklyReportMeta', {});
+  const currentHash = reportHash();
+  if (!force && last.week === weekKey && document.getElementById('weeklyReport').textContent.trim()) {
+    document.getElementById('weeklyReport').textContent = last.text || ''; toast('📋 本周周报已生成，可使用「重新生成」更新');
+    updateReportButtons(true); return;
+  }
+  const tasks = Store.get('tasks', []);
+  const habits = Store.get('habits', []);
+  const expenses = Store.get('expenses', []);
+  const notes = Store.get('notes', []);
+  const events = Store.get('events', []);
+  const health = Store.get('health', []);
+  const wt = tasks.filter(x => x.date && x.date >= start && x.date <= end);
+  const done = wt.filter(x => x.done);
+  const high = wt.filter(x => x.pri === 'h');
+  // 习惯：取本周打卡天数
+  const habitLines = habits.slice(0, 5).map(h => {
+    const days = Object.keys(h.log || {}).filter(d => d >= start && d <= end && h.log[d]).length;
+    return '  · ' + h.name + '：打卡 ' + days + ' 天';
+  });
+  // 记账
+  const exp = expenses.filter(x => x.date && x.date >= start && x.date <= end);
+  const expTotal = exp.filter(x => x.type === 'e').reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
+  const incTotal = exp.filter(x => x.type === 'i').reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
+  const topCat = {};
+  exp.filter(x => x.type === 'e').forEach(x => { topCat[x.cat || '其他'] = (topCat[x.cat || '其他'] || 0) + (parseFloat(x.amt) || 0); });
+  const topCats = Object.entries(topCat).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  // 笔记/日程/健康
+  const weekNotes = notes.filter(x => x.date && x.date >= start && x.date <= end).length;
+  const weekEvents = events.filter(x => x.date && x.date >= start && x.date <= end).length;
+  const weekHealth = health.filter(x => x.date && x.date >= start && x.date <= end);
+  const latestWeight = weekHealth.length ? weekHealth[weekHealth.length - 1].weight : null;
+  // 生成文本
+  let r = '📋 本周工作周报（' + start + ' ~ ' + end + '）\n━━━━━━━━━━━━━━━━━━\n';
+  r += '📊 任务：' + done.length + ' / ' + wt.length + ' 完成' + (wt.length ? '（完成率 ' + Math.round(done.length / wt.length * 100) + '%）' : '') + '\n';
+  r += '🔥 紧急任务：' + high.length + ' 项' + (high.filter(x => x.done).length ? '，已完成 ' + high.filter(x => x.done).length + ' 项' : '') + '\n\n';
+  r += '📌 已完成任务：\n' + (done.length ? done.map(x => '  ✔ ' + x.title + (x.pri === 'h' ? '【紧急】' : x.pri === 'l' ? '【低优】' : '')).join('\n') : '  （暂无）') + '\n\n';
+  r += '📌 待完成任务：\n' + (wt.filter(x => !x.done).length ? wt.filter(x => !x.done).map(x => '  ○ ' + x.title).join('\n') : '  （全部完成）') + '\n\n';
+  if (habitLines.length) r += '🔥 习惯打卡：\n' + habitLines.join('\n') + '\n\n';
+  r += '💰 收支：收入 ¥' + incTotal.toFixed(2) + ' · 支出 ¥' + expTotal.toFixed(2) + '\n';
+  if (topCats.length) r += '🏷️ 支出 TOP：' + topCats.map(([c, a]) => c + ' ¥' + a.toFixed(2)).join(' / ') + '\n';
+  r += '\n📝 本周记录：笔记 ' + weekNotes + ' 条 / 日程 ' + weekEvents + ' 场' + (latestWeight ? ' / 最新体重 ' + latestWeight + 'kg' : '') + '\n';
+  r += '\n📅 ' + new Date().toLocaleString();
+  document.getElementById('weeklyReport').textContent = r;
+  Store.set('weeklyReportMeta', { week: weekKey, text: r, hash: currentHash, generatedAt: Date.now() });
+  updateReportButtons(true); toast('✅ 周报已生成');
+}
+function reportHash() {
+  const { start, end } = weekRange();
+  const keys = ['tasks','habits','expenses','notes','events','health'];
+  return keys.map(k => JSON.stringify(Store.get(k, []))).join('|').length + '_' + start + '_' + end;
+}
+function checkReportStale() {
+  const meta = Store.get('weeklyReportMeta', {});
+  const { start, end } = weekRange();
+  const stale = meta.week === (start + '_' + end) && meta.hash !== reportHash();
+  const btn = document.getElementById('reGenReportBtn');
+  if (btn && meta.week === (start + '_' + end)) btn.style.display = stale ? '' : 'none';
+}
+function updateReportButtons(generated) {
+  const genBtn = document.getElementById('genReportBtn');
+  const reBtn = document.getElementById('reGenReportBtn');
+  if (genBtn) genBtn.innerHTML = generated ? '<i class="fas fa-check"></i> 已生成' : '<i class="fas fa-file-alt"></i> 生成周报';
+  if (reBtn) reBtn.style.display = generated ? '' : 'none';
+  checkReportStale();
 }
 
 // ============================================================
@@ -3301,8 +4021,33 @@ function genReport() {
 // ============================================================
 const newsCache = {};
 
+function renderFinance() {
+  const list = document.getElementById('newsList');
+  const today = new Date().toISOString().slice(0, 10);
+  const items = [
+    ['📊 宏观', '关注今日央行公开市场操作与国债收益率走势'],
+    ['📈 A股', '上证 / 深成 / 创业板三大指数盘面与北向资金流向'],
+    ['💱 外汇', '人民币兑美元中间价及在岸 / 离岸汇率波动'],
+    ['🥇 黄金', '国际现货黄金与 COMEX 期货价格'],
+    ['🛢️ 原油', '布伦特与 WTI 原油期货走势'],
+    ['🏦 利率', 'LPR 报价与货币基金七日年化参考']
+  ];
+  list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">📅 ' + today + ' · 每日财经要点（接入行情 API 后可自动刷新）</div>' +
+    items.map(([t, d]) => '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:18px;min-width:26px;text-align:center">' + t.split(' ')[0] + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">' + t.split(' ')[1] + '</div><div style="font-size:12px;color:var(--text2);margin-top:2px">' + d + '</div></div></div>').join('');
+}
+
 function renderNews(platform) {
   if (!platform) platform = document.querySelector('#newsTabs .fb.active')?.getAttribute('data-p') || 'weibo';
+  const newsList = document.getElementById('newsList');
+  const laterPage = document.getElementById('laterPage');
+  const title = document.getElementById('newsTitle');
+  const refreshBtn = document.getElementById('newsRefreshBtn');
+  if (newsList) newsList.style.display = platform === 'later' ? 'none' : '';
+  if (laterPage) laterPage.style.display = platform === 'later' ? '' : 'none';
+  if (refreshBtn) refreshBtn.style.display = platform === 'later' ? 'none' : '';
+  if (title) title.textContent = platform === 'later' ? '📑 稍后阅读' : '🔥 实时热点';
+  if (platform === 'later') { showReadLater(); return; }
+  if (platform === 'finance') { renderFinance(); return; }
   const data = newsCache[platform] || [];
   const list = document.getElementById('newsList');
   if (data.length === 0) {
@@ -3351,9 +4096,8 @@ function updateNewsBadge() {
 
 function showReadLater() {
   const favs = Store.get('hotFav', []);
-  const section = document.getElementById('laterSection');
   const list = document.getElementById('laterList');
-  section.style.display = 'block';
+  if (!list) return;
   list.innerHTML = favs.length === 0
     ? '<div class="emp" style="padding:20px"><i class="fas fa-bookmark"></i><p>稍后阅读为空</p></div>'
     : favs.map((f, i) => '<div class="cb" style="cursor:default"><span style="font-size:12px;color:var(--text3);min-width:16px">' + (i + 1) + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="window.open(\'' + f.url + '\',\'_blank\')">' + f.title + '</div><div style="font-size:11px;color:var(--text3)">' + f.date + ' · ' + f.platform + '</div></div><button class="btn-icon btn-o" onclick="rmFav(' + i + ')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
@@ -3362,7 +4106,7 @@ function showReadLater() {
 function rmFav(idx) {
   let favs = Store.get('hotFav', []);
   favs.splice(idx, 1); Store.set('hotFav', favs);
-  showReadLater(); updateNewsBadge(); renderNews();
+  showReadLater(); updateNewsBadge();
 }
 
 // ============================================================
@@ -3372,6 +4116,7 @@ const dramaCache = { tv: [], movie: [], variety: [] };
 
 function renderDrama(type) {
   if (!type) type = document.querySelector('#dramaTabs .fb.active')?.getAttribute('data-d') || 'tv';
+  if (type === 'want') { renderWantList(); return; }
   const data = dramaCache[type] || [];
   const list = document.getElementById('dramaList');
   const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
@@ -3492,6 +4237,19 @@ function updateDramaBadge() {
   const want = Store.get('dramaWant', []);
   document.getElementById('wantCount').textContent = want.length;
 }
+function switchDramaTab(d) {
+  document.querySelectorAll('#dramaTabs .fb').forEach(f => f.classList.toggle('active', f.getAttribute('data-d') === d));
+  renderDrama(d);
+}
+function renderWantList() {
+  const want = Store.get('dramaWant', []);
+  const list = document.getElementById('dramaList');
+  const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
+  list.innerHTML = want.length === 0
+    ? '<div class="emp" style="grid-column:1/-1"><i class="fas fa-heart"></i><p>想看列表为空，去「电视剧 / 电影 / 综艺」里点 ❤ 想看吧</p></div>'
+    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer" onclick="window.open(\'' + w.url + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;color:var(--text3)"><span class="tag t1">' + (typeName[w.type] || '影视') + '</span>' + (w.rate ? '<span>⭐' + escHtml(w.rate) + '</span>' : '') + '<span>' + w.date + '</span><div style="flex:1"></div><button class="btn-sm btn-o" onclick="editWant(' + i + ')"><i class="fas fa-pen"></i> 评分</button><button class="btn-sm btn-o" onclick="rmWant(' + i + ')" style="color:var(--d)"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
+  updateDramaBadge();
+}
 
 function showWant() {
   const want = Store.get('dramaWant', []);
@@ -3527,8 +4285,8 @@ let moodSel = '';
 let moodDate = '';
 function escHtml(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function getMoodlogs() { const m = Store.get('moodlogs', {}); return (m && typeof m === 'object' && !Array.isArray(m)) ? m : {}; }
-function openMoodModal() {
-  moodDate = document.getElementById('evDate')?.value || new Date().toISOString().slice(0, 10);
+function openMoodModal(d) {
+  moodDate = d || document.getElementById('evDate')?.value || new Date().toISOString().slice(0, 10);
   const cur = getMoodlogs()[moodDate];
   moodSel = cur ? cur.mood : '';
   document.getElementById('moodText').value = cur ? (cur.text || '') : '';
@@ -3557,7 +4315,7 @@ function renderMoodLogs() {
   if (dates.length === 0) { el.innerHTML = '<div class="emp" style="padding:20px"><i class="fas fa-book-open"></i><p>还没有日志，点右上角「写日志」记录今天的心情吧</p></div>'; return; }
   el.innerHTML = dates.slice(0, 10).map(d => {
     const x = logs[d];
-    return '<div class="mood-item"><span class="mood-emoji">' + (x.mood || '🙂') + '</span><div class="mood-body"><div class="mood-text">' + (x.text ? escHtml(x.text) : '<span style="color:var(--text3)">（只记了心情，没有文字）</span>') + '</div><div class="mood-date">' + d + '</div></div><span class="mood-del" onclick="delMoodLog(\'' + d + '\')"><i class="fas fa-times"></i></span></div>';
+    return '<div class="mood-item"><span class="mood-emoji">' + (x.mood || '🙂') + '</span><div class="mood-body"><div class="mood-text">' + (x.text ? escHtml(x.text) : '<span style="color:var(--text3)">（只记了心情，没有文字）</span>') + '</div><div class="mood-date">' + d + '</div></div><span style="cursor:pointer;color:var(--text3);font-size:14px;margin-right:8px" onclick="openMoodModal(\'' + d + '\')" title="编辑"><i class="fas fa-pen"></i></span><span class="mood-del" onclick="delMoodLog(\'' + d + '\')"><i class="fas fa-times"></i></span></div>';
   }).join('');
 }
 function delMoodLog(d) {
@@ -3747,10 +4505,12 @@ function addEnToBook() {
   addToBook({ kind: 'en', tag: it.src || '考研', w: it.w, py: it.py || '', def: (it.pos ? it.pos + ' ' : '') + (it.def || ''), src: '' });
 }
 function renderBook() {
-  const b = getBook();
+  let b = getBook();
   const el = document.getElementById('bookList');
   if (!el) return;
-  if (b.length === 0) { el.innerHTML = '<div class="emp" style="padding:20px"><i class="fas fa-book"></i><p>积累本还是空的，去「中文/英语积累」里把喜欢的内容加进来吧</p></div>'; return; }
+  const q = (document.getElementById('bookSearch')?.value || '').toLowerCase();
+  if (q) b = b.filter(x => (x.w || '').toLowerCase().includes(q) || (x.def || '').toLowerCase().includes(q) || (x.src || '').toLowerCase().includes(q) || (x.tag || '').toLowerCase().includes(q));
+  if (b.length === 0) { el.innerHTML = '<div class="emp" style="padding:20px"><i class="fas fa-book"></i><p>' + (q ? '没有匹配内容' : '积累本还是空的，去「中文/英语积累」里把喜欢的内容加进来吧') + '</p></div>'; return; }
   el.innerHTML = b.map(x => '<div class="book-item"><span class="book-tag">' + (x.tag || (x.kind === 'cn' ? '中文' : '英语')) + '</span><div class="book-main"><div class="book-t">' + escHtml(x.w) + (x.py ? ' <span style="font-size:12px;color:var(--accent);font-weight:400">' + escHtml(x.py) + '</span>' : '') + '</div><div class="book-s">' + escHtml(x.def) + (x.src ? ' —— ' + escHtml(x.src) : '') + '</div></div><span class="book-x" onclick="delBookItem(\'' + x.id + '\')"><i class="fas fa-times"></i></span></div>').join('');
 }
 function delBookItem(id) { Store.set('studyBook', getBook().filter(x => x.id !== id)); renderBook(); }
@@ -3767,7 +4527,22 @@ const EXP_SUBS_DEFAULT = {
   '学习': ['书籍','课程','文具','考试','培训'],
   '医疗': ['门诊','药品','体检','牙科'],
   '住房': ['房租','物业','水电燃气','维修'],
-  '薪资': [],
+  '其他': ['借款']
+};
+const CATS1 = ['餐饮','交通','购物','娱乐','学习','医疗','住房','其他'];
+const INCOME_CATS1 = ['薪资','兼职','奖金','理财盈亏','收红包','中奖','借入','报销','卖二手','收礼','补贴','其他'];
+const INCOME_SUBS_DEFAULT = {
+  '薪资': ['基本工资','绩效工资','加班费','津贴'],
+  '兼职': ['写作','设计','翻译','代驾','跑腿','众包','其他'],
+  '奖金': ['年终奖','季度奖','项目奖','全勤奖','其他'],
+  '理财盈亏': ['股票','基金','债券','存款利息','数字货币','其他'],
+  '收红包': ['家庭红包','朋友红包','群红包','其他'],
+  '中奖': ['彩票','抽奖','游戏奖励','其他'],
+  '借入': ['信用卡借款','亲友借款','网贷','其他'],
+  '报销': ['差旅报销','餐饮报销','交通报销','办公报销','医疗报销','其他'],
+  '卖二手': ['数码','服饰','书籍','家居','其他'],
+  '收礼': ['现金','礼品卡','实物','其他'],
+  '补贴': ['住房补贴','交通补贴','餐饮补贴','通讯补贴','高温补贴','其他'],
   '其他': []
 };
 function getExpSubs() {
@@ -3776,36 +4551,34 @@ function getExpSubs() {
   Object.keys(EXP_SUBS_DEFAULT).forEach(k => { if (!Array.isArray(s[k])) s[k] = EXP_SUBS_DEFAULT[k].slice(); });
   return s;
 }
+function getIncomeSubs() {
+  let s = Store.get('incomeSubs', null);
+  if (!s || typeof s !== 'object' || Array.isArray(s)) { s = JSON.parse(JSON.stringify(INCOME_SUBS_DEFAULT)); Store.set('incomeSubs', s); }
+  Object.keys(INCOME_SUBS_DEFAULT).forEach(k => { if (!Array.isArray(s[k])) s[k] = (INCOME_SUBS_DEFAULT[k] || []).slice(); });
+  return s;
+}
+function onExpTypeChange() { fillExpCatOptions(); }
 function onExpCatChange() { fillExpSubs(); }
+function fillExpCatOptions() {
+  const type = document.getElementById('expType')?.value || 'e';
+  const sel = document.getElementById('expCat'); if (!sel) return;
+  const cats = type === 'i' ? INCOME_CATS1 : getExpCats1();
+  const map = type === 'i' ? INCOME_ICON : CAT_ICON;
+  let h = '';
+  cats.forEach(c => { h += '<option value="' + c + '">' + (map[c] || '📦') + ' ' + c + '</option>'; });
+  sel.innerHTML = h;
+  fillExpSubs();
+}
 function fillExpSubs() {
+  const type = document.getElementById('expType')?.value || 'e';
   const catEl = document.getElementById('expCat');
   if (!catEl) return;
   const cat = catEl.value;
-  const subs = getExpSubs()[cat] || [];
+  const subs = type === 'i' ? (getIncomeSubs()[cat] || []) : (getExpSubs()[cat] || []);
   const sel = document.getElementById('expSub');
   let h = '<option value="">（不选二级）</option>';
   subs.forEach(s => { h += '<option value="' + s + '">' + s + '</option>'; });
   sel.innerHTML = h;
-}
-function manageExpSubs() {
-  const cat = document.getElementById('expCat').value;
-  const subs = getExpSubs();
-  const op = prompt('「' + cat + '」二级分类管理：\n输入新名称 = 添加\n输入 "del:名称" = 删除\n当前：' + (subs[cat] && subs[cat].length ? subs[cat].join('、') : '（无）'), '');
-  if (!op) return;
-  if (op.startsWith('del:')) {
-    const n = op.slice(4).trim();
-    subs[cat] = (subs[cat] || []).filter(s => s !== n);
-    Store.set('expSubs', subs); fillExpSubs(); toast('已删除');
-  } else {
-    const n = op.trim();
-    if (!n) return;
-    if (!subs[cat]) subs[cat] = [];
-    if (subs[cat].includes(n)) return toast('已存在');
-    subs[cat].push(n);
-    Store.set('expSubs', subs); fillExpSubs();
-    document.getElementById('expSub').value = n;
-    toast('已添加二级分类「' + n + '」');
-  }
 }
 
 // ============================================================
@@ -3905,7 +4678,7 @@ onExpCatChange();
 // ============================================================
 function exportData() {
   const d = {};
-  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs'].forEach(k => { d[k] = Store.get(k, null); });
+  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs','incomeSubs','totalAssets','totalDebts','assetEyes','foodShops'].forEach(k => { d[k] = Store.get(k, null); });
   const b = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = '工作台备份_' + new Date().toISOString().slice(0, 10) + '.json'; a.click(); toast('✅ 已导出');
 }
@@ -3918,8 +4691,8 @@ function importData(i) {
 function clearData() {
   if (!confirm('确定清空所有数据？\n建议先导出备份！')) return;
   if (!confirm('再次确认！')) return;
-  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook'].forEach(k => Store.set(k, []));
-  Store.set('budget', 0); Store.set('targetWeight', 0); Store.set('expSubs', {});
+  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook','foodShops'].forEach(k => Store.set(k, []));
+  Store.set('budget', 0); Store.set('targetWeight', 0); Store.set('expSubs', {}); Store.set('incomeSubs', {}); Store.set('totalAssets', 0); Store.set('totalDebts', 0); Store.set('assetEyes', { net: false, assets: false, debts: false });
   renderAll(); toast('🗑️ 已清空');
 }
 </script>
