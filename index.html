@@ -107,6 +107,10 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .btn-icon{width:32px;height:32px;padding:0;justify-content:center;border-radius:8px}
 .cb-acts.task-acts{flex-direction:row;align-items:center;gap:4px;margin-left:8px}
 .cb-acts.task-acts .btn-icon{width:22px;height:22px;font-size:11px;border-radius:5px}
+.txn-acts{display:flex;flex-direction:column;gap:4px;margin-left:8px;align-items:center}
+.txn-acts .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px}
+.bill-total{justify-content:center;text-align:center}
+.bill-total .si{width:auto;height:auto}
 .ig{display:flex;gap:8px;margin-bottom:12px}
 .in{flex:1;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px}
 .in:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(223,48,28,0.1)}
@@ -155,12 +159,13 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .si-d{font-size:12px;color:var(--text3)}
 .stat-chart-box{height:240px}
 .stat-summary{display:block}
-.stat-bar{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px}
-.stat-bar-item{flex:1;min-width:120px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:background .2s}
+.stat-bar{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;align-items:flex-start}
+.stat-col{flex:1;min-width:120px;display:flex;flex-direction:column;gap:8px}
+.stat-bar-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:background .2s}
 .stat-bar-item:active{background:var(--primary-bg)}
 .stat-bar-item span{display:block;font-size:12px;color:var(--text3);margin-bottom:2px}
 .stat-bar-item .num{font-size:18px;font-weight:700}
-.stat-detail{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:12px}
+.stat-detail{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:4px}
 .stat-detail.hide{display:none}
 @media(max-width:1024px){.g4{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){
@@ -221,15 +226,20 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .cb-acts{flex-direction:column;align-items:flex-end;gap:2px;margin-left:6px;flex:0 0 auto}
   .cb-acts.task-acts{flex-direction:row;align-items:center;gap:2px}
   .cb-acts.task-acts .btn-icon{width:20px;height:20px;font-size:10px;border-radius:5px}
+  .txn-acts{gap:2px;margin-left:4px}
+  .txn-acts .btn-icon{width:14px;height:14px;font-size:8px;border-radius:3px}
   .cb-acts .tag{padding:1px 6px;font-size:11px}
   .stat-chart-box{height:120px!important}
   .stat-summary{display:block}
   .stat-bar{flex-direction:column;gap:8px}
+  .stat-col{flex:1 1 100%;min-width:auto;gap:6px}
   .stat-bar-item{min-width:auto;padding:8px 10px;display:flex;align-items:center;justify-content:space-between}
   .stat-bar-item span{font-size:11px;margin-bottom:0}
   .stat-bar-item .num{font-size:16px}
-  .stat-detail{padding:8px 10px}
+  .stat-detail{padding:8px 10px;margin-bottom:2px}
   .stat-detail .cb{padding:5px 0}
+  #expMonth{width:110px;padding:2px 6px;font-size:12px}
+  .bill-total .num{font-size:12px}
   .page.active{padding-bottom:4px}
   #homeStats{grid-template-columns:repeat(2,1fr)!important}
   #homeStats .sc{flex-direction:row}
@@ -458,10 +468,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
               <div class="ig"><select class="in" id="expCat" onchange="onExpCatChange()" style="flex:1 1 40%"></select><select class="in" id="expSub" style="flex:1 1 34%"></select></div>
               <div class="ig"><input class="in" id="expNote" placeholder="备注" style="flex:1 1 58%"><button class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto"><i class="fas fa-cog"></i></button><button class="btn btn-p" onclick="addExpense()" style="flex:0 0 auto"><i class="fas fa-plus"></i></button></div>
               <div class="card" style="padding:10px 14px;margin-top:12px" id="assetCards">
-                <div class="asset-line asset-net"><span class="a-lab">净资产</span><span class="a-num" id="dispNet">¥0.00</span><i class="fas fa-eye asset-eye" id="eyeNet" onclick="toggleAssetEye('net')" title="显示/隐藏金额"></i></div>
+                <div class="asset-line asset-net"><span class="a-lab">净资产</span><span class="a-num" id="dispNet">0.00</span><i class="fas fa-eye asset-eye" id="eyeNet" onclick="toggleAssetEye()" title="显示/隐藏金额"></i></div>
                 <div class="asset-line asset-row2">
-                  <span class="a-grp"><span class="a-lab">总资产</span><span class="a-num" id="dispAssets">¥0.00</span><i class="fas fa-eye asset-eye" id="eyeAssets" onclick="toggleAssetEye('assets')" title="显示/隐藏金额"></i></span>
-                  <span class="a-grp"><span class="a-lab">总负债</span><span class="a-num a-debt" id="dispDebts">¥0.00</span><i class="fas fa-eye asset-eye" id="eyeDebts" onclick="toggleAssetEye('debts')" title="显示/隐藏金额"></i></span>
+                  <span class="a-grp"><span class="a-lab">总资产</span><span class="a-num" id="dispAssets">0.00</span></span>
+                  <span class="a-grp"><span class="a-lab">总负债</span><span class="a-num a-debt" id="dispDebts">0.00</span></span>
                 </div>
               </div>
               <div class="ig" style="margin-top:10px"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:1 1 38%"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:1 1 38%"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto">设置</button></div>
@@ -487,11 +497,11 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
               <div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="statScopeTabs" style="margin:0"><span class="fb active" data-s="month">月度</span><span class="fb" data-s="year">年度</span></div></div>
             </div>
             <div id="statMonthWrap">
-              <div class="card-hd" style="margin-top:6px"><h3 style="font-size:14px">月度分析</h3><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expMonthLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="month" id="expMonth" onchange="renderStat()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"></div></div>
+              <div class="card-hd" style="margin-top:6px"><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expMonthLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="month" id="expMonth" onchange="renderStat()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"></div></div>
               <div style="margin-top:8px"><div class="stat-chart-box"><canvas id="expChart"></canvas></div><div id="statMonthSummary" class="stat-summary"></div></div>
             </div>
             <div id="statYearWrap" style="display:none">
-              <div class="card-hd" style="margin-top:6px"><h3 style="font-size:14px">年度分析 <span id="annYearLabel" style="font-size:13px;color:var(--text2)"></span></h3><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expYearLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="number" id="expYear" onchange="renderStat()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px;width:90px"></div></div>
+              <div class="card-hd" style="margin-top:6px"><div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="expYearLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="number" id="expYear" onchange="renderStat()" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px;width:90px"></div></div>
               <div style="margin-top:8px"><div class="stat-chart-box"><canvas id="annChart"></canvas></div><div id="statYearSummary" class="stat-summary"></div></div>
             </div>
           </div>
@@ -2070,7 +2080,10 @@ function mergeRecords(local, remote) {
       // 对象按日期/分类键浅合并，避免单端覆盖另一端的键
       result[key] = Object.assign({}, loc || {}, rem || {});
     } else if (key === 'assetEyes') {
-      result[key] = Object.assign({}, loc || {}, rem || {});
+      // 资产眼睛从旧版对象 {net,assets,debts} 简化为单一布尔
+      const toBool = v => typeof v === 'boolean' ? v : !!(v && (v.net || v.assets || v.debts));
+      const l = toBool(loc), r = toBool(rem);
+      result[key] = (l && r) || (l || r); // 任一隐藏则隐藏
     } else {
       result[key] = rem !== undefined ? rem : loc;
     }
@@ -2874,11 +2887,13 @@ function expItemHtml(x) {
   const emo = isEmotional(x);
   const catLabel = (x.cat || '其他') + (x.sub ? ' · ' + x.sub : '');
   const id = x.id;
-  return '<div class="cb" style="cursor:default"><div style="font-size:14px;font-weight:500;flex:1">' + catLabel + (emo ? ' <span title="情绪化消费">😰</span>' : '') +
-    '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.date || '') + ' ' + escHtml(x.note || '') + '</span></div>' +
-    '<span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + '">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span>' +
-    '<button class="btn-icon btn-o" onclick="event.stopPropagation();editExpense(\'' + id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button>' +
-    '<button class="btn-icon btn-o" onclick="event.stopPropagation();delExpense(\'' + id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+  return '<div class="cb" style="cursor:default"><div style="font-size:14px;font-weight:500;flex:1;min-width:0;word-break:break-word">' + catLabel + (emo ? ' <span title="情绪化消费">😰</span>' : '') +
+    '<span style="font-size:12px;color:var(--text3);margin-left:8px;display:block;margin-top:2px">' + (x.date || '') + ' ' + escHtml(x.note || '') + '</span></div>' +
+    '<span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + ';white-space:nowrap;margin-left:6px">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span>' +
+    '<div class="txn-acts">' +
+    '<button class="btn-icon btn-o" onclick="event.stopPropagation();editExpense(\'' + id + '\')" style="color:var(--text2)" title="编辑"><i class="fas fa-pen"></i></button>' +
+    '<button class="btn-icon btn-o" onclick="event.stopPropagation();delExpense(\'' + id + '\')" style="color:var(--d)" title="删除"><i class="fas fa-times"></i></button>' +
+    '</div></div>';
 }
 
 function renderRecent() {
@@ -2916,8 +2931,8 @@ function renderBill() {
   const inc = expenseSum(list, 'i'), exp = expenseSum(list, 'e');
   const te = document.getElementById('billTotals');
   if (te) te.innerHTML = [
-    ['收支结余', inc - exp, 'var(--s)'], ['收入', inc, 'var(--accent)'], ['支出', exp, 'var(--d)'], ['笔数', list.length, 'var(--text)']
-  ].map(([l, v, col]) => '<div class="sc"><div class="si si1"><i class="fas fa-yen-sign"></i></div><div class="si"><div class="num" style="color:' + col + '">' + (l === '笔数' ? v : '¥' + (v ? v.toFixed(2) : '0.00')) + '</div><div class="label">' + l + '</div></div></div>').join('');
+    ['收支结余', inc - exp, 'var(--s)'], ['收入', inc, 'var(--accent)'], ['支出', exp, 'var(--d)']
+  ].map(([l, v, col]) => '<div class="sc bill-total"><div class="si"><div class="num" style="color:' + col + '">¥' + (v ? v.toFixed(2) : '0.00') + '</div><div class="label">' + l + '</div></div></div>').join('');
   const el = document.getElementById('expList'); if (!el) return;
   if (!list.length) { el.innerHTML = '<div class="emp"><i class="fas fa-coins"></i><p>' + label + ' 没有收支记录</p></div>'; return; }
   const sorted = list.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.updatedAt || 0) - (a.updatedAt || 0));
@@ -2956,11 +2971,9 @@ function fillStatSummary(elId, arr, level, scope) {
   const exp = arr.reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
   const scopeEsc = scope.replace(/'/g, "\\'");
   let h = '<div class="stat-bar">' +
-    '<div class="stat-bar-item" onclick="toggleStatDetail(\'' + elId + '\',\'income\',\'' + scopeEsc + '\')"><span>收入</span><div class="num" style="color:var(--accent)">¥' + inc.toFixed(2) + '</div></div>' +
-    '<div class="stat-bar-item" onclick="toggleStatDetail(\'' + elId + '\',\'expense\',\'' + scopeEsc + '\')"><span>支出</span><div class="num" style="color:var(--d)">¥' + exp.toFixed(2) + '</div></div>' +
-    '<div class="stat-bar-item"><span>结余</span><div class="num" style="color:var(--s)">¥' + (inc - exp).toFixed(2) + '</div></div></div>' +
-    '<div id="' + elId + 'IncomeDetail" class="stat-detail hide"></div>' +
-    '<div id="' + elId + 'ExpenseDetail" class="stat-detail hide"></div>';
+    '<div class="stat-col"><div class="stat-bar-item" onclick="toggleStatDetail(\'' + elId + '\',\'income\',\'' + scopeEsc + '\')"><span>收入</span><div class="num" style="color:var(--accent)">¥' + inc.toFixed(2) + '</div></div><div id="' + elId + 'IncomeDetail" class="stat-detail hide"></div></div>' +
+    '<div class="stat-col"><div class="stat-bar-item" onclick="toggleStatDetail(\'' + elId + '\',\'expense\',\'' + scopeEsc + '\')"><span>支出</span><div class="num" style="color:var(--d)">¥' + exp.toFixed(2) + '</div></div><div id="' + elId + 'ExpenseDetail" class="stat-detail hide"></div></div>' +
+    '<div class="stat-col"><div class="stat-bar-item"><span>结余</span><div class="num" style="color:var(--s)">¥' + (inc - exp).toFixed(2) + '</div></div></div></div>';
   if (!arr.length) { el.innerHTML = h + '<div style="font-size:13px;color:var(--text3)">该区间暂无支出记录</div>'; return; }
   const total = exp;
   const g = {};
@@ -3018,7 +3031,7 @@ function renderExpChart() {
   const ctx = document.getElementById('expChart');
   if (!ctx) return;
   if (charts.exp) charts.exp.destroy();
-  charts.exp = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', layout: { padding: window.innerWidth <= 768 ? 8 : 16 }, plugins: { legend: { display: false }, title: { display: true, text: m + (expMonthLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: window.innerWidth <= 768 ? 6 : 12 } }, tooltip: pctTooltip } }, plugins: [doughnutOutsideLabels] });
+  charts.exp = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', layout: { padding: window.innerWidth <= 768 ? 8 : 16 }, plugins: { legend: { display: false }, title: { display: false }, tooltip: pctTooltip } }, plugins: [doughnutOutsideLabels] });
 }
 function renderAnnual() {
   const e = Store.get('expenses', []);
@@ -3028,7 +3041,7 @@ function renderAnnual() {
   const ctx = document.getElementById('annChart');
   if (ctx) {
     if (charts.ann) charts.ann.destroy();
-    charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', layout: { padding: window.innerWidth <= 768 ? 8 : 16 }, plugins: { legend: { display: false }, title: { display: true, text: y + (expYearLevel === 'l2' ? ' 二级分类支出' : ' 一级分类支出'), font: { size: window.innerWidth <= 768 ? 6 : 12 } }, tooltip: pctTooltip } }, plugins: [doughnutOutsideLabels] });
+    charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', layout: { padding: window.innerWidth <= 768 ? 8 : 16 }, plugins: { legend: { display: false }, title: { display: false }, tooltip: pctTooltip } }, plugins: [doughnutOutsideLabels] });
   }
   const lbl = document.getElementById('annYearLabel'); if (lbl) lbl.textContent = '· ' + y;
 }
@@ -3068,16 +3081,17 @@ function getAssets() {
 }
 function renderAssets() {
   const { assets, debts, net } = getAssets();
-  const hidden = Store.get('assetEyes', { net: false, assets: false, debts: false });
-  const set = (id, v, hide) => { const el = document.getElementById(id); if (el) el.textContent = hide ? '¥****' : '¥' + v.toFixed(2); };
+  const raw = Store.get('assetEyes', false);
+  const hidden = typeof raw === 'boolean' ? raw : !!(raw && (raw.net || raw.assets || raw.debts));
+  const set = (id, v, hide) => { const el = document.getElementById(id); if (el) el.textContent = hide ? '****' : v.toFixed(2); };
   const setEye = (id, hide) => { const el = document.getElementById(id); if (el) el.className = 'fas ' + (hide ? 'fa-eye-slash' : 'fa-eye') + ' asset-eye'; };
-  set('dispNet', net, hidden.net); setEye('eyeNet', hidden.net);
-  set('dispAssets', assets, hidden.assets); setEye('eyeAssets', hidden.assets);
-  set('dispDebts', debts, hidden.debts); setEye('eyeDebts', hidden.debts);
+  set('dispNet', net, hidden); setEye('eyeNet', hidden);
+  set('dispAssets', assets, hidden);
+  set('dispDebts', debts, hidden);
 }
-function toggleAssetEye(k) {
-  const h = Store.get('assetEyes', { net: false, assets: false, debts: false });
-  h[k] = !h[k]; Store.set('assetEyes', h); renderAssets();
+function toggleAssetEye() {
+  const h = Store.get('assetEyes', false);
+  Store.set('assetEyes', !h); renderAssets();
 }
 function adjustAssetsByTxn(txn, sign) {
   const a = parseFloat(txn.amt) || 0; if (a <= 0) return;
@@ -5046,19 +5060,27 @@ const doughnutOutsideLabels = {
       const r = arc.outerRadius;
       const x1 = cx + Math.cos(mid) * r;
       const y1 = cy + Math.sin(mid) * r;
-      const x2 = cx + Math.cos(mid) * (r + 16);
-      const y2 = cy + Math.sin(mid) * (r + 16);
+      const lead = isMobile ? 10 : 16;
+      const elbow = isMobile ? 8 : 14;
+      const x2 = cx + Math.cos(mid) * (r + lead);
+      const y2 = cy + Math.sin(mid) * (r + lead);
       const color = colors[i % colors.length] || '#999';
-      // 引导线
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
       // 标签
       const text = (labels[i] || '') + ' ' + pct.toFixed(2) + '%';
-      const onRight = Math.cos(mid) >= 0;
+      const tw = ctx.measureText(text).width;
+      let onRight = Math.cos(mid) >= 0;
+      let x3 = x2 + (onRight ? elbow : -elbow);
+      const pad = 4;
+      // 若超出画布则换边
+      if (onRight && x3 + tw + pad > chart.width) { onRight = false; x3 = x2 - elbow; }
+      else if (!onRight && x3 - tw - pad < 0) { onRight = true; x3 = x2 + elbow; }
+      // 折线引导线
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.lineTo(x3, y2); ctx.stroke();
       ctx.textAlign = onRight ? 'left' : 'right';
       ctx.fillStyle = color;
-      ctx.fillText(text, onRight ? x2 + 4 : x2 - 4, y2);
+      ctx.fillText(text, onRight ? x3 + pad : x3 - pad, y2);
     });
     ctx.restore();
   }
