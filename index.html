@@ -269,6 +269,17 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   /* 移动端：健康记录输入框缩小50%紧凑排列 */
   #hWeight,#hFat{width:70px!important;flex:0 0 70px!important;min-width:70px!important;font-size:12px!important}
   #hDate{width:105px!important;flex:0 0 105px!important;font-size:11px!important}
+  /* 移动端首页：隐藏emoji */
+  .mo-hide{display:none}
+  /* 移动端首页：今日任务/习惯/日程/未完成 字号缩小20%紧凑排列 */
+  #homeComboTabs .fb{padding:3px 7px;font-size:10px;gap:4px}
+  #homeComboTabs{gap:4px;margin-bottom:8px!important}
+  /* 移动端首页：快速新建任务/记一笔/灵感速记 缩小30%紧凑排列 */
+  #homeActions .btn{padding:5px 8px;font-size:9px;border-radius:8px;flex:1;text-align:center;white-space:nowrap}
+  #homeActions{gap:4px}
+  /* 移动端首页：倒数日提醒 行距缩小40% 字号缩小20% */
+  #homeCountdownTip{font-size:11px!important;line-height:1.0!important}
+  #homeCountdownTip>div{padding:3px 0!important;gap:4px!important}
 }
 /* ===== FOOD MODULE ===== */
 .food-tab{display:block}
@@ -419,7 +430,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
               <div class="dotbar" id="ybMonFill"></div>
             </div>
           </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px" id="homeActions">
             <button class="btn btn-p" onclick="go('tasks')"><i class="fas fa-plus"></i> 快速新建任务</button>
             <button class="btn btn-a" onclick="go('life')"><i class="fas fa-coins"></i> 记一笔</button>
             <button class="btn btn-o" onclick="go('notes')"><i class="fas fa-lightbulb"></i> 灵感速记</button>
@@ -427,10 +438,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
         </div>
         <div class="card" id="homeCombo">
           <div class="ft" id="homeComboTabs" style="margin-bottom:10px">
-            <span class="fb active" data-h="tasks">📌 今日任务</span>
-            <span class="fb" data-h="habit">🔥 习惯</span>
-            <span class="fb" data-h="event">📅 日程</span>
-            <span class="fb" data-h="undo">📥 未完成</span>
+            <span class="fb active" data-h="tasks"><span class="mo-hide">📌 </span>今日任务</span>
+            <span class="fb" data-h="habit"><span class="mo-hide">🔥 </span>习惯</span>
+            <span class="fb" data-h="event"><span class="mo-hide">📅 </span>日程</span>
+            <span class="fb" data-h="undo"><span class="mo-hide">📥 </span>未完成</span>
           </div>
           <div id="homeComboBody"></div>
         </div>
