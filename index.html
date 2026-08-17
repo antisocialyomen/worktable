@@ -512,7 +512,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <div class="page" id="p-schedule">
         <!-- 日历 + 近期日程 -->
         <div class="sched-tab" id="s-cal">
-          <div class="card"><div class="card-hd"><h3>📅 日程</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="addEvent()"><i class="fas fa-plus"></i> 新建日程</button><button class="btn-sm btn-a" onclick="openMoodModal()" style="margin-left:6px"><i class="fas fa-plus"></i> 新建日志</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
+          <div class="card"><div class="card-hd"><h3>📅 日程</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="openEventModal(null, null)"><i class="fas fa-plus"></i> 新建日程</button><button class="btn-sm btn-a" onclick="openMoodModal()" style="margin-left:6px"><i class="fas fa-plus"></i> 新建日志</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
           <div class="card"><div class="card-hd"><h3>📋 近期日程</h3></div><div id="eventList"></div></div>
           <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📓 心情日志</h3><button class="btn-sm btn-a" onclick="openMoodModal()"><i class="fas fa-plus"></i> 写日志</button></div><div id="moodLogList"></div></div>
         </div>
@@ -898,6 +898,22 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   <div class="modal" style="max-width:520px" onclick="event.stopPropagation()">
     <div class="modal-hd"><h3 id="genMaskTitle">弹窗</h3><span class="modal-x" onclick="closeGenMask()"><i class="fas fa-times"></i></span></div>
     <div id="genMaskBody"></div>
+  </div>
+</div>
+
+<!-- 日程编辑弹窗 -->
+<div class="mask hide" id="eventMask" onclick="if(event.target===this)closeEventModal()">
+  <div class="modal" style="max-width:480px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3 id="eventMaskTitle">📅 新建日程</h3><span class="modal-x" onclick="closeEventModal()"><i class="fas fa-times"></i></span></div>
+    <div id="eventMaskBody">
+      <div class="ig" style="margin-bottom:10px"><input class="in" id="evModalDate" type="date" style="flex:1 1 40%"><input class="in" id="evModalTitle" placeholder="日程标题 *" style="flex:1 1 58%"></div>
+      <div style="font-size:13px;font-weight:600;margin:4px 0 6px">备注</div>
+      <textarea class="in" id="evModalNote" placeholder="备注（选填）" style="width:100%;min-height:80px;resize:vertical"></textarea>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-o" onclick="closeEventModal()">取消</button>
+        <button class="btn btn-p" onclick="saveEvent()"><i class="fas fa-save"></i> 保存</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1844,12 +1860,11 @@ document.addEventListener('DOMContentLoaded', function() {
   initApp();
   // Register PWA service worker
   if ('serviceWorker' in navigator) {
-    let reloading = false;
+    const hadController = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (reloading) return;
-      reloading = true;
-      toast('🔄 已更新，正在刷新…');
-      location.reload();
+      // 不再强制刷新页面，避免刷新导致进入页（splash）重新弹出、需要二次点击进入
+      if (!hadController) return;
+      toast('🔄 已更新，刷新页面即可应用');
     });
     navigator.serviceWorker.register('/sw.js').then(reg => {
       reg.addEventListener('updatefound', () => {
@@ -3342,9 +3357,9 @@ function renderCalendar() {
     const dayCd = cds.filter(x => x.ds === ds);
     const ml = (Store.get('moodlogs', {}) || {})[ds];
     const numStyle = it ? 'background:var(--primary);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin:0 auto' : 'margin:0 auto;text-align:center';
-    const dots = de.slice(0, 2).map(x => '<div onclick="event.stopPropagation();editEvent(\'' + x.id + '\')" style="font-size:9px;background:var(--primary);color:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer">' + x.title + '</div>').join('');
+    const dots = de.slice(0, 2).map(x => '<div onclick="event.stopPropagation();openEventModal(null, \'' + x.id + '\')" style="font-size:9px;background:var(--primary);color:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer">' + x.title + '</div>').join('');
     const cdDots = dayCd.slice(0, 2).map(x => '<div onclick="event.stopPropagation();showCdTip(\'' + x.id + '\')" style="font-size:9px;color:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;background:' + x.color + '">' + x.name + '</div>').join('');
-    h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:6px;min-height:54px;font-size:13px"><div onclick="openEventForDate(\'' + ds + '\')" style="font-weight:600;cursor:pointer;' + numStyle + '">' + i + '</div>' + (ml ? '<div class="cal-emo" style="text-align:center;font-size:13px;line-height:1.1;margin-top:1px">' + ml.mood + '</div>' : '') + dots + cdDots + ((de.length + dayCd.length) > 4 ? '<div style="font-size:10px;color:var(--text3)">+' + ((de.length + dayCd.length) - 4) + '更多</div>' : '') + '</div>';
+    h += '<div style="background:' + (it ? 'var(--primary-bg)' : 'var(--bg-card)') + ';padding:6px;min-height:54px;font-size:13px"><div onclick="openEventModal(\'' + ds + '\', null)" style="font-weight:600;cursor:pointer;' + numStyle + '">' + i + '</div>' + (ml ? '<div class="cal-emo" style="text-align:center;font-size:13px;line-height:1.1;margin-top:1px">' + ml.mood + '</div>' : '') + dots + cdDots + ((de.length + dayCd.length) > 4 ? '<div style="font-size:10px;color:var(--text3)">+' + ((de.length + dayCd.length) - 4) + '更多</div>' : '') + '</div>';
   }
   document.getElementById('calGrid').innerHTML = h;
 }
@@ -3355,44 +3370,40 @@ function renderEvents() {
   const t = new Date().toISOString().slice(0, 10);
   const up = ev.filter(x => x.date >= t).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 10);
   list.innerHTML = up.length === 0 ? '<div class="emp" style="padding:20px"><p>近期无日程</p></div>'
-    : up.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:13px;font-weight:500;margin-right:8px">' + x.date.slice(5) + '</span><button class="btn-icon btn-o" onclick="editEvent(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delEvent(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+    : up.map(x => '<div class="cb" style="cursor:default"><div style="flex:1;font-weight:500">' + x.title + '<span style="font-size:12px;color:var(--text3);margin-left:8px">' + (x.note || '') + '</span></div><span style="font-size:13px;font-weight:500;margin-right:8px">' + x.date.slice(5) + '</span><button class="btn-icon btn-o" onclick="openEventModal(null, \'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="delEvent(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
-function openEventForDate(ds) {
-  const ev = Store.get('events', []).filter(x => x.date === ds);
-  document.getElementById('evDate').value = ds;
-  if (ev.length === 0) {
-    addEventWithDate(ds);
-  } else if (ev.length === 1) {
-    editEvent(ev[0].id);
+let evEditingId = null;
+function openEventModal(ds, id) {
+  evEditingId = id || null;
+  const ev = id ? (Store.get('events', []).find(x => x.id === id)) : null;
+  const dateEl = document.getElementById('evDate');
+  const defDate = (ev && ev.date) || ds || (dateEl && dateEl.value) || new Date().toISOString().slice(0, 10);
+  document.getElementById('evModalDate').value = defDate;
+  document.getElementById('evModalTitle').value = ev ? ev.title : '';
+  document.getElementById('evModalNote').value = ev ? (ev.note || '') : '';
+  document.getElementById('eventMaskTitle').textContent = ev ? '📅 编辑日程' : '📅 新建日程';
+  document.getElementById('eventMask').classList.remove('hide');
+}
+function closeEventModal() {
+  document.getElementById('eventMask').classList.add('hide');
+  evEditingId = null;
+}
+function saveEvent() {
+  const title = document.getElementById('evModalTitle').value.trim();
+  if (!title) { toast('请填写日程标题'); return; }
+  const date = document.getElementById('evModalDate').value || new Date().toISOString().slice(0, 10);
+  const note = document.getElementById('evModalNote').value.trim();
+  const ev = Store.get('events', []);
+  if (evEditingId) {
+    const x = ev.find(z => z.id === evEditingId);
+    if (x) { x.title = title; x.date = date; x.note = note; x.updatedAt = Date.now(); }
   } else {
-    const list = ev.map((x, idx) => (idx + 1) + '. ' + x.title).join('\n');
-    const choice = prompt('该日期有 ' + ev.length + ' 个日程，输入序号编辑，或留空/0 新建：\n' + list);
-    if (!choice || choice === '0') { addEventWithDate(ds); return; }
-    const idx = parseInt(choice) - 1;
-    if (idx >= 0 && idx < ev.length) editEvent(ev[idx].id);
-    else addEventWithDate(ds);
+    ev.push({ id: Date.now().toString(), title, date, note, updatedAt: Date.now() });
   }
-}
-function addEventWithDate(ds) {
-  const t = prompt('日程标题：', ''); if (!t) return;
-  const note = prompt('备注：', '');
-  const ev = Store.get('events', []);
-  ev.push({ id: Date.now().toString(), title: t, date: ds, note: note || '', updatedAt: Date.now() });
-  Store.set('events', ev); renderCalendar(); renderEvents(); renderHome(); toast('✅ 已添加');
-}
-function addEvent() {
-  const d0 = document.getElementById('evDate')?.value || new Date().toISOString().slice(0, 10);
-  openEventForDate(d0);
-}
-function editEvent(id) {
-  const ev = Store.get('events', []);
-  const x = ev.find(z => z.id === id);
-  if (!x) return;
-  const t = prompt('日程标题：', x.title);
-  if (t === null) return;
-  const d = prompt('日期 (YYYY-MM-DD)：', x.date);
-  const note = prompt('备注：', x.note || '');
-  if (t.trim()) { x.title = t.trim(); x.date = d || x.date; x.note = note; x.updatedAt = Date.now(); Store.set('events', ev); renderCalendar(); renderEvents(); renderHome(); toast('✅ 已更新'); }
+  Store.set('events', ev);
+  closeEventModal();
+  renderCalendar(); renderEvents(); renderHome();
+  toast(evEditingId ? '✅ 已更新' : '✅ 已添加');
 }
 function delEvent(id) { Store.set('events', Store.get('events', []).filter(e => e.id !== id)); renderCalendar(); renderEvents(); renderHome(); }
 function chMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderCalendar(); renderEvents(); }
