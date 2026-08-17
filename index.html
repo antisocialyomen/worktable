@@ -4632,14 +4632,18 @@ function renderFinanceNews(src) {
     fetchFinanceSource(src);
     return;
   }
+  const favs = Store.get('hotFav', []);
   list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">' + (srcNames[src] || src) + ' · 共 ' + data.length + ' 条快讯 · 点击标题展开</div>' +
     data.slice(0, 30).map((item, i) => {
       const content = item.content || item.summary || '';
       const hasContent = content && content !== item.title;
+      const isFav = favs.some(f => f.title === item.title);
       return '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:13px;font-weight:700;color:var(--primary);min-width:20px;text-align:center">' + (i + 1) + '</span>' +
         '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="' + (hasContent ? 'var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'' : 'window.open(\'' + (item.url || '#') + '\',\'_blank\')') + '">' + item.title + '</div>' +
-        (hasContent ? '<div style="display:none;font-size:12px;color:var(--text2);margin-top:6px;padding:8px;background:var(--primary-bg);border-radius:8px;line-height:1.6">' + content + (item.url ? ' <a href="' + item.url + '" target="_blank" style="color:var(--accent)">查看原文</a>' : '') + '</div>' : '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + (item.time || '') + '</div>') + '</div></div>';
+        (hasContent ? '<div style="display:none;font-size:12px;color:var(--text2);margin-top:6px;padding:8px;background:var(--primary-bg);border-radius:8px;line-height:1.6">' + content + (item.url ? ' <a href="' + item.url + '" target="_blank" style="color:var(--accent)">查看原文</a>' : '') + '</div>' : '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + (item.time || '') + '</div>') + '</div>' +
+        '<button class="btn-icon ' + (isFav ? 'btn-p' : 'btn-o') + '" onclick="togFav(\'' + (item.title || '').replace(/'/g, "\\'") + '\',\'' + (item.url || '').replace(/'/g, "\\'") + '\',\'' + src + '\')" style="flex-shrink:0"><i class="fas fa-bookmark"></i></button></div>';
     }).join('');
+  updateNewsBadge();
 }
 
 // 抓取财经快讯来源
