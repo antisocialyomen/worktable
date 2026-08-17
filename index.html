@@ -657,14 +657,12 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
             <span class="fb" data-p="finance">💹 财经</span>
             <span class="fb" data-p="later">📑 稍后阅读 (<span id="laterCount">0</span>)</span>
           </div>
-          <div id="newsList"><div class="emp"><i class="fas fa-newspaper"></i><p>点击「刷新」获取最新热点 🔥</p></div></div>
           <div id="financeTabs" style="display:none;margin-bottom:12px" class="ft">
             <span class="fb active" data-fp="market">📊 行情数据</span>
             <span class="fb" data-fp="wallstreetcn">华尔街见闻</span>
             <span class="fb" data-fp="eastmoney">东方财富</span>
-            <span class="fb" data-fp="sina">新浪财经</span>
-            <span class="fb" data-fp="jin10">金十数据</span>
           </div>
+          <div id="newsList"><div class="emp"><i class="fas fa-newspaper"></i><p>点击「刷新」获取最新热点 🔥</p></div></div>
           <div id="laterPage" style="display:none"><div id="laterList"></div></div>
         </div>
       </div>
@@ -4628,7 +4626,7 @@ async function fetchFinanceMarket() {
 function renderFinanceNews(src) {
   const list = document.getElementById('newsList');
   const data = financeCache[src] || [];
-  const srcNames = { wallstreetcn: '华尔街见闻·快讯', eastmoney: '东方财富·快讯', sina: '新浪财经·快讯', jin10: '金十数据·快讯' };
+  const srcNames = { wallstreetcn: '华尔街见闻·快讯', eastmoney: '东方财富·快讯' };
   if (data.length === 0) {
     list.innerHTML = '<div class="emp"><i class="fas fa-spinner fa-spin"></i><p>正在抓取' + (srcNames[src] || src) + '实时快讯...</p></div>';
     fetchFinanceSource(src);
@@ -4647,29 +4645,37 @@ function renderFinanceNews(src) {
 // 抓取财经快讯来源
 async function fetchFinanceSource(src) {
   const list = document.getElementById('newsList');
-  const srcNames = { wallstreetcn: '华尔街见闻', eastmoney: '东方财富', sina: '新浪财经', jin10: '金十数据' };
+  const srcNames = { wallstreetcn: '华尔街见闻', eastmoney: '东方财富' };
   try {
     let data = [];
-    const platformMap = {
-      wallstreetcn: 'wallstreetcn',
-      eastmoney: 'eastmoney',
-      sina: 'sina',
-      jin10: 'jin10'
-    };
-    const apiPlatform = platformMap[src] || src;
-    const r = await fetch('https://news.orz.ai/api/v1/dailynews?platform=' + apiPlatform);
-    const json = await r.json();
-    if (json && json.data && Array.isArray(json.data)) {
-      data = json.data.map(item => ({
-        title: (item.title || '').replace(/<[^>]*>/g, '').slice(0, 200),
-        content: (item.content || '').replace(/<[^>]*>/g, ''),
-        time: item.time || item.pubDate || '',
-        url: item.url || item.link || ''
-      }));
+    if (src === 'wallstreetcn') {
+      // 华尔街见闻：直连 API（已验证可用）
+      const r = await fetch('https://api-one.wallstcn.com/apiv1/content/lives?channel=global-channel&limit=30');
+      const json = await r.json();
+      if (json && json.data && json.data.items) {
+        data = json.data.items.map(item => ({
+          title: (item.title || item.content_text || '').replace(/<[^>]*>/g, '').slice(0, 200),
+          content: (item.content_text || item.content || '').replace(/<[^>]*>/g, ''),
+          time: item.display_time || '',
+          url: item.id ? 'https://wallstreetcn.com/lives/' + item.id : (item.uri ? 'https://wallstreetcn.com' + item.uri : '')
+        }));
+      }
+    } else if (src === 'eastmoney') {
+      // 东方财富：news.orz.ai 聚合
+      const r = await fetch('https://news.orz.ai/api/v1/dailynews?platform=eastmoney');
+      const json = await r.json();
+      if (json && json.data && Array.isArray(json.data)) {
+        data = json.data.map(item => ({
+          title: (item.title || '').replace(/<[^>]*>/g, '').slice(0, 200),
+          content: (item.content || '').replace(/<[^>]*>/g, ''),
+          time: item.time || item.pubDate || '',
+          url: item.url || item.link || ''
+        }));
+      }
     }
     financeCache[src] = data;
     if (data.length === 0) {
-      list.innerHTML = '<div class="emp"><i class="fas fa-exclamation-circle"></i><p>' + srcNames[src] + ' 暂无快讯数据</p><p style="font-size:12px;color:var(--text3);margin-top:4px">news.orz.ai 暂不支持此平台</p><p style="font-size:12px;color:var(--text3)">建议：切换其他财经源，或点击刷新重试</p></div>';
+      list.innerHTML = '<div class="emp"><i class="fas fa-exclamation-circle"></i><p>' + srcNames[src] + ' 暂无快讯数据</p><p style="font-size:12px;color:var(--text3);margin-top:4px">点击顶部「刷新」按钮重试</p></div>';
     } else {
       renderFinanceNews(src);
     }
@@ -4681,7 +4687,7 @@ async function fetchFinanceSource(src) {
 // 财经全部刷新
 async function fetchFinanceAll() {
   document.getElementById('newsRefreshBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
-  const srcs = ['wallstreetcn', 'eastmoney', 'sina', 'jin10'];
+  const srcs = ['wallstreetcn', 'eastmoney'];
   for (const src of srcs) {
     try { await fetchFinanceSource(src); } catch(e) {}
   }
