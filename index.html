@@ -4660,36 +4660,46 @@ async function fetchFinanceSource(src) {
         }));
       }
     } else if (src === 'cls') {
-      // 财联社：先尝试直连，失败后走代理
-      const r = await smartFetch('https://www.cls.cn/api/sw?app=CailianpressWeb&os=web&sv=8.4.6').catch(() => null);
-      if (r && r.data && r.data.roll_data) {
-        data = r.data.roll_data.slice(0, 30).map(item => ({
-          title: (item.title || item.content || '').replace(/<[^>]*>/g, '').slice(0, 200),
-          content: (item.content || item.brief || '').replace(/<[^>]*>/g, ''),
-          time: item.ctime ? new Date(item.ctime * 1000).toLocaleString() : '',
-          url: item.id ? 'https://www.cls.cn/detail/' + item.id : ''
-        }));
+      // 财联社：尝试多个 API 端点
+      let r = await smartFetch('https://www.cls.cn/api/sw?app=CailianpressWeb&os=web&sv=8.4.6').catch(() => null);
+      if (!r || !r.data || !r.data.roll_data) {
+        r = await smartFetch('https://www.cls.cn/nodeapi/roll/list?app=CailianpressWeb&os=web&sv=8.4.6').catch(() => null);
+      }
+      if (r) {
+        let items = (r.data && r.data.roll_data) ? r.data.roll_data : (Array.isArray(r.data) ? r.data : (r.roll_data || []));
+        if (items.length > 0) {
+          data = items.slice(0, 30).map(item => ({
+            title: (item.title || item.content || '').replace(/<[^>]*>/g, '').slice(0, 200),
+            content: (item.content || item.brief || item.summary || '').replace(/<[^>]*>/g, ''),
+            time: item.ctime ? new Date(item.ctime * 1000).toLocaleString() : (item.display_time || ''),
+            url: item.id ? 'https://www.cls.cn/detail/' + item.id : (item.shareurl || '')
+          }));
+        }
       }
     } else if (src === 'xueqiu') {
-      // 雪球：需要 cookie，只能用代理
-      const r = await smartFetch('https://xueqiu.com/statuses/hot/listV2.json?since_id=-1&size=30').catch(() => null);
-      if (r && r.items) {
-        data = r.items.map(item => {
-          const title = (item.title || item.text || '').replace(/<[^>]*>/g, '').slice(0, 150);
+      // 雪球：尝试公开时间线 API
+      let r = await smartFetch('https://xueqiu.com/v4/statuses/public_timeline_by_category.json?since_id=-1&max_id=-1&count=30&category=-1').catch(() => null);
+      if (!r || !r.list || r.list.length === 0) {
+        r = await smartFetch('https://xueqiu.com/statuses/hot/listV2.json?since_id=-1&size=30').catch(() => null);
+      }
+      let items = (r && r.list) ? r.list : (r && r.items ? r.items : []);
+      if (items.length > 0) {
+        data = items.map(item => {
+          const title = (item.title || item.text || item.description || '').replace(/<[^>]*>/g, '').slice(0, 150);
           return {
             title, content: title,
-            time: item.created_at ? new Date(item.created_at).toLocaleString() : '',
+            time: item.created_at ? new Date(item.created_at).toLocaleString() : (item.time || ''),
             url: item.target ? 'https://xueqiu.com' + item.target : ''
           };
         });
       }
     } else if (src === 'yicai') {
-      // 第一财经：尝试多个 API 端点
+      // 第一财经：尝试多个 API + RSS
       let r = await smartFetch('https://www.yicai.com/api/ajax/getlistbycid?cid=48&page=1&pagesize=30').catch(() => null);
       if (!r || !Array.isArray(r) || r.length === 0) {
-        r = await smartFetch('https://www.yicai.com/api/ajax/getlist?cid=48&page=1&pagesize=30').catch(() => null);
+        r = await smartFetch('https://www.yicai.com/api/ajax/getlatest?page=1&pagesize=30').catch(() => null);
       }
-      if (r && Array.isArray(r)) {
+      if (r && Array.isArray(r) && r.length > 0) {
         data = r.map(item => ({
           title: (item.title || item.NewsTitle || '').slice(0, 200),
           content: (item.Abstraction || item.NewsContent || '').replace(/<[^>]*>/g, '').slice(0, 300),
@@ -4700,12 +4710,14 @@ async function fetchFinanceSource(src) {
     }
     financeCache[src] = data;
     if (data.length === 0) {
-      list.innerHTML = '<div class="emp"><i class="fas fa-exclamation-circle"></i><p>' + ({ wallstreetcn: '华尔街见闻', yicai: '第一财经', cls: '财联社', xueqiu: '雪球' })[src] + ' 暂无快讯数据，可能受到 CORS 限制</p><p style="font-size:12px;color:var(--text3)">提示：部分财经 API 需要后端代理，可使用 Cloudflare Worker 中转</p></div>';
+      const srcNames = { wallstreetcn: '华尔街见闻', yicai: '第一财经', cls: '财联社', xueqiu: '雪球' };
+      list.innerHTML = '<div class="emp"><i class="fas fa-exclamation-circle"></i><p>' + srcNames[src] + ' 暂无快讯数据</p><p style="font-size:12px;color:var(--text3);margin-top:4px">可能原因：API 需要登录认证或接口已变更</p><p style="font-size:12px;color:var(--text3)">建议：点击顶部「刷新」按钮重试，或切换其他财经源</p></div>';
     } else {
       renderFinanceNews(src);
     }
   } catch(e) {
-    list.innerHTML = '<div class="emp"><i class="fas fa-exclamation-circle"></i><p>抓取失败，可能受到跨域限制</p><p style="font-size:12px;color:var(--text3)">请使用 Cloudflare Worker 代理或后端中转</p></div>';
+    const srcNames = { wallstreetcn: '华尔街见闻', yicai: '第一财经', cls: '财联社', xueqiu: '雪球' };
+    list.innerHTML = '<div class="emp"><i class="fas fa-exclamation-circle"></i><p>' + srcNames[src] + ' 抓取失败</p><p style="font-size:12px;color:var(--text3);margin-top:4px">错误：' + e.message + '</p><p style="font-size:12px;color:var(--text3)">请确认 Cloudflare Pages Functions 已部署（functions/api/proxy.js）</p></div>';
   }
 }
 

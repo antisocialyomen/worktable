@@ -17,30 +17,40 @@ export async function onRequest(context) {
     const headers = {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
       'Accept': 'application/json, text/plain, */*',
-      'Accept-Language': 'zh-CN,zh;q=0.9'
+      'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.5'
     };
 
     // 雪球需要 Cookie 认证：先访问首页获取 Cookie，再请求 API
     if (target.includes('xueqiu.com')) {
-      const cookieRes = await fetch('https://xueqiu.com', {
-        headers: { ...headers, 'Accept': 'text/html,application/xhtml+xml' }
-      });
-      const setCookie = cookieRes.headers.get('set-cookie');
-      if (setCookie) {
-        // 提取 xq_a_token 和 xq_r_token
-        const cookies = setCookie.split(',').map(c => c.split(';')[0].trim()).join('; ');
-        headers['Cookie'] = cookies;
+      try {
+        const cookieRes = await fetch('https://xueqiu.com', {
+          headers: { ...headers, 'Accept': 'text/html,application/xhtml+xml' },
+          redirect: 'follow'
+        });
+        const setCookie = cookieRes.headers.get('set-cookie');
+        if (setCookie) {
+          const cookies = setCookie.split(',').map(c => c.split(';')[0].trim()).join('; ');
+          headers['Cookie'] = cookies;
+        }
+      } catch (e) {
+        // Cookie 获取失败，继续尝试无 Cookie 请求
       }
     }
 
-    const res = await fetch(target, { headers });
+    // 财联社需要特定 Referer
+    if (target.includes('cls.cn')) {
+      headers['Referer'] = 'https://www.cls.cn/';
+    }
 
+    const res = await fetch(target, { headers, redirect: 'follow' });
+
+    const contentType = res.headers.get('Content-Type') || 'application/json';
     const body = await res.text();
 
     return new Response(body, {
       status: res.status,
       headers: {
-        'Content-Type': res.headers.get('Content-Type') || 'application/json',
+        'Content-Type': contentType.includes('text/html') ? 'application/json' : contentType,
         'Access-Control-Allow-Origin': '*'
       }
     });
