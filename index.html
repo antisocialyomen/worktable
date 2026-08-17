@@ -4564,6 +4564,11 @@ const newsCache = {};
 const financeCache = {};
 let financeTab = 'market';
 
+// 代理中转辅助函数：绕过浏览器 CORS 限制
+function proxyFetch(targetUrl) {
+  return fetch('/api/proxy?url=' + encodeURIComponent(targetUrl)).then(r => r.json());
+}
+
 function renderFinance() {
   document.getElementById('financeTabs').style.display = '';
   document.getElementById('newsList').style.display = '';
@@ -4585,7 +4590,7 @@ async function fetchFinanceMarket() {
   list.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text3)">📅 ' + today + ' · 正在加载实时行情...</div>';
   const items = [];
   try {
-    const stockRes = await fetch('https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&secids=1.000001,0.399001,0.399006&fields=f2,f3,f4,f12,f14').then(r => r.json()).catch(() => null);
+    const stockRes = await proxyFetch('https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&secids=1.000001,0.399001,0.399006&fields=f2,f3,f4,f12,f14').catch(() => null);
     if (stockRes && stockRes.data && stockRes.data.diff) {
       const names = { '000001': '上证指数', '399001': '深证成指', '399006': '创业板指' };
       const parts = stockRes.data.diff.map(d => names[d.f12] + ' ' + (d.f2/100).toFixed(2) + '（' + (d.f3 > 0 ? '+' : '') + d.f3.toFixed(2) + '%）').join(' · ');
@@ -4593,11 +4598,11 @@ async function fetchFinanceMarket() {
     }
   } catch(e) {}
   try {
-    const goldRes = await fetch('https://api.it120.cc/gzbd/hq/query?code=AU9999').then(r => r.json()).catch(() => null);
+    const goldRes = await proxyFetch('https://api.it120.cc/gzbd/hq/query?code=AU9999').catch(() => null);
     if (goldRes && goldRes.data) items.push(['🥇 黄金', 'Au99.99 ' + goldRes.data.price + ' 元/克']);
   } catch(e) {}
   try {
-    const fxRes = await fetch('https://api.it120.cc/gzbd/hq/query?code=USDCNY').then(r => r.json()).catch(() => null);
+    const fxRes = await proxyFetch('https://api.it120.cc/gzbd/hq/query?code=USDCNY').catch(() => null);
     if (fxRes && fxRes.data) items.push(['💱 外汇', '美元/人民币 ' + fxRes.data.price]);
   } catch(e) {}
   if (!items.some(i => i[0] === '📊 宏观')) items.push(['📊 宏观', '央行公开市场操作与国债收益率走势']);
@@ -4636,8 +4641,7 @@ async function fetchFinanceSource(src) {
   try {
     let data = [];
     if (src === 'wallstreetcn') {
-      // 华尔街见闻快讯 API
-      const r = await fetch('https://api-one.wallstcn.com/apiv1/content/lives?channel=global-channel&limit=30').then(r => r.json()).catch(() => null);
+      const r = await proxyFetch('https://api-one.wallstcn.com/apiv1/content/lives?channel=global-channel&limit=30').catch(() => null);
       if (r && r.data && r.data.items) {
         data = r.data.items.map(item => ({
           title: (item.title || item.content_text || '').replace(/<[^>]*>/g, '').slice(0, 200),
@@ -4647,8 +4651,7 @@ async function fetchFinanceSource(src) {
         }));
       }
     } else if (src === 'cls') {
-      // 财联社电报 API
-      const r = await fetch('https://www.cls.cn/api/sw?app=CailianpressWeb&os=web&sv=8.4.6').then(r => r.json()).catch(() => null);
+      const r = await proxyFetch('https://www.cls.cn/api/sw?app=CailianpressWeb&os=web&sv=8.4.6').catch(() => null);
       if (r && r.data && r.data.roll_data) {
         data = r.data.roll_data.slice(0, 30).map(item => ({
           title: (item.title || item.content || '').replace(/<[^>]*>/g, '').slice(0, 200),
@@ -4658,8 +4661,7 @@ async function fetchFinanceSource(src) {
         }));
       }
     } else if (src === 'xueqiu') {
-      // 雪球热帖
-      const r = await fetch('https://xueqiu.com/statuses/hot/listV2.json?since_id=-1&size=30').then(r => r.json()).catch(() => null);
+      const r = await proxyFetch('https://xueqiu.com/statuses/hot/listV2.json?since_id=-1&size=30').catch(() => null);
       if (r && r.items) {
         data = r.items.map(item => {
           const title = (item.title || item.text || '').replace(/<[^>]*>/g, '').slice(0, 150);
@@ -4671,8 +4673,7 @@ async function fetchFinanceSource(src) {
         });
       }
     } else if (src === 'yicai') {
-      // 第一财经 - 使用 brief API
-      const r = await fetch('https://www.yicai.com/api/ajax/getlistbycid?cid=48&page=1&pagesize=30').then(r => r.json()).catch(() => null);
+      const r = await proxyFetch('https://www.yicai.com/api/ajax/getlistbycid?cid=48&page=1&pagesize=30').catch(() => null);
       if (r && Array.isArray(r)) {
         data = r.map(item => ({
           title: (item.title || item.NewsTitle || '').slice(0, 200),
