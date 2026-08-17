@@ -4656,10 +4656,11 @@ async function fetchFinanceSource(src) {
           title: (item.title || item.content_text || '').replace(/<[^>]*>/g, '').slice(0, 200),
           content: (item.content_text || item.content || '').replace(/<[^>]*>/g, ''),
           time: item.display_time || '',
-          url: item.uri ? 'https://wallstreetcn.com' + item.uri : ''
+          url: item.id ? 'https://wallstreetcn.com/lives/' + item.id : (item.uri ? 'https://wallstreetcn.com' + item.uri : '')
         }));
       }
     } else if (src === 'cls') {
+      // 财联社：先尝试直连，失败后走代理
       const r = await smartFetch('https://www.cls.cn/api/sw?app=CailianpressWeb&os=web&sv=8.4.6').catch(() => null);
       if (r && r.data && r.data.roll_data) {
         data = r.data.roll_data.slice(0, 30).map(item => ({
@@ -4670,6 +4671,7 @@ async function fetchFinanceSource(src) {
         }));
       }
     } else if (src === 'xueqiu') {
+      // 雪球：需要 cookie，只能用代理
       const r = await smartFetch('https://xueqiu.com/statuses/hot/listV2.json?since_id=-1&size=30').catch(() => null);
       if (r && r.items) {
         data = r.items.map(item => {
@@ -4682,7 +4684,11 @@ async function fetchFinanceSource(src) {
         });
       }
     } else if (src === 'yicai') {
-      const r = await smartFetch('https://www.yicai.com/api/ajax/getlistbycid?cid=48&page=1&pagesize=30').catch(() => null);
+      // 第一财经：尝试多个 API 端点
+      let r = await smartFetch('https://www.yicai.com/api/ajax/getlistbycid?cid=48&page=1&pagesize=30').catch(() => null);
+      if (!r || !Array.isArray(r) || r.length === 0) {
+        r = await smartFetch('https://www.yicai.com/api/ajax/getlist?cid=48&page=1&pagesize=30').catch(() => null);
+      }
       if (r && Array.isArray(r)) {
         data = r.map(item => ({
           title: (item.title || item.NewsTitle || '').slice(0, 200),
