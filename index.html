@@ -4639,7 +4639,7 @@ function renderFinanceNews(src) {
       const hasContent = content && content !== item.title;
       const isFav = favs.some(f => f.title === item.title);
       return '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:13px;font-weight:700;color:var(--primary);min-width:20px;text-align:center">' + (i + 1) + '</span>' +
-        '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="' + (hasContent ? 'var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'' : 'window.open(\'' + (item.url || '#') + '\',\'_blank\')') + '">' + item.title + '</div>' +
+        '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="' + (hasContent ? 'var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'' : (item.url ? 'window.open(\'' + item.url + '\',\'_blank\')' : '')) + '">' + item.title + '</div>' +
         (hasContent ? '<div style="display:none;font-size:12px;color:var(--text2);margin-top:6px;padding:8px;background:var(--primary-bg);border-radius:8px;line-height:1.6">' + content + (item.url ? ' <a href="' + item.url + '" target="_blank" style="color:var(--accent)">查看原文</a>' : '') + '</div>' : '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + (item.time || '') + '</div>') + '</div>' +
         '<button class="btn-icon ' + (isFav ? 'btn-p' : 'btn-o') + '" onclick="togFav(\'' + (item.title || '').replace(/'/g, "\\'") + '\',\'' + (item.url || '').replace(/'/g, "\\'") + '\',\'' + src + '\')" style="flex-shrink:0"><i class="fas fa-bookmark"></i></button></div>';
     }).join('');
@@ -4657,24 +4657,37 @@ async function fetchFinanceSource(src) {
       const r = await fetch('https://api-one.wallstcn.com/apiv1/content/lives?channel=global-channel&limit=30');
       const json = await r.json();
       if (json && json.data && json.data.items) {
-        data = json.data.items.map(item => ({
-          title: (item.title || item.content_text || '').replace(/<[^>]*>/g, '').slice(0, 200),
-          content: (item.content_text || item.content || '').replace(/<[^>]*>/g, ''),
-          time: item.display_time || '',
-          url: item.id ? 'https://wallstreetcn.com/lives/' + item.id : (item.uri ? 'https://wallstreetcn.com' + item.uri : '')
-        }));
+        data = json.data.items.map(item => {
+          let url = '';
+          if (item.uri) {
+            url = item.uri.startsWith('http') ? item.uri : 'https://wallstreetcn.com' + item.uri;
+          } else if (item.id) {
+            url = 'https://wallstreetcn.com/lives/' + item.id;
+          }
+          return {
+            title: (item.title || item.content_text || '').replace(/<[^>]*>/g, '').slice(0, 200),
+            content: (item.content_text || item.content || '').replace(/<[^>]*>/g, ''),
+            time: item.display_time || '',
+            url
+          };
+        });
       }
     } else if (src === 'eastmoney') {
       // 东方财富：news.orz.ai 聚合
       const r = await fetch('https://news.orz.ai/api/v1/dailynews?platform=eastmoney');
       const json = await r.json();
       if (json && json.data && Array.isArray(json.data)) {
-        data = json.data.map(item => ({
-          title: (item.title || '').replace(/<[^>]*>/g, '').slice(0, 200),
-          content: (item.content || '').replace(/<[^>]*>/g, ''),
-          time: item.time || item.pubDate || '',
-          url: item.url || item.link || ''
-        }));
+        data = json.data.map(item => {
+          let url = item.url || item.link || '';
+          // news.orz.ai 有时返回自身域名，过滤掉
+          if (url && url.includes('news.orz.ai')) url = '';
+          return {
+            title: (item.title || '').replace(/<[^>]*>/g, '').slice(0, 200),
+            content: (item.content || '').replace(/<[^>]*>/g, ''),
+            time: item.time || item.pubDate || '',
+            url
+          };
+        });
       }
     }
     financeCache[src] = data;
