@@ -4641,7 +4641,7 @@ function renderFinanceNews(src) {
       return '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:13px;font-weight:700;color:var(--primary);min-width:20px;text-align:center">' + (i + 1) + '</span>' +
         '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="' + (hasContent ? 'var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'' : (item.url ? 'window.open(\'' + item.url + '\',\'_blank\')' : '')) + '">' + item.title + '</div>' +
         (hasContent ? '<div style="display:none;font-size:12px;color:var(--text2);margin-top:6px;padding:8px;background:var(--primary-bg);border-radius:8px;line-height:1.6">' + content + (item.url ? ' <a href="' + item.url + '" target="_blank" style="color:var(--accent)">查看原文</a>' : '') + '</div>' : '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + (item.time || '') + '</div>') + '</div>' +
-        '<button class="btn-icon ' + (isFav ? 'btn-p' : 'btn-o') + '" onclick="togFav(\'' + (item.title || '').replace(/'/g, "\\'") + '\',\'' + (item.url || '').replace(/'/g, "\\'") + '\',\'' + src + '\')" style="flex-shrink:0"><i class="fas fa-bookmark"></i></button></div>';
+        '<button class="btn-icon ' + (isFav ? 'btn-p' : 'btn-o') + '" onclick="togFav(\'' + (item.title || '').replace(/'/g, "\\'") + '\',\'' + (item.url || '').replace(/'/g, "\\'") + '\',\'' + src + '\',\'' + (content || '').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')" style="flex-shrink:0"><i class="fas fa-bookmark"></i></button></div>';
     }).join('');
   updateNewsBadge();
 }
@@ -4738,7 +4738,7 @@ function renderNews(platform) {
       return '<div class="cb" style="cursor:default;align-items:flex-start;padding:10px 0"><span style="font-size:13px;font-weight:700;color:var(--primary);min-width:20px;text-align:center">' + (i + 1) + '</span>' +
         '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;cursor:pointer" onclick="' + (needsInline ? 'var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'' : 'window.open(\'' + item.url + '\',\'_blank\')') + '">' + item.title + '</div>' +
         (needsInline ? '<div style="display:none;font-size:12px;color:var(--text2);margin-top:6px;padding:8px;background:var(--primary-bg);border-radius:8px;line-height:1.6">' + (content || '暂无详细内容，可尝试 <a href="' + item.url + '" target="_blank" style="color:var(--accent)">打开原链接</a>') + '</div>' : '<div style="font-size:12px;color:var(--text3);margin-top:2px">' + content + '</div>') + '</div>' +
-        '<button class="btn-icon ' + (isFav ? 'btn-p' : 'btn-o') + '" onclick="togFav(\'' + item.title.replace(/'/g, "\\'") + '\',\'' + item.url.replace(/'/g, "\\'") + '\',\'' + platform + '\')" style="flex-shrink:0"><i class="fas fa-bookmark"></i></button></div>';
+        '<button class="btn-icon ' + (isFav ? 'btn-p' : 'btn-o') + '" onclick="togFav(\'' + item.title.replace(/'/g, "\\'") + '\',\'' + item.url.replace(/'/g, "\\'") + '\',\'' + platform + '\',\'' + (content || '').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')" style="flex-shrink:0"><i class="fas fa-bookmark"></i></button></div>';
     }).join('');
   updateNewsBadge();
 }
@@ -4765,11 +4765,11 @@ async function fetchNews() {
   renderNews(); toast('🔥 热点已刷新');
 }
 
-function togFav(title, url, platform) {
+function togFav(title, url, platform, content) {
   let favs = Store.get('hotFav', []);
   const idx = favs.findIndex(f => f.title === title);
   if (idx > -1) { favs.splice(idx, 1); toast('已取消收藏'); }
-  else { favs.unshift({ title, url, platform, date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() }); toast('✅ 已收藏到稍后阅读'); }
+  else { favs.unshift({ title, url, platform, content: content || '', date: new Date().toISOString().slice(0, 10), updatedAt: Date.now() }); toast('✅ 已收藏到稍后阅读'); }
   Store.set('hotFav', favs); renderNews(); updateNewsBadge();
 }
 
@@ -4788,8 +4788,9 @@ function showReadLater() {
     : sorted.map((f, i) => {
         const origIdx = favs.findIndex(x => x.title === f.title);
         const isRead = f.read;
-        const linkClick = (f.url && !f.url.includes('news.orz.ai')) ? 'onclick="window.open(\'' + f.url + '\',\'_blank\')" style="cursor:pointer"' : '';
-        return '<div class="cb" style="cursor:default;' + (isRead ? 'opacity:0.5' : '') + '"><span style="font-size:12px;color:var(--text3);min-width:16px">' + (i + 1) + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500"' + linkClick + '>' + (isRead ? '<s>' + f.title + '</s>' : f.title) + '</div><div style="font-size:11px;color:var(--text3)">' + f.date + ' · ' + f.platform + '</div></div><button class="btn-icon btn-o" onclick="markRead(' + origIdx + ')" title="已阅"><i class="fas fa-check"></i></button><button class="btn-icon btn-o" onclick="rmFav(' + origIdx + ')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
+        const hasContent = f.content && f.content !== f.title;
+        const linkClick = (f.url && !f.url.includes('news.orz.ai')) ? 'onclick="window.open(\'' + f.url + '\',\'_blank\')" style="cursor:pointer"' : (hasContent ? 'onclick="var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'" style="cursor:pointer"' : '');
+        return '<div class="cb" style="cursor:default;' + (isRead ? 'opacity:0.5' : '') + '"><span style="font-size:12px;color:var(--text3);min-width:16px">' + (i + 1) + '</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500"' + linkClick + '>' + (isRead ? '<s>' + f.title + '</s>' : f.title) + '</div>' + (hasContent ? '<div style="display:none;font-size:12px;color:var(--text2);margin-top:6px;padding:8px;background:var(--primary-bg);border-radius:8px;line-height:1.6">' + f.content + '</div>' : '') + '<div style="font-size:11px;color:var(--text3)">' + f.date + ' · ' + f.platform + '</div></div><button class="btn-icon btn-o" onclick="markRead(' + origIdx + ')" title="已阅"><i class="fas fa-check"></i></button><button class="btn-icon btn-o" onclick="rmFav(' + origIdx + ')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>';
       }).join('');
 }
 
