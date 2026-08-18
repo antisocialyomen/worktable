@@ -42,6 +42,12 @@ export async function onRequest(context) {
       headers['Referer'] = 'https://www.cls.cn/';
     }
 
+    // 豆瓣需要 Referer 和特定 Accept
+    if (target.includes('douban.com')) {
+      headers['Referer'] = 'https://movie.douban.com/';
+      headers['Accept'] = 'application/json, text/plain, */*';
+    }
+
     const res = await fetch(target, { headers, redirect: 'follow' });
 
     const contentType = res.headers.get('Content-Type') || 'application/json';
