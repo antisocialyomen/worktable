@@ -170,6 +170,21 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .stat-detail{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:4px}
 .stat-detail.hide{display:none}
 @media(max-width:1024px){.g4{grid-template-columns:repeat(2,1fr)}}
+.dt-picker-mask{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center}
+.dt-picker-mask.show{display:flex}
+.dt-picker{width:100%;max-width:400px;background:var(--bg-card);border-radius:16px;padding:0;animation:dtSlideUp .25s ease-out}
+.dt-picker-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+.dt-picker-hd span{font-size:14px;font-weight:600;color:var(--text)}
+.dt-picker-hd .dt-cancel,.dt-picker-hd .dt-confirm{font-size:13px;padding:4px 12px;border-radius:8px;cursor:pointer}
+.dt-picker-hd .dt-cancel{color:var(--text2)}
+.dt-picker-hd .dt-confirm{color:#fff;background:var(--primary);font-weight:600}
+.dt-picker-body{display:flex;height:220px;padding:8px 0}
+.dt-picker-body>div{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.dt-col-label{flex:0 0 auto;text-align:center;font-size:10px;color:var(--text3);padding:4px 0;border-bottom:1px solid var(--border)}
+.dt-col{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;text-align:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.dt-col::-webkit-scrollbar{display:none}
+.dt-col-item{height:36px;line-height:36px;font-size:14px;color:var(--text2);scroll-snap-align:center;cursor:pointer;transition:all .15s}
+.dt-col-item.selected{font-size:18px;font-weight:700;color:var(--primary)}
 .dt-picker-mask.desktop-center{align-items:center}
 .dt-picker-mask.desktop-center .dt-picker{border-radius:16px;max-width:360px;margin:auto}
 .bill-cal{padding:8px 0}
@@ -320,22 +335,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   /* 日期按钮：自定义日期选择器触发按钮 */
   .dt-btn{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;font-size:9px;line-height:1.2;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);cursor:pointer;white-space:nowrap;min-width:auto;height:23px}
   .dt-btn i{font-size:10px;color:var(--text2)}
-  /* 日期选择面板：底部弹出 */
-  .dt-picker-mask{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.4);display:none;align-items:flex-end;justify-content:center}
-  .dt-picker-mask.show{display:flex}
-  .dt-picker{width:100%;max-width:400px;background:var(--bg-card);border-radius:16px 16px 0 0;padding:0 0 env(safe-area-inset-bottom);animation:dtSlideUp .25s ease-out}
+  /* 日期选择面板：移动端底部弹出 */
+  .dt-picker-mask{align-items:flex-end}
+  .dt-picker{border-radius:16px 16px 0 0;padding:0 0 env(safe-area-inset-bottom)}
   @keyframes dtSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .dt-picker-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
-  .dt-picker-hd span{font-size:14px;font-weight:600;color:var(--text)}
-  .dt-picker-hd .dt-cancel,.dt-picker-hd .dt-confirm{font-size:13px;padding:4px 12px;border-radius:8px;cursor:pointer}
-  .dt-picker-hd .dt-cancel{color:var(--text2)}
-  .dt-picker-hd .dt-confirm{color:#fff;background:var(--primary);font-weight:600}
-  .dt-picker-body{display:flex;height:220px;padding:8px 0}
-  .dt-col{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;text-align:center;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .dt-col::-webkit-scrollbar{display:none}
-  .dt-col-item{height:36px;line-height:36px;font-size:14px;color:var(--text2);scroll-snap-align:center;cursor:pointer;transition:all .15s}
-  .dt-col-item.selected{font-size:18px;font-weight:700;color:var(--primary)}
-  .dt-col-label{text-align:center;font-size:10px;color:var(--text3);padding:4px 0;border-bottom:1px solid var(--border)}
   /* 移动端：隐藏冗余日期显示控件（日期已显示在按钮上） */
   #calDateHint{display:none!important}
   #cdTargetHint{display:none!important}
@@ -5954,7 +5957,7 @@ function renderDtCols() {
   const monthCol = document.getElementById('dtColMonth');
   const dayCol = document.getElementById('dtColDay');
   let yHtml = '', mHtml = '', dHtml = '';
-  for (let y = 2020; y <= 2035; y++) {
+  for (let y = 1900; y <= 2100; y++) {
     yHtml += '<div class="dt-col-item' + (y === _dtPickerYear ? ' selected' : '') + '" data-val="' + y + '" onclick="pickDtYear(' + y + ')">' + y + '</div>';
   }
   for (let m = 1; m <= 12; m++) {
@@ -5971,7 +5974,7 @@ function renderDtCols() {
     _dtScrollInited = true;
     setupDtColScroll(yearCol, function(idx) {
       var old = _dtPickerYear;
-      _dtPickerYear = 2020 + idx;
+      _dtPickerYear = 1900 + idx;
       return old !== _dtPickerYear;
     });
     setupDtColScroll(monthCol, function(idx) {
