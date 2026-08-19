@@ -85,7 +85,7 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 /* 资产负债合并控件（去图标·两行·缩小） */
 .asset-line{display:flex;align-items:baseline;gap:6px;padding:2px 0}
 .asset-net{font-size:14px}
-.asset-row2{justify-content:space-between;margin-top:3px}
+.asset-row2{justify-content:flex-start;margin-top:3px}
 .a-grp{display:inline-flex;align-items:baseline;gap:6px}
 .a-lab{font-size:10px;color:var(--text2);flex:0 0 auto}
 .a-num{font-weight:700;color:var(--text);font-size:13px;line-height:1.2}
@@ -114,7 +114,7 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .ig{display:flex;gap:8px;margin-bottom:12px}
 .in{flex:1;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px}
 .in:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(223,48,28,0.1)}
-select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='none' stroke='%236B7280' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' d='M1.5 3L4 5.5 6.5 3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;padding-right:16px}
 .tag{display:inline-flex;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:500}
 .t1{background:#FFD4A8;color:#FF6B8A}
 .t2{background:#E8D8F5;color:#8140DC}
@@ -149,8 +149,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .mc .mt{font-size:15px;font-weight:600;margin-bottom:4px}
 .mc .md{font-size:10px;color:var(--text2)}
 .mp{width:100%;height:120px;background:linear-gradient(135deg,var(--primary-bg),var(--accent-light));display:flex;align-items:center;justify-content:center;font-size:36px;color:var(--text3)}
-.ft{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
-.ft .fb{padding:4px 12px;border-radius:16px;font-size:13px;color:var(--text2);cursor:pointer;transition:all var(--t)}
+.ft{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.ft .fb{padding:4px 12px;border-radius:16px;font-size:13px;color:var(--text2);cursor:pointer;transition:all var(--t);line-height:1.2;display:inline-flex;align-items:center}
 .ft .fb.active{background:var(--primary);color:#fff}
 .ft .fb:hover:not(.active){background:var(--primary-bg);color:var(--primary)}
 .emp{text-align:center;padding:40px;color:var(--text3)}
@@ -245,6 +245,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .in{padding:3px 7px;font-size:11px}
   .ig{flex-wrap:wrap;gap:3px;margin-bottom:10px}
   .ig .in{flex:0 1 auto;min-width:auto;width:auto}
+select.in{font-size:11px!important;padding:2px 5px!important;height:auto!important}
 .ig select.in{flex:0 0 auto;min-width:auto;width:auto}
   .ig .btn{flex:0 0 auto}
   .g2,.g4{grid-template-columns:1fr;gap:10px}
@@ -350,15 +351,23 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   /* 移动端：财务-记账-资产概览 */
   .a-num,.a-debt{font-size:9px!important}
   #assetIn,#debtIn{width:70px!important;flex:0 0 70px!important}
-  #debtIn{margin-left:3px!important}
-  .asset-row2 .a-grp:last-child{margin-left:10px!important}
+  #debtIn{margin-left:5px!important}
+  .asset-row2 .a-grp:last-child{margin-left:5px!important}
   /* 移动端：记一笔输入框 */
+  #expType{width:50px!important;flex:0 0 50px!important}
   #expNl{width:100px!important;flex:0 0 100px!important}
   #expAmt{width:70px!important;flex:0 0 70px!important}
   #expCat{width:60px!important;flex:0 0 60px!important}
   #expSub{width:60px!important;flex:0 0 60px!important}
   #budgetIn{width:70px!important;flex:0 0 70px!important}
   #expNote{width:50px!important;flex:0 0 50px!important}
+  /* 移动端：任务添加按钮 */
+  #taskAddBtn{font-size:11px!important;padding:2px 5px!important;width:auto!important;height:auto!important}
+  /* 移动端：购物项输入框 */
+  #shopIn{width:80px!important;flex:0 0 80px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
+  /* 移动端：所有搜索输入框 */
+  #collSearch,#noteSearch,#shopSearch,#topicSearch,#matSearch{width:80px!important;flex:0 0 80px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
+
   /* 移动端：账单明细条目标题、金额字号9px，日期7px，居左对齐 */
   #expRecent .cb>div:first-child,#expList .cb>div:first-child{text-align:left!important}
   #expRecent .cb>div:first-child>span:first-child,#expList .cb>div:first-child>span:first-child{font-size:9px!important}
@@ -371,8 +380,16 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .stat-detail .cb>div:first-child>div:last-child{font-size:7px!important}
   .stat-bar .num{font-size:9px!important}
   /* 移动端：记录饮水按钮 */
-  .w-btn{font-size:9px!important;padding:1px 5px!important}
+  .w-btn{font-size:9px!important;padding:1px 5px!important;width:40px!important;min-width:40px!important}
   #wCustom{width:100px!important;flex:0 0 100px!important}
+  /* 移动端：热量计算餐次下拉框55px、食材输入框80px */
+  #calMeal{width:55px!important;flex:0 0 55px!important}
+  #calFood{width:80px!important;flex:0 0 80px!important}
+  /* 移动端：日期按钮 */
+  .dt-date-btn{font-size:11px!important;padding:2px 5px!important;width:auto!important;height:auto!important}
+  .dt-date-btn .dt-btn-text{font-size:9px}
+  /* 移动端：账单收入/支出/结余字号9px */
+  #billTotals span{font-size:9px!important}
   /* 移动端：学习-中文/英语积累 */
   .study-word{font-size:14px!important}
   .study-def{font-size:12px!important;padding:2px 7px!important}
@@ -382,11 +399,11 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   /* 移动端：选题标签水平间距2px */
   #topicList .cb .tag+.tag{margin-left:2px}
   #topicList .cb .tag+span{margin-left:2px}
-  /* 移动端：选题管理搜索框100px、下拉框70px，与新建按钮间距3px */
-  #topicSearch{width:100px!important;flex:0 0 100px!important}
+  /* 移动端：选题管理搜索框、下拉框、新建按钮并排 */
+  #c-topics .card-hd{flex-wrap:nowrap!important;gap:3px!important}
+  #topicSearch{width:80px!important;flex:0 0 80px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
   #topicStatus{width:70px!important;flex:0 0 70px!important}
-  #c-topics .card-hd{gap:3px!important}
-  #c-topics .card-hd .btn-p{margin-left:0!important}
+  #topicNewBtn{margin-left:0!important}
   /* 移动端：笔记清单编辑删除按钮上下排列 */
   #notesList .cb-acts:last-child{display:flex;flex-direction:column;gap:3px}
   /* 移动端：想看列表标签和日期并排 */
@@ -568,14 +585,13 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
       <!-- TASKS -->
       <div class="page" id="p-tasks">
         <div class="card">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn btn-p" onclick="openTaskModal()"><i class="fas fa-plus"></i> 添加</button></div>
           <div class="ft" id="taskFilter">
             <span class="fb active" data-f="all">全部</span>
             <span class="fb" data-f="today">今天</span>
             <span class="fb" data-f="high">紧急</span>
             <span class="fb" data-f="done">已完成</span>
             <div style="flex:1"></div>
-            <span style="font-size:13px;color:var(--text3)" id="taskProg">0/0</span>
+            <button class="btn btn-p" id="taskAddBtn" onclick="openTaskModal()"><i class="fas fa-plus"></i> 添加</button>
           </div>
           <div id="taskList"></div>
         </div>
@@ -608,15 +624,16 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
                 <div class="asset-line asset-net"><span class="a-lab">净资产</span><span class="a-num" id="dispNet">0.00</span><i class="fas fa-eye asset-eye" id="eyeNet" onclick="toggleAssetEye()" title="显示/隐藏金额"></i></div>
                 <div class="asset-line asset-row2">
                   <span class="a-grp"><span class="a-lab">总资产</span><span class="a-num" id="dispAssets">0.00</span></span>
-                  <span class="a-grp" style="margin-left:auto"><span class="a-lab">总负债</span><span class="a-num a-debt" id="dispDebts">0.00</span></span>
+                  <span class="a-grp" style="margin-left:5px"><span class="a-lab">总负债</span><span class="a-num a-debt" id="dispDebts">0.00</span></span>
                 </div>
               </div>
-              <div class="ig"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:0 0 auto;font-size:10px;width:auto"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:0 0 auto;font-size:10px;width:auto;margin-left:auto"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto">设置</button></div>
+              <div class="ig"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:0 0 auto;font-size:10px;width:auto"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:0 0 auto;font-size:10px;width:auto;margin-left:5px"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto">设置</button></div>
             </div>
             <div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div>
-              <div class="ig"><input class="in" id="expNl" placeholder="例：午餐20元 / 说&quot;晚餐三十&quot;" style="flex:0 0 auto;width:100px;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()"><button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">智能填充</button></div>
-              <div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01" style="flex:0 0 auto;width:70px"><input class="in" id="expDate" type="date" style="flex:0 0 30%"><select class="in" id="expType" onchange="onExpTypeChange()" style="flex:0 0 22%"><option value="e">支出</option><option value="i">收入</option></select></div>
-              <div class="ig"><select class="in" id="expCat" onchange="onExpCatChange()" style="flex:0 0 auto;width:60px"></select><select class="in" id="expSub" style="flex:0 0 auto;width:60px"></select><input class="in" id="expNote" placeholder="备注" style="flex:0 0 auto"><button class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto"><i class="fas fa-cog"></i></button><button class="btn btn-p" onclick="addExpense()" style="flex:0 0 auto">添加</button></div>
+              <div class="ig"><select class="in" id="expType" onchange="onExpTypeChange()" style="flex:0 0 auto;width:60px"><option value="e">支出</option><option value="i">收入</option></select><input class="in" id="expNl" placeholder="例：午餐20元" style="flex:0 0 auto;width:100px;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()"><button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">识别</button></div>
+              <div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01" style="flex:0 0 auto;width:70px"><input class="in" id="expDate" type="date" style="flex:0 0 30%"></div>
+              <div class="ig" style="margin-bottom:4px"><select class="in" id="expCat" onchange="onExpCatChange()" style="flex:0 0 auto;width:60px"></select><select class="in" id="expSub" style="flex:0 0 auto;width:60px"></select><input class="in" id="expNote" placeholder="备注" style="flex:0 0 auto"><button id="catMgrBtn" class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center"><i class="fas fa-cog"></i></button></div>
+              <div id="addBtnRow" style="display:flex;justify-content:flex-end;margin-top:4px"><button class="btn btn-p" onclick="addExpense()">添加</button></div>
               <div style="margin-top:10px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number" style="flex:0 0 auto"><button class="btn-sm btn-a" onclick="setBudget()" style="flex:0 0 auto">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div>
             </div>
             <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📋 最近记录</h3><button class="btn-sm btn btn-o" onclick="switchExpTab('bill')"><i class="fas fa-list"></i> 看账单</button></div><div id="expRecent"></div></div>
@@ -644,7 +661,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
               <div style="margin-left:auto;display:flex;gap:6px;align-items:center"><div class="ft" id="statScopeTabs" style="margin:0"><span class="fb active" data-s="month">月度</span><span class="fb" data-s="year">年度</span></div></div>
             </div>
             <div id="statMonthWrap">
-              <div class="card-hd" style="margin-top:6px"><div style="margin-left:auto;display:flex;gap:3px;align-items:center"><div class="ft" id="expMonthLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="month" id="expMonth" onchange="renderStat()" class="dt-btn"></div></div>
+              <div class="card-hd" style="margin-top:6px"><div style="margin-left:auto;display:flex;gap:3px;align-items:center"><div class="ft" id="expMonthLevelTabs" style="margin:0"><span class="fb active" data-l="l1">一级</span><span class="fb" data-l="l2">二级</span></div><input type="hidden" id="expMonth" onchange="renderStat()"><button class="btn-sm btn-o dt-date-btn" data-dt-target="expMonth" onclick="openDtPicker('expMonth','month')"><span class="dt-btn-text">月份</span></button></div></div>
               <div style="margin-top:8px"><div class="stat-chart-box"><canvas id="expChart"></canvas></div><div id="statMonthSummary" class="stat-summary"></div></div>
             </div>
             <div id="statYearWrap" style="display:none">
@@ -671,7 +688,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
                 <span id="perCalLabel" style="font-weight:600;font-size:15px;min-width:84px;text-align:center"></span>
                 <button class="btn-sm btn-o" onclick="chPerMonth(1)"><i class="fas fa-chevron-right"></i></button>
                 <button class="btn-sm btn-a" onclick="perDate=new Date();renderPeriodCalendar()">今天</button>
-                <button class="btn-sm btn-o" onclick="exportPeriods()" style="margin-left:4px">📥 导出</button>
+                <button class="btn-sm btn-o" onclick="exportPeriods()" style="margin-left:4px">导出</button>
               </div>
             </div>
             <div id="perCalGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px"></div>
@@ -831,7 +848,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
           <span class="fb active" data-c="topics">📋 选题管理</span>
           <span class="fb" data-c="materials">📎 素材库</span>
         </div>
-        <div class="c-tab" id="c-topics"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><input class="in" id="topicSearch" placeholder="🔍 搜索选题标题..." oninput="renderTopics()" style="flex:0 0 auto;width:50%;max-width:220px;padding:6px 10px;font-size:13px"><select class="in" id="topicStatus" style="flex:0 0 auto;width:100px;padding:6px 8px;font-size:13px" onchange="renderTopics()"><option value="all">全部</option><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select><button class="btn-sm btn-p" onclick="addTopic()" style="margin-left:auto"><i class="fas fa-plus"></i> 新建选题</button></div><div id="topicList" style="margin-top:8px"></div></div></div>
+        <div class="c-tab" id="c-topics"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><input class="in" id="topicSearch" placeholder="🔍 搜索选题标题..." oninput="renderTopics()" style="flex:0 0 auto;width:50%;max-width:220px;padding:6px 10px;font-size:13px"><select class="in" id="topicStatus" style="flex:0 0 auto;width:100px;padding:6px 8px;font-size:13px" onchange="renderTopics()"><option value="all">全部</option><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select><button class="btn-sm btn-p" id="topicNewBtn" onclick="addTopic()"><i class="fas fa-plus"></i> 新建</button></div><div id="topicList" style="margin-top:8px"></div></div></div>
         <div class="c-tab" id="c-materials" style="display:none"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><input class="in" id="matSearch" placeholder="🔍 搜索素材标题..." oninput="renderMats()" style="flex:0 0 auto;width:50%;max-width:220px;padding:6px 10px;font-size:13px"><button class="btn-sm btn-p" onclick="addMat()"><i class="fas fa-plus"></i> 添加素材</button></div><div id="matList" style="margin-top:8px"></div></div></div>
       </div>
 
@@ -877,16 +894,16 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
                 <option value="零食">🍪 零食</option>
                 <option value="饮料">🥤 饮料</option>
               </select>
-              <input class="in" id="calDate" type="date" style="flex:0 0 auto;width:120px" onchange="document.getElementById('calDateHint').textContent=this.value||''"><span id="calDateHint" style="font-size:12px;color:var(--text2);white-space:nowrap"></span>
-              <input class="in" id="calFood" placeholder="食材/饮品（如：米饭、可乐）" style="flex:1" list="calFoodList">
+              <input class="in" id="calFood" placeholder="食材/饮品,如:米饭/可乐）" style="flex:1" list="calFoodList">
               <datalist id="calFoodList"></datalist>
               <input class="in" id="calGrams" type="number" placeholder="克数/ml" style="flex:0 0 auto;width:90px">
+              <input type="hidden" id="calDate"><button class="btn-sm btn-o dt-date-btn" data-dt-target="calDate" onclick="openDtPicker('calDate')" style="flex:0 0 auto"><span class="dt-btn-text">日期</span></button>
               <button class="btn btn-p" onclick="addCalorie()"><i class="fas fa-plus"></i></button>
             </div>
             <div style="font-size:12px;color:var(--text3);margin-top:6px">提示：输入食材或饮品即可自动匹配热量库（每 100g/ml 的 kcal，饮料按 1ml≈1g 计），未收录可手动填热量。</div>
             <div id="calLog" style="margin-top:10px"></div>
           </div>
-          <div class="card"><div class="card-hd"><h3>📊 摄入总热量</h3><div style="display:flex;align-items:center;gap:8px"><input class="in" id="calViewDate" type="date" onchange="renderCalorie();document.getElementById('calDateLabel').textContent=this.value||'今日合计'" style="flex:0 0 auto;width:130px;padding:4px 8px;font-size:12px"></div></div>
+          <div class="card"><div class="card-hd"><h3>📊 摄入总热量</h3><div style="display:flex;align-items:center;gap:8px"><input type="hidden" id="calViewDate" onchange="renderCalorie()"><button class="btn-sm btn-o dt-date-btn" data-dt-target="calViewDate" onclick="openDtPicker('calViewDate')"><span class="dt-btn-text">日期</span></button></div></div>
             <div style="text-align:center;padding:6px 0">
               <div style="font-size:40px;font-weight:800;color:var(--primary)" id="calTotal">0</div>
               <div style="font-size:13px;color:var(--text2)" id="calDateLabel">今日合计</div>
@@ -959,6 +976,18 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
     <div style="text-align:right;margin-top:14px">
       <button class="btn btn-o" onclick="closeMoodModal()">取消</button>
       <button class="btn btn-p" onclick="saveMoodLog()" style="margin-left:8px"><i class="fas fa-save"></i> 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 经期删除确认弹窗 -->
+<div class="mask hide" id="perDelMask" onclick="if(event.target===this)closePerDelModal()">
+  <div class="modal" style="max-width:320px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><h3>确认删除</h3><span class="modal-x" onclick="closePerDelModal()"><i class="fas fa-times"></i></span></div>
+    <div style="font-size:14px;color:var(--text);text-align:center;padding:16px 0">删除这一整段经期记录？</div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-o" onclick="closePerDelModal()">取消</button>
+      <button class="btn btn-p" id="perDelConfirmBtn" style="margin-left:8px">确定</button>
     </div>
   </div>
 </div>
@@ -2096,7 +2125,7 @@ document.addEventListener('DOMContentLoaded', function() {
       else if (parent === 'foodTabs') switchFoodTab(fb.getAttribute('data-f'));
       else if (parent === 'studyTabs') switchStudyTab(fb.getAttribute('data-s'));
       else if (parent === 'expTabs') switchExpTab(fb.getAttribute('data-e'));
-      else if (parent === 'statScopeTabs') { expScope = fb.getAttribute('data-s'); if (expScope === 'year' && window.innerWidth <= 768) { openDtPicker('expYear', 'year'); } renderStat(); }
+      else if (parent === 'statScopeTabs') { expScope = fb.getAttribute('data-s'); if (expScope === 'month') { openDtPicker('expMonth', 'month'); } if (expScope === 'year' && window.innerWidth <= 768) { openDtPicker('expYear', 'year'); } renderStat(); }
       else if (parent === 'expMonthLevelTabs') { expMonthLevel = fb.getAttribute('data-l'); renderStat(); }
       else if (parent === 'expYearLevelTabs') { expYearLevel = fb.getAttribute('data-l'); renderStat(); }
         else if (parent === 'billDimTabs') { window._billDim = fb.getAttribute('data-dim'); handleBillDimSwitch(); }
@@ -2769,12 +2798,22 @@ function exportPeriods() {
   toast('✅ 已导出');
 }
 function clearPeriodRun(start) {
-  if (!confirm('删除这一整段经期记录？')) return;
-  const pd = Store.get('periodDays', {});
-  const runs = periodRuns(pd);
-  const run = runs.find(r => r.start === start);
-  if (run) run.days.forEach(d => delete pd[d]);
-  Store.set('periodDays', pd); renderPeriod(); renderPeriodHome(); toast('已删除');
+  const mask = document.getElementById('perDelMask');
+  if (!mask) return;
+  mask.classList.remove('hide');
+  const confirmBtn = document.getElementById('perDelConfirmBtn');
+  confirmBtn.onclick = function() {
+    const pd = Store.get('periodDays', {});
+    const runs = periodRuns(pd);
+    const run = runs.find(r => r.start === start);
+    if (run) run.days.forEach(d => delete pd[d]);
+    Store.set('periodDays', pd); renderPeriod(); renderPeriodHome(); toast('已删除');
+    closePerDelModal();
+  };
+}
+function closePerDelModal() {
+  const mask = document.getElementById('perDelMask');
+  if (mask) mask.classList.add('hide');
 }
 // ============================================================
 // REMINDER SYSTEM (应用内提醒中心 + 浏览器通知 + 免打扰)
@@ -2919,8 +2958,6 @@ function renderTasks() {
   if (f === 'today') filtered = tasks.filter(t => t.date === today);
   else if (f === 'high') filtered = tasks.filter(t => t.pri === 'h' && !t.done);
   else if (f === 'done') filtered = tasks.filter(t => t.done);
-  const d = filtered.filter(t => t.done).length;
-  document.getElementById('taskProg').textContent = d + '/' + filtered.length + ' 已完成';
   const list = document.getElementById('taskList');
   if (filtered.length === 0) {
     list.innerHTML = '<div class="emp"><i class="fas fa-clipboard-list"></i><p>还没有任务</p></div>';
@@ -3055,7 +3092,7 @@ function switchLifeTab(t) {
   document.querySelectorAll('.life-tab').forEach(el => el.style.display = 'none');
   const tab = document.getElementById('l-' + t);
   if (tab) tab.style.display = 'block';
-  if (t === 'expense') { initExpPeriods(); switchExpTab('record'); }
+  if (t === 'expense') { initExpPeriods(); switchExpTab('record'); requestAnimationFrame(() => requestAnimationFrame(alignAddBtn)); }
   if (t === 'health') { const hd=document.getElementById('hDate'); if(hd)hd.value=new Date().toISOString().slice(0,10); renderHealth(); setTimeout(renderWeightChart, 100); }
   if (t === 'habit') renderHeatmap();
   if (t === 'period') renderPeriod();
@@ -3070,7 +3107,7 @@ function switchExpTab(e) {
     if (p) p.style.display = (k === e) ? '' : 'none';
   });
   document.querySelectorAll('#expTabs .fb').forEach(f => f.classList.toggle('active', f.getAttribute('data-e') === e));
-  if (e === 'record') { renderRecent(); renderBudget(); renderAssets(); }
+  if (e === 'record') { renderRecent(); renderBudget(); renderAssets(); requestAnimationFrame(() => requestAnimationFrame(alignAddBtn)); }
   else if (e === 'bill') renderBill();
   else if (e === 'stat') renderStat();
   else if (e === 'emo') renderEmotional();
@@ -3439,6 +3476,20 @@ function renderAnnual() {
     charts.ann = new Chart(ctx, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: g.values, backgroundColor: EXP_COLORS }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', layout: { padding: { top: 16, bottom: 16, left: 8, right: 8 } }, plugins: { legend: { display: false }, title: { display: false }, tooltip: pctTooltip } }, plugins: [doughnutOutsideLabels] });
   }
   const lbl = document.getElementById('annYearLabel'); if (lbl) lbl.textContent = '· ' + y;
+}
+
+// ---- 动态对齐添加按钮与分类管理按钮右边界 ----
+function alignAddBtn() {
+  const catBtn = document.getElementById('catMgrBtn');
+  const addRow = document.getElementById('addBtnRow');
+  if (!catBtn || !addRow) return;
+  const catRect = catBtn.getBoundingClientRect();
+  if (catRect.right === 0) return;
+  const card = catBtn.closest('.card');
+  if (!card) return;
+  const cardRect = card.getBoundingClientRect();
+  const paddingRight = cardRect.right - catRect.right;
+  addRow.style.paddingRight = Math.max(0, paddingRight) + 'px';
 }
 
 // ---- 增删改 ----
@@ -3839,7 +3890,7 @@ function renderShopping() {
   const i = Store.get('shopping', []);
   if (i.length === 0) { document.getElementById('shopList').innerHTML = '<div class="emp" style="padding:20px"><i class="fas fa-shopping-cart"></i><p>购物清单为空</p></div>'; return; }
   const sorted = [...i].sort((a, b) => (a.done ? 1 : 0) - (b.done ? 1 : 0));
-  document.getElementById('shopList').innerHTML = sorted.map(x => '<div class="cb"><input type="checkbox"' + (x.done ? 'checked' : '') + ' id="shopCb' + x.id + '"><span class="cc" onclick="event.stopPropagation();togShop(\'' + x.id + '\')"></span><span class="ct" style="' + (x.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '" onclick="togShop(\'' + x.id + '\')">' + x.name + '</span><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (x.cat || '其他') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();openShopEditModal(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delShop(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
+  document.getElementById('shopList').innerHTML = sorted.map(x => '<div class="cb"><input type="checkbox"' + (x.done ? ' checked' : '') + ' id="shopCb' + x.id + '" onchange="togShop(\'' + x.id + '\')"><span class="cc' + (x.done ? ' checked' : '') + '" onclick="event.stopPropagation();togShop(\'' + x.id + '\')"></span><span class="ct" style="' + (x.done ? 'text-decoration:line-through;color:var(--text3)' : '') + '" onclick="togShop(\'' + x.id + '\')">' + x.name + '</span><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (x.cat || '其他') + '</span><button class="btn-icon btn-o" onclick="event.stopPropagation();openShopEditModal(\'' + x.id + '\')" style="color:var(--text2)"><i class="fas fa-pen"></i></button><button class="btn-icon btn-o" onclick="event.stopPropagation();delShop(\'' + x.id + '\')" style="color:var(--d)"><i class="fas fa-times"></i></button></div>').join('');
 }
 function addShop() { const n = document.getElementById('shopIn').value.trim(); if (!n) return; const i = Store.get('shopping', []); i.unshift({ id: Date.now().toString(), name: n, cat: document.getElementById('shopCat').value, done: false, updatedAt: Date.now() }); Store.set('shopping', i); document.getElementById('shopIn').value = ''; renderShopping(); }
 function togShop(id) { const i = Store.get('shopping', []); const x = i.find(x => x.id === id); if (x) { x.done = !x.done; x.updatedAt = Date.now(); Store.set('shopping', i); renderShopping(); } }
@@ -5851,9 +5902,17 @@ const doughnutOutsideLabels = {
     const { ctx } = chart;
     ctx.save();
     const isMobile = window.innerWidth <= 768;
-    ctx.font = (isMobile ? '7px' : '11px') + ' -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+    const fontSize = isMobile ? 7 : 11;
+    ctx.font = fontSize + 'px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.textBaseline = 'middle';
     const maxRadius = Math.min(chart.width, chart.height) * 0.42;
+    const lead = isMobile ? 8 : 14;
+    const elbow = isMobile ? 6 : 12;
+    const pad = 3;
+    const lineHeight = fontSize + 2;
+
+    // 第一遍：计算所有标签位置
+    const labelPositions = [];
     meta.data.forEach((arc, i) => {
       const v = Number(data[i]) || 0;
       if (v <= 0) return;
@@ -5862,8 +5921,6 @@ const doughnutOutsideLabels = {
       const r = Math.min(arc.outerRadius, maxRadius);
       const x1 = cx + Math.cos(mid) * r;
       const y1 = cy + Math.sin(mid) * r;
-      const lead = isMobile ? 8 : 14;
-      const elbow = isMobile ? 6 : 12;
       const x2 = cx + Math.cos(mid) * (r + lead);
       const y2 = cy + Math.sin(mid) * (r + lead);
       const color = colors[i % colors.length] || '#999';
@@ -5871,15 +5928,36 @@ const doughnutOutsideLabels = {
       const tw = ctx.measureText(text).width;
       let onRight = Math.cos(mid) >= 0;
       let x3 = x2 + (onRight ? elbow : -elbow);
-      const pad = 3;
       if (onRight && x3 + tw + pad > chart.width - 2) { onRight = false; x3 = x2 - elbow; }
       else if (!onRight && x3 - tw - pad < 2) { onRight = true; x3 = x2 + elbow; }
-      ctx.strokeStyle = color;
+      labelPositions.push({ i, x1, y1, x2, y2, x3, color, text, tw, onRight, pad });
+    });
+
+    // 第二遍：检测并解决垂直重叠
+    const minGap = 2;
+    for (let pass = 0; pass < 3; pass++) {
+      for (let a = 0; a < labelPositions.length; a++) {
+        for (let b = a + 1; b < labelPositions.length; b++) {
+          const la = labelPositions[a];
+          const lb = labelPositions[b];
+          const yDiff = Math.abs(la.y2 - lb.y2);
+          if (yDiff < lineHeight + minGap) {
+            const push = (lineHeight + minGap - yDiff) / 2;
+            if (la.y2 < lb.y2) { la.y2 -= push; lb.y2 += push; }
+            else { la.y2 += push; lb.y2 -= push; }
+          }
+        }
+      }
+    }
+
+    // 第三遍：绘制
+    labelPositions.forEach(la => {
+      ctx.strokeStyle = la.color;
       ctx.lineWidth = 0.8;
-      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.lineTo(x3, y2); ctx.stroke();
-      ctx.textAlign = onRight ? 'left' : 'right';
-      ctx.fillStyle = color;
-      ctx.fillText(text, onRight ? x3 + pad : x3 - pad, y2);
+      ctx.beginPath(); ctx.moveTo(la.x1, la.y1); ctx.lineTo(la.x2, la.y2); ctx.lineTo(la.x3, la.y2); ctx.stroke();
+      ctx.textAlign = la.onRight ? 'left' : 'right';
+      ctx.fillStyle = la.color;
+      ctx.fillText(la.text, la.onRight ? la.x3 + la.pad : la.x3 - la.pad, la.y2);
     });
     ctx.restore();
   }
@@ -5987,11 +6065,13 @@ function renderDtCols() {
   }
   setTimeout(function() {
     _dtSuppressScroll = true;
-    scrollDtColToSelected(yearCol);
-    if (_dtPickerMode !== 'year') scrollDtColToSelected(monthCol);
-    if (_dtPickerMode === 'date') scrollDtColToSelected(dayCol);
-    setTimeout(function() { _dtSuppressScroll = false; }, 150);
-  }, 50);
+    requestAnimationFrame(function() {
+      scrollDtColToSelected(yearCol);
+      if (_dtPickerMode !== 'year') scrollDtColToSelected(monthCol);
+      if (_dtPickerMode === 'date') scrollDtColToSelected(dayCol);
+      setTimeout(function() { _dtSuppressScroll = false; }, 150);
+    });
+  }, 100);
 }
 
 function setupDtColScroll(col, setter) {
@@ -6031,7 +6111,14 @@ function setupDtColScroll(col, setter) {
 
 function scrollDtColToSelected(col) {
   const sel = col.querySelector('.selected');
-  if (sel) sel.scrollIntoView({ block: 'center', behavior: 'auto' });
+  if (sel) {
+    const itemH = 36;
+    const colH = col.clientHeight;
+    const idx = Array.prototype.indexOf.call(col.children, sel);
+    if (idx >= 0) {
+      col.scrollTop = idx * itemH - (colH / 2) + (itemH / 2);
+    }
+  }
 }
 
 function pickDtYear(y) { _dtPickerYear = y; renderDtCols(); }
@@ -6080,7 +6167,11 @@ function confirmDtPicker() {
   }
   if (_dtPickerTarget === 'expMonth' || _dtPickerTarget === 'expYear') { if (typeof renderStat === 'function') renderStat(); }
   if (_dtPickerTarget === 'calDate') { if (typeof renderCalorie === 'function') renderCalorie(); }
-  if (_dtPickerTarget === 'calViewDate') { if (typeof renderCalorie === 'function') renderCalorie(); }
+  if (_dtPickerTarget === 'calViewDate') {
+    if (typeof renderCalorie === 'function') renderCalorie();
+    var label = document.getElementById('calDateLabel');
+    if (label) label.textContent = input.value ? '千卡 (kcal) · ' + input.value + '合计' : '今日合计';
+  }
   closeDtPicker();
 }
 
