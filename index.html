@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=VT323&family=DotGothic16&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&family=DotGothic16&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--primary:#FF6B8A;--primary-light:#FF8DA6;--primary-dark:#E05070;--primary-bg:#FFD4A8;--accent:#8140DC;--accent-light:#E8D8F5;--alert:#FFB347;--bg:#FFF5EE;--bg-card:#FFFFFF;--bg-nav:#FFFFFF;--text:#4A3040;--text2:#8A6A7A;--text3:#BAA0AA;--border:#F5E0E0;--shadow:0 2px 8px rgba(255,107,138,0.1);--shadow-lg:0 8px 25px rgba(255,107,138,0.15);--radius:16px;--radius-sm:10px;--radius-lg:24px;--nav-w:170px;--h:56px;--t:.3s;--s:#8BC4A0;--w:#FFB347;--d:#FF6B8A;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
@@ -117,7 +117,7 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .in{flex:1;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px}
 .in:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(223,48,28,0.1)}
 select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='none' stroke='%236B7280' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' d='M1.5 3L4 5.5 6.5 3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;padding-right:16px}
-.tag{display:inline-flex;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:500}
+.tag{display:inline-flex;align-items:center;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:500}
 .t1{background:#FFD4A8;color:#FF6B8A}
 .t2{background:#E8D8F5;color:#8140DC}
 .t3{background:#FFF0E0;color:#FFB347}
@@ -244,7 +244,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .card-hd h3{font-size:14px}
   .btn{padding:3px 7px;font-size:11px;border-radius:var(--radius-lg)}
 .btn-sm{padding:3px 7px;font-size:11px}
-  .in{padding:3px 7px;font-size:11px}
+  .in{padding:2px 5px;font-size:11px;height:auto}
   .ig{flex-wrap:wrap;gap:3px;margin-bottom:10px}
   .ig .in{flex:0 1 auto;min-width:auto;width:auto}
 select.in{font-size:11px!important;padding:2px 5px!important;height:auto!important}
@@ -315,7 +315,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：选题/素材编辑删除按钮 */
   #topicList .cb .btn-icon,#matList .cb .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
   /* 移动端：健康记录输入框缩小50%紧凑排列 */
-  #hWeight,#hFat{width:70px!important;flex:0 0 70px!important;min-width:70px!important;font-size:11px!important;padding:3px 7px!important}
+  #hWeight,#hFat{width:70px!important;flex:0 0 70px!important;min-width:70px!important;font-size:11px!important;padding:2px 5px!important}
   #hDate{width:21px!important;height:21px;flex:0 0 21px!important;padding:0!important;box-sizing:border-box;background:var(--bg-card)!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1.5' y='2.5' width='13' height='12' rx='2' fill='none' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M1.5 6h13' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M4.5 1v3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M11.5 1v3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:16px!important;border:1px solid var(--border)!important;border-radius:var(--radius-sm)!important;color:transparent!important;cursor:pointer}
 #hDate::-webkit-calendar-picker-indicator{display:none!important}
   /* 移动端首页：隐藏emoji */
@@ -366,9 +366,11 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：任务添加按钮 */
   #taskAddBtn{font-size:11px!important;padding:2px 5px!important;width:auto!important;height:auto!important}
   /* 移动端：购物项输入框 */
-  #shopIn{width:80px!important;flex:0 0 80px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
+  #shopIn{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
   /* 移动端：所有搜索输入框 */
-  #collSearch,#noteSearch,#shopSearch,#topicSearch,#matSearch{width:80px!important;flex:0 0 80px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
+  #collSearch,#noteSearch,#shopSearch,#topicSearch,#matSearch{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  /* 移动端：带内联样式的输入框统一2px 5px、11px */
+  #cdSearch,#bookSearch,#evDate{padding:2px 5px!important;font-size:11px!important;height:auto!important}
 
   /* 移动端：账单明细条目标题、金额字号9px，日期7px，居左对齐 */
   #expRecent .cb>div:first-child,#expList .cb>div:first-child{text-align:left!important}
@@ -384,9 +386,9 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：记录饮水按钮 */
   .w-btn{font-size:9px!important;padding:1px 5px!important;width:40px!important;min-width:40px!important}
   #wCustom{width:100px!important;flex:0 0 100px!important}
-  /* 移动端：热量计算餐次下拉框55px、食材输入框80px */
+  /* 移动端：热量计算餐次下拉框55px、食材输入框弹性伸展 */
   #calMeal{width:55px!important;flex:0 0 55px!important}
-  #calFood{width:80px!important;flex:0 0 80px!important}
+  #calFood{flex:1!important;min-width:80px!important}
   /* 移动端：日期按钮 */
   .dt-date-btn{font-size:11px!important;padding:2px 5px!important;width:auto!important;height:auto!important}
   .dt-date-btn .dt-btn-text{font-size:9px}
@@ -403,21 +405,25 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #topicList .cb .tag+span{margin-left:2px}
   /* 移动端：选题管理搜索框、下拉框、新建按钮并排 */
   #c-topics .card-hd{flex-wrap:nowrap!important;gap:3px!important}
-  #topicSearch{width:80px!important;flex:0 0 80px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
+  #topicSearch{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
   #topicStatus{width:70px!important;flex:0 0 70px!important}
   #topicNewBtn{margin-left:0!important}
   /* 移动端：笔记清单编辑删除按钮上下排列 */
   #notesList .cb-acts:last-child{display:flex;flex-direction:column;gap:3px}
   /* 移动端：想看列表标签和日期并排 */
   #wantList .mc .mbd>div:nth-child(2){display:flex;gap:2px;align-items:center}
+  /* 移动端：想看列表标题11px、添加日期7px、评分/已看/移除按钮8px */
+  #dramaList.want-list .mt{font-size:11px!important}
+  #dramaList.want-list .dw-date{font-size:7px!important}
+  #dramaList.want-list .btn-sm{font-size:8px!important}
   /* 移动端：首页未完成字号9px */
   #homeComboBody .cb,#homeComboBody>div:first-child{font-size:9px!important}
   #homeComboBody .cb .cd{font-size:9px!important}
   #homeComboBody .btn-o{font-size:9px!important}
   /* 移动端：倒数日 */
-  #cdName{width:80px!important;flex:0 0 80px!important;font-size:11px!important;padding:2px 5px!important;height:auto!important}
+  #cdName{width:90px!important;flex:0 0 90px!important;font-size:11px!important;padding:2px 5px!important;height:23px!important}
   #cdCalType{width:50px!important;flex:0 0 50px!important}
-  #cdRepeat{width:50px!important;flex:0 0 50px!important}
+  #cdRepeat{width:70px!important;flex:0 0 70px!important}
   .cd-name{font-size:10px!important}
   .cd-name span{font-size:10px!important}
   .cd-date{font-size:8px!important}
@@ -461,10 +467,10 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 .yb-wrap{margin-top:12px;background:transparent;border:none;border-radius:0;padding:0;box-shadow:none}
 .yb-row{margin:0 0 10px;width:fit-content}
 .yb-row:last-child{margin-bottom:0}
-.yb-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font);font-size:13px;color:var(--text);margin-bottom:5px}
-.yb-label{font-weight:600;font-size:14px;white-space:nowrap}
-.yb-data{font-size:13px;color:var(--text2);white-space:nowrap;line-height:1.2}
-.pixel{font-family:'VT323','DotGothic16',monospace;font-size:13px;line-height:1.2;color:#D10056;font-weight:400;letter-spacing:1px;vertical-align:baseline;padding:0 1px}
+.yb-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font);font-size:12px;color:var(--text);margin-bottom:5px}
+.yb-label{font-weight:600;font-size:12px;white-space:nowrap}
+.yb-data{font-size:12px;color:var(--text2);white-space:nowrap;line-height:1.2}
+.pixel{font-family:'Silkscreen','VT323','DotGothic16',monospace;font-size:12px;line-height:1.2;color:#D10056;font-weight:400;letter-spacing:1px;vertical-align:baseline;padding:0 1px}
 .dotbar{position:relative;display:flex;gap:2px;padding:3px;border-radius:35%;width:fit-content;overflow:hidden}
 .dotbar .dot{width:6px;height:6px;border-radius:35%;background:#EADDE2;flex:0 0 auto;transition:background .35s,box-shadow .35s}
 .dotbar .dot.on{background:#D10056;box-shadow:0 0 6px rgba(209,0,86,0.55)}
@@ -717,8 +723,8 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
       <!-- COUNTDOWN -->
       <div class="page" id="p-countdown">
         <div class="card"><div class="card-hd"><h3>⏳ 新建倒数日</h3></div>
-          <div class="ig"><input class="in" id="cdName" placeholder="如：生日/纪念日" style="flex:1 1 100%"></div>
-          <div class="ig" style="margin-top:8px">
+          <div class="ig" style="margin-top:8px;flex-wrap:wrap">
+            <input class="in" id="cdName" placeholder="如:生日/纪念日" style="flex:1 1 100%">
             <select class="in" id="cdCalType" style="flex:0 0 auto;width:120px" onchange="onCDCalType()">
               <option value="solar">公历</option>
               <option value="lunar">农历</option>
@@ -731,8 +737,8 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
             </div>
           </div>
           <div style="font-size:12px;color:var(--text3);margin-top:6px" id="cdTargetHint"></div>
-          <div class="ig" style="margin-top:10px"><span style="font-size:13px;color:var(--text2);align-self:center">重复提醒</span><select class="in" id="cdRepeat" style="flex:1"><option value="none">不重复</option><option value="daily">每天</option><option value="weekly">每周</option><option value="monthly">每月</option><option value="yearly">每年</option></select></div>
-          <div class="ig" style="margin-top:8px"><span style="font-size:13px;color:var(--text2);align-self:center">事件颜色</span><div id="cdColors" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
+          <div class="ig" style="margin-top:10px"><span style="font-size:12px;color:var(--text2);align-self:center">重复提醒</span><select class="in" id="cdRepeat" style="flex:1"><option value="none">不重复</option><option value="daily">每天</option><option value="weekly">每周</option><option value="monthly">每月</option><option value="yearly">每年</option></select></div>
+          <div class="ig" style="margin-top:8px"><span style="font-size:12px;color:var(--text2);align-self:center">事件颜色</span><div id="cdColors" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
           <div style="text-align:right;margin-top:12px"><button class="btn btn-p" onclick="saveCountdown()"><i class="fas fa-save"></i> 保存</button></div>
         </div>
         <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📑 我的倒数日</h3><div style="display:flex;gap:6px"><input class="in" id="cdSearch" placeholder="搜索事件名称..." oninput="renderCountdowns()" style="width:140px;padding:4px 8px;font-size:12px"><button class="btn-sm btn-o" onclick="document.getElementById('cdSearch').focus()"><i class="fas fa-search"></i></button></div></div><div id="cdList"></div></div>
@@ -910,7 +916,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
         <!-- 热量计算 -->
         <div class="food-tab" id="f-calorie" style="display:none">
           <div class="card"><div class="card-hd"></div>
-            <div class="ig">
+            <div class="ig" style="margin-bottom:3px">
               <select class="in" id="calMeal" style="flex:0 0 auto;width:110px">
                 <option value="早餐">早餐</option>
                 <option value="午餐">午餐</option>
@@ -921,8 +927,10 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
               <input class="in" id="calFood" placeholder="食材/饮品,如:米饭/可乐）" style="flex:1" list="calFoodList">
               <datalist id="calFoodList"></datalist>
               <input class="in" id="calGrams" type="number" placeholder="克数/ml" style="flex:0 0 auto;width:90px">
+            </div>
+            <div class="ig" style="justify-content:flex-end">
               <input type="hidden" id="calDate"><button class="btn-sm btn-o dt-date-btn" data-dt-target="calDate" onclick="openDtPicker('calDate')" style="flex:0 0 auto"><span class="dt-btn-text">日期</span></button>
-              <button class="btn btn-p" onclick="addCalorie()"><i class="fas fa-plus"></i></button>
+              <button class="btn btn-p" onclick="addCalorie()">添加</button>
             </div>
             <div style="font-size:12px;color:var(--text3);margin-top:6px">提示：输入食材或饮品即可自动匹配热量库（每 100g/ml 的 kcal，饮料按 1ml≈1g 计），未收录可手动填热量。</div>
             <div id="calLog" style="margin-top:10px"></div>
@@ -953,8 +961,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 
         <!-- 探店 -->
         <div class="food-tab" id="f-shop" style="display:none">
-          <div class="card"><div class="card-hd"><div style="display:flex;gap:6px"><button class="btn-sm btn-o" onclick="document.getElementById('shopSearch').focus()"><i class="fas fa-search"></i> 搜索</button><button class="btn-sm btn-p" onclick="openShopModal()"><i class="fas fa-plus"></i> 新建店名</button></div></div>
-            <div class="ig" style="margin-bottom:12px"><input class="in" id="shopSearch" placeholder="搜索店名、地址、菜品或备注..." oninput="renderShops()" style="flex:1"></div>
+          <div class="card"><div class="card-hd"><div style="display:flex;gap:6px;align-items:center;flex:1"><input class="in" id="shopSearch" placeholder="搜索店名、地址、菜品或备注..." oninput="renderShops()" style="flex:1"><button class="btn-sm btn-p" onclick="openShopModal()"><i class="fas fa-plus"></i> 新建店名</button></div></div>
             <div id="foodShopList"></div>
           </div>
         </div>
@@ -4507,7 +4514,7 @@ function renderCalorie() {
   const byMealEl = document.getElementById('calByMeal');
   if (byMealEl) byMealEl.innerHTML = meals.map(m => {
     const s = list.filter(x => x.meal === m).reduce((a, x) => a + (x.kcal || 0), 0);
-    return '<div class="si"><div class="num">' + Math.round(s) + '</div><div class="label">' + m + '</div></div>';
+    return '<div class="si"><div class="label">' + m + '</div><div class="num">' + Math.round(s) + '</div></div>';
   }).join('');
   const log = document.getElementById('calLog');
   if (log) log.innerHTML = list.length === 0
@@ -5319,6 +5326,7 @@ function renderDrama(type) {
   if (type === 'want') { renderWantList(); return; }
   const data = dramaCache[type] || [];
   const list = document.getElementById('dramaList');
+  list.classList.remove('want-list');
   const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
   if (data.length === 0) {
     list.innerHTML = '<div class="emp" style="grid-column:1/-1"><i class="fas fa-film"></i><p>点击「刷新」获取热播' + typeName[type] + ' 🎬</p></div>';
@@ -5449,10 +5457,11 @@ function renderWantList() {
   // Sort: unwatched first, then watched sink to bottom
   want = want.slice().sort((a, b) => (a.watched ? 1 : 0) - (b.watched ? 1 : 0));
   const list = document.getElementById('dramaList');
+  list.classList.add('want-list');
   const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
   list.innerHTML = want.length === 0
     ? '<div class="emp" style="grid-column:1/-1"><i class="fas fa-heart"></i><p>想看列表为空，去「电视剧 / 电影 / 综艺」里点 ❤ 想看吧</p></div>'
-    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer;' + (w.watched ? 'text-decoration:line-through;opacity:0.6' : '') + '" onclick="window.open(\'' + (w.url || '').replace(/'/g, "\\'") + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:2px;align-items:center;margin-top:6px;font-size:11px;color:var(--text3)"><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (typeName[w.type] || '影视') + '</span><span style="font-size:10px;line-height:1.2">' + (w.date || '') + '</span>' + (w.rate ? '<span style="font-size:11px;color:var(--accent);font-weight:600;margin-left:4px">⭐' + escHtml(w.rate) + '</span>' : '') + '<div style="flex:1"></div><button class="btn-sm btn-o" onclick="event.stopPropagation();openDramaRateModal(' + i + ')" style="font-size:10px;padding:2px 6px"><i class="fas fa-star"></i> 评分</button><button class="btn-sm btn-o" onclick="event.stopPropagation();markDramaWatched(' + i + ')" style="font-size:10px;padding:2px 6px"><i class="fas fa-check"></i> 已看</button><button class="btn-sm btn-o" onclick="event.stopPropagation();rmWant(' + i + ')" style="color:var(--d);font-size:10px;padding:2px 6px"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
+    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer;' + (w.watched ? 'text-decoration:line-through;opacity:0.6' : '') + '" onclick="window.open(\'' + (w.url || '').replace(/'/g, "\\'") + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:2px;align-items:center;margin-top:6px;font-size:11px;color:var(--text3)"><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (typeName[w.type] || '影视') + '</span><span class="dw-date" style="font-size:10px;line-height:1.2">' + (w.date || '') + '</span>' + (w.rate ? '<span style="font-size:11px;color:var(--accent);font-weight:600;margin-left:4px">⭐' + escHtml(w.rate) + '</span>' : '') + '<div style="flex:1"></div><button class="btn-sm btn-o" onclick="event.stopPropagation();openDramaRateModal(' + i + ')" style="font-size:10px;padding:2px 6px"><i class="fas fa-star"></i> 评分</button><button class="btn-sm btn-o" onclick="event.stopPropagation();markDramaWatched(' + i + ')" style="font-size:10px;padding:2px 6px"><i class="fas fa-check"></i> 已看</button><button class="btn-sm btn-o" onclick="event.stopPropagation();rmWant(' + i + ')" style="color:var(--d);font-size:10px;padding:2px 6px"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
   updateDramaBadge();
 }
 
