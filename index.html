@@ -206,14 +206,14 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 @media(max-width:768px){
   :root{--h:48px;--radius:12px;--radius-sm:8px;--radius-lg:16px}
   .app{height:100dvh;height:calc(100dvh - env(safe-area-inset-top))}
-  .sidebar{display:flex;position:relative;left:auto;top:auto;height:auto;width:58px;background:transparent;border-right:1px solid rgba(255,255,255,0.25);z-index:100;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .sidebar{display:flex;position:relative;left:auto;top:auto;height:auto;width:48px;background:transparent;border-right:1px solid rgba(255,255,255,0.25);z-index:100;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
   [data-theme=dark] .sidebar{background:transparent;border-right-color:rgba(74,48,56,0.4)}
   .sidebar-brand{display:none}
   .sidebar-footer{display:none}
   .sidebar-nav{padding:4px 0}
-  .nav-item{position:relative;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:8px 2px;margin:2px 4px;border-radius:10px}
-  .nav-item i{font-size:18px;width:18px;text-align:center}
-  .nav-item span{display:block;font-size:9px;line-height:1.2;text-align:center;margin-top:3px;max-width:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-item{position:relative;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:6px 2px;margin:2px 3px;border-radius:10px}
+  .nav-item i{font-size:14px;width:14px;text-align:center}
+  .nav-item span{display:block;font-size:7px;line-height:1.2;text-align:center;margin-top:2px;max-width:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .nav-item .badge{position:absolute;top:2px;right:2px;margin-left:0;padding:0 4px;line-height:12px;font-size:9px;min-width:12px;border-radius:6px}
   #menuBtn{display:none}
   .m-nav{display:none}
@@ -412,6 +412,23 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #homeComboBody .cb,#homeComboBody>div:first-child{font-size:9px!important}
   #homeComboBody .cb .cd{font-size:9px!important}
   #homeComboBody .btn-o{font-size:9px!important}
+  /* 移动端：倒数日 */
+  #cdName{width:80px!important;flex:0 0 80px!important;font-size:11px!important;padding:2px 5px!important;height:auto!important}
+  #cdCalType{width:50px!important;flex:0 0 50px!important}
+  #cdRepeat{width:50px!important;flex:0 0 50px!important}
+  .cd-name{font-size:10px!important}
+  .cd-name span{font-size:10px!important}
+  .cd-date{font-size:8px!important}
+  .cd-acts{gap:3px!important}
+  .cd-act{width:16px!important;height:16px!important;padding:0!important;display:flex;align-items:center;justify-content:center}
+  .cd-act i{font-size:9px}
+  /* 移动端：笔记输入框 */
+  #noteTitle{width:150px!important}
+  #noteContent{width:150px!important}
+  #noteCat{width:80px!important;flex:0 0 80px!important}
+  #noteTags{width:80px!important}
+  /* 移动端：吃什么分类按钮 */
+  .eat-cat{font-size:12px!important;padding:4px 10px!important}
 }
 /* ===== FOOD MODULE ===== */
 .food-tab{display:block}
@@ -446,8 +463,8 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 .yb-label{font-weight:600;font-size:14px;white-space:nowrap}
 .yb-data{font-size:13px;color:var(--text2);white-space:nowrap;line-height:1.2}
 .pixel{font-family:'VT323','DotGothic16',monospace;font-size:13px;line-height:1.2;color:#D10056;font-weight:400;letter-spacing:1px;vertical-align:baseline;padding:0 1px}
-.dotbar{position:relative;display:flex;gap:4px;padding:3px;border-radius:35%;width:fit-content;overflow:hidden}
-.dotbar .dot{width:9px;height:9px;border-radius:35%;background:#EADDE2;flex:0 0 auto;transition:background .35s,box-shadow .35s}
+.dotbar{position:relative;display:flex;gap:2px;padding:3px;border-radius:35%;width:fit-content;overflow:hidden}
+.dotbar .dot{width:6px;height:6px;border-radius:35%;background:#EADDE2;flex:0 0 auto;transition:background .35s,box-shadow .35s}
 .dotbar .dot.on{background:#D10056;box-shadow:0 0 6px rgba(209,0,86,0.55)}
 [data-theme=dark] .dotbar .dot{background:#4A3038}
 [data-theme=dark] .dotbar .dot.on{background:#D10056;box-shadow:0 0 7px rgba(255,70,130,0.65)}
@@ -704,17 +721,18 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
       <div class="page" id="p-schedule">
         <!-- 日历 + 近期日程 -->
         <div class="sched-tab" id="s-cal">
-          <div class="card"><div class="card-hd"><h3>📅 日程</h3><input type="date" id="evDate" style="margin-left:auto;border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><button class="btn-sm btn-p" onclick="openEventModal(null, null)"><i class="fas fa-plus"></i> 新建日程</button><button class="btn-sm btn-a" onclick="openMoodModal()" style="margin-left:6px"><i class="fas fa-plus"></i> 新建日志</button></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
+          <div class="card"><div class="card-hd"><input type="date" id="evDate" style="border:1px solid var(--border);border-radius:8px;padding:4px 8px;background:var(--bg-card);color:var(--text);font-size:13px"><div style="margin-left:auto;display:flex"><button class="btn-sm btn-p" onclick="openEventModal(null, null)"><i class="fas fa-plus"></i> 日程</button><button class="btn-sm btn-a" onclick="openMoodModal()" style="margin-left:6px"><i class="fas fa-plus"></i> 日志</button></div></div><div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><button class="btn-sm btn-o" onclick="chMonth(-1)"><i class="fas fa-chevron-left"></i></button><span style="font-weight:600;font-size:16px;flex:1;text-align:center" id="calLabel">2026年8月</span><button class="btn-sm btn-o" onclick="chMonth(1)"><i class="fas fa-chevron-right"></i></button><button class="btn-sm btn-a" onclick="goToday()">今天</button></div><div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden"></div></div>
           <div class="card"><div class="card-hd"><h3>📋 近期日程</h3></div><div id="eventList"></div></div>
-          <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📓 心情日志</h3><button class="btn-sm btn-a" onclick="openMoodModal()"><i class="fas fa-plus"></i> 写日志</button></div><div id="moodLogList"></div></div>
+          <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📓 心情日志</h3></div><div id="moodLogList"></div></div>
         </div>
+
 
       </div>
 
       <!-- COUNTDOWN -->
       <div class="page" id="p-countdown">
         <div class="card"><div class="card-hd"><h3>⏳ 新建倒数日</h3></div>
-          <div class="ig"><input class="in" id="cdName" placeholder="事件名称（如：生日、纪念日）" style="flex:1 1 100%"></div>
+          <div class="ig"><input class="in" id="cdName" placeholder="如：生日/纪念日" style="flex:1 1 100%"></div>
           <div class="ig" style="margin-top:8px">
             <select class="in" id="cdCalType" style="flex:0 0 auto;width:120px" onchange="onCDCalType()">
               <option value="solar">公历</option>
@@ -737,7 +755,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 
       <!-- NOTES -->
       <div class="page" id="p-notes">
-        <div class="card"><div class="card-hd"><h3>✏️ 快速笔记</h3><button class="btn-sm btn-p" onclick="showEditor()"><i class="fas fa-plus"></i> 新建笔记</button></div><div id="noteEditor" style="display:none"><div class="ig"><input class="in" id="noteTitle" placeholder="笔记标题"></div><textarea class="in" id="noteContent" placeholder="写下你的灵感..." rows="4" style="resize:vertical;min-height:80px"></textarea><div class="ig" style="margin-top:8px"><select class="in" id="noteCat" style="flex:0 0 auto;width:120px"><option value="工作">工作</option><option value="学习">学习</option><option value="生活">生活</option><option value="灵感">灵感</option></select><input class="in" id="noteTags" placeholder="标签（逗号分隔）"><button class="btn btn-p" onclick="saveNote()"><i class="fas fa-save"></i> 保存</button><button class="btn btn-o" onclick="hideEditor()">取消</button></div></div></div>
+        <div class="card"><div class="card-hd"><h3>✏️ 快速笔记</h3><button class="btn-sm btn-p" onclick="showEditor()"><i class="fas fa-plus"></i> 新建笔记</button></div><div id="noteEditor" style="display:none"><div class="ig"><input class="in" id="noteTitle" placeholder="笔记标题" style="width:1086px"></div><textarea class="in" id="noteContent" placeholder="写下你的灵感..." rows="4" style="resize:vertical;min-height:80px;width:1086px"></textarea><div class="ig" style="margin-top:8px"><select class="in" id="noteCat" style="flex:0 0 auto;width:120px"><option value="工作">工作</option><option value="学习">学习</option><option value="生活">生活</option><option value="灵感">灵感</option></select><input class="in" id="noteTags" placeholder="标签（逗号分隔）" style="width:150px"><button class="btn btn-p" onclick="saveNote()"><i class="fas fa-save"></i> 保存</button><button class="btn btn-o" onclick="hideEditor()">取消</button></div></div></div>
         <div class="ig"><input class="in" id="noteSearch" placeholder="搜索笔记..." oninput="renderNotes()"><select class="in" id="noteCatFilter" style="flex:0 0 auto;width:120px" onchange="renderNotes()"><option value="all">全部分类</option><option value="工作">工作</option><option value="学习">学习</option><option value="生活">生活</option><option value="灵感">灵感</option></select></div>
         <div id="notesList" style="margin-top:12px"></div>
       </div>
@@ -820,7 +838,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 
       <!-- DRAMA -->
       <div class="page" id="p-drama">
-        <div class="card"><div class="card-hd"><h3>🎬 热播剧集</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-a" id="dramaRefreshBtn" onclick="fetchDramas()"><i class="fas fa-sync"></i> 刷新</button><button class="btn-sm btn-o" onclick="switchDramaTab('want')"><i class="fas fa-heart"></i> 想看 (<span id="wantCount">0</span>)</button></div></div>        <div class="ft" id="dramaTabs">
+        <div class="card"><div class="card-hd"><div style="display:flex;gap:6px"><button class="btn-sm btn-a" id="dramaRefreshBtn" onclick="fetchDramas()"><i class="fas fa-sync"></i> 刷新</button><button class="btn-sm btn-o" onclick="switchDramaTab('want')"><i class="fas fa-heart"></i> 想看 (<span id="wantCount">0</span>)</button></div></div>        <div class="ft" id="dramaTabs">
           <span class="fb active" data-d="tv">📺 电视剧</span>
           <span class="fb" data-d="movie">🎬 电影</span>
           <span class="fb" data-d="variety">🎪 综艺</span>
@@ -848,7 +866,9 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           <span class="fb active" data-c="topics">📋 选题管理</span>
           <span class="fb" data-c="materials">📎 素材库</span>
         </div>
-        <div class="c-tab" id="c-topics"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><input class="in" id="topicSearch" placeholder="🔍 搜索选题标题..." oninput="renderTopics()" style="flex:0 0 auto;width:50%;max-width:220px;padding:6px 10px;font-size:13px"><select class="in" id="topicStatus" style="flex:0 0 auto;width:100px;padding:6px 8px;font-size:13px" onchange="renderTopics()"><option value="all">全部</option><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select><button class="btn-sm btn-p" id="topicNewBtn" onclick="addTopic()"><i class="fas fa-plus"></i> 新建</button></div><div id="topicList" style="margin-top:8px"></div></div></div>
+        <div class="c-tab" id="c-topics"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><input class="in" id="topicSearch" placeholder="🔍 搜索选题标题..." oninput="renderTopics()" style="flex:0 0 auto;width:50%;max-width:220px;padding:6px 10px;font-size:13px">
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center"></div>
+          <select class="in" id="topicStatus" style="flex:0 0 auto;width:100px;padding:6px 8px;font-size:13px" onchange="renderTopics()"><option value="all">全部</option><option value="待创作">待创作</option><option value="进行中">进行中</option><option value="已发布">已发布</option></select><button class="btn-sm btn-p" id="topicNewBtn" onclick="addTopic()"><i class="fas fa-plus"></i> 新建</button></div><div id="topicList" style="margin-top:8px"></div></div></div>
         <div class="c-tab" id="c-materials" style="display:none"><div class="card"><div class="card-hd" style="flex-wrap:wrap;gap:8px"><input class="in" id="matSearch" placeholder="🔍 搜索素材标题..." oninput="renderMats()" style="flex:0 0 auto;width:50%;max-width:220px;padding:6px 10px;font-size:13px"><button class="btn-sm btn-p" onclick="addMat()"><i class="fas fa-plus"></i> 添加素材</button></div><div id="matList" style="margin-top:8px"></div></div></div>
       </div>
 
@@ -885,7 +905,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 
         <!-- 热量计算 -->
         <div class="food-tab" id="f-calorie" style="display:none">
-          <div class="card"><div class="card-hd"><h3>🔥 录入一餐</h3></div>
+          <div class="card"><div class="card-hd"></div>
             <div class="ig">
               <select class="in" id="calMeal" style="flex:0 0 auto;width:110px">
                 <option value="早餐">🌅 早餐</option>
@@ -917,9 +937,9 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           <div class="card"><div class="card-hd"><h3>🎲 吃什么</h3><button class="btn-sm btn-o" onclick="openEatCatsModal()"><i class="fas fa-cog"></i> 管理分类</button></div>
             <div class="ft eat-cats-row" id="eatCats" style="margin-bottom:12px;flex-wrap:nowrap;overflow-x:auto"></div>
             <div style="text-align:center;padding:10px 0">
-              <div id="eatRoulette" style="min-height:72px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--primary);padding:10px;border:2px dashed var(--border);border-radius:14px;background:var(--primary-bg)">选个分类，开始掷骰子 🎲</div>
+              <div id="eatRoulette" style="min-height:72px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--primary);padding:10px;border:2px dashed var(--border);border-radius:14px;background:var(--primary-bg)">选个分类，开始掷骰子 🎲</div>
               <div style="margin-top:10px">
-                <button class="btn btn-p" id="eatRollBtn" onclick="startRoll()" style="font-size:14px;padding:8px 20px"><i class="fas fa-dice"></i> 开始</button>
+                <button class="btn btn-p" id="eatRollBtn" onclick="startRoll()" style="font-size:12px;padding:4px 10px"><i class="fas fa-dice"></i> 开始</button>
               </div>
               <div style="font-size:11px;color:var(--text3);margin-top:6px">点击「开始」随机闪现词条，再点「停止」留下一个。</div>
             </div>
@@ -929,7 +949,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 
         <!-- 探店 -->
         <div class="food-tab" id="f-shop" style="display:none">
-          <div class="card"><div class="card-hd"><h3>🍽️ 探店</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-o" onclick="document.getElementById('shopSearch').focus()"><i class="fas fa-search"></i> 搜索</button><button class="btn-sm btn-p" onclick="openShopModal()"><i class="fas fa-plus"></i> 新建店名</button></div></div>
+          <div class="card"><div class="card-hd"><div style="display:flex;gap:6px"><button class="btn-sm btn-o" onclick="document.getElementById('shopSearch').focus()"><i class="fas fa-search"></i> 搜索</button><button class="btn-sm btn-p" onclick="openShopModal()"><i class="fas fa-plus"></i> 新建店名</button></div></div>
             <div class="ig" style="margin-bottom:12px"><input class="in" id="shopSearch" placeholder="搜索店名、地址、菜品或备注..." oninput="renderShops()" style="flex:1"></div>
             <div id="foodShopList"></div>
           </div>
@@ -4227,7 +4247,7 @@ function renderCountdowns() {
     const leftTxt = (left === null) ? '日期无效' : (left > 0 ? '还有 <b>' + left + '</b> 天' : (left === 0 ? '就是<b>今天</b>！' : '已过 <b>' + Math.abs(left) + '</b> 天'));
     const rep = { none: '不重复', daily: '每天', weekly: '每周', monthly: '每月', yearly: '每年' }[o.repeat] || '不重复';
     const cal = o.calType === 'lunar' ? '农历' : '公历';
-    return '<div class="cb" style="align-items:center;border-left:4px solid ' + o.color + '"><div style="flex:1"><div style="font-weight:600">' + o.name + ' <span style="font-size:12px;color:var(--text3)">' + cal + '·' + rep + '</span></div><div style="font-size:13px;color:var(--text2);margin-top:2px">' + leftTxt + ' · 目标 ' + occStr + '</div></div><span class="btn-sm btn-o" onclick="editCountdown(\'' + o.id + '\')"><i class="fas fa-edit"></i></span><span class="btn-sm btn-o" style="color:var(--d)" onclick="delCountdown(\'' + o.id + '\')"><i class="fas fa-trash"></i></span></div>';
+    return '<div class="cb" style="align-items:center;border-left:4px solid ' + o.color + '"><div style="flex:1"><div class="cd-name" style="font-weight:600">' + o.name + ' <span style="color:var(--text3)">' + cal + '·' + rep + '</span></div><div class="cd-date" style="color:var(--text2);margin-top:2px">' + leftTxt + ' · 目标 ' + occStr + '</div></div><div class="cd-acts" style="display:flex;flex-direction:column;align-items:center"><span class="btn-sm btn-o cd-act" onclick="editCountdown(\'' + o.id + '\')"><i class="fas fa-edit"></i></span><span class="btn-sm btn-o cd-act" style="color:var(--d)" onclick="delCountdown(\'' + o.id + '\')"><i class="fas fa-trash"></i></span></div></div>';
   }).join('');
 }
 function editCountdown(id) {
@@ -4533,7 +4553,7 @@ function renderEatItems() {
     wrap.innerHTML = '<span class="eat-item" style="background:var(--accent-light);color:var(--accent);cursor:pointer" onclick="toggleEatItems()">收起 ▴</span>' + cat.items.map((it, i) => '<span class="eat-item">' + it + ' <span class="x" onclick="delEatItem(\'' + cat.name + '\',' + i + ')">✕</span></span>').join('');
   } else {
     const preview = cat.items.slice(0, 8).join('、');
-    wrap.innerHTML = '<span style="font-size:13px;color:var(--text2)">共 ' + cat.items.length + ' 个词条：' + preview + (cat.items.length > 8 ? '…' : '') + '</span><span class="eat-item" style="background:var(--accent-light);color:var(--accent);cursor:pointer;margin-left:6px" onclick="toggleEatItems()">展开全部 ▾</span>';
+    wrap.innerHTML = '<span style="font-size:12px;color:var(--text2)">共 ' + cat.items.length + ' 个词条：' + preview + (cat.items.length > 8 ? '…' : '') + '</span><span class="eat-item" style="background:var(--accent-light);color:var(--accent);cursor:pointer;margin-left:6px" onclick="toggleEatItems()">展开全部 ▾</span>';
   }
 }
 function toggleEatItems() { eatItemsOpen = !eatItemsOpen; renderEatItems(); }
