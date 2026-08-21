@@ -205,6 +205,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .bill-cal-grid .cal-day.has-record{position:relative}
 .bill-cal-grid .cal-day.has-record::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--primary)}
 .bill-cal-grid .cal-day.selected.has-record::after{background:#fff}
+.cd-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;flex:0 0 auto}
 @media(max-width:768px){
   /* 移动端：使用竖版背景图 */
   #wallpaper{background:url('assets/ios-bg-wallpaper.jpg') center/cover no-repeat}
@@ -320,6 +321,10 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #hWeight,#hFat{width:70px!important;flex:0 0 70px!important;min-width:70px!important;font-size:11px!important;padding:2px 5px!important}
   #hDate{width:21px!important;height:21px;flex:0 0 21px!important;padding:0!important;box-sizing:border-box;background:var(--bg-card)!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1.5' y='2.5' width='13' height='12' rx='2' fill='none' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M1.5 6h13' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M4.5 1v3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M11.5 1v3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:16px!important;border:1px solid var(--border)!important;border-radius:var(--radius-sm)!important;color:transparent!important;cursor:pointer}
 #hDate::-webkit-calendar-picker-indicator{display:none!important}
+  /* 移动端：健康记录「记录」按钮另起一行居右，与日期按钮右边界对齐 */
+  #l-health .ig{row-gap:5px}
+  #l-health .ig [data-dt-target="hDate"]{margin-left:auto}
+  .hRecRow{flex-basis:100%;display:flex;justify-content:flex-end}
   /* 移动端首页：隐藏emoji */
   .mo-hide{display:none}
   /* 移动端首页：今日任务/习惯/日程/未完成 字号缩小20%紧凑排列 */
@@ -412,8 +417,9 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #topicNewBtn{margin-left:0!important}
   /* 移动端：笔记清单编辑删除按钮上下排列 */
   #notesList .cb-acts:last-child{display:flex;flex-direction:column;gap:3px}
-  /* 移动端：想看列表标签和日期并排 */
-  #wantList .mc .mbd>div:nth-child(2){display:flex;gap:2px;align-items:center}
+  /* 移动端：想看列表标签与日期上下两行排列居左 */
+  #dramaList.want-list .mc .mbd>div:nth-child(2){flex-wrap:wrap}
+  #dramaList.want-list .mc .mbd>div:nth-child(2) .want-tag-row{flex-basis:100%}
   /* 移动端：想看列表标题11px、添加日期7px、评分/已看/移除按钮8px */
   #dramaList.want-list .mt{font-size:11px!important}
   #dramaList.want-list .dw-date{font-size:7px!important}
@@ -426,6 +432,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #cdName{width:90px!important;flex:0 0 90px!important;font-size:11px!important;padding:2px 5px!important;height:23px!important}
   #cdCalType{width:50px!important;flex:0 0 50px!important}
   #cdRepeat{width:70px!important;flex:0 0 70px!important}
+  #cdColors .cd-swatch{width:15px!important;height:15px!important;border-width:2px!important}
   .cd-name{font-size:10px!important}
   .cd-name span{font-size:10px!important}
   .cd-date{font-size:8px!important}
@@ -705,7 +712,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           </div>
         </div>
         <div class="life-tab" id="l-habit" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>🔥 我的习惯</h3><button class="btn-sm btn-p" onclick="addHabit()"><i class="fas fa-plus"></i> 新建</button></div><div id="habitList"></div></div><div class="card"><div class="card-hd"><h3>📅 本月打卡</h3><div style="margin-left:auto;display:flex;gap:3px;align-items:center"><select class="in" id="habitSelect" onchange="onHabitSelect()" style="flex:0 0 auto;padding:3px 7px;font-size:11px"><option value="">选择习惯</option></select><button class="btn-sm btn-p" onclick="checkinHabit()" style="font-size:11px;padding:3px 8px">打卡</button></div></div><div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div><div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text2)">本月打卡 <span id="monthCheck">0</span> 天</div></div></div></div>
-        <div class="life-tab" id="l-health" style="display:none"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><input class="in" id="hDate" type="date" style="flex:0 0 auto;width:125px"><button class="btn btn-p" onclick="addHealth()">记录</button></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3 id="healthTabTitle">📈 体重趋势</h3><button class="btn-sm btn-o" id="healthToggleBtn" onclick="toggleHealthView()">📋 历史记录</button></div><div id="healthChartWrap"><div style="height:200px"><canvas id="weightChart"></canvas></div></div><div id="healthListWrap" style="display:none"><div id="healthList"></div></div></div></div>
+        <div class="life-tab" id="l-health" style="display:none"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><input class="in" id="hDate" type="date" style="flex:0 0 auto;width:125px"><span class="hRecRow"><button class="btn btn-p" onclick="addHealth()">记录</button></span></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3 id="healthTabTitle">📈 体重趋势</h3><button class="btn-sm btn-o" id="healthToggleBtn" onclick="toggleHealthView()">📋 历史记录</button></div><div id="healthChartWrap"><div style="height:200px"><canvas id="weightChart"></canvas></div></div><div id="healthListWrap" style="display:none"><div id="healthList"></div></div></div></div>
         <div class="life-tab" id="l-shopping" style="display:none"><div class="card"><div class="card-hd"><h3>🛒 购物清单</h3></div><div class="ig"><input class="in" id="shopIn" placeholder="添加购物项..." onkeydown="if(event.key==='Enter') addShop()"><select class="in" id="shopCat" style="flex:0 0 auto;width:100px"><option value="食品">食品</option><option value="日用品">日用品</option><option value="服饰">服饰</option><option value="数码">数码</option><option value="其他">其他</option></select><button class="btn btn-p" onclick="addShop()"><i class="fas fa-plus"></i></button></div><div id="shopList"></div></div></div>
         <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="card-hd"><h3>📚 书影音收藏</h3><button class="btn-sm btn-p" onclick="addColl()"><i class="fas fa-plus"></i> 添加</button></div><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="tv">📺 电视剧</option><option value="music">🎵 音乐</option></select></div><div id="collList" style="margin-top:8px"></div></div></div>
 
@@ -919,7 +926,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
         <!-- 热量计算 -->
         <div class="food-tab" id="f-calorie" style="display:none">
           <div class="card"><div class="card-hd"></div>
-            <div class="ig" style="margin-bottom:3px">
+            <div class="ig" style="margin-bottom:5px">
               <select class="in" id="calMeal" style="flex:0 0 auto;width:110px">
                 <option value="早餐">早餐</option>
                 <option value="午餐">午餐</option>
@@ -4222,7 +4229,7 @@ function updateCDHint() {
 }
 function renderCDColors(sel) {
   const box = document.getElementById('cdColors');
-  box.innerHTML = CD_COLORS.map(c => '<div onclick="selectCDColor(\'' + c.v + '\')" style="width:26px;height:26px;border-radius:50%;cursor:pointer;background:' + c.v + ';border:3px solid ' + (sel === c.v ? '#222' : 'transparent') + ';box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>').join('');
+  box.innerHTML = CD_COLORS.map(c => '<div class="cd-swatch" onclick="selectCDColor(\'' + c.v + '\')" style="background:' + c.v + ';border:3px solid ' + (sel === c.v ? '#222' : 'transparent') + ';box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>').join('');
 }
 function selectCDColor(v) { window.__cdColor = v; renderCDColors(v); }
 function saveCountdown() {
@@ -5464,7 +5471,7 @@ function renderWantList() {
   const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
   list.innerHTML = want.length === 0
     ? '<div class="emp" style="grid-column:1/-1"><i class="fas fa-heart"></i><p>想看列表为空，去「电视剧 / 电影 / 综艺」里点 ❤ 想看吧</p></div>'
-    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer;' + (w.watched ? 'text-decoration:line-through;opacity:0.6' : '') + '" onclick="window.open(\'' + (w.url || '').replace(/'/g, "\\'") + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:2px;align-items:center;margin-top:6px;font-size:11px;color:var(--text3)"><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (typeName[w.type] || '影视') + '</span><span class="dw-date" style="font-size:10px;line-height:1.2">' + (w.date || '') + '</span>' + (w.rate ? '<span style="font-size:11px;color:var(--accent);font-weight:600;margin-left:4px">⭐' + escHtml(w.rate) + '</span>' : '') + '<div style="flex:1"></div><button class="btn-sm btn-o" onclick="event.stopPropagation();openDramaRateModal(' + i + ')" style="font-size:10px;padding:2px 6px"><i class="fas fa-star"></i> 评分</button><button class="btn-sm btn-o" onclick="event.stopPropagation();markDramaWatched(' + i + ')" style="font-size:10px;padding:2px 6px"><i class="fas fa-check"></i> 已看</button><button class="btn-sm btn-o" onclick="event.stopPropagation();rmWant(' + i + ')" style="color:var(--d);font-size:10px;padding:2px 6px"><i class="fas fa-times"></i> 移除</button></div></div></div>').join('');
+    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer;' + (w.watched ? 'text-decoration:line-through;opacity:0.6' : '') + '" onclick="window.open(\'' + (w.url || '').replace(/'/g, "\\'") + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:2px;align-items:center;margin-top:6px;font-size:11px;color:var(--text3)"><span class="want-tag-row"><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (typeName[w.type] || '影视') + '</span></span><span class="dw-date" style="font-size:10px;line-height:1.2">' + (w.date || '') + '</span>' + (w.rate ? '<span style="font-size:11px;color:var(--accent);font-weight:600;margin-left:4px">⭐' + escHtml(w.rate) + '</span>' : '') + '<div style="flex:1"></div><button class="btn-sm btn-o" onclick="event.stopPropagation();openDramaRateModal(' + i + ')" style="font-size:10px;padding:2px 6px">评分</button><button class="btn-sm btn-o" onclick="event.stopPropagation();markDramaWatched(' + i + ')" style="font-size:10px;padding:2px 6px">已看</button><button class="btn-sm btn-o" onclick="event.stopPropagation();rmWant(' + i + ')" style="color:var(--d);font-size:10px;padding:2px 6px">移除</button></div></div></div>').join('');
   updateDramaBadge();
 }
 
