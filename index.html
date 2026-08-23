@@ -206,6 +206,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .bill-cal-grid .cal-day.has-record::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--primary)}
 .bill-cal-grid .cal-day.selected.has-record::after{background:#fff}
 .cd-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;flex:0 0 auto}
+.want-rate{display:inline-flex;align-items:center;gap:1px;font-size:11px;color:var(--accent);font-weight:600;margin-left:4px}
+.want-rate-star{line-height:1}
 @media(max-width:768px){
   /* 移动端：使用竖版背景图 */
   #wallpaper{background:url('assets/ios-bg-wallpaper.jpg') center/cover no-repeat}
@@ -247,7 +249,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .card-hd h3{font-size:14px}
   .btn{padding:3px 7px;font-size:11px;border-radius:var(--radius-lg)}
 .btn-sm{padding:3px 7px;font-size:11px}
-  .in{padding:2px 5px;font-size:11px;height:auto}
+  .in{padding:2px 5px!important;font-size:11px!important;height:auto!important}
   .ig{flex-wrap:wrap;gap:3px;margin-bottom:10px}
   .ig .in{flex:0 1 auto;min-width:auto;width:auto}
 select.in{font-size:11px!important;padding:2px 5px!important;height:auto!important}
@@ -424,6 +426,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #dramaList.want-list .mt{font-size:11px!important}
   #dramaList.want-list .dw-date{font-size:7px!important}
   #dramaList.want-list .btn-sm{font-size:8px!important}
+  #dramaList.want-list .want-rate{font-size:7px!important;line-height:1!important}
   /* 移动端：首页未完成字号9px */
   #homeComboBody .cb,#homeComboBody>div:first-child{font-size:9px!important}
   #homeComboBody .cb .cd{font-size:9px!important}
@@ -445,7 +448,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #noteCat{width:80px!important;flex:0 0 80px!important}
   #noteTags{width:80px!important}
   /* 移动端：吃什么分类按钮 */
-  .eat-cat{font-size:12px!important;padding:4px 10px!important}
+  .eat-cat{font-size:12px!important;padding:2px 5px!important}
 }
 /* ===== FOOD MODULE ===== */
 .food-tab{display:block}
@@ -983,7 +986,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
         <div class="card"><div class="card-hd"><h3>🎨 外观设置</h3></div><div class="si-item"><div><div class="si-l">深色模式</div><div class="si-d">切换明暗主题</div></div><div class="toggle" id="themeToggle" onclick="toggleTheme()"></div></div></div>
         <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ Cloudflare KV 云同步已启用，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div id="kvMissing" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:#FFF0E0;border-radius:8px;margin-bottom:12px">⚠️ Cloudflare KV 未绑定。请在 Cloudflare Pages 项目的 <b>Settings → Functions → KV namespace bindings</b> 里添加绑定：<br>• <b>Variable name（变量名）</b>必须填 <code>SYNC_KV</code><br>• <b>KV namespace</b> 选 <code>workbench-data</code><br>保存并重新部署后云同步自动生效。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到云端</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">当前使用 WebDAV 同步（KV 未绑定时的回退方案）。如已绑定 KV，请保存空白配置让系统自动切换。</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="WebDAV 账号" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>📦 数据管理</h3></div><div class="si-item"><div><div class="si-l">导出全部数据</div></div><button class="btn-sm btn-p" onclick="exportData()"><i class="fas fa-download"></i> 导出</button></div><div class="si-item"><div><div class="si-l">导入数据</div></div><button class="btn-sm btn-o" onclick="document.getElementById('importIn').click()"><i class="fas fa-upload"></i> 导入</button><input type="file" id="importIn" accept=".json" style="display:none" onchange="importData(this)"></div><div class="si-item"><div><div class="si-l" style="color:var(--d)">清空所有数据</div></div><button class="btn-sm btn" style="background:var(--d);color:#fff;padding:5px 10px;font-size:12px;border-radius:8px" onclick="clearData()"><i class="fas fa-trash"></i> 清空</button></div></div>
-        <div class="card"><div class="card-hd"><h3>ℹ️ 关于</h3></div><div style="font-size:14px;color:var(--text2);line-height:2"><p>🎀 个人工作台 v1.1 · Labubu 限定版</p><p>12 大模块 · 80+ 功能 · 全场景覆盖</p><p>🥟 部署到 Cloudflare Pages 后自动启用豆瓣数据</p></div></div>
+        <div class="card"><div class="card-hd"><h3>ℹ️ 关于</h3></div><div style="font-size:14px;color:var(--text2);line-height:2"><p>🎀 个人工作台 v1.1 · Labubu 限定版</p><p>12 大模块 · 80+ 功能 · 全场景覆盖</p><p>🥟 部署到 Cloudflare Pages</p></div></div>
       </div>
     </div>
 
@@ -4935,7 +4938,7 @@ function renderDataCharts() {
   const td = Array(7).fill(0);
   for (let i = 6; i >= 0; i--) { const d = new Date(t); d.setDate(d.getDate() - i); td[6 - i] = tasks.filter(x => x.date === d.toISOString().slice(0, 10) && x.done).length; }
   const ctx1 = document.getElementById('trendChart');
-  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#FF6B8A', backgroundColor: 'rgba(255,107,138,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } } } }); }
+  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#FF6B8A', backgroundColor: 'rgba(255,107,138,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 } } } } } }); }
   const cats = {}; tasks.forEach(x => { if (!x.done) { cats[x.pri || '其他'] = (cats[x.pri || '其他'] || 0) + 1; } });
   const ctx2 = document.getElementById('distChart');
   if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 8, font: { size: 11 } } } } } }); }
@@ -5471,7 +5474,7 @@ function renderWantList() {
   const typeName = { tv: '电视剧', movie: '电影', variety: '综艺' };
   list.innerHTML = want.length === 0
     ? '<div class="emp" style="grid-column:1/-1"><i class="fas fa-heart"></i><p>想看列表为空，去「电视剧 / 电影 / 综艺」里点 ❤ 想看吧</p></div>'
-    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer;' + (w.watched ? 'text-decoration:line-through;opacity:0.6' : '') + '" onclick="window.open(\'' + (w.url || '').replace(/'/g, "\\'") + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:2px;align-items:center;margin-top:6px;font-size:11px;color:var(--text3)"><span class="want-tag-row"><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (typeName[w.type] || '影视') + '</span></span><span class="dw-date" style="font-size:10px;line-height:1.2">' + (w.date || '') + '</span>' + (w.rate ? '<span style="font-size:11px;color:var(--accent);font-weight:600;margin-left:4px">⭐' + escHtml(w.rate) + '</span>' : '') + '<div style="flex:1"></div><button class="btn-sm btn-o" onclick="event.stopPropagation();openDramaRateModal(' + i + ')" style="font-size:10px;padding:2px 6px">评分</button><button class="btn-sm btn-o" onclick="event.stopPropagation();markDramaWatched(' + i + ')" style="font-size:10px;padding:2px 6px">已看</button><button class="btn-sm btn-o" onclick="event.stopPropagation();rmWant(' + i + ')" style="color:var(--d);font-size:10px;padding:2px 6px">移除</button></div></div></div>').join('');
+    : want.map((w, i) => '<div class="mc"><div class="mbd"><div class="mt" style="cursor:pointer;' + (w.watched ? 'text-decoration:line-through;opacity:0.6' : '') + '" onclick="window.open(\'' + (w.url || '').replace(/'/g, "\\'") + '\',\'_blank\')">' + escHtml(w.title) + '</div><div style="display:flex;gap:2px;align-items:center;margin-top:6px;font-size:11px;color:var(--text3)"><span class="want-tag-row"><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + (typeName[w.type] || '影视') + '</span></span><span class="dw-date" style="font-size:10px;line-height:1.2">' + (w.date || '') + '</span>' + (w.rate ? '<span class="want-rate"><span class="want-rate-star">⭐</span>' + escHtml(w.rate) + '</span>' : '') + '<div style="flex:1"></div><button class="btn-sm btn-o" onclick="event.stopPropagation();openDramaRateModal(' + i + ')" style="font-size:10px;padding:2px 6px">评分</button><button class="btn-sm btn-o" onclick="event.stopPropagation();markDramaWatched(' + i + ')" style="font-size:10px;padding:2px 6px">已看</button><button class="btn-sm btn-o" onclick="event.stopPropagation();rmWant(' + i + ')" style="color:var(--d);font-size:10px;padding:2px 6px">移除</button></div></div></div>').join('');
   updateDramaBadge();
 }
 
