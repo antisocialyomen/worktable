@@ -323,9 +323,8 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #hWeight,#hFat{width:70px!important;flex:0 0 70px!important;min-width:70px!important;font-size:11px!important;padding:2px 5px!important}
   #hDate{width:21px!important;height:21px;flex:0 0 21px!important;padding:0!important;box-sizing:border-box;background:var(--bg-card)!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1.5' y='2.5' width='13' height='12' rx='2' fill='none' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M1.5 6h13' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M4.5 1v3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M11.5 1v3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:16px!important;border:1px solid var(--border)!important;border-radius:var(--radius-sm)!important;color:transparent!important;cursor:pointer}
 #hDate::-webkit-calendar-picker-indicator{display:none!important}
-  /* 移动端：健康记录「记录」按钮另起一行居右，与日期按钮右边界对齐 */
+  /* 移动端：健康记录「记录」按钮另起一行居右 */
   #l-health .ig{row-gap:5px}
-  #l-health .ig [data-dt-target="hDate"]{margin-left:auto}
   .hRecRow{flex-basis:100%;display:flex;justify-content:flex-end}
   /* 移动端首页：隐藏emoji */
   .mo-hide{display:none}
@@ -443,10 +442,10 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   .cd-act{width:16px!important;height:16px!important;padding:0!important;display:flex;align-items:center;justify-content:center}
   .cd-act i{font-size:9px}
   /* 移动端：笔记输入框 */
-  #noteTitle{width:190px!important}
-  #noteContent{width:190px!important}
+  #noteTitle{width:210px!important}
+  #noteContent{width:210px!important}
   #noteCat{width:80px!important;flex:0 0 80px!important}
-  #noteTags{width:80px!important}
+  #noteTags{width:130px!important}
   /* 移动端：吃什么分类按钮 */
   .eat-cat{font-size:12px!important;padding:2px 5px!important}
 }
@@ -667,12 +666,46 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
               </div>
               <div class="ig"><input class="in" id="assetIn" placeholder="总资产金额" type="number" step="0.01" style="flex:0 0 auto;font-size:10px;width:auto"><input class="in" id="debtIn" placeholder="总负债金额" type="number" step="0.01" style="flex:0 0 auto;font-size:10px;width:auto;margin-left:5px"><button class="btn-sm btn-a" onclick="setAssets()" style="flex:0 0 auto">设置</button></div>
             </div>
-            <div class="card"><div class="card-hd"><h3>💰 记一笔</h3></div>
-              <div class="ig"><select class="in" id="expType" onchange="onExpTypeChange()" style="flex:0 0 auto;width:60px"><option value="e">支出</option><option value="i">收入</option></select><input class="in" id="expNl" placeholder="例：午餐20元" style="flex:0 0 auto;width:100px;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()"><button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">识别</button></div>
-              <div class="ig"><input class="in" id="expAmt" placeholder="金额" type="number" step="0.01" style="flex:0 0 auto;width:70px"><input class="in" id="expDate" type="date" style="flex:0 0 30%"></div>
-              <div class="ig" style="margin-bottom:4px"><select class="in" id="expCat" onchange="onExpCatChange()" style="flex:0 0 auto;width:60px"></select><select class="in" id="expSub" style="flex:0 0 auto;width:60px"></select><input class="in" id="expNote" placeholder="备注" style="flex:0 0 auto"><button id="catMgrBtn" class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center"><i class="fas fa-cog"></i></button></div>
-              <div id="addBtnRow" style="display:flex;justify-content:flex-end;margin-top:4px"><button class="btn btn-p" onclick="addExpense()">添加</button></div>
-              <div style="margin-top:10px"><label style="font-size:13px;color:var(--text2)">月度预算：</label><div class="ig" style="margin-top:4px"><input class="in" id="budgetIn" placeholder="月预算" type="number" style="flex:0 0 auto"><button class="btn-sm btn-a" onclick="setBudget()" style="flex:0 0 auto">设置</button></div><div style="margin-top:8px;font-size:13px"><span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span><div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px"><div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div></div></div></div>
+            <div class="card">
+              <div class="card-hd">
+                <h3>💰 记一笔</h3>
+              </div>
+              <div class="ig">
+                <select class="in" id="expType" onchange="onExpTypeChange()" style="flex:0 0 auto;width:60px">
+                  <option value="e">支出</option>
+                  <option value="i">收入</option>
+                </select>
+                <input class="in" id="expNl" placeholder="例：午餐20元" style="flex:0 0 auto;width:100px;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()">
+                <button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">识别</button>
+              </div>
+              <div class="ig">
+                <input class="in" id="expAmt" placeholder="金额" type="number" step="0.01" style="flex:0 0 auto;width:70px">
+                <input class="in" id="expDate" type="date" style="flex:0 0 30%">
+              </div>
+              <div class="ig" style="margin-bottom:4px">
+                <select class="in" id="expCat" onchange="onExpCatChange()" style="flex:0 0 auto;width:60px"></select>
+                <select class="in" id="expSub" style="flex:0 0 auto;width:60px"></select>
+                <input class="in" id="expNote" placeholder="备注" style="flex:0 0 auto">
+                <button id="catMgrBtn" class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center">
+                  <i class="fas fa-cog"></i>
+                </button>
+              </div>
+              <div id="addBtnRow" style="display:flex;justify-content:flex-start; margin-left:150px; margin-top:5px">
+                <button class="btn btn-p" onclick="addExpense()">添加</button>
+              </div>
+              <div style="margin-top:10px">
+                <label style="font-size:13px;color:var(--text2)">月度预算：</label>
+                <div class="ig" style="margin-top:4px">
+                  <input class="in" id="budgetIn" placeholder="月预算" type="number" style="flex:0 0 auto">
+                  <button class="btn-sm btn-a" onclick="setBudget()" style="flex:0 0 auto">设置</button>
+                </div>
+                <div style="margin-top:8px;font-size:13px">
+                  <span>已用 <span id="budUsed">0</span> / 预算 <span id="budTotal">0</span></span>
+                  <div style="height:8px;background:var(--border);border-radius:4px;margin-top:4px">
+                    <div id="budFill" style="height:100%;border-radius:4px;width:0%;background:var(--s)"></div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card" style="margin-top:12px"><div class="card-hd"><h3>📋 最近记录</h3><button class="btn-sm btn btn-o" onclick="switchExpTab('bill')"><i class="fas fa-list"></i> 看账单</button></div><div id="expRecent"></div></div>
           </div>
@@ -715,7 +748,45 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           </div>
         </div>
         <div class="life-tab" id="l-habit" style="display:none"><div class="g2"><div class="card"><div class="card-hd"><h3>🔥 我的习惯</h3><button class="btn-sm btn-p" onclick="addHabit()"><i class="fas fa-plus"></i> 新建</button></div><div id="habitList"></div></div><div class="card"><div class="card-hd"><h3>📅 本月打卡</h3><div style="margin-left:auto;display:flex;gap:3px;align-items:center"><select class="in" id="habitSelect" onchange="onHabitSelect()" style="flex:0 0 auto;padding:3px 7px;font-size:11px"><option value="">选择习惯</option></select><button class="btn-sm btn-p" onclick="checkinHabit()" style="font-size:11px;padding:3px 8px">打卡</button></div></div><div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div><div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text2)">本月打卡 <span id="monthCheck">0</span> 天</div></div></div></div>
-        <div class="life-tab" id="l-health" style="display:none"><div class="card"><div class="card-hd"><h3>❤️ 健康记录</h3></div><div class="ig"><input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1"><input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1"><input class="in" id="hDate" type="date" style="flex:0 0 auto;width:125px"><span class="hRecRow"><button class="btn btn-p" onclick="addHealth()">记录</button></span></div><div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap"><div><span style="font-size:12px;color:var(--text3)">当前体重</span><div style="font-size:22px;font-weight:700" id="curWeight">--</div></div><div><span style="font-size:12px;color:var(--text3)">BMI</span><div style="font-size:22px;font-weight:700" id="curBMI">--</div></div></div></div><div class="card"><div class="card-hd"><h3 id="healthTabTitle">📈 体重趋势</h3><button class="btn-sm btn-o" id="healthToggleBtn" onclick="toggleHealthView()">📋 历史记录</button></div><div id="healthChartWrap"><div style="height:200px"><canvas id="weightChart"></canvas></div></div><div id="healthListWrap" style="display:none"><div id="healthList"></div></div></div></div>
+        <div class="life-tab" id="l-health" style="display:none">
+          <div class="card">
+            <div class="card-hd">
+              <h3>❤️ 健康记录</h3>
+            </div>
+            <div class="ig">
+              <input class="in" id="hWeight" placeholder="体重 (kg)" type="number" step="0.1">
+              <input class="in" id="hFat" placeholder="体脂率 (%)" type="number" step="0.1">
+              <input class="in" id="hDate" type="date" style="flex:0 0 auto;width:125px">
+              <span class="hRecRow" style="display:flex; justify-content:flex-start; margin-left:150px; margin-top:5px">
+                <button class="btn btn-p" onclick="addHealth()">记录</button>
+              </span>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap">
+              <div>
+                <span style="font-size:12px;color:var(--text3)">当前体重</span>
+                <div style="font-size:22px;font-weight:700" id="curWeight">--</div>
+              </div>
+              <div>
+                <span style="font-size:12px;color:var(--text3)">BMI</span>
+                <div style="font-size:22px;font-weight:700" id="curBMI">--</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd">
+              <h3 id="healthTabTitle">📈 体重趋势</h3>
+              <button class="btn-sm btn-o" id="healthToggleBtn" onclick="toggleHealthView()">📋 历史记录</button>
+            </div>
+            <div id="healthChartWrap">
+              <div style="height:200px">
+                <canvas id="weightChart"></canvas>
+              </div>
+            </div>
+            <div id="healthListWrap" style="display:none">
+              <div id="healthList"></div>
+            </div>
+          </div>
+        </div>
         <div class="life-tab" id="l-shopping" style="display:none"><div class="card"><div class="card-hd"><h3>🛒 购物清单</h3></div><div class="ig"><input class="in" id="shopIn" placeholder="添加购物项..." onkeydown="if(event.key==='Enter') addShop()"><select class="in" id="shopCat" style="flex:0 0 auto;width:100px"><option value="食品">食品</option><option value="日用品">日用品</option><option value="服饰">服饰</option><option value="数码">数码</option><option value="其他">其他</option></select><button class="btn btn-p" onclick="addShop()"><i class="fas fa-plus"></i></button></div><div id="shopList"></div></div></div>
         <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="card-hd"><h3>📚 书影音收藏</h3><button class="btn-sm btn-p" onclick="addColl()"><i class="fas fa-plus"></i> 添加</button></div><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="tv">📺 电视剧</option><option value="music">🎵 音乐</option></select></div><div id="collList" style="margin-top:8px"></div></div></div>
 
@@ -759,10 +830,37 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 
       <!-- NOTES -->
       <div class="page" id="p-notes">
-        <div class="card"><div class="card-hd"><h3>✏️ 快速笔记</h3><button class="btn-sm btn-p" onclick="showEditor()"><i class="fas fa-plus"></i> 新建笔记</button></div><div id="noteEditor" style="display:none"><div class="ig"><input class="in" id="noteTitle" placeholder="笔记标题"></div><textarea class="in" id="noteContent" placeholder="写下你的灵感..." rows="4" style="resize:vertical;min-height:80px"></textarea><div class="ig" style="margin-top:8px"><select class="in" id="noteCat" style="flex:0 0 auto;width:120px"><option value="工作">工作</option><option value="学习">学习</option><option value="生活">生活</option><option value="灵感">灵感</option></select><input class="in" id="noteTags" placeholder="标签（逗号分隔）"><button class="btn btn-p" onclick="saveNote()"><i class="fas fa-save"></i> 保存</button><button class="btn btn-o" onclick="hideEditor()">取消</button></div></div></div>
-        <div class="ig"><input class="in" id="noteSearch" placeholder="搜索笔记..." oninput="renderNotes()"><select class="in" id="noteCatFilter" style="flex:0 0 auto;width:120px" onchange="renderNotes()"><option value="all">全部分类</option><option value="工作">工作</option><option value="学习">学习</option><option value="生活">生活</option><option value="灵感">灵感</option></select></div>
-        <div id="notesList" style="margin-top:12px"></div>
-      </div>
+        <div class="card">
+          <div class="card-hd" style="display:flex; justify-content: flex-start; align-items:center; gap:60px;">
+            <h3>✏️ 快速笔记</h3>
+            <button class="btn-sm btn-p" onclick="showEditor()">
+              <i class="fas fa-plus"></i> 新建笔记
+            </button>
+          </div>
+          <div id="noteEditor" style="display:none">
+            <div class="ig">
+              <input class="in" id="noteTitle" placeholder="笔记标题">
+            </div>
+            <textarea class="in" id="noteContent" placeholder="写下你的灵感..." rows="4"
+                      style="resize:vertical;min-height:80px"></textarea>
+            <div class="ig" style="margin-top:8px">
+              <select class="in" id="noteCat" style="flex:0 0 auto;width:120px">
+                <option value="工作">工作</option>
+                <option value="学习">学习</option>
+                <option value="生活">生活</option>
+                <option value="灵感">灵感</option>
+              </select>
+              <input class="in" id="noteTags" placeholder="标签（逗号分隔）">
+            </div>
+            <!-- 保存 / 取消按钮另起一行，与上一行间距 5px -->
+            <div style="margin-top:5px; display:flex; gap:8px;"></div>
+              <button class="btn btn-p" onclick="saveNote()">
+                <i class="fas fa-save"></i> 保存
+              </button>
+              <button class="btn btn-o" onclick="hideEditor()">取消</button>
+            </div>
+          </div>
+        </div>
 
       <!-- STUDY -->
       <div class="page" id="p-study">
