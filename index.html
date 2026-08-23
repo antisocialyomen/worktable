@@ -853,7 +853,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
               <input class="in" id="noteTags" placeholder="标签（逗号分隔）">
             </div>
             <!-- 保存 / 取消按钮另起一行，与上一行间距 5px -->
-            <div style="margin-top:5px; display:flex; gap:8px;"></div>
+            <div style="margin-top:5px; display:flex; gap:8px;">
               <button class="btn btn-p" onclick="saveNote()">
                 <i class="fas fa-save"></i> 保存
               </button>
@@ -861,6 +861,9 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
             </div>
           </div>
         </div>
+        <div class="ig"><input class="in" id="noteSearch" placeholder="搜索笔记..." oninput="renderNotes()"><select class="in" id="noteCatFilter" style="flex:0 0 auto;width:120px" onchange="renderNotes()"><option value="all">全部分类</option><option value="工作">工作</option><option value="学习">学习</option><option value="生活">生活</option><option value="灵感">灵感</option></select></div>
+        <div id="notesList" style="margin-top:12px"></div>
+      </div>
 
       <!-- STUDY -->
       <div class="page" id="p-study">
