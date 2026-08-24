@@ -6166,7 +6166,7 @@ function markMisjudged(id) {
 function expGroupByLevel(arr, level) {
   const c = {};
   arr.forEach(x => {
-    const key = level === 'l2' ? ((x.cat || '其他') + (x.sub ? '·' + x.sub : '')) : (x.cat || '其他');
+    const key = level === 'l2' ? (x.sub || (x.cat || '其他')) : (x.cat || '其他');
     c[key] = (c[key] || 0) + (parseFloat(x.amt) || 0);
   });
   const entries = Object.entries(c).sort((a, b) => b[1] - a[1]);
@@ -6191,7 +6191,8 @@ const doughnutOutsideLabels = {
     const fontSize = isMobile ? 7 : 11;
     ctx.font = fontSize + 'px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.textBaseline = 'middle';
-    const maxRadius = Math.min(chart.width, chart.height) * 0.42;
+    const nSlices = meta.data.filter((arc, i) => (Number(data[i]) || 0) > 0).length;
+    const maxRadius = Math.min(chart.width, chart.height) * (nSlices > 8 ? 0.36 : 0.42);
     const lead = isMobile ? 8 : 14;
     const elbow = isMobile ? 6 : 12;
     const pad = 3;
@@ -6236,7 +6237,25 @@ const doughnutOutsideLabels = {
       }
     }
 
-    // 第三遍：绘制
+    // 第三遍：若标签垂直范围超出画布，整体压缩到画布内；水平方向钳制不越界
+    const topLimit = lineHeight / 2 + 2;
+    const bottomLimit = chart.height - lineHeight / 2 - 2;
+    let minY = Infinity, maxY = -Infinity;
+    labelPositions.forEach(la => { if (la.y2 < minY) minY = la.y2; if (la.y2 > maxY) maxY = la.y2; });
+    if (minY < topLimit || maxY > bottomLimit) {
+      const span = maxY - minY;
+      const available = bottomLimit - topLimit;
+      if (span > 0 && available > 0) {
+        const scale = Math.min(1, available / span);
+        labelPositions.forEach(la => { la.y2 = topLimit + (la.y2 - minY) * scale; });
+      }
+    }
+    labelPositions.forEach(la => {
+      if (la.onRight) la.x3 = Math.max(la.x2, Math.min(la.x3, chart.width - 2 - la.tw - la.pad));
+      else la.x3 = Math.min(la.x2, Math.max(la.x3, 2 + la.tw + la.pad));
+    });
+
+    // 第四遍：绘制
     labelPositions.forEach(la => {
       ctx.strokeStyle = la.color;
       ctx.lineWidth = 0.8;
