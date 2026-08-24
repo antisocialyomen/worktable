@@ -2431,6 +2431,7 @@ function loadAvatarFile(file) {
       cropState.img = img;
       const cropImg = document.getElementById('cropImg');
       cropImg.src = img.src;
+      document.getElementById('cropWrap').style.display = 'block';
       const box = document.getElementById('cropBox');
       const boxW = box.clientWidth, boxH = box.clientHeight;
       const iw = img.naturalWidth, ih = img.naturalHeight;
@@ -2441,7 +2442,6 @@ function loadAvatarFile(file) {
       cropImg.style.width = w + 'px'; cropImg.style.height = h + 'px';
       cropState.x = (boxW - w) / 2; cropState.y = (boxH - h) / 2;
       clampCrop();
-      document.getElementById('cropWrap').style.display = 'block';
       document.getElementById('cropZoom').value = 1;
     };
     img.src = e.target.result;
@@ -3770,10 +3770,9 @@ function alignAddBtn() {
   if (!catBtn || !addRow) return;
   const catRect = catBtn.getBoundingClientRect();
   if (catRect.right === 0) return;
-  const card = catBtn.closest('.card');
-  if (!card) return;
-  const cardRect = card.getBoundingClientRect();
-  const paddingRight = cardRect.right - catRect.right;
+  const rowRect = addRow.getBoundingClientRect();
+  if (rowRect.right === 0) return;
+  const paddingRight = rowRect.right - catRect.right;
   addRow.style.paddingRight = Math.max(0, paddingRight) + 'px';
 }
 
