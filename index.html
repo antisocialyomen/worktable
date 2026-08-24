@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#FF6B8A">
+<meta name="theme-color" content="#FF84BA">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="工作台">
@@ -18,12 +18,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Doto:wght@400;700&family=Silkscreen:wght@400;700&family=VT323&family=DotGothic16&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#FF6B8A;--primary-light:#FF8DA6;--primary-dark:#E05070;--primary-bg:#FFD4A8;--accent:#8140DC;--accent-light:#E8D8F5;--alert:#FFB347;--bg:#FFF5EE;--bg-card:#FFFFFF;--bg-nav:#FFFFFF;--text:#4A3040;--text2:#8A6A7A;--text3:#BAA0AA;--border:#F5E0E0;--shadow:0 2px 8px rgba(255,107,138,0.1);--shadow-lg:0 8px 25px rgba(255,107,138,0.15);--radius:16px;--radius-sm:10px;--radius-lg:24px;--nav-w:170px;--h:56px;--t:.3s;--s:#8BC4A0;--w:#FFB347;--d:#FF6B8A;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
+:root{--primary:#FF84BA;--primary-light:#FFA3CB;--primary-dark:#F26BA6;--primary-bg:#FFE9F3;--accent:#BDB2FF;--accent-light:#EFECFF;--accent2:#4274D9;--alert:#FFCC4D;--bg:#FFF9F4;--bg-card:#FFFFFF;--bg-nav:#FFFFFF;--text:#4A3B45;--text2:#8A7280;--text3:#B8A6B0;--border:#F5E8EE;--shadow:0 2px 8px rgba(255,132,186,0.1);--shadow-lg:0 8px 25px rgba(255,132,186,0.15);--radius:16px;--radius-sm:10px;--radius-lg:24px;--nav-w:170px;--h:56px;--t:.3s;--s:#8BC4A0;--w:#FFCC4D;--d:#E0528A;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
 [data-theme=dark]{--bg:#2A1820;--bg-card:#3A2430;--bg-nav:#3A2430;--text:#F5E8EC;--text2:#C8A8B8;--text3:#9A7A8A;--border:#4A3038;--primary-bg:#3A2028}
 html{font-size:16px}
 body{font-family:var(--font);background:transparent;color:var(--text);line-height:1.6;overflow:hidden;height:100vh;transition:color var(--t);padding-top:0;padding-top:env(safe-area-inset-top)}
 #wallpaper{position:fixed;inset:0;z-index:0;background:url('assets/windows-bg-wallpaper.jpg') center/cover no-repeat;pointer-events:none;top:env(safe-area-inset-top)}
-#wallpaper::after{content:'';position:absolute;inset:0;background:rgba(255,245,238,0.3);transition:background var(--t)}
+#wallpaper::after{content:'';position:absolute;inset:0;background:rgba(255,249,244,0.3);transition:background var(--t)}
 [data-theme=dark] #wallpaper::after{background:rgba(42,24,32,0.75)}
 [data-theme=dark] .sidebar{background:transparent;border-right-color:rgba(74,48,56,0.4)}
 [data-theme=dark] .header{background:transparent;border-bottom-color:rgba(74,48,56,0.4)}
@@ -32,14 +32,18 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
 #splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);text-align:center;padding:24px;transition:opacity .4s}
 #splash.hide{opacity:0;pointer-events:none}
-.splash-avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:24px;box-shadow:0 8px 28px rgba(255,107,138,0.28)}
+.splash-avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:24px;box-shadow:0 8px 28px rgba(255,132,186,0.28)}
 #splashHello{font-size:28px;font-weight:700;margin-bottom:8px;color:var(--text)}
 #splashName{outline:none;border-bottom:1px dashed transparent;transition:border-color .2s;cursor:text;min-width:2px}
 #splashName:hover,#splashName:focus{border-bottom-color:var(--primary)}
 #splashName:empty:before{content:'你的名字';color:var(--text3);font-weight:400}
 #splashTime{font-size:38px;font-weight:700;margin-bottom:4px;color:var(--primary);font-variant-numeric:tabular-nums}
 #splashDate{font-size:15px;color:var(--text2);margin-bottom:36px}
-#enterBtn{padding:12px 32px;font-size:16px;border-radius:28px;box-shadow:0 6px 18px rgba(255,107,138,0.3)}
+#enterBtn{padding:12px 32px;font-size:16px;border-radius:28px;box-shadow:0 6px 18px rgba(255,132,186,0.3)}
+#changeAvatarBtn{margin-top:-16px;margin-bottom:16px;font-size:12px;padding:3px 10px;border-radius:14px}
+#cropBox{width:260px;height:260px;margin:14px auto 0;position:relative;overflow:hidden;border-radius:50%;border:2px solid var(--primary);background:#000;box-shadow:var(--shadow)}
+#cropImg{position:absolute;top:0;left:0;max-width:none;user-select:none;-webkit-user-select:none;touch-action:none;cursor:grab}
+#cropImg.dragging{cursor:grabbing}
 .app{position:relative;z-index:1;display:flex;height:100vh;height:calc(100vh - env(safe-area-inset-top));overflow:hidden}
 .sidebar{width:var(--nav-w);background:transparent;border-right:1px solid rgba(255,255,255,0.25);display:flex;flex-direction:column;flex-shrink:0;z-index:100}
 .sidebar-brand{padding:14px 8px 10px;text-align:center;flex-shrink:0;border-bottom:1px solid var(--border)}
@@ -49,7 +53,7 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .sidebar-nav{flex:1;overflow-y:auto;padding:6px 0}
 .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;margin:1px 6px;border-radius:var(--radius);color:var(--text2);cursor:pointer;font-size:13px;font-weight:500;transition:all var(--t)}
 .nav-item:hover{background:var(--primary-bg);color:var(--primary);transform:scale(1.02)}
-.nav-item.active{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 12px rgba(255,107,138,0.3)}
+.nav-item.active{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 12px rgba(255,132,186,0.3)}
 .nav-item i{width:18px;text-align:center;font-size:14px;flex-shrink:0}
 .nav-item .badge{margin-left:auto;background:var(--d);color:#fff;font-size:10px;padding:0 6px;border-radius:9px;min-width:16px;text-align:center;line-height:16px}
 .sidebar-footer{padding:10px;text-align:center;flex-shrink:0;border-top:1px solid var(--border)}
@@ -75,10 +79,10 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .sc{background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:16px;transition:all var(--t)}
 .sc:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
 .si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.si1{background:#FFD4A8;color:#FF6B8A}
-.si2{background:#E8D8F5;color:var(--accent)}
-.si3{background:#FFF3E0;color:var(--alert)}
-.si4{background:#E8D8F5;color:#8140DC}
+.si1{background:#FFE9F3;color:#FF84BA}
+.si2{background:#EFECFF;color:#BDB2FF}
+.si3{background:#FFF6D9;color:#FFCC4D}
+.si4{background:#E8F0FC;color:#4274D9}
 .si .num{font-size:24px;font-weight:700;line-height:1.2}
 .si .label{font-size:10px;color:var(--text2)}
 .sc > .si:nth-child(2){width:auto;height:auto;flex:1;min-width:0;display:block;padding:0;background:transparent;color:inherit}
@@ -99,10 +103,10 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .btn-sm.rec{background:var(--d);color:#fff;border-color:var(--d);animation:micPulse 1.1s ease-in-out infinite}
 @keyframes micPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(209,0,86,.5)}50%{transform:scale(1.08);box-shadow:0 0 0 6px rgba(209,0,86,0)}}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius-lg);font-size:14px;font-weight:500;cursor:pointer;transition:all var(--t)}
-.btn-p{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 12px rgba(255,107,138,0.25)}
-.btn-p:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 6px 16px rgba(255,107,138,0.35)}
+.btn-p{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 12px rgba(255,132,186,0.25)}
+.btn-p:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 6px 16px rgba(255,132,186,0.35)}
 .btn-a{background:var(--accent);color:#fff}
-.btn-a:hover{background:#0098AB}
+.btn-a:hover{background:#E0528A}
 .btn-o{border:1px solid var(--border);color:var(--text2);background:transparent}
 .btn-o:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-bg)}
 .btn-sm{padding:5px 10px;font-size:12px}
@@ -114,16 +118,35 @@ a{color:var(--primary)}input,textarea,select,button{font-family:inherit;font-siz
 .bill-total{justify-content:center;text-align:center}
 .bill-total .si{width:auto;height:auto}
 .ig{display:flex;gap:8px;margin-bottom:12px}
+.calAddRow{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto}
+#addBtnInline{display:none}
+@media(min-width:769px){
+  #addBtnRow{display:none!important}
+  #addBtnInline{display:inline-block}
+  /* 探店-菜品打分：打分下拉框宽度140px */
+  #shopDishList select.in{width:140px!important;flex:0 0 140px!important}
+  /* 记账-最近记录 / 统计明细：消费名称15px、日期12px */
+  .exp-item>div:first-child{font-size:15px!important}
+  .exp-item>div:first-child>span{font-size:12px!important}
+  /* 账单：消费名称15px */
+  #expList .cb>div:first-child{font-size:15px!important}
+  /* 情绪化消费：名称15px、日期12px、金额15px */
+  #emoList .emo-name{font-size:15px!important}
+  #emoList .emo-date{font-size:12px!important}
+  #emoList .cb>span{font-size:15px!important}
+}
 .in{flex:1;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px}
-.in:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(223,48,28,0.1)}
+#noteContent{width:100%}
+.in:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(255,132,186,0.15)}
 select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='none' stroke='%236B7280' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' d='M1.5 3L4 5.5 6.5 3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;padding-right:16px}
 .tag{display:inline-flex;align-items:center;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:500}
-.t1{background:#FFD4A8;color:#FF6B8A}
-.t2{background:#E8D8F5;color:#8140DC}
-.t3{background:#FFF0E0;color:#FFB347}
+.t1{background:#E8F0FC;color:#4274D9}
+.t2{background:#EFECFF;color:#BDB2FF}
+.t3{background:#FFF6D9;color:#FFCC4D}
 .cb{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 0;border-bottom:1px solid var(--border)}
 .cb:last-child{border-bottom:none}
 .cb input{display:none}
+#genMaskBody .cb input.in{display:block} /* 分类管理弹窗内二级分类输入框需显示 */
 .cb .cc{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all var(--t)}
 .cb input:checked+.cc{background:var(--primary);border-color:var(--primary)}
 .cb input:checked+.cc::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#fff;font-size:11px}
@@ -132,7 +155,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .cb .ct{flex:1;font-size:14px;min-width:0;word-break:break-word}
 .cb input:checked~.ct{text-decoration:line-through;color:var(--text3)}
 .cb-acts{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;z-index:2000;opacity:0;pointer-events:none;white-space:pre-wrap;transition:opacity .3s}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;z-index:10001;opacity:0;pointer-events:none;white-space:pre-wrap;transition:opacity .3s}
 .toast.show{opacity:1}
 .toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;transition:background var(--t)}
 .toggle.on{background:var(--accent)}
@@ -213,7 +236,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   #wallpaper{background:url('assets/ios-bg-wallpaper.jpg') center/cover no-repeat}
   :root{--h:48px;--radius:12px;--radius-sm:8px;--radius-lg:16px}
   .app{height:100dvh;height:calc(100dvh - env(safe-area-inset-top))}
-  .sidebar{display:flex;position:relative;left:auto;top:auto;height:auto;width:48px;background:transparent;border-right:1px solid rgba(255,255,255,0.25);z-index:100;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .sidebar{display:flex;position:relative;left:auto;top:auto;height:auto;width:36px;background:transparent;border-right:1px solid rgba(255,255,255,0.25);z-index:100;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
   [data-theme=dark] .sidebar{background:transparent;border-right-color:rgba(74,48,56,0.4)}
   .sidebar-brand{display:none}
   .sidebar-footer{display:none}
@@ -397,6 +420,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：热量计算餐次下拉框55px、食材输入框弹性伸展 */
   #calMeal{width:55px!important;flex:0 0 55px!important}
   #calFood{flex:1!important;min-width:80px!important}
+  .calAddRow{flex-basis:100%;display:flex;justify-content:flex-end;gap:3px;align-items:center}
   /* 移动端：日期按钮 */
   .dt-date-btn{font-size:11px!important;padding:2px 5px!important;width:auto!important;height:auto!important}
   .dt-date-btn .dt-btn-text{font-size:9px}
@@ -490,7 +514,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 [data-theme=dark] .pixel{color:#C9A0FF}
 
 /* ===== 心情日志弹框 ===== */
-.mask{position:fixed;inset:0;background:rgba(40,20,30,0.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:1500;display:flex;align-items:center;justify-content:center;padding:16px}
+.mask{position:fixed;inset:0;background:rgba(40,20,30,0.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px}
 .mask.hide{display:none}
 .modal{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:100%;max-width:440px;max-height:90vh;overflow-y:auto;padding:22px}
 .modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
@@ -500,7 +524,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 .mood-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:8px 0 6px}
 .mood-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:26px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:all var(--t)}
 .mood-cell:hover{transform:scale(1.08)}
-.mood-cell.active{border-color:var(--primary);background:var(--primary-bg);box-shadow:0 2px 8px rgba(255,107,138,0.25)}
+.mood-cell.active{border-color:var(--primary);background:var(--primary-bg);box-shadow:0 2px 8px rgba(255,132,186,0.25)}
 .log-area{width:100%;min-height:96px;resize:vertical;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px;line-height:1.6;font-family:inherit;margin-top:6px}
 .log-count{text-align:right;font-size:10px;color:var(--text3);margin-top:4px}
 
@@ -538,7 +562,8 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 
 <!-- Entry / Splash Page -->
 <div id="splash">
-  <img src="assets/labubu-avatar.png" alt="" class="splash-avatar">
+  <img src="assets/labubu-avatar.png" alt="" class="splash-avatar" id="splashAvatar">
+  <button id="changeAvatarBtn" class="btn btn-sm btn-o" onclick="openAvatarModal()">更换头像</button>
   <h1 id="splashHello">Hello，<span id="splashName" contenteditable="true" spellcheck="false" title="点击输入你的名字"></span></h1>
   <div id="splashTime"></div>
   <div id="splashDate"></div>
@@ -616,8 +641,8 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           <div id="homeComboBody"></div>
         </div>
         <div class="card" id="homePeriod" style="margin-top:12px;display:none;border-left:4px solid var(--primary);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>🩸 经期提醒</h3><span class="btn-sm btn-o" onclick="go('period')">记录 / 详情 →</span></div><div id="homePeriodTip" style="font-size:14px;line-height:1.7"></div></div>
-        <div class="card" id="homeCountdown" style="margin-top:12px;display:none;border-left:4px solid var(--s);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>⏳ 倒数日提醒</h3><span class="btn-sm btn-o" onclick="go('countdown')">管理 →</span></div><div id="homeCountdownTip" style="font-size:14px;line-height:1.6"></div></div>
-        <div class="card" id="homeReminder" style="margin-top:12px;border-left:4px solid var(--w);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>🔔 提醒中心</h3><div style="margin-left:auto;display:flex;gap:6px"><button class="btn-sm btn-o" id="remNotifBtn" onclick="toggleRemNotif()"><i class="fas fa-bell"></i> 通知</button><button class="btn-sm btn-o" onclick="openReminderSettings()"><i class="fas fa-cog"></i> 设置</button></div></div><div id="reminderList" style="font-size:14px;line-height:1.6"></div></div>
+        <div class="card" id="homeCountdown" style="margin-top:12px;display:none;border-left:4px solid var(--s);background:linear-gradient(135deg,#FFCC4D,transparent)"><div class="card-hd"><h3>⏳ 倒数日提醒</h3><span class="btn-sm btn-o" onclick="go('countdown')">管理 →</span></div><div id="homeCountdownTip" style="font-size:14px;line-height:1.6"></div></div>
+        <div class="card" id="homeReminder" style="margin-top:12px;border-left:4px solid var(--w);background:linear-gradient(135deg,#FFCC4D,transparent)"><div class="card-hd"><h3>🔔 提醒中心</h3><div style="margin-left:auto;display:flex;gap:6px"><button class="btn-sm btn-o" id="remNotifBtn" onclick="toggleRemNotif()"><i class="fas fa-bell"></i> 通知</button><button class="btn-sm btn-o" onclick="openReminderSettings()"><i class="fas fa-cog"></i> 设置</button></div></div><div id="reminderList" style="font-size:14px;line-height:1.6"></div></div>
       </div>
 
       <!-- TASKS -->
@@ -689,8 +714,9 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
                 <button id="catMgrBtn" class="btn-sm btn-o" onclick="openCatManager()" title="分类管理" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center">
                   <i class="fas fa-cog"></i>
                 </button>
+                <button id="addBtnInline" class="btn btn-p" onclick="addExpense()">添加</button>
               </div>
-              <div id="addBtnRow" style="display:flex;justify-content:flex-start; margin-left:150px; margin-top:5px">
+              <div id="addBtnRow" style="display:flex;justify-content:flex-end; margin-top:5px">
                 <button class="btn btn-p" onclick="addExpense()">添加</button>
               </div>
               <div style="margin-top:10px">
@@ -831,8 +857,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
       <!-- NOTES -->
       <div class="page" id="p-notes">
         <div class="card">
-          <div class="card-hd" style="display:flex; justify-content: flex-start; align-items:center; gap:60px;">
-            <h3>✏️ 快速笔记</h3>
+          <div class="card-hd" style="display:flex; justify-content: flex-start; align-items:center;">
             <button class="btn-sm btn-p" onclick="showEditor()">
               <i class="fas fa-plus"></i> 新建笔记
             </button>
@@ -931,7 +956,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
             </div>
           </div>
           <div id="perCalGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px"></div>
-          <div style="font-size:12px;color:var(--text3);margin-top:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span>经量：</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#FFB3C6"></span>少</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#FF6B8A"></span>中</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#D10056"></span>多</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#8B0045"></span>超大量</span><span style="margin-left:auto">点击日期记录 / 编辑</span></div>
+          <div style="font-size:12px;color:var(--text3);margin-top:10px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span>经量：</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#FFD6E8"></span>少</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#FF84BA"></span>中</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#E0528A"></span>多</span><span style="display:inline-flex;align-items:center;gap:4px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#B2054C"></span>超大量</span><span style="margin-left:auto">点击日期记录 / 编辑</span></div>
         </div>
         <div class="card" style="margin-top:16px"><div class="card-hd"><h3>🔮 周期预测</h3></div><div id="perPredict"></div></div>
         <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📋 历史记录</h3></div><div id="periodList"></div></div>
@@ -1038,13 +1063,13 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
                 <option value="零食">零食</option>
                 <option value="饮料">饮料</option>
               </select>
-              <input class="in" id="calFood" placeholder="食材/饮品,如:米饭/可乐）" style="flex:1" list="calFoodList">
+              <input class="in" id="calFood" placeholder="食材/饮品,如:米饭/可乐）" style="flex:0 0 300px" list="calFoodList">
               <datalist id="calFoodList"></datalist>
-              <input class="in" id="calGrams" type="number" placeholder="克数/ml" style="flex:0 0 auto;width:90px">
-            </div>
-            <div class="ig" style="justify-content:flex-end">
-              <input type="hidden" id="calDate"><button class="btn-sm btn-o dt-date-btn" data-dt-target="calDate" onclick="openDtPicker('calDate')" style="flex:0 0 auto"><span class="dt-btn-text">日期</span></button>
-              <button class="btn btn-p" onclick="addCalorie()">添加</button>
+              <input class="in" id="calGrams" type="number" placeholder="克数/ml" style="flex:0 0 100px">
+              <span class="calAddRow">
+                <input type="hidden" id="calDate"><button class="btn-sm btn-o dt-date-btn" data-dt-target="calDate" onclick="openDtPicker('calDate')" style="flex:0 0 auto"><span class="dt-btn-text">日期</span></button>
+                <button class="btn btn-p" onclick="addCalorie()">添加</button>
+              </span>
             </div>
             <div style="font-size:12px;color:var(--text3);margin-top:6px">提示：输入食材或饮品即可自动匹配热量库（每 100g/ml 的 kcal，饮料按 1ml≈1g 计），未收录可手动填热量。</div>
             <div id="calLog" style="margin-top:10px"></div>
@@ -1085,7 +1110,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
       <div class="page" id="p-settings">
         <div class="card"><div class="card-hd"><h3>👤 昵称</h3></div><div class="ig"><input class="in" id="nickIn" placeholder="输入你的昵称，将显示在侧栏与进入页" style="font-size:14px"></div><button class="btn-sm btn-p" onclick="saveNickname()"><i class="fas fa-save"></i> 保存</button><span id="nickStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div>
         <div class="card"><div class="card-hd"><h3>🎨 外观设置</h3></div><div class="si-item"><div><div class="si-l">深色模式</div><div class="si-d">切换明暗主题</div></div><div class="toggle" id="themeToggle" onclick="toggleTheme()"></div></div></div>
-        <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ Cloudflare KV 云同步已启用，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div id="kvMissing" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:#FFF0E0;border-radius:8px;margin-bottom:12px">⚠️ Cloudflare KV 未绑定。请在 Cloudflare Pages 项目的 <b>Settings → Functions → KV namespace bindings</b> 里添加绑定：<br>• <b>Variable name（变量名）</b>必须填 <code>SYNC_KV</code><br>• <b>KV namespace</b> 选 <code>workbench-data</code><br>保存并重新部署后云同步自动生效。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到云端</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">当前使用 WebDAV 同步（KV 未绑定时的回退方案）。如已绑定 KV，请保存空白配置让系统自动切换。</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="WebDAV 账号" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
+        <div class="card"><div class="card-hd"><h3>☁️ 云同步</h3></div><div id="kvInfo" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:var(--primary-bg);border-radius:8px;margin-bottom:12px">✅ Cloudflare KV 云同步已启用，数据自动跨设备保存（无需额外配置）。点击顶部 ☁ 按钮即可手动同步。</div><div id="kvMissing" style="display:none;font-size:13px;color:var(--text2);padding:12px;background:#FFF6D9;border-radius:8px;margin-bottom:12px">⚠️ Cloudflare KV 未绑定。请在 Cloudflare Pages 项目的 <b>Settings → Functions → KV namespace bindings</b> 里添加绑定：<br>• <b>Variable name（变量名）</b>必须填 <code>SYNC_KV</code><br>• <b>KV namespace</b> 选 <code>workbench-data</code><br>保存并重新部署后云同步自动生效。</div><div class="si-item" id="wdToggleRow"><div><div class="si-l">启用云同步</div><div class="si-d" id="wdToggleDesc">开启后数据自动同步到云端</div></div><div class="toggle" id="wdToggle" onclick="toggleWD()"></div></div><div id="wdConfig" style="display:none;margin-top:12px"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;padding:12px;background:var(--primary-bg);border-radius:8px">当前使用 WebDAV 同步（KV 未绑定时的回退方案）。如已绑定 KV，请保存空白配置让系统自动切换。</div><div class="ig"><input class="in" id="wdUrl" placeholder="WebDAV 地址 (如 https://dav.jianguoyun.com/dav/)" style="font-size:12px"></div><div class="ig"><input class="in" id="wdUser" placeholder="WebDAV 账号" style="font-size:12px"><input class="in" id="wdPass" placeholder="应用密码" style="font-size:12px" type="password"></div><button class="btn-sm btn-p" onclick="saveWD()"><i class="fas fa-save"></i> 保存</button><button class="btn-sm btn-a" onclick="doSync()" style="margin-left:4px"><i class="fas fa-sync"></i> 同步</button><span id="wdStatus" style="font-size:12px;color:var(--text3);margin-left:8px"></span></div></div>
         <div class="card"><div class="card-hd"><h3>📦 数据管理</h3></div><div class="si-item"><div><div class="si-l">导出全部数据</div></div><button class="btn-sm btn-p" onclick="exportData()"><i class="fas fa-download"></i> 导出</button></div><div class="si-item"><div><div class="si-l">导入数据</div></div><button class="btn-sm btn-o" onclick="document.getElementById('importIn').click()"><i class="fas fa-upload"></i> 导入</button><input type="file" id="importIn" accept=".json" style="display:none" onchange="importData(this)"></div><div class="si-item"><div><div class="si-l" style="color:var(--d)">清空所有数据</div></div><button class="btn-sm btn" style="background:var(--d);color:#fff;padding:5px 10px;font-size:12px;border-radius:8px" onclick="clearData()"><i class="fas fa-trash"></i> 清空</button></div></div>
         <div class="card"><div class="card-hd"><h3>ℹ️ 关于</h3></div><div style="font-size:14px;color:var(--text2);line-height:2"><p>🎀 个人工作台 v1.1 · Labubu 限定版</p><p>12 大模块 · 80+ 功能 · 全场景覆盖</p><p>🥟 部署到 Cloudflare Pages</p></div></div>
       </div>
@@ -2369,6 +2394,120 @@ function enterApp() {
   setTimeout(() => { s.style.display = 'none'; }, 400);
   Store.set('lastEnter', Date.now());
 }
+// ===== AVATAR =====
+let cropState = { img: null, baseW: 0, baseH: 0, scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, origX: 0, origY: 0 };
+let cropDragBound = false;
+function applyAvatar() {
+  const url = Store.get('avatar', '');
+  if (!url) return;
+  const splash = document.getElementById('splashAvatar');
+  if (splash) splash.src = url;
+  const brand = document.querySelector('.brand-avatar');
+  if (brand) brand.src = url;
+}
+function openAvatarModal() {
+  cropState = { img: null, baseW: 0, baseH: 0, scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, origX: 0, origY: 0 };
+  openGenMask('🖼️ 更换头像', '<div style="text-align:center">' +
+    '<input type="file" id="avatarFileInput" accept="image/*" style="display:none">' +
+    '<button class="btn btn-o" onclick="document.getElementById(\'avatarFileInput\').click()"><i class="fas fa-upload"></i> 选择图片</button>' +
+    '<div id="cropWrap" style="display:none">' +
+    '<div id="cropBox"><img id="cropImg" draggable="false"></div>' +
+    '<div style="display:flex;align-items:center;gap:8px;margin-top:12px">' +
+    '<i class="fas fa-search-minus" style="color:var(--text3)"></i>' +
+    '<input type="range" id="cropZoom" min="1" max="3" step="0.01" value="1" style="flex:1;accent-color:var(--primary)" oninput="onCropZoom()">' +
+    '<i class="fas fa-search-plus" style="color:var(--text3)"></i>' +
+    '</div>' +
+    '<button class="btn btn-p" onclick="saveAvatar()" style="margin-top:12px;width:100%">保存头像</button>' +
+    '</div></div>');
+  const fi = document.getElementById('avatarFileInput');
+  fi.onchange = function(e) { const f = e.target.files && e.target.files[0]; if (f) loadAvatarFile(f); };
+  initCropDrag();
+}
+function loadAvatarFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      cropState.img = img;
+      const cropImg = document.getElementById('cropImg');
+      cropImg.src = img.src;
+      const box = document.getElementById('cropBox');
+      const boxW = box.clientWidth, boxH = box.clientHeight;
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      let w, h;
+      if (iw / ih > boxW / boxH) { h = boxH; w = boxH * iw / ih; }
+      else { w = boxW; h = boxW * ih / iw; }
+      cropState.baseW = w; cropState.baseH = h; cropState.scale = 1;
+      cropImg.style.width = w + 'px'; cropImg.style.height = h + 'px';
+      cropState.x = (boxW - w) / 2; cropState.y = (boxH - h) / 2;
+      clampCrop();
+      document.getElementById('cropWrap').style.display = 'block';
+      document.getElementById('cropZoom').value = 1;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function clampCrop() {
+  const box = document.getElementById('cropBox');
+  const img = document.getElementById('cropImg');
+  if (!box || !img || !cropState.img) return;
+  const boxW = box.clientWidth, boxH = box.clientHeight;
+  const imgW = img.offsetWidth, imgH = img.offsetHeight;
+  const minX = boxW - imgW, minY = boxH - imgH;
+  cropState.x = Math.min(0, Math.max(minX, cropState.x));
+  cropState.y = Math.min(0, Math.max(minY, cropState.y));
+  img.style.left = cropState.x + 'px';
+  img.style.top = cropState.y + 'px';
+}
+function onCropZoom() {
+  const zoom = document.getElementById('cropZoom');
+  const img = document.getElementById('cropImg');
+  const box = document.getElementById('cropBox');
+  if (!zoom || !img || !box || !cropState.img) return;
+  const boxW = box.clientWidth, boxH = box.clientHeight;
+  const scale = parseFloat(zoom.value);
+  const cx = (cropState.x + img.offsetWidth / 2) / img.offsetWidth;
+  const cy = (cropState.y + img.offsetHeight / 2) / img.offsetHeight;
+  const w = cropState.baseW * scale, h = cropState.baseH * scale;
+  img.style.width = w + 'px'; img.style.height = h + 'px';
+  cropState.x = cx * w - boxW / 2;
+  cropState.y = cy * h - boxH / 2;
+  clampCrop();
+}
+function initCropDrag() {
+  const img = document.getElementById('cropImg');
+  if (!img) return;
+  img.addEventListener('mousedown', function(e) { cropState.dragging = true; cropState.startX = e.clientX; cropState.startY = e.clientY; cropState.origX = cropState.x; cropState.origY = cropState.y; img.classList.add('dragging'); e.preventDefault(); });
+  img.addEventListener('touchstart', function(e) { const t = e.touches[0]; cropState.dragging = true; cropState.startX = t.clientX; cropState.startY = t.clientY; cropState.origX = cropState.x; cropState.origY = cropState.y; img.classList.add('dragging'); e.preventDefault(); }, { passive: false });
+  if (cropDragBound) return;
+  cropDragBound = true;
+  window.addEventListener('mousemove', function(e) { if (!cropState.dragging) return; cropState.x = cropState.origX + (e.clientX - cropState.startX); cropState.y = cropState.origY + (e.clientY - cropState.startY); clampCrop(); });
+  window.addEventListener('mouseup', function() { cropState.dragging = false; const i = document.getElementById('cropImg'); if (i) i.classList.remove('dragging'); });
+  window.addEventListener('touchmove', function(e) { if (!cropState.dragging) return; const t = e.touches[0]; cropState.x = cropState.origX + (t.clientX - cropState.startX); cropState.y = cropState.origY + (t.clientY - cropState.startY); clampCrop(); e.preventDefault(); }, { passive: false });
+  window.addEventListener('touchend', function() { cropState.dragging = false; const i = document.getElementById('cropImg'); if (i) i.classList.remove('dragging'); });
+}
+function saveAvatar() {
+  if (!cropState.img) return toast('请先选择图片');
+  const size = 300;
+  const canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const box = document.getElementById('cropBox');
+  const img = document.getElementById('cropImg');
+  const boxRect = box.getBoundingClientRect();
+  const imgRect = img.getBoundingClientRect();
+  const sx = (boxRect.left - imgRect.left) / imgRect.width * cropState.img.naturalWidth;
+  const sy = (boxRect.top - imgRect.top) / imgRect.height * cropState.img.naturalHeight;
+  const sw = boxRect.width / imgRect.width * cropState.img.naturalWidth;
+  const sh = boxRect.height / imgRect.height * cropState.img.naturalHeight;
+  ctx.drawImage(cropState.img, sx, sy, sw, sh, 0, 0, size, size);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+  Store.set('avatar', dataUrl);
+  applyAvatar();
+  closeGenMask();
+  toast('✅ 头像已更新');
+}
 function updateSplashTime() {
   const now = new Date();
   const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
@@ -2382,6 +2521,7 @@ function updateSplashTime() {
 // ===== INIT =====
 function initApp() {
   initGreeting();
+  applyAvatar();
   initTheme();
   WebDAV.init();
   migratePeriods();
@@ -2854,7 +2994,7 @@ function migratePeriods() {
 }
 
 let perDate = new Date();
-const PER_FLOW = { light: '#FFB3C6', medium: '#FF6B8A', heavy: '#D10056', super: '#8B0045' };
+const PER_FLOW = { light: '#FFD6E8', medium: '#FF84BA', heavy: '#E0528A', super: '#B2054C' };
 function renderPeriod() {
   renderPeriodCalendar();
   const pr = predictPeriod();
@@ -3134,7 +3274,7 @@ function renderTasksChart() {
   charts.tasks = new Chart(ctx, {
     type: 'bar',
     data: { labels: days, datasets: [
-      { label: '已完成', data: wd.map(x => x.d), backgroundColor: '#FF6B8A', borderRadius: 4 },
+      { label: '已完成', data: wd.map(x => x.d), backgroundColor: '#FF84BA', borderRadius: 4 },
       { label: '未完成', data: wd.map(x => x.t - x.d), backgroundColor: 'rgba(240,230,216,0.6)', borderRadius: 4 }
     ]},
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
@@ -3376,7 +3516,7 @@ function expItemHtml(x) {
   const emo = isEmotional(x);
   const catLabel = (x.cat || '其他') + (x.sub ? ' · ' + x.sub : '');
   const id = x.id;
-  return '<div class="cb" style="cursor:default"><div style="font-size:9px;font-weight:500;flex:1;min-width:0;word-break:break-word">' + catLabel + (emo ? ' <span title="情绪化消费">😰</span>' : '') +
+  return '<div class="cb exp-item" style="cursor:default"><div style="font-size:9px;font-weight:500;flex:1;min-width:0;word-break:break-word">' + catLabel + (emo ? ' <span title="情绪化消费">😰</span>' : '') +
     '<span style="font-size:7px;color:var(--text3);display:block;margin-top:2px">' + (x.date || '') + ' ' + escHtml(x.note || '') + '</span></div>' +
     '<span style="font-weight:600;color:' + (x.type === 'i' ? 'var(--accent)' : 'var(--text)') + ';white-space:nowrap;margin-left:6px">' + (x.type === 'i' ? '+' : '-') + '¥' + parseFloat(x.amt).toFixed(2) + '</span>' +
     '<div class="txn-acts">' +
@@ -3976,7 +4116,7 @@ function renderWeightChart() {
   if (!ctx) return;
   if (charts.weight) charts.weight.destroy();
   const d = r.slice(0, 30).reverse();
-  charts.weight = new Chart(ctx, { type: 'line', data: { labels: d.map(x => x.date.slice(5)), datasets: [{ label: '体重(kg)', data: d.map(x => x.weight), borderColor: '#FF6B8A', backgroundColor: 'rgba(255,107,138,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } } } });
+  charts.weight = new Chart(ctx, { type: 'line', data: { labels: d.map(x => x.date.slice(5)), datasets: [{ label: '体重(kg)', data: d.map(x => x.weight), borderColor: '#FF84BA', backgroundColor: 'rgba(255,132,186,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } } } });
 }
 function addHealth() {
   const w = parseFloat(document.getElementById('hWeight').value);
@@ -4843,7 +4983,7 @@ let shopEditingId = null;
 let shopTempDishes = [];
 function getShops() { return Store.get('foodShops', []) || []; }
 function saveShops(list) { Store.set('foodShops', list); }
-function starHtml(n) { return '<span style="color:#FFB347">' + '⭐'.repeat(parseInt(n || 0)) + '</span>'; }
+function starHtml(n) { return '<span style="color:#FFCC4D">' + '⭐'.repeat(parseInt(n || 0)) + '</span>'; }
 function renderShops() {
   const el = document.getElementById('foodShopList'); if (!el) return;
   const q = (document.getElementById('shopSearch')?.value || '').toLowerCase();
@@ -4874,7 +5014,7 @@ function renderShopDishes() {
   const el = document.getElementById('shopDishList');
   if (!el) return;
   if (shopTempDishes.length === 0) { el.innerHTML = '<span style="font-size:12px;color:var(--text3)">暂无菜品，可在下方添加</span>'; return; }
-  el.innerHTML = shopTempDishes.map((d, i) => '<div class="ig" style="margin:4px 0"><input class="in" value="' + escHtml(d.name) + '" onchange="editShopDishName(' + i + ',this.value)" style="flex:1"><select class="in" onchange="editShopDishRate(' + i + ',this.value)" style="flex:0 0 auto;width:90px">' + [5,4,3,2,1].map(n => '<option value="' + n + '"' + ((d.rate || 5) == n ? ' selected' : '') + '>' + '⭐'.repeat(n) + '</option>').join('') + '</select><button class="btn-sm btn-o" style="color:var(--d)" onclick="delShopDish(' + i + ')"><i class="fas fa-times"></i></button></div>').join('');
+  el.innerHTML = shopTempDishes.map((d, i) => '<div class="ig" style="margin:4px 0"><input class="in" value="' + escHtml(d.name) + '" onchange="editShopDishName(' + i + ',this.value)" style="flex:0 0 250px"><select class="in" onchange="editShopDishRate(' + i + ',this.value)" style="flex:0 0 auto;width:90px">' + [5,4,3,2,1].map(n => '<option value="' + n + '"' + ((d.rate || 5) == n ? ' selected' : '') + '>' + '⭐'.repeat(n) + '</option>').join('') + '</select><button class="btn-sm btn-o" style="color:var(--d)" onclick="delShopDish(' + i + ')"><i class="fas fa-times"></i></button></div>').join('');
 }
 function addShopDish() {
   const inp = document.getElementById('shopNewDish'); const n = inp.value.trim(); if (!n) return;
@@ -5039,10 +5179,10 @@ function renderDataCharts() {
   const td = Array(7).fill(0);
   for (let i = 6; i >= 0; i--) { const d = new Date(t); d.setDate(d.getDate() - i); td[6 - i] = tasks.filter(x => x.date === d.toISOString().slice(0, 10) && x.done).length; }
   const ctx1 = document.getElementById('trendChart');
-  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#FF6B8A', backgroundColor: 'rgba(255,107,138,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 } } } } } }); }
+  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#FF84BA', backgroundColor: 'rgba(255,132,186,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 } } } } } }); }
   const cats = {}; tasks.forEach(x => { if (!x.done) { cats[x.pri || '其他'] = (cats[x.pri || '其他'] || 0) + 1; } });
   const ctx2 = document.getElementById('distChart');
-  if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 8, font: { size: 11 } } } } } }); }
+  if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#FF84BA','#BDB2FF','#FFCC4D','#E0528A','#8BC4A0','#FFA3CB'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 8, font: { size: 11 } } } } } }); }
 }
 function weekRange() {
   const t = new Date(), ws = new Date(t); ws.setDate(t.getDate() - t.getDay());
@@ -5980,7 +6120,7 @@ function fillExpSubs() {
 // ============================================================
 // 记账：饼图分级 + 情绪化消费
 // ============================================================
-const EXP_COLORS = ['#FF6B8A','#8140DC','#FFB347','#FFD4A8','#8BC4A0','#E86B8A','#8C6BB0','#BAA0AA','#56CCF2','#F2994A','#BB6BD9','#27AE60','#E67E22','#2E86C1','#7DCEA0','#C0392B'];
+const EXP_COLORS = ['#FF84BA','#BDB2FF','#FFCC4D','#E0528A','#8BC4A0','#FFA3CB','#C9B8E8','#B8A6B0','#56CCF2','#F2994A','#BB6BD9','#27AE60','#E67E22','#2E86C1','#7DCEA0','#C0392B'];
 const EMOTIONAL_KEYWORDS = ['奶茶','咖啡','星巴克','甜品','蛋糕','巧克力','零食','薯片','冰淇淋','雪糕','酒','啤酒','盲盒','抽卡','直播','游戏','电影','ktv','KTV','按摩','spa','SPA','冲动','心情','难过','安慰','礼物','剁手','夜宵','烧烤','火锅','炸鸡','外卖','口红','包包','演唱会','周边','手办','彩票','赌博','双十一','双11','618','直播间','种草','拔草'];
 function isEmotional(x) {
   if (!x || x.type !== 'e') return false;
