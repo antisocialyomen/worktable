@@ -94,6 +94,8 @@ a{color:var(--accent)}input,textarea,select,button{font-family:inherit;font-size
 #homeCombo{position:relative}
 #homeCombo .lucky-deco{position:absolute;top:-32px;right:-4px;width:118px;height:auto;pointer-events:none;user-select:none;z-index:2}
 .lucky-greet{display:none}
+.yb-cd{position:relative;display:inline-block;vertical-align:baseline}
+.lucky-yb{display:none}
 #notesList{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:10px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
@@ -268,9 +270,10 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 @media(max-width:768px){
   /* 移动端：渐变墙纸（与桌面端一致） */
   :root{--h:48px;--radius:12px;--radius-sm:8px;--radius-lg:16px}
-  /* 移动端：Labubu 放在问候语标题旁，隐藏卡片边缘装饰 */
+  /* 移动端：Labubu 放在年份倒数文字上方，隐藏卡片边缘装饰 */
   #homeCombo .lucky-deco{display:none}
-  .lucky-greet{display:block;width:46px;height:auto;pointer-events:none;user-select:none;flex-shrink:0}
+  .lucky-yb{display:block;position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);width:100%;height:auto;pointer-events:none;user-select:none}
+  .yb-wrap{margin-top:72px!important}
   .app{height:100dvh;height:calc(100dvh - env(safe-area-inset-top))}
   .sidebar{display:flex;position:relative;left:auto;top:auto;height:auto;width:36px;background:transparent;border-right:1px solid rgba(255,255,255,0.25);z-index:100;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
   [data-theme=dark] .sidebar{background:transparent;border-right-color:rgba(52,34,58,0.4)}
@@ -658,12 +661,11 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
         <div style="margin-bottom:16px;position:relative">
           <div style="display:flex;align-items:center;gap:8px">
             <h1 id="greeting" style="font-size:21px;font-weight:700">早上好 👋</h1>
-            <img src="assets/lucky.png" alt="" class="lucky-greet">
           </div>
           <p style="color:var(--text2);margin-top:2px;font-size:13px">今天也要高效工作，享受生活 ✨</p>
           <div class="yb-wrap">
             <div class="yb-row">
-              <div class="yb-top"><span class="yb-label" id="ybYearLabel">2026年</span><span class="yb-data"><span class="pixel" id="ybYearPct">0%</span> / 2027还有<span class="pixel" id="ybYearDays">0</span>天</span></div>
+              <div class="yb-top"><span class="yb-label" id="ybYearLabel">2026年</span><span class="yb-data"><span class="pixel" id="ybYearPct">0%</span> / <span class="yb-cd"><img src="assets/lucky.png" alt="" class="lucky-yb">2027还有<span class="pixel" id="ybYearDays">0</span>天</span></span></div>
               <div class="dotbar" id="ybYearFill"></div>
             </div>
             <div class="yb-row">
@@ -688,8 +690,8 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           <div id="homeComboBody"></div>
         </div>
         <div class="card" id="homePeriod" style="margin-top:12px;display:none;border-left:4px solid var(--primary);background:linear-gradient(135deg,var(--primary-bg),transparent)"><div class="card-hd"><h3>🩸 经期提醒</h3><span class="btn-sm btn-o" onclick="go('period')">记录 / 详情 →</span></div><div id="homePeriodTip" style="font-size:14px;line-height:1.7"></div></div>
-        <div class="card" id="homeCountdown" style="margin-top:12px;display:none;border-left:4px solid var(--s);background:#FFE97D"><div class="card-hd"><h3>⏳ 倒数日提醒</h3><span class="btn-sm btn-o" onclick="go('countdown')">管理 →</span></div><div id="homeCountdownTip" style="font-size:14px;line-height:1.6"></div></div>
-        <div class="card" id="homeReminder" style="margin-top:12px;border-left:4px solid var(--w);background:#FFE97D"><div class="card-hd"><h3>🔔 提醒中心</h3><div style="margin-left:auto;display:flex;gap:6px"><button class="btn-sm btn-o" id="remNotifBtn" onclick="toggleRemNotif()"><i class="fas fa-bell"></i> 通知</button><button class="btn-sm btn-o" onclick="openReminderSettings()"><i class="fas fa-cog"></i> 设置</button></div></div><div id="reminderList" style="font-size:14px;line-height:1.6"></div></div>
+        <div class="card" id="homeCountdown" style="margin-top:12px;display:none;border-left:4px solid var(--s);background:#FFF4BF"><div class="card-hd"><h3>⏳ 倒数日提醒</h3><span class="btn-sm btn-o" onclick="go('countdown')">管理 →</span></div><div id="homeCountdownTip" style="font-size:14px;line-height:1.6"></div></div>
+        <div class="card" id="homeReminder" style="margin-top:12px;border-left:4px solid var(--w);background:#FFF4BF"><div class="card-hd"><h3>🔔 提醒中心</h3><div style="margin-left:auto;display:flex;gap:6px"><button class="btn-sm btn-o" id="remNotifBtn" onclick="toggleRemNotif()"><i class="fas fa-bell"></i> 通知</button><button class="btn-sm btn-o" onclick="openReminderSettings()"><i class="fas fa-cog"></i> 设置</button></div></div><div id="reminderList" style="font-size:14px;line-height:1.6"></div></div>
       </div>
 
       <!-- TASKS -->
