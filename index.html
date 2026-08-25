@@ -438,9 +438,12 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：购物项输入框 */
   #shopIn{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
   /* 移动端：所有搜索输入框 */
-  #collSearch,#noteSearch,#shopSearch,#topicSearch,#matSearch{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  #collSearch,#noteSearch,#topicSearch{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  #matSearch{width:90px!important;flex:0 0 90px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  #shopSearch{width:90px!important;flex:0 0 90px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important;line-height:1.2!important}
   /* 移动端：带内联样式的输入框统一2px 5px、11px */
-  #cdSearch,#bookSearch,#evDate{padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  #cdSearch,#evDate{padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  #bookSearch{padding:3px 7px!important;font-size:11px!important;height:auto!important}
 
   /* 移动端：账单明细条目标题、金额字号9px，日期7px，居左对齐 */
   #expRecent .cb>div:first-child,#expList .cb>div:first-child{text-align:left!important}
@@ -459,7 +462,12 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：热量计算餐次下拉框55px、食材输入框弹性伸展 */
   #calMeal{width:55px!important;flex:0 0 55px!important}
   #calFood{flex:1!important;min-width:80px!important}
-  .calAddRow{flex-basis:100%;display:flex;justify-content:flex-end;gap:3px;align-items:center}
+  .calAddRow{flex-basis:100%;display:flex;justify-content:flex-end;gap:3px;align-items:center;margin-top:8px}
+  /* 移动端：摄入总热量各餐并排排列 */
+  #calByMeal{display:flex!important;flex-wrap:nowrap;gap:4px;justify-content:center;overflow-x:auto}
+  #calByMeal .si{flex:0 0 auto}
+  /* 移动端：吃什么展开全部按钮 */
+  .eat-toggle{font-size:9px!important;padding:2px 4px!important}
   /* 移动端：日期按钮 */
   .dt-date-btn{font-size:11px!important;padding:2px 5px!important;width:auto!important;height:auto!important}
   .dt-date-btn .dt-btn-text{font-size:9px}
@@ -467,6 +475,9 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #billTotals span{font-size:9px!important}
   /* 移动端：学习-中文/英语积累 */
   .study-word{font-size:14px!important}
+  .study-main{font-size:26px!important}
+  .study-main.study-long{font-size:19px!important}
+  .study-main.study-long2{font-size:15px!important}
   .study-def{font-size:12px!important;padding:2px 7px!important}
   /* 移动端：卡片间距3px */
   .card{margin-top:3px!important}
@@ -519,6 +530,14 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #habitSelect{width:70px!important;flex:0 0 70px!important}
   /* 移动端：吃什么分类按钮 */
   .eat-cat{font-size:12px!important;padding:2px 5px!important}
+  /* 移动端：数据图表卡片与周报生成同宽，内容等比缩小 */
+  #p-data .g2{grid-template-columns:1fr!important}
+  .chart-box{height:150px!important}
+  /* 移动端：所有弹窗背景透明度70% */
+  .modal{background:rgba(248,244,255,0.7)!important}
+  [data-theme=dark] .modal{background:rgba(52,34,58,0.7)!important}
+  .dt-picker{background:rgba(248,244,255,0.7)!important}
+  [data-theme=dark] .dt-picker{background:rgba(52,34,58,0.7)!important}
 }
 /* ===== FOOD MODULE ===== */
 .food-tab{display:block}
@@ -588,8 +607,10 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 /* ===== 学习模块 ===== */
 .study-word{text-align:center;padding:20px 8px}
 .study-main{font-size:30px;font-weight:800;color:var(--primary);line-height:1.4;word-break:break-all;white-space:pre-line}
+.study-main.study-long{font-size:24px}
+.study-main.study-long2{font-size:20px}
 .study-py{font-size:15px;color:var(--accent);margin-top:8px;letter-spacing:.5px}
-.study-def{font-size:15px;color:var(--text);margin-top:12px;line-height:1.8;text-align:left;background:var(--primary-bg);border-radius:12px;padding:14px 16px}
+.study-def{font-size:15px;color:var(--text);margin-top:12px;line-height:1.8;text-align:left;background:var(--accent-light);border-radius:12px;padding:14px 16px}
 .study-src{font-size:12px;color:var(--text3);margin-top:8px;text-align:right}
 .study-actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
 .study-counter{text-align:center;font-size:13px;color:var(--text2);margin-top:10px}
@@ -749,7 +770,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
                   <option value="e">支出</option>
                   <option value="i">收入</option>
                 </select>
-                <input class="in" id="expNl" placeholder="例：午餐20元" style="flex:0 0 auto;width:100px;color:var(--text3)" onkeydown="if(event.key==='Enter')applyNl()">
+                <input class="in" id="expNl" placeholder="例：午餐20元 / 工资5000" style="flex:0 0 auto;width:100px;color:var(--text3)" oninput="autoDetectType()" onkeydown="if(event.key==='Enter')applyNl()">
                 <button class="btn-sm btn-o" onclick="applyNl()" style="flex:0 0 auto">识别</button>
               </div>
               <div class="ig">
@@ -863,7 +884,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           </div>
         </div>
         <div class="life-tab" id="l-shopping" style="display:none"><div class="card"><div class="card-hd"><h3>🛒 购物清单</h3></div><div class="ig"><input class="in" id="shopIn" placeholder="添加购物项..." onkeydown="if(event.key==='Enter') addShop()"><select class="in" id="shopCat" style="flex:0 0 auto;width:100px"><option value="食品">食品</option><option value="日用品">日用品</option><option value="服饰">服饰</option><option value="数码">数码</option><option value="其他">其他</option></select><button class="btn btn-p" onclick="addShop()"><i class="fas fa-plus"></i></button></div><div id="shopList"></div></div></div>
-        <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="card-hd"><h3>📚 书影音收藏</h3><button class="btn-sm btn-p" onclick="addColl()"><i class="fas fa-plus"></i> 添加</button></div><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="tv">📺 电视剧</option><option value="music">🎵 音乐</option></select></div><div id="collList" style="margin-top:8px"></div></div></div>
+        <div class="life-tab" id="l-collection" style="display:none"><div class="card"><div class="ig"><input class="in" id="collSearch" placeholder="搜索..." oninput="renderColl()"><select class="in" id="collType" style="flex:0 0 auto;width:100px" onchange="renderColl()"><option value="all">全部</option><option value="book">📖 书籍</option><option value="movie">🎬 电影</option><option value="tv">📺 电视剧</option><option value="music">🎵 音乐</option></select><button class="btn-sm btn-p" onclick="addColl()" style="flex:0 0 auto"><i class="fas fa-plus"></i> 添加</button></div><div id="collList" style="margin-top:8px"></div></div></div>
 
       </div>
 
@@ -1049,7 +1070,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
       <!-- DATA -->
       <div class="page" id="p-data">
         <div class="card"><div class="card-hd"><h3>📋 周报生成</h3><div style="display:flex;gap:6px"><button class="btn-sm btn-p" id="genReportBtn" onclick="genReport()"><i class="fas fa-file-alt"></i> 生成周报</button><button class="btn-sm btn-o" id="reGenReportBtn" onclick="genReport(true)" style="display:none"><i class="fas fa-redo"></i> 重新生成</button></div></div><div id="weeklyReport" style="font-size:14px;color:var(--text2);white-space:pre-wrap;margin-top:8px"></div></div>
-        <div class="g2"><div class="card"><div class="card-hd"><h3>📈 任务完成趋势</h3></div><div style="height:220px"><canvas id="trendChart"></canvas></div></div><div class="card"><div class="card-hd"><h3>🎯 任务分类分布</h3></div><div style="height:220px"><canvas id="distChart"></canvas></div></div></div>
+        <div class="g2"><div class="card"><div class="card-hd"><h3>📈 任务完成趋势</h3></div><div class="chart-box" style="height:220px"><canvas id="trendChart"></canvas></div></div><div class="card"><div class="card-hd"><h3>🎯 任务分类分布</h3></div><div class="chart-box" style="height:220px"><canvas id="distChart"></canvas></div></div></div>
       </div>
 
       <!-- FILES -->
@@ -3519,6 +3540,25 @@ function cnToNum(str) {
   }
   return total > 0 ? total : null;
 }
+function matchKw(txt, kw) {
+  const sorted = kw.slice().sort((a, b) => b[0].length - a[0].length);
+  for (const row of sorted) { if (txt.indexOf(row[0]) > -1) return row; }
+  return null;
+}
+function detectNlType(txt) {
+  if (matchKw(txt, NL_KW_I)) return 'i';
+  if (matchKw(txt, NL_KW_E)) return 'e';
+  for (const c of INCOME_CATS1) { if (txt.indexOf(c) > -1) return 'i'; }
+  for (const c of CATS1) { if (txt.indexOf(c) > -1) return 'e'; }
+  return 'e';
+}
+function autoDetectType() {
+  const raw = (document.getElementById('expNl') && document.getElementById('expNl').value || '').trim();
+  if (!raw) return;
+  const type = detectNlType(raw);
+  const typeEl = document.getElementById('expType');
+  if (typeEl && typeEl.value !== type) { typeEl.value = type; onExpTypeChange(); }
+}
 function applyNl() {
   const raw = (document.getElementById('expNl') && document.getElementById('expNl').value || '').trim();
   if (!raw) return toast('请输入自然语言，如：晚餐30 / 买药20 / 演唱会两千');
@@ -3531,13 +3571,17 @@ function applyNl() {
   let am = txt.match(/(\d+(?:\.\d+)?)/);
   if (am) amt = parseFloat(am[1]);
   else { const cn = cnToNum(txt); if (cn) amt = cn; }
-  const type = document.getElementById('expType').value;
+  const type = detectNlType(raw);
+  const typeEl = document.getElementById('expType');
+  if (typeEl) typeEl.value = type;
   const allCats = type === 'i' ? INCOME_CATS1 : CATS1;
   for (const c of allCats) { if (raw.indexOf(c) > -1) { cat = c; break; } }
   const kw = type === 'i' ? NL_KW_I : NL_KW_E;
   if (!cat) {
-    for (const row of kw) { if (raw.indexOf(row[0]) > -1) { cat = row[1]; sub = row[2] || ''; break; } }
-  } else {
+    const m = matchKw(raw, kw);
+    if (m) { cat = m[1]; sub = m[2] || ''; }
+  }
+  if (cat) {
     const subs = type === 'i' ? getIncomeSubs()[cat] : getExpSubs()[cat];
     for (const s of (subs || [])) { if (raw.indexOf(s) > -1) { sub = s; break; } }
   }
@@ -4873,10 +4917,10 @@ function renderEatItems() {
     return;
   }
   if (eatItemsOpen) {
-    wrap.innerHTML = '<span class="eat-item" style="background:var(--accent-light);color:var(--accent);cursor:pointer" onclick="toggleEatItems()">收起 ▴</span>' + cat.items.map((it, i) => '<span class="eat-item">' + it + ' <span class="x" onclick="delEatItem(\'' + cat.name + '\',' + i + ')">✕</span></span>').join('');
+    wrap.innerHTML = '<span class="eat-item eat-toggle" style="background:var(--accent-light);color:var(--accent);cursor:pointer" onclick="toggleEatItems()">收起 ▴</span>' + cat.items.map((it, i) => '<span class="eat-item">' + it + ' <span class="x" onclick="delEatItem(\'' + cat.name + '\',' + i + ')">✕</span></span>').join('');
   } else {
     const preview = cat.items.slice(0, 8).join('、');
-    wrap.innerHTML = '<span style="font-size:12px;color:var(--text2)">共 ' + cat.items.length + ' 个词条：' + preview + (cat.items.length > 8 ? '…' : '') + '</span><span class="eat-item" style="background:var(--accent-light);color:var(--accent);cursor:pointer;margin-left:6px" onclick="toggleEatItems()">展开全部 ▾</span>';
+    wrap.innerHTML = '<span style="font-size:12px;color:var(--text2)">共 ' + cat.items.length + ' 个词条：' + preview + (cat.items.length > 8 ? '…' : '') + '</span><span class="eat-item eat-toggle" style="background:var(--accent-light);color:var(--accent);cursor:pointer;margin-left:6px" onclick="toggleEatItems()">展开全部 ▾</span>';
   }
 }
 function toggleEatItems() { eatItemsOpen = !eatItemsOpen; renderEatItems(); }
@@ -5237,10 +5281,10 @@ function renderDataCharts() {
   const td = Array(7).fill(0);
   for (let i = 6; i >= 0; i--) { const d = new Date(t); d.setDate(d.getDate() - i); td[6 - i] = tasks.filter(x => x.date === dStr(d) && x.done).length; }
   const ctx1 = document.getElementById('trendChart');
-  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#9B7EDE', backgroundColor: 'rgba(155,126,222,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 } } } } } }); }
+  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#9B7EDE', backgroundColor: 'rgba(155,126,222,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 } } }, x: { grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 } } } } } }); }
   const cats = {}; tasks.forEach(x => { if (!x.done) { cats[x.pri || '其他'] = (cats[x.pri || '其他'] || 0) + 1; } });
   const ctx2 = document.getElementById('distChart');
-  if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#9B7EDE','#5FB8A8','#FFC349','#FF8383','#4CAF85','#B39BE8'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 8, font: { size: 11 } } } } } }); }
+  if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#9B7EDE','#5FB8A8','#FFC349','#FF8383','#4CAF85','#B39BE8'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: window.innerWidth <= 768 ? 8 : 11 } } } } } }); }
 }
 function weekRange() {
   const t = new Date(), ws = new Date(t); ws.setDate(t.getDate() - t.getDay());
@@ -15219,8 +15263,12 @@ function renderCn() {
     const s = cnState();
     const it = STUDY_CN[s.idx];
     if (!it) return;
+    const main = document.getElementById('cnMain');
+    main.textContent = it.w;
+    const n = (it.w || '').length;
+    main.classList.toggle('study-long', n > 26);
+    main.classList.toggle('study-long2', n > 60);
     document.getElementById('cnKind').textContent = it.k;
-    document.getElementById('cnMain').textContent = it.w;
     document.getElementById('cnPy').textContent = it.py || '';
     document.getElementById('cnDef').textContent = it.def || '';
     document.getElementById('cnSrc').textContent = it.src ? '—— ' + it.src : '';
@@ -15264,7 +15312,7 @@ function renderEn() {
 }
 function switchEn() {
   const { s, pool } = enState();
-  const unseen = pool.filter((_, i) => !s.seen.includes(i));
+  const unseen = pool.map((_, i) => i).filter(i => !s.seen.includes(i));
   const idx = unseen.length ? unseen[Math.floor(Math.random() * unseen.length)] : Math.floor(Math.random() * pool.length);
   s.idx = idx; if (!s.seen.includes(idx)) s.seen.push(idx);
   Store.set('studyEn', s); renderEn();
@@ -15323,63 +15371,171 @@ const CATS1 = ['餐饮','交通','购物','娱乐','学习','医疗','住房','�
 const INCOME_CATS1 = ['薪资','兼职','奖金','理财盈亏','收红包','中奖','借入','报销','卖二手','收礼','补贴','其他'];
 // 自然语言关键词字典：[关键词, 一级分类, 二级分类]（支出）
 const NL_KW_E = [
+  // 餐饮
   ['早饭', '餐饮', '早餐'], ['早餐', '餐饮', '早餐'],
   ['午饭', '餐饮', '午餐'], ['中饭', '餐饮', '午餐'], ['午餐', '餐饮', '午餐'],
-  ['晚饭', '餐饮', '晚餐'], ['夜宵', '餐饮', '晚餐'], ['晚餐', '餐饮', '晚餐'],
+  ['晚饭', '餐饮', '晚餐'], ['夜宵', '餐饮', '晚餐'], ['晚餐', '餐饮', '晚餐'], ['宵夜', '餐饮', '晚餐'],
   ['零食', '餐饮', '零食'],
   ['奶茶', '餐饮', '饮品'], ['咖啡', '餐饮', '饮品'], ['饮料', '餐饮', '饮品'], ['饮品', '餐饮', '饮品'],
+  ['矿泉水', '餐饮', '饮品'], ['酸奶', '餐饮', '饮品'], ['牛奶', '餐饮', '饮品'], ['果汁', '餐饮', '饮品'],
+  ['啤酒', '餐饮', '饮品'], ['红酒', '餐饮', '饮品'], ['白酒', '餐饮', '饮品'], ['酒', '餐饮', '饮品'], ['茶叶', '餐饮', '饮品'], ['茶', '餐饮', '饮品'],
   ['水果', '餐饮', '果蔬'], ['买菜', '餐饮', '果蔬'], ['菜', '餐饮', '果蔬'], ['果蔬', '餐饮', '果蔬'],
+  ['蔬菜', '餐饮', '果蔬'], ['鸡蛋', '餐饮', '果蔬'], ['猪肉', '餐饮', '果蔬'], ['牛肉', '餐饮', '果蔬'],
+  ['羊肉', '餐饮', '果蔬'], ['鸡肉', '餐饮', '果蔬'], ['鱼', '餐饮', '果蔬'], ['虾', '餐饮', '果蔬'], ['海鲜', '餐饮', '果蔬'],
   ['生鲜', '餐饮', '生鲜'],
   ['油盐', '餐饮', '粮油调味'], ['调料', '餐饮', '粮油调味'], ['粮油', '餐饮', '粮油调味'],
+  ['酱油', '餐饮', '粮油调味'], ['醋', '餐饮', '粮油调味'], ['盐', '餐饮', '粮油调味'], ['糖', '餐饮', '粮油调味'],
+  ['味精', '餐饮', '粮油调味'], ['鸡精', '餐饮', '粮油调味'], ['辣椒', '餐饮', '粮油调味'],
+  ['葱', '餐饮', '粮油调味'], ['姜', '餐饮', '粮油调味'], ['蒜', '餐饮', '粮油调味'],
+  ['大米', '餐饮', '粮油调味'], ['面粉', '餐饮', '粮油调味'], ['食用油', '餐饮', '粮油调味'], ['油', '餐饮', '粮油调味'],
   ['蛋糕', '餐饮', '甜品'], ['甜品', '餐饮', '甜品'], ['点心', '餐饮', '甜品'],
-  ['外卖', '餐饮', '外卖'],
-  ['公交', '交通', '公交地铁'], ['地铁', '交通', '公交地铁'], ['地铁票', '交通', '公交地铁'],
-  ['打车', '交通', '打车'], ['滴滴', '交通', '打车'], ['出租车', '交通', '打车'],
-  ['高铁', '交通', '高铁火车'], ['火车', '交通', '高铁火车'], ['动车', '交通', '高铁火车'],
+  ['冰淇淋', '餐饮', '甜品'], ['面包', '餐饮', '甜品'], ['饼干', '餐饮', '甜品'], ['糖果', '餐饮', '甜品'], ['巧克力', '餐饮', '甜品'],
+  ['外卖', '餐饮', '外卖'], ['点外卖', '餐饮', '外卖'],
+  ['火锅', '餐饮', '其他'], ['烧烤', '餐饮', '其他'], ['烤串', '餐饮', '其他'], ['麻辣烫', '餐饮', '其他'],
+  ['米线', '餐饮', '其他'], ['面条', '餐饮', '其他'], ['面', '餐饮', '其他'], ['粉', '餐饮', '其他'],
+  ['饺子', '餐饮', '其他'], ['馄饨', '餐饮', '其他'], ['包子', '餐饮', '其他'], ['油条', '餐饮', '其他'],
+  ['豆浆', '餐饮', '其他'], ['煎饼', '餐饮', '其他'], ['汉堡', '餐饮', '其他'], ['披萨', '餐饮', '其他'],
+  ['寿司', '餐饮', '其他'], ['日料', '餐饮', '其他'], ['西餐', '餐饮', '其他'], ['快餐', '餐饮', '其他'],
+  ['食堂', '餐饮', '其他'], ['聚餐', '餐饮', '其他'], ['请客', '餐饮', '其他'], ['吃饭', '餐饮', '其他'],
+  ['便当', '餐饮', '其他'], ['盒饭', '餐饮', '其他'], ['小吃', '餐饮', '其他'], ['泡面', '餐饮', '其他'], ['方便面', '餐饮', '其他'],
+  // 交通
+  ['公交', '交通', '公交地铁'], ['地铁', '交通', '公交地铁'], ['地铁票', '交通', '公交地铁'], ['公交卡', '交通', '公交地铁'], ['地铁卡', '交通', '公交地铁'],
+  ['打车', '交通', '打车'], ['滴滴', '交通', '打车'], ['出租车', '交通', '打车'], ['网约车', '交通', '打车'], ['顺风车', '交通', '打车'], ['拼车', '交通', '打车'], ['车费', '交通', '打车'],
+  ['高铁', '交通', '高铁火车'], ['火车', '交通', '高铁火车'], ['动车', '交通', '高铁火车'], ['车票', '交通', '高铁火车'], ['火车票', '交通', '高铁火车'],
   ['机票', '交通', '飞机'], ['飞机', '交通', '飞机'], ['航班', '交通', '飞机'],
-  ['加油', '交通', '加油'], ['油价', '交通', '加油'],
-  ['停车', '交通', '停车'], ['停车费', '交通', '停车'],
-  ['单车', '交通', '共享单车'], ['共享单车', '交通', '共享单车'], ['骑行', '交通', '共享单车'],
-  ['衣服', '购物', '服饰'], ['服饰', '购物', '服饰'], ['买衣服', '购物', '服饰'],
+  ['加油', '交通', '加油'], ['油价', '交通', '加油'], ['油费', '交通', '加油'],
+  ['停车', '交通', '停车'], ['停车费', '交通', '停车'], ['车位费', '交通', '停车'],
+  ['单车', '交通', '共享单车'], ['共享单车', '交通', '共享单车'], ['骑行', '交通', '共享单车'], ['电动车', '交通', '共享单车'],
+  ['过路费', '交通', '其他'], ['高速费', '交通', '其他'], ['路费', '交通', '其他'], ['轮渡', '交通', '其他'], ['船票', '交通', '其他'],
+  // 购物
+  ['买衣服', '购物', '服饰'], ['衣服', '购物', '服饰'], ['服饰', '购物', '服饰'],
+  ['买鞋', '购物', '服饰'], ['鞋子', '购物', '服饰'], ['裤子', '购物', '服饰'], ['裙子', '购物', '服饰'],
+  ['外套', '购物', '服饰'], ['衬衫', '购物', '服饰'], ['毛衣', '购物', '服饰'], ['羽绒服', '购物', '服饰'],
+  ['袜子', '购物', '服饰'], ['帽子', '购物', '服饰'], ['围巾', '购物', '服饰'], ['手套', '购物', '服饰'],
+  ['内衣', '购物', '服饰'], ['睡衣', '购物', '服饰'], ['西装', '购物', '服饰'], ['连衣裙', '购物', '服饰'],
+  ['卫衣', '购物', '服饰'], ['牛仔裤', '购物', '服饰'], ['运动鞋', '购物', '服饰'], ['高跟鞋', '购物', '服饰'],
+  ['凉鞋', '购物', '服饰'], ['拖鞋', '购物', '服饰'], ['T恤', '购物', '服饰'],
   ['手机', '购物', '数码'], ['电脑', '购物', '数码'], ['数码', '购物', '数码'],
-  ['化妆品', '购物', '美妆'], ['美妆', '购物', '美妆'],
-  ['日用品', '购物', '日用品'], ['杂货', '购物', '日用品'],
-  ['家居', '购物', '家居'], ['家具', '购物', '家居'],
-  ['鞋', '购物', '鞋包'], ['包', '购物', '鞋包'],
-  ['电影', '娱乐', '电影'], ['看电影', '娱乐', '电影'],
-  ['演出', '娱乐', '演出'], ['演唱会', '娱乐', '演出'], ['话剧', '娱乐', '演出'], ['音乐节', '娱乐', '演出'],
-  ['游戏', '娱乐', '游戏'], ['手游', '娱乐', '游戏'],
-  ['会员', '娱乐', '会员'], ['视频会员', '娱乐', '会员'],
-  ['旅游', '娱乐', '旅游'], ['旅行', '娱乐', '旅游'], ['出游', '娱乐', '旅游'],
-  ['健身', '娱乐', '健身'], ['健身卡', '娱乐', '健身'], ['运动', '娱乐', '健身'],
-  ['书', '学习', '书籍'], ['买书', '学习', '书籍'], ['书籍', '学习', '书籍'],
-  ['课程', '学习', '课程'], ['网课', '学习', '课程'], ['培训班', '学习', '课程'],
-  ['文具', '学习', '文具'],
-  ['考试', '学习', '考试'], ['报名费', '学习', '考试'],
-  ['培训', '学习', '培训'],
-  ['门诊', '医疗', '门诊'], ['看病', '医疗', '门诊'], ['挂号', '医疗', '门诊'],
-  ['买药', '医疗', '药品'], ['药', '医疗', '药品'], ['药品', '医疗', '药品'],
-  ['体检', '医疗', '体检'],
-  ['牙', '医疗', '牙科'], ['牙科', '医疗', '牙科'], ['看牙', '医疗', '牙科'],
-  ['房租', '住房', '房租'], ['租金', '住房', '房租'],
+  ['耳机', '购物', '数码'], ['平板', '购物', '数码'], ['笔记本', '购物', '数码'],
+  ['键盘', '购物', '数码'], ['鼠标', '购物', '数码'], ['显示器', '购物', '数码'],
+  ['相机', '购物', '数码'], ['镜头', '购物', '数码'], ['手表', '购物', '数码'],
+  ['充电器', '购物', '数码'], ['数据线', '购物', '数码'], ['充电宝', '购物', '数码'], ['移动电源', '购物', '数码'],
+  ['U盘', '购物', '数码'], ['硬盘', '购物', '数码'], ['路由器', '购物', '数码'], ['智能手表', '购物', '数码'], ['手环', '购物', '数码'],
+  ['电视', '购物', '数码'], ['冰箱', '购物', '数码'], ['洗衣机', '购物', '数码'], ['空调', '购物', '数码'], ['电饭煲', '购物', '数码'], ['家电', '购物', '数码'],
+  ['化妆品', '购物', '美妆'], ['美妆', '购物', '美妆'], ['口红', '购物', '美妆'], ['面膜', '购物', '美妆'],
+  ['护肤品', '购物', '美妆'], ['洗发水', '购物', '美妆'], ['沐浴露', '购物', '美妆'], ['洗面奶', '购物', '美妆'],
+  ['香水', '购物', '美妆'], ['粉底', '购物', '美妆'], ['眼影', '购物', '美妆'], ['防晒', '购物', '美妆'],
+  ['精华', '购物', '美妆'], ['乳液', '购物', '美妆'], ['爽肤水', '购物', '美妆'],
+  ['日用品', '购物', '日用品'], ['杂货', '购物', '日用品'], ['纸巾', '购物', '日用品'], ['洗衣液', '购物', '日用品'],
+  ['牙膏', '购物', '日用品'], ['牙刷', '购物', '日用品'], ['毛巾', '购物', '日用品'], ['肥皂', '购物', '日用品'],
+  ['洗洁精', '购物', '日用品'], ['垃圾袋', '购物', '日用品'], ['雨伞', '购物', '日用品'], ['水杯', '购物', '日用品'],
+  ['保温杯', '购物', '日用品'], ['拖把', '购物', '日用品'], ['扫帚', '购物', '日用品'],
+  ['家居', '购物', '家居'], ['家具', '购物', '家居'], ['床单', '购物', '家居'], ['被子', '购物', '家居'],
+  ['枕头', '购物', '家居'], ['窗帘', '购物', '家居'], ['台灯', '购物', '家居'], ['地毯', '购物', '家居'],
+  ['沙发', '购物', '家居'], ['桌子', '购物', '家居'], ['椅子', '购物', '家居'], ['柜子', '购物', '家居'], ['床', '购物', '家居'],
+  ['鞋', '购物', '鞋包'], ['包', '购物', '鞋包'], ['买包', '购物', '鞋包'], ['包包', '购物', '鞋包'],
+  ['背包', '购物', '鞋包'], ['行李箱', '购物', '鞋包'], ['钱包', '购物', '鞋包'], ['皮带', '购物', '鞋包'],
+  ['首饰', '购物', '鞋包'], ['项链', '购物', '鞋包'], ['戒指', '购物', '鞋包'], ['耳环', '购物', '鞋包'],
+  ['眼镜', '购物', '鞋包'], ['太阳镜', '购物', '鞋包'],
+  // 娱乐
+  ['看电影', '娱乐', '电影'], ['电影', '娱乐', '电影'], ['电影票', '娱乐', '电影'], ['观影', '娱乐', '电影'],
+  ['演唱会', '娱乐', '演出'], ['演出', '娱乐', '演出'], ['话剧', '娱乐', '演出'], ['音乐节', '娱乐', '演出'],
+  ['音乐会', '娱乐', '演出'], ['相声', '娱乐', '演出'], ['脱口秀', '娱乐', '演出'], ['舞台剧', '娱乐', '演出'],
+  ['音乐剧', '娱乐', '演出'], ['展览', '娱乐', '演出'], ['画展', '娱乐', '演出'],
+  ['游戏', '娱乐', '游戏'], ['手游', '娱乐', '游戏'], ['游戏充值', '娱乐', '游戏'], ['皮肤', '娱乐', '游戏'], ['点卡', '娱乐', '游戏'],
+  ['视频会员', '娱乐', '会员'], ['会员', '娱乐', '会员'], ['会员费', '娱乐', '会员'], ['订阅', '娱乐', '会员'], ['续费', '娱乐', '会员'],
+  ['爱奇艺', '娱乐', '会员'], ['腾讯视频', '娱乐', '会员'], ['优酷', '娱乐', '会员'], ['B站', '娱乐', '会员'], ['b站', '娱乐', '会员'],
+  ['旅游', '娱乐', '旅游'], ['旅行', '娱乐', '旅游'], ['出游', '娱乐', '旅游'], ['门票', '娱乐', '旅游'],
+  ['景区', '娱乐', '旅游'], ['酒店', '娱乐', '旅游'], ['民宿', '娱乐', '旅游'], ['住宿', '娱乐', '旅游'], ['跟团', '娱乐', '旅游'],
+  ['健身', '娱乐', '健身'], ['健身卡', '娱乐', '健身'], ['运动', '娱乐', '健身'], ['健身房', '娱乐', '健身'], ['私教', '娱乐', '健身'],
+  ['瑜伽', '娱乐', '健身'], ['舞蹈', '娱乐', '健身'], ['游泳', '娱乐', '健身'], ['羽毛球', '娱乐', '健身'],
+  ['篮球', '娱乐', '健身'], ['足球', '娱乐', '健身'], ['乒乓球', '娱乐', '健身'], ['网球', '娱乐', '健身'],
+  ['高尔夫', '娱乐', '健身'], ['滑雪', '娱乐', '健身'], ['滑冰', '娱乐', '健身'],
+  ['KTV', '娱乐', '其他'], ['ktv', '娱乐', '其他'], ['唱歌', '娱乐', '其他'], ['酒吧', '娱乐', '其他'],
+  ['桌游', '娱乐', '其他'], ['剧本杀', '娱乐', '其他'], ['密室', '娱乐', '其他'], ['游乐园', '娱乐', '其他'], ['迪士尼', '娱乐', '其他'],
+  ['按摩', '娱乐', '其他'], ['足疗', '娱乐', '其他'], ['洗浴', '娱乐', '其他'], ['温泉', '娱乐', '其他'],
+  ['美容', '娱乐', '其他'], ['美发', '娱乐', '其他'], ['理发', '娱乐', '其他'], ['剪发', '娱乐', '其他'],
+  ['染发', '娱乐', '其他'], ['烫发', '娱乐', '其他'], ['美甲', '娱乐', '其他'], ['写真', '娱乐', '其他'], ['摄影', '娱乐', '其他'],
+  ['博物馆', '娱乐', '其他'], ['美术馆', '娱乐', '其他'], ['主题乐园', '娱乐', '其他'], ['环球影城', '娱乐', '其他'],
+  // 学习
+  ['买书', '学习', '书籍'], ['书', '学习', '书籍'], ['书籍', '学习', '书籍'], ['教材', '学习', '书籍'],
+  ['教辅', '学习', '书籍'], ['练习册', '学习', '书籍'], ['图书', '学习', '书籍'], ['绘本', '学习', '书籍'],
+  ['小说', '学习', '书籍'], ['漫画', '学习', '书籍'],
+  ['课程', '学习', '课程'], ['网课', '学习', '课程'], ['培训班', '学习', '课程'], ['辅导班', '学习', '课程'],
+  ['家教', '学习', '课程'], ['学费', '学习', '课程'], ['学杂费', '学习', '课程'], ['知识付费', '学习', '课程'],
+  ['文具', '学习', '文具'], ['笔', '学习', '文具'], ['书包', '学习', '文具'], ['文具盒', '学习', '文具'],
+  ['打印', '学习', '文具'], ['复印', '学习', '文具'],
+  ['考试', '学习', '考试'], ['报名费', '学习', '考试'], ['考试费', '学习', '考试'], ['报名', '学习', '考试'],
+  ['考证', '学习', '考试'], ['驾照', '学习', '考试'], ['驾校', '学习', '考试'], ['考研', '学习', '考试'],
+  ['考公', '学习', '考试'], ['雅思', '学习', '考试'], ['托福', '学习', '考试'], ['四六级', '学习', '考试'],
+  ['培训', '学习', '培训'], ['培训费', '学习', '培训'],
+  // 医疗
+  ['门诊', '医疗', '门诊'], ['看病', '医疗', '门诊'], ['挂号', '医疗', '门诊'], ['急诊', '医疗', '门诊'],
+  ['复诊', '医疗', '门诊'], ['就诊', '医疗', '门诊'], ['医院', '医疗', '门诊'], ['诊所', '医疗', '门诊'],
+  ['买药', '医疗', '药品'], ['药', '医疗', '药品'], ['药品', '医疗', '药品'], ['药房', '医疗', '药品'], ['药店', '医疗', '药品'],
+  ['感冒药', '医疗', '药品'], ['退烧药', '医疗', '药品'], ['止痛药', '医疗', '药品'], ['创可贴', '医疗', '药品'],
+  ['维生素', '医疗', '药品'], ['钙片', '医疗', '药品'], ['口罩', '医疗', '药品'], ['保健品', '医疗', '药品'],
+  ['体检', '医疗', '体检'], ['体检费', '医疗', '体检'],
+  ['牙', '医疗', '牙科'], ['牙科', '医疗', '牙科'], ['看牙', '医疗', '牙科'], ['补牙', '医疗', '牙科'],
+  ['拔牙', '医疗', '牙科'], ['洗牙', '医疗', '牙科'], ['牙齿', '医疗', '牙科'],
+  ['住院', '医疗', '其他'], ['手术', '医疗', '其他'], ['检查', '医疗', '其他'], ['化验', '医疗', '其他'],
+  ['CT', '医疗', '其他'], ['疫苗', '医疗', '其他'], ['打针', '医疗', '其他'], ['输液', '医疗', '其他'],
+  ['针灸', '医疗', '其他'], ['推拿', '医疗', '其他'], ['中医', '医疗', '其他'], ['西医', '医疗', '其他'],
+  ['处方', '医疗', '其他'], ['医保', '医疗', '其他'],
+  // 住房
+  ['房租', '住房', '房租'], ['租金', '住房', '房租'], ['交租', '住房', '房租'], ['月租', '住房', '房租'],
   ['物业', '住房', '物业'], ['物业费', '住房', '物业'],
   ['水电', '住房', '水电燃气'], ['燃气', '住房', '水电燃气'], ['水电费', '住房', '水电燃气'],
-  ['维修', '住房', '维修'], ['修理', '住房', '维修'],
-  ['借款', '其他', '借款'], ['借钱', '其他', '借款'], ['借给', '其他', '借款']
+  ['水费', '住房', '水电燃气'], ['电费', '住房', '水电燃气'], ['燃气费', '住房', '水电燃气'], ['天然气', '住房', '水电燃气'],
+  ['维修', '住房', '维修'], ['修理', '住房', '维修'], ['维修费', '住房', '维修'],
+  ['房贷', '住房', '其他'], ['月供', '住房', '其他'], ['装修', '住房', '其他'], ['宽带', '住房', '其他'],
+  ['网费', '住房', '其他'], ['话费', '住房', '其他'], ['手机费', '住房', '其他'], ['充值话费', '住房', '其他'],
+  ['取暖费', '住房', '其他'], ['供暖', '住房', '其他'], ['押金', '住房', '其他'], ['定金', '住房', '其他'],
+  ['中介费', '住房', '其他'], ['保洁', '住房', '其他'], ['家政', '住房', '其他'], ['搬家', '住房', '其他'],
+  ['快递', '住房', '其他'], ['快递费', '住房', '其他'], ['邮费', '住房', '其他'], ['邮寄', '住房', '其他'],
+  // 其他
+  ['借款', '其他', '借款'], ['借钱', '其他', '借款'], ['借给', '其他', '借款'], ['还钱', '其他', '借款'],
+  ['还款', '其他', '借款'], ['转账', '其他', '借款'], ['发红包', '其他', '借款'], ['随礼', '其他', '借款'],
+  ['份子钱', '其他', '借款'], ['捐款', '其他', '借款'], ['捐赠', '其他', '借款'], ['慈善', '其他', '借款'],
+  ['罚款', '其他', '其他'], ['罚单', '其他', '其他'], ['滞纳金', '其他', '其他'], ['手续费', '其他', '其他'],
+  ['利息', '其他', '其他'], ['保险', '其他', '其他'], ['保费', '其他', '其他'], ['税费', '其他', '其他'],
+  ['个税', '其他', '其他'], ['社保', '其他', '其他'], ['公积金', '其他', '其他'], ['党费', '其他', '其他'],
+  ['团费', '其他', '其他'], ['会费', '其他', '其他'], ['年费', '其他', '其他'], ['充值', '其他', '其他'],
+  ['打赏', '其他', '其他'], ['小费', '其他', '其他'], ['服务费', '其他', '其他'], ['管理费', '其他', '其他'], ['杂费', '其他', '其他']
 ];
 // 自然语言关键词字典：[关键词, 一级分类]（收入）
 const NL_KW_I = [
-  ['工资', '薪资'], ['薪水', '薪资'], ['基本工资', '薪资'],
-  ['兼职', '兼职'], ['副业', '兼职'],
-  ['奖金', '奖金'], ['年终奖', '奖金'],
-  ['理财', '理财盈亏'], ['股票', '理财盈亏'], ['基金', '理财盈亏'], ['盈利', '理财盈亏'],
-  ['红包', '收红包'],
-  ['彩票', '中奖'], ['中奖', '中奖'],
-  ['借入', '借入'], ['借到', '借入'],
-  ['报销', '报销'],
-  ['卖二手', '卖二手'], ['闲鱼', '卖二手'],
-  ['收礼', '收礼'], ['礼物', '收礼'],
-  ['补贴', '补贴']
+  ['工资', '薪资'], ['薪水', '薪资'], ['基本工资', '薪资'], ['底薪', '薪资'], ['月薪', '薪资'], ['年薪', '薪资'],
+  ['发工资', '薪资'], ['发薪', '薪资'], ['薪资', '薪资'], ['薪酬', '薪资'], ['工资条', '薪资'],
+  ['兼职', '兼职'], ['副业', '兼职'], ['外快', '兼职'], ['私活', '兼职'], ['接单', '兼职'], ['跑腿', '兼职'],
+  ['代驾', '兼职'], ['稿费', '兼职'], ['稿酬', '兼职'], ['家教', '兼职'], ['摆摊', '兼职'], ['微商', '兼职'],
+  ['代购', '兼职'], ['直播收入', '兼职'], ['打赏收入', '兼职'], ['咨询费', '兼职'], ['劳务费', '兼职'],
+  ['演出费', '兼职'], ['出场费', '兼职'], ['翻译费', '兼职'], ['设计费', '兼职'], ['写作费', '兼职'],
+  ['奖金', '奖金'], ['年终奖', '奖金'], ['季度奖', '奖金'], ['项目奖', '奖金'], ['全勤奖', '奖金'],
+  ['绩效奖', '奖金'], ['提成', '奖金'], ['分红', '奖金'],
+  ['理财', '理财盈亏'], ['股票', '理财盈亏'], ['基金', '理财盈亏'], ['盈利', '理财盈亏'], ['收益', '理财盈亏'],
+  ['利息', '理财盈亏'], ['存款利息', '理财盈亏'], ['债券', '理财盈亏'], ['数字货币', '理财盈亏'], ['比特币', '理财盈亏'],
+  ['基金收益', '理财盈亏'], ['股票收益', '理财盈亏'], ['理财收益', '理财盈亏'], ['中签', '理财盈亏'], ['打新', '理财盈亏'],
+  ['股息', '理财盈亏'], ['红利', '理财盈亏'], ['收租', '理财盈亏'], ['房租收入', '理财盈亏'], ['租金收入', '理财盈亏'],
+  ['收红包', '收红包'], ['收到红包', '收红包'], ['红包到账', '收红包'], ['红包收入', '收红包'], ['压岁钱', '收红包'],
+  ['中奖', '中奖'], ['彩票', '中奖'], ['抽奖', '中奖'], ['中彩票', '中奖'], ['中大奖', '中奖'], ['刮刮乐', '中奖'],
+  ['福彩', '中奖'], ['体彩', '中奖'], ['双色球', '中奖'], ['大乐透', '中奖'], ['游戏奖励', '中奖'],
+  ['借入', '借入'], ['借到', '借入'], ['借款到账', '借入'], ['贷款到账', '借入'], ['放款', '借入'], ['网贷到账', '借入'],
+  ['报销', '报销'], ['报销款', '报销'], ['报销到账', '报销'], ['差旅报销', '报销'], ['餐饮报销', '报销'],
+  ['交通报销', '报销'], ['办公报销', '报销'], ['医疗报销', '报销'],
+  ['卖二手', '卖二手'], ['闲鱼', '卖二手'], ['转转', '卖二手'], ['卖旧', '卖二手'], ['卖闲置', '卖二手'], ['回收', '卖二手'],
+  ['卖手机', '卖二手'], ['卖电脑', '卖二手'], ['卖书', '卖二手'], ['卖衣服', '卖二手'], ['卖家具', '卖二手'],
+  ['卖车', '卖二手'], ['二手交易', '卖二手'], ['转卖', '卖二手'], ['出售', '卖二手'],
+  ['收礼', '收礼'], ['礼物', '收礼'], ['收到礼物', '收礼'], ['收礼金', '收礼'],
+  ['补贴', '补贴'], ['住房补贴', '补贴'], ['交通补贴', '补贴'], ['餐饮补贴', '补贴'], ['通讯补贴', '补贴'],
+  ['高温补贴', '补贴'], ['取暖补贴', '补贴'], ['生育补贴', '补贴'], ['失业金', '补贴'], ['救济金', '补贴'],
+  ['低保', '补贴'], ['补助', '补贴'], ['津贴', '补贴'],
+  ['退款', '其他'], ['返现', '其他'], ['退钱', '其他'], ['退货退款', '其他'], ['赔偿', '其他'], ['理赔', '其他'],
+  ['保险理赔', '其他'], ['退款到账', '其他'], ['转账收入', '其他'], ['收款', '其他'], ['收到转账', '其他'],
+  ['支付宝收款', '其他'], ['微信收款', '其他'], ['银行卡收款', '其他'], ['现金收入', '其他'], ['收入', '其他'],
+  ['进账', '其他'], ['入账', '其他'], ['到账', '其他'], ['赚', '其他'], ['挣', '其他'], ['佣金', '其他'],
+  ['返利', '其他'], ['返佣', '其他'], ['回扣', '其他'], ['小费收入', '其他'], ['赞赏', '其他'], ['众筹', '其他'],
+  ['赞助', '其他'], ['捐赠收入', '其他'], ['遗产', '其他'], ['继承', '其他'], ['中签款', '其他']
 ];
 const INCOME_SUBS_DEFAULT = {
   '薪资': ['基本工资','绩效工资','加班费','津贴'],
