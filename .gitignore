@@ -13,6 +13,22 @@ _shot_*.py
 _eat_*.png
 _restructure_expense.py
 
+# 调试/测量/一次性脚本
+_debug*.py
+_measure*.py
+_replace*.py
+_cat_size.py
+
+# 中文积累原始数据集（大文件，不入库；由 _gen_cn.py 生成 study_cn_data.js）
+_ci.json
+_idiom.json
+_gsw*.json
+_dl_*.json
+_lunyu.json
+_tang300.json
+_gsw_list.json
+_gsw_guwen.json
+
 # WorkBuddy 项目内部数据（记忆/配置，不进仓库）
 .workbuddy/
 

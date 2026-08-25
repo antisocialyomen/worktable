@@ -4,11 +4,11 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#FFF5EE",
-  "theme_color": "#FF6B8A",
+  "background_color": "#F3EEFC",
+  "theme_color": "#9B7EDE",
   "orientation": "portrait-primary",
   "icons": [
-    { "src": "/assets/labubu-avatar.jpg", "sizes": "192x192", "type": "image/jpeg" },
-    { "src": "/assets/labubu-avatar.jpg", "sizes": "512x512", "type": "image/jpeg" }
+    { "src": "/assets/labubu-avatar.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/labubu-avatar.png", "sizes": "512x512", "type": "image/png" }
   ]
 }

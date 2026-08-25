@@ -1,5 +1,5 @@
-const CACHE = 'workbench-v26';
-const PRECACHE = ['/', '/index.html', '/manifest.json', '/assets/bg-wallpaper.jpg', '/assets/labubu-avatar.jpg'];
+const CACHE = 'workbench-v29';
+const PRECACHE = ['/', '/index.html', '/manifest.json', '/assets/lucky.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
