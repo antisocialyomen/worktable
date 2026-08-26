@@ -42,7 +42,7 @@ body{font-family:var(--font);background:transparent;color:var(--text);line-heigh
 [data-theme=dark] #homeCountdown,[data-theme=dark] #homeReminder{color:#5A4A00}
 [data-theme=dark] #homeCountdown .card-hd h3,[data-theme=dark] #homeReminder .card-hd h3{color:#5A4A00}
 [data-theme=dark] #homeCountdownTip,[data-theme=dark] #reminderList{color:#5A4A00}
-a{color:var(--accent)}input,textarea,select,button{font-family:inherit;font-size:inherit;outline:none;border:none;background:none}button{cursor:pointer}
+a{color:var(--accent)}input,textarea,select,button{font-family:inherit;font-size:inherit;outline:none;border:none;background:none}button{cursor:pointer;border-radius:var(--radius-sm)}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
 #splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);text-align:center;padding:24px;transition:opacity .4s}
 #splash.hide{opacity:0;pointer-events:none}
@@ -439,8 +439,8 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #shopIn{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
   /* 移动端：所有搜索输入框 */
   #collSearch,#noteSearch,#topicSearch{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
-  #matSearch{width:90px!important;flex:0 0 90px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
-  #shopSearch{width:90px!important;flex:0 0 90px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important;line-height:1.2!important}
+  #matSearch{width:110px!important;flex:0 0 110px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
+  #shopSearch{width:110px!important;flex:0 0 110px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
   /* 移动端：带内联样式的输入框统一2px 5px、11px */
   #cdSearch,#evDate{padding:2px 5px!important;font-size:11px!important;height:auto!important}
   #bookSearch{padding:3px 7px!important;font-size:11px!important;height:auto!important}
@@ -462,9 +462,9 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：热量计算餐次下拉框55px、食材输入框弹性伸展 */
   #calMeal{width:55px!important;flex:0 0 55px!important}
   #calFood{flex:1!important;min-width:80px!important}
-  .calAddRow{flex-basis:100%;display:flex;justify-content:flex-end;gap:3px;align-items:center;margin-top:8px}
-  /* 移动端：摄入总热量各餐并排排列 */
-  #calByMeal{display:flex!important;flex-wrap:nowrap;gap:4px;justify-content:center;overflow-x:auto}
+  .calAddRow{flex-basis:100%;display:flex;justify-content:flex-end;gap:5px;align-items:center;margin-top:8px}
+  /* 移动端：摄入总热量 早餐/午餐/晚餐一行居中，零食/饮料另起一行靠左并排 */
+  #calByMeal{display:grid!important;grid-template-columns:repeat(3,auto)!important;justify-content:center!important;gap:4px!important}
   #calByMeal .si{flex:0 0 auto}
   /* 移动端：吃什么展开全部按钮 */
   .eat-toggle{font-size:9px!important;padding:2px 4px!important}
@@ -487,7 +487,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #topicList .cb .tag+span{margin-left:2px}
   /* 移动端：选题管理搜索框、下拉框、新建按钮并排 */
   #c-topics .card-hd{flex-wrap:nowrap!important;gap:3px!important}
-  #topicSearch{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  #topicSearch{width:85px!important;flex:0 0 85px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
   #topicStatus{width:70px!important;flex:0 0 70px!important}
   #topicNewBtn{margin-left:0!important}
   /* 移动端：笔记清单编辑删除按钮上下排列 */
@@ -520,10 +520,12 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #noteContent{width:210px!important}
   #noteCat{width:80px!important;flex:0 0 80px!important}
   #noteTags{width:130px!important}
-  /* 移动端：笔记分类筛选框55px、卡片容器内边距10px 10px、下边框距搜索框10px */
-  #noteCatFilter{width:55px!important;flex:0 0 55px!important}
+  /* 移动端：笔记分类筛选框65px、卡片容器内边距10px 10px、下边框距搜索框10px */
+  #noteCatFilter{width:65px!important;flex:0 0 65px!important}
   #p-notes .card{padding:10px 10px!important}
   #p-notes .card-hd{margin-bottom:0!important}
+  /* 移动端：书影音筛选下拉框55px */
+  #l-collection #collType{width:55px!important;flex:0 0 55px!important}
   /* 移动端：英语词本下拉框50px */
   #enBookSelect{width:50px!important;flex:0 0 50px!important}
   /* 移动端：本月打卡选择习惯下拉框70px */
@@ -533,11 +535,11 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：数据图表卡片与周报生成同宽，内容等比缩小 */
   #p-data .g2{grid-template-columns:1fr!important}
   .chart-box{height:150px!important}
-  /* 移动端：所有弹窗背景透明度70% */
-  .modal{background:rgba(248,244,255,0.7)!important}
-  [data-theme=dark] .modal{background:rgba(52,34,58,0.7)!important}
-  .dt-picker{background:rgba(248,244,255,0.7)!important}
-  [data-theme=dark] .dt-picker{background:rgba(52,34,58,0.7)!important}
+  /* 移动端：所有弹窗背景透明度80% */
+  .modal{background:rgba(248,244,255,0.8)!important}
+  [data-theme=dark] .modal{background:rgba(52,34,58,0.8)!important}
+  .dt-picker{background:rgba(248,244,255,0.8)!important}
+  [data-theme=dark] .dt-picker{background:rgba(52,34,58,0.8)!important}
 }
 /* ===== FOOD MODULE ===== */
 .food-tab{display:block}
@@ -5280,11 +5282,13 @@ function renderDataCharts() {
   const days = ['周日','周一','周二','周三','周四','周五','周六'];
   const td = Array(7).fill(0);
   for (let i = 6; i >= 0; i--) { const d = new Date(t); d.setDate(d.getDate() - i); td[6 - i] = tasks.filter(x => x.date === dStr(d) && x.done).length; }
+  const trendMax = Math.max(...td);
+  const yStep = (window.innerWidth <= 768 && trendMax >= 20) ? 20 : undefined;
   const ctx1 = document.getElementById('trendChart');
-  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#9B7EDE', backgroundColor: 'rgba(155,126,222,0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 } } }, x: { grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 } } } } } }); }
+  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#9B7EDE', backgroundColor: 'rgba(155,126,222,0.1)', fill: true, tension: 0.4, pointRadius: window.innerWidth <= 768 ? 2 : 3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 }, stepSize: yStep } }, x: { grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 }, autoSkip: false, maxRotation: 0 } } } } }); }
   const cats = {}; tasks.forEach(x => { if (!x.done) { cats[x.pri || '其他'] = (cats[x.pri || '其他'] || 0) + 1; } });
   const ctx2 = document.getElementById('distChart');
-  if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#9B7EDE','#5FB8A8','#FFC349','#FF8383','#4CAF85','#B39BE8'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: window.innerWidth <= 768 ? 8 : 11 } } } } } }); }
+  if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#9B7EDE','#5FB8A8','#FFC349','#FF8383','#4CAF85','#B39BE8'] }] }, options: { responsive: true, maintainAspectRatio: false, layout: { padding: { right: window.innerWidth <= 768 ? 50 : 0 } }, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: window.innerWidth <= 768 ? 8 : 11 } } } } } }); }
 }
 function weekRange() {
   const t = new Date(), ws = new Date(t); ws.setDate(t.getDate() - t.getDay());
@@ -15270,7 +15274,9 @@ function renderCn() {
     main.classList.toggle('study-long2', n > 60);
     document.getElementById('cnKind').textContent = it.k;
     document.getElementById('cnPy').textContent = it.py || '';
-    document.getElementById('cnDef').textContent = it.def || '';
+    const defEl = document.getElementById('cnDef');
+    defEl.textContent = it.def || '';
+    defEl.style.display = it.def ? '' : 'none';
     document.getElementById('cnSrc').textContent = it.src ? '—— ' + it.src : '';
     document.getElementById('cnCount').textContent = '今日已看 ' + s.seen.length + ' 个（每日固定一个，可切换随机）';
   });
