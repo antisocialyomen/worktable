@@ -2970,25 +2970,14 @@ function renderHomeStats() {
   const el = document.getElementById('homeMiniStats');
   if (!el) return;
   const today = todayStr();
-  const tasks = Store.get('tasks', []);
-  const tAll = tasks.filter(t => t.date === today).length;
-  const tDone = tasks.filter(t => t.date === today && t.done).length;
+  const spent = Store.get('expenses', []).filter(x => x.type === 'e' && x.date === today).reduce((s, x) => s + (parseFloat(x.amt) || 0), 0);
   const day = getWater()[today] || [];
   const drank = day.reduce((s, x) => s + (x.ml || 0), 0);
-  const habits = Store.get('habits', []);
-  let streak = 0;
-  if (habits.length) {
-    const d = new Date();
-    if (!habits.some(h => (h.records || []).includes(today))) d.setDate(d.getDate() - 1);
-    while (habits.some(h => (h.records || []).includes(dStr(d)))) {
-      streak++;
-      d.setDate(d.getDate() - 1);
-    }
-  }
+  const calIntake = Store.get('calorie', []).filter(x => x.date === today).reduce((s, x) => s + (parseFloat(x.kcal) || 0), 0);
   el.innerHTML =
-    '<div class="st" onclick="go(\'tasks\')"><i class="fas fa-check-circle"></i><span class="st-num">' + tDone + '/' + tAll + '</span><span class="st-label">今日任务</span></div>' +
+    '<div class="st" onclick="go(\'life\')"><i class="fas fa-wallet"></i><span class="st-num">¥' + spent.toFixed(2).replace(/\.00$/, '') + '</span><span class="st-label">今日花费</span></div>' +
     '<div class="st" onclick="go(\'food\')"><i class="fas fa-tint"></i><span class="st-num">' + Math.round(drank) + 'ml</span><span class="st-label">今日饮水</span></div>' +
-    '<div class="st" onclick="go(\'life\');switchLifeTab(\'habit\')"><i class="fas fa-fire"></i><span class="st-num">' + streak + '天</span><span class="st-label">连续打卡</span></div>';
+    '<div class="st" onclick="go(\'food\');switchFoodTab(\'calorie\')"><i class="fas fa-utensils"></i><span class="st-num">' + Math.round(calIntake) + 'kcal</span><span class="st-label">今日摄入</span></div>';
 }
   let homeComboTab = 'tasks';
   // 窗口缩放时重绘进度条圆点（30列）
