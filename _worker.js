@@ -12,6 +12,11 @@ export default {
       return handleDoubanProxy(path, url.search);
     }
 
+    // 处理 /img-proxy 路径 → 代理豆瓣图片，添加 Referer 绕过防盗链
+    if (path === '/img-proxy') {
+      return handleImageProxy(url);
+    }
+
     // 处理 /api/webdav 路径 → 代理到用户 WebDAV 服务（解决浏览器 CORS 跨域）
     if (path === '/api/webdav' || path.startsWith('/api/webdav/')) {
       return handleWebDAVProxy(request);
@@ -260,5 +265,31 @@ async function handleDoubanProxy(path, search) {
       status: 502,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
     });
+  }
+}
+
+async function handleImageProxy(url) {
+  const imgUrl = url.searchParams.get('url');
+  if (!imgUrl) return new Response('Missing url param', { status: 400 });
+  try {
+    const response = await fetch(imgUrl, {
+      headers: {
+        'Referer': 'https://movie.douban.com/',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
+    if (!response.ok) return new Response('Image proxy failed', { status: response.status });
+    const contentType = response.headers.get('Content-Type') || 'image/jpeg';
+    const body = await response.arrayBuffer();
+    return new Response(body, {
+      status: 200,
+      headers: {
+        'Content-Type': contentType,
+        'Cache-Control': 'public, max-age=86400',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
+  } catch (e) {
+    return new Response('Image proxy error: ' + e.message, { status: 502 });
   }
 }

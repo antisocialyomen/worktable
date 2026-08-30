@@ -94,8 +94,11 @@ a{color:var(--accent)}input,textarea,select,button{font-family:inherit;font-size
 #homeCombo{position:relative}
 #homeCombo .lucky-deco{position:absolute;top:-32px;right:-4px;width:118px;height:auto;pointer-events:none;user-select:none;z-index:2}
 .lucky-greet{display:none}
+/* 今日数据概览：仅移动端显示 */
+#homeMiniStats{display:none}
+.home-mid{display:none}
+.lucky-gap{display:none}
 .yb-cd{position:relative;display:inline-block;vertical-align:baseline}
-.lucky-yb{display:none}
 #notesList{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:10px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
@@ -148,6 +151,8 @@ a{color:var(--accent)}input,textarea,select,button{font-family:inherit;font-size
 @media(min-width:769px){
   #addBtnRow{display:none!important}
   #addBtnInline{display:inline-block}
+  /* 热量计算：窗口缩小时日期/添加按钮自动换行，避免溢出容器 */
+  #f-calorie .ig{flex-wrap:wrap}
   /* 探店-菜品打分：打分下拉框宽度140px */
   #shopDishList select.in{width:140px!important;flex:0 0 140px!important}
   /* 记账-最近记录 / 统计明细：消费名称15px、日期12px */
@@ -169,6 +174,9 @@ a{color:var(--accent)}input,textarea,select,button{font-family:inherit;font-size
   #enBookSelect{width:60px!important;flex:0 0 60px!important}
   /* 桌面端：本月打卡选择习惯下拉框80px */
   #habitSelect{width:80px!important;flex:0 0 80px!important}
+  /* 桌面端：笔记搜索框/新建笔记按钮与分类下拉框同高 */
+  #noteSearch{height:37px}
+  #p-notes .card-hd .btn-sm{height:37px;display:inline-flex;align-items:center}
 }
 .in{flex:1;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px}
 #noteContent{width:100%}
@@ -265,6 +273,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .bill-cal-grid .cal-day.has-record::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--primary)}
 .bill-cal-grid .cal-day.selected.has-record::after{background:#fff}
 .cd-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;flex:0 0 auto}
+.cd-item{position:relative;padding-left:7px}
+.cd-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:2px;background:var(--cd-color)}
 .want-rate{display:inline-flex;align-items:center;gap:1px;font-size:11px;color:var(--accent);font-weight:600;margin-left:4px}
 .want-rate-star{line-height:1}
 @media(max-width:768px){
@@ -272,8 +282,16 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   :root{--h:48px;--radius:12px;--radius-sm:8px;--radius-lg:16px}
   /* 移动端：Labubu 放在年份倒数文字上方，隐藏卡片边缘装饰 */
   #homeCombo .lucky-deco{display:none}
-  .lucky-yb{display:block;position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);width:100%;height:auto;pointer-events:none;user-select:none}
-  .yb-wrap{margin-top:72px!important}
+  .yb-wrap{margin-top:12px}
+  /* 移动端：今日数据概览（问候语与进度条之间，左侧控件 + 右侧兔子） */
+  .home-mid{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+  #homeMiniStats{display:grid!important;grid-template-columns:repeat(3,1fr);gap:6px;flex:1 1 auto;min-width:0}
+  #homeMiniStats .st{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:6px 2px;border-radius:10px;background:var(--glass);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+  #homeMiniStats .st:active{transform:scale(0.95)}
+  #homeMiniStats .st i{font-size:12px;color:var(--primary)}
+  #homeMiniStats .st .st-num{font-size:13px;font-weight:700;color:var(--primary);white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.2}
+  #homeMiniStats .st .st-label{font-size:9px;color:var(--text2)}
+  .lucky-gap{display:block;width:88px;height:auto;flex:0 0 auto;pointer-events:none;user-select:none}
   .app{height:100dvh;height:calc(100dvh - env(safe-area-inset-top))}
   .sidebar{display:flex;position:relative;left:auto;top:auto;height:auto;width:36px;background:transparent;border-right:1px solid rgba(255,255,255,0.25);z-index:100;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
   [data-theme=dark] .sidebar{background:transparent;border-right-color:rgba(52,34,58,0.4)}
@@ -440,10 +458,10 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：所有搜索输入框 */
   #collSearch,#noteSearch,#topicSearch{width:80px!important;flex:0 0 80px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
   #matSearch{width:110px!important;flex:0 0 110px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
-  #shopSearch{width:110px!important;flex:0 0 110px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
+  #shopSearch{width:150px!important;flex:0 0 150px!important;padding:3px 7px!important;font-size:11px!important;height:auto!important}
   /* 移动端：带内联样式的输入框统一2px 5px、11px */
   #cdSearch,#evDate{padding:2px 5px!important;font-size:11px!important;height:auto!important}
-  #bookSearch{padding:3px 7px!important;font-size:11px!important;height:auto!important}
+  #bookSearch{padding:3px 7px!important;font-size:11px!important;height:auto!important;line-height:1.6}
 
   /* 移动端：账单明细条目标题、金额字号9px，日期7px，居左对齐 */
   #expRecent .cb>div:first-child,#expList .cb>div:first-child{text-align:left!important}
@@ -462,7 +480,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   /* 移动端：热量计算餐次下拉框55px、食材输入框弹性伸展 */
   #calMeal{width:55px!important;flex:0 0 55px!important}
   #calFood{flex:1!important;min-width:80px!important}
-  .calAddRow{flex-basis:100%;display:flex;justify-content:flex-end;gap:5px;align-items:center;margin-top:8px}
+  .calAddRow{flex-basis:100%;display:flex;justify-content:flex-end;gap:8px;align-items:center;margin-top:6px}
   /* 移动端：摄入总热量 早餐/午餐/晚餐一行居中，零食/饮料另起一行靠左并排 */
   #calByMeal{display:grid!important;grid-template-columns:repeat(3,auto)!important;justify-content:center!important;gap:4px!important}
   #calByMeal .si{flex:0 0 auto}
@@ -487,7 +505,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #topicList .cb .tag+span{margin-left:2px}
   /* 移动端：选题管理搜索框、下拉框、新建按钮并排 */
   #c-topics .card-hd{flex-wrap:nowrap!important;gap:3px!important}
-  #topicSearch{width:85px!important;flex:0 0 85px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  #topicSearch{width:90px!important;flex:0 0 90px!important;padding:2px 5px!important;font-size:11px!important;height:auto!important}
   #topicStatus{width:70px!important;flex:0 0 70px!important}
   #topicNewBtn{margin-left:0!important}
   /* 移动端：笔记清单编辑删除按钮上下排列 */
@@ -509,6 +527,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #cdCalType{width:50px!important;flex:0 0 50px!important}
   #cdRepeat{width:70px!important;flex:0 0 70px!important}
   #cdColors .cd-swatch{width:15px!important;height:15px!important;border-width:2px!important}
+  .cd-item{padding-left:7px}
   .cd-name{font-size:10px!important}
   .cd-name span{font-size:10px!important}
   .cd-date{font-size:8px!important}
@@ -524,8 +543,11 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   #noteCatFilter{width:65px!important;flex:0 0 65px!important}
   #p-notes .card{padding:10px 10px!important}
   #p-notes .card-hd{margin-bottom:0!important}
-  /* 移动端：书影音筛选下拉框55px */
-  #l-collection #collType{width:55px!important;flex:0 0 55px!important}
+  /* 移动端：笔记编辑器独立面板，与搜索栏间隔10px避免重叠 */
+  #p-notes #noteEditor{margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:rgba(255,255,255,0.45)}
+  [data-theme=dark] #p-notes #noteEditor{background:rgba(255,255,255,0.05)}
+  /* 移动端：书影音筛选下拉框90px */
+  #l-collection #collType{width:90px!important;flex:0 0 90px!important}
   /* 移动端：英语词本下拉框50px */
   #enBookSelect{width:50px!important;flex:0 0 50px!important}
   /* 移动端：本月打卡选择习惯下拉框70px */
@@ -534,6 +556,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   .eat-cat{font-size:12px!important;padding:2px 5px!important}
   /* 移动端：数据图表卡片与周报生成同宽，内容等比缩小 */
   #p-data .g2{grid-template-columns:1fr!important}
+  #p-data .g2 .card{min-width:0}
   .chart-box{height:150px!important}
   /* 移动端：所有弹窗背景透明度80% */
   .modal{background:rgba(248,244,255,0.8)!important}
@@ -686,9 +709,13 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
             <h1 id="greeting" style="font-size:21px;font-weight:700">早上好 👋</h1>
           </div>
           <p style="color:var(--text2);margin-top:2px;font-size:13px">今天也要高效工作，享受生活 ✨</p>
+          <div class="home-mid">
+            <div id="homeMiniStats" class="home-stats"></div>
+            <img src="assets/lucky.png" alt="" class="lucky-gap">
+          </div>
           <div class="yb-wrap">
             <div class="yb-row">
-              <div class="yb-top"><span class="yb-label" id="ybYearLabel">2026年</span><span class="yb-data"><span class="pixel" id="ybYearPct">0%</span> / <span class="yb-cd"><img src="assets/lucky.png" alt="" class="lucky-yb">2027还有<span class="pixel" id="ybYearDays">0</span>天</span></span></div>
+              <div class="yb-top"><span class="yb-label" id="ybYearLabel">2026年</span><span class="yb-data"><span class="pixel" id="ybYearPct">0%</span> / <span class="yb-cd">2027还有<span class="pixel" id="ybYearDays">0</span>天</span></span></div>
               <div class="dotbar" id="ybYearFill"></div>
             </div>
             <div class="yb-row">
@@ -2931,11 +2958,38 @@ function updateBadge() {
 // HOME
 // ============================================================
 function renderHome() {
+  renderHomeStats();
   renderHomeCombo();
   renderPeriodHome();
   renderCountdownHome();
   renderYearBars();
   }
+
+// 移动端首页：今日数据概览（问候语与进度条之间）
+function renderHomeStats() {
+  const el = document.getElementById('homeMiniStats');
+  if (!el) return;
+  const today = todayStr();
+  const tasks = Store.get('tasks', []);
+  const tAll = tasks.filter(t => t.date === today).length;
+  const tDone = tasks.filter(t => t.date === today && t.done).length;
+  const day = getWater()[today] || [];
+  const drank = day.reduce((s, x) => s + (x.ml || 0), 0);
+  const habits = Store.get('habits', []);
+  let streak = 0;
+  if (habits.length) {
+    const d = new Date();
+    if (!habits.some(h => (h.records || []).includes(today))) d.setDate(d.getDate() - 1);
+    while (habits.some(h => (h.records || []).includes(dStr(d)))) {
+      streak++;
+      d.setDate(d.getDate() - 1);
+    }
+  }
+  el.innerHTML =
+    '<div class="st" onclick="go(\'tasks\')"><i class="fas fa-check-circle"></i><span class="st-num">' + tDone + '/' + tAll + '</span><span class="st-label">今日任务</span></div>' +
+    '<div class="st" onclick="go(\'food\')"><i class="fas fa-tint"></i><span class="st-num">' + Math.round(drank) + 'ml</span><span class="st-label">今日饮水</span></div>' +
+    '<div class="st" onclick="go(\'life\');switchLifeTab(\'habit\')"><i class="fas fa-fire"></i><span class="st-num">' + streak + '天</span><span class="st-label">连续打卡</span></div>';
+}
   let homeComboTab = 'tasks';
   // 窗口缩放时重绘进度条圆点（30列）
   let _ybTimer = null;
@@ -4614,7 +4668,7 @@ function renderCountdowns() {
     const leftTxt = (left === null) ? '日期无效' : (left > 0 ? '还有 <b>' + left + '</b> 天' : (left === 0 ? '就是<b>今天</b>！' : '已过 <b>' + Math.abs(left) + '</b> 天'));
     const rep = { none: '不重复', daily: '每天', weekly: '每周', monthly: '每月', yearly: '每年' }[o.repeat] || '不重复';
     const cal = o.calType === 'lunar' ? '农历' : '公历';
-    return '<div class="cb" style="align-items:center;border-left:4px solid ' + o.color + '"><div style="flex:1"><div class="cd-name" style="font-weight:600">' + o.name + ' <span style="color:var(--text3)">' + cal + '·' + rep + '</span></div><div class="cd-date" style="color:var(--text2);margin-top:2px">' + leftTxt + ' · 目标 ' + occStr + '</div></div><div class="cd-acts" style="display:flex;flex-direction:column;align-items:center"><span class="btn-sm btn-o cd-act" onclick="editCountdown(\'' + o.id + '\')"><i class="fas fa-edit"></i></span><span class="btn-sm btn-o cd-act" style="color:var(--d)" onclick="delCountdown(\'' + o.id + '\')"><i class="fas fa-trash"></i></span></div></div>';
+    return '<div class="cb cd-item" style="--cd-color:' + o.color + ';align-items:center"><div style="flex:1"><div class="cd-name" style="font-weight:600">' + o.name + ' <span style="color:var(--text3)">' + cal + '·' + rep + '</span></div><div class="cd-date" style="color:var(--text2);margin-top:2px">' + leftTxt + ' · 目标 ' + occStr + '</div></div><div class="cd-acts" style="display:flex;flex-direction:column;align-items:center"><span class="btn-sm btn-o cd-act" onclick="editCountdown(\'' + o.id + '\')"><i class="fas fa-edit"></i></span><span class="btn-sm btn-o cd-act" style="color:var(--d)" onclick="delCountdown(\'' + o.id + '\')"><i class="fas fa-trash"></i></span></div></div>';
   }).join('');
 }
 function editCountdown(id) {
@@ -4779,6 +4833,7 @@ function renderWater() {
   if (log) log.innerHTML = day.length === 0
     ? '<span style="color:var(--text3)">暂无记录</span>'
     : day.map((x, i) => '<span class="w-log-item">' + x.ml + 'ml <span class="x" onclick="delWater(' + i + ')">✕</span></span>').join('');
+  renderHomeStats();
 }
 function addWater(ml) {
   const w = getWater();
@@ -5285,7 +5340,7 @@ function renderDataCharts() {
   const trendMax = Math.max(...td);
   const yStep = (window.innerWidth <= 768 && trendMax >= 20) ? 20 : undefined;
   const ctx1 = document.getElementById('trendChart');
-  if (ctx1) { if (charts.trend) charts.trend.destroy(); charts.trend = new Chart(ctx1, { type: 'line', data: { labels: days, datasets: [{ label: '完成任务', data: td, borderColor: '#9B7EDE', backgroundColor: 'rgba(155,126,222,0.1)', fill: true, tension: 0.4, pointRadius: window.innerWidth <= 768 ? 2 : 3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 }, stepSize: yStep } }, x: { grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 }, autoSkip: false, maxRotation: 0 } } } } }); }
+  if (ctx1) { if (charts.trend) charts.trend.destroy(); const xL = ['周日','周一','周二','周三','周四','周五','周六']; charts.trend = new Chart(ctx1, { type: 'line', data: { datasets: [{ label: '完成任务', data: td.map((v, i) => ({ x: i * 20, y: v })), borderColor: '#9B7EDE', backgroundColor: 'rgba(155,126,222,0.1)', fill: true, tension: 0.4, pointRadius: window.innerWidth <= 768 ? 2 : 3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { title: function(it) { return xL[it[0].dataIndex] || ''; } } } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 }, stepSize: yStep } }, x: { type: 'linear', min: 0, max: 120, grid: { display: false }, ticks: { font: { size: window.innerWidth <= 768 ? 9 : 12 }, stepSize: 20, callback: function(val) { return xL[Math.round(val / 20)] || ''; } } } } } }); }
   const cats = {}; tasks.forEach(x => { if (!x.done) { cats[x.pri || '其他'] = (cats[x.pri || '其他'] || 0) + 1; } });
   const ctx2 = document.getElementById('distChart');
   if (ctx2) { if (charts.dist) charts.dist.destroy(); charts.dist = new Chart(ctx2, { type: 'doughnut', data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ['#9B7EDE','#5FB8A8','#FFC349','#FF8383','#4CAF85','#B39BE8'] }] }, options: { responsive: true, maintainAspectRatio: false, layout: { padding: { right: window.innerWidth <= 768 ? 50 : 0 } }, plugins: { legend: { position: 'bottom', labels: { padding: 6, font: { size: window.innerWidth <= 768 ? 8 : 11 } } } } } }); }
@@ -5697,11 +5752,12 @@ function renderDrama(type) {
     const isWant = want.some(w => w.title === item.title);
     const rate = item.rate || '';
     const poster = item.cover || '';
+    const proxyPoster = poster ? '/img-proxy?url=' + encodeURIComponent(poster) : '';
     const epInfo = item.episodes_info || '';
     const desc = item.desc || (type === 'movie' ? '热门电影推荐' : type === 'variety' ? '热门综艺推荐' : '热门剧集推荐');
     const icon = type === 'movie' ? 'fa-film' : type === 'variety' ? 'fa-music' : 'fa-tv';
     return '<div class="mc">' +
-      (poster ? '<img src="' + poster + '" alt="' + item.title + '" style="width:100%;height:180px;object-fit:cover;display:block;background:var(--primary-bg)" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"><div class="mp" style="display:none"><i class="fas ' + icon + '"></i></div>' : '<div class="mp"><i class="fas ' + icon + '"></i></div>') +
+      (poster ? '<img src="' + proxyPoster + '" data-orig="' + poster + '" alt="' + item.title + '" style="width:100%;height:180px;object-fit:cover;display:block;background:var(--primary-bg)" onerror="if(this.src!==this.dataset.orig){this.src=this.dataset.orig}else{this.style.display=\'none\';this.nextSibling.style.display=\'flex\'}"><div class="mp" style="display:none"><i class="fas ' + icon + '"></i></div>' : '<div class="mp"><i class="fas ' + icon + '"></i></div>') +
       '<div class="mbd"><div class="mt" style="cursor:pointer" onclick="window.open(\'' + item.url + '\',\'_blank\')">' + item.title + '</div>' +
       '<div style="display:flex;gap:8px;margin:4px 0"><span class="tag t1" style="font-size:10px;padding:1px 5px;line-height:1.2">' + typeName[type] + '</span>' +
       (rate ? '<span style="font-size:13px;color:var(--alert);font-weight:600">⭐ ' + rate + '</span>' : '') +
