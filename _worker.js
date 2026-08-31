@@ -27,6 +27,11 @@ export default {
       return handleSyncApi(request, env);
     }
 
+    // 处理 /api/ai 路径 → 记账智能分类（零样本，不依赖预置词库）；未绑定 AI 时优雅降级
+    if (path === '/api/ai') {
+      return handleAi(request, env);
+    }
+
     // 其他路径 → 交给 Cloudflare Pages 托管静态文件
     // env.ASSETS.fetch 会从 Pages 的静态资源中查找并返回文件
     try {
@@ -213,6 +218,82 @@ async function handleSyncApi(request, env) {
 
   // 未绑定 KV → 回退到 WebDAV 代理（老用户/其他 WebDAV 服务仍可工作）
   return handleWebDAVProxy(request);
+}
+
+// 记账智能分类：前端把消费名称 + 现有分类体系发来，Worker 调 Workers AI 做零样本分类。
+// 不绑定 AI（env.AI 不存在）或调用失败 → 返回 ai:false，前端自动回退关键词逻辑，功能不中断。
+async function handleAi(request, env) {
+  const cors = {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  };
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: cors });
+  }
+  if (request.method !== 'POST') {
+    return jsonError(405, '仅支持 POST');
+  }
+  if (!env.AI) {
+    return new Response(JSON.stringify({ ai: false, reason: 'AI 未绑定' }), { status: 200, headers: cors });
+  }
+  let body;
+  try { body = await request.json(); } catch (e) { return jsonError(400, '请求体非合法 JSON'); }
+  const text = (body.text || '').toString().slice(0, 200).trim();
+  if (!text) return jsonError(400, '缺少 text 字段');
+  const eCats = Array.isArray(body.eCats) ? body.eCats : [];
+  const iCats = Array.isArray(body.iCats) ? body.iCats : [];
+  const eSubs = (body.eSubs && typeof body.eSubs === 'object') ? body.eSubs : {};
+  const iSubs = (body.iSubs && typeof body.iSubs === 'object') ? body.iSubs : {};
+
+  const subsDesc = (obj) => Object.keys(obj).map(k => k + '：' + (obj[k] || []).join('/')).join('；');
+  const schema =
+    '【支出一级分类】' + eCats.join('、') + '\n' +
+    '【收入一级分类】' + iCats.join('、') + '\n' +
+    '【支出二级分类】' + subsDesc(eSubs) + '\n' +
+    '【收入二级分类】' + subsDesc(iSubs);
+
+  const sys = '你是记账分类助手。只依据给定分类体系对消费名称做零样本分类，严禁自造分类，不要解释。';
+  const user =
+    schema + '\n\n消费名称：' + text + '\n\n请严格只输出一个 JSON 对象（不要代码块、不要额外文字）：\n' +
+    '{"type":"e 或 i（e=支出，i=收入）","cat":"一级分类名（必须来自上面体系，无匹配则空字符串）","sub":"二级分类名（必须来自该一级下的二级，无则空字符串）","reason":"10字内中文理由"}';
+
+  try {
+    const resp = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+      messages: [
+        { role: 'system', content: sys },
+        { role: 'user', content: user }
+      ],
+      max_tokens: 200,
+      temperature: 0.1,
+      stream: false
+    });
+    const raw = (resp && resp.response) ? resp.response : '';
+    const m = raw.match(/\{[\s\S]*\}/);
+    if (!m) return new Response(JSON.stringify({ ai: true, type: '', cat: '', sub: '', reason: '', raw }), { status: 200, headers: cors });
+    let obj;
+    try { obj = JSON.parse(m[0]); } catch (e) { return new Response(JSON.stringify({ ai: true, type: '', cat: '', sub: '', reason: '', raw }), { status: 200, headers: cors }); }
+    let type = obj.type;
+    if (type === '收入' || type === '收') type = 'i';
+    if (type === '支出' || type === '支') type = 'e';
+    if (type !== 'e' && type !== 'i') type = '';
+    let cat = (typeof obj.cat === 'string') ? obj.cat.trim() : '';
+    let sub = (typeof obj.sub === 'string') ? obj.sub.trim() : '';
+    const validCats = type === 'i' ? iCats : eCats;
+    if (cat && validCats.indexOf(cat) === -1) {
+      const hit = validCats.find(c => c.indexOf(cat) > -1 || cat.indexOf(c) > -1);
+      cat = hit || '';
+    }
+    const validSubs = type === 'i' ? (iSubs[cat] || []) : (eSubs[cat] || []);
+    if (sub && validSubs.indexOf(sub) === -1) {
+      const hit = validSubs.find(s => s.indexOf(sub) > -1 || sub.indexOf(s) > -1);
+      sub = hit || '';
+    }
+    return new Response(JSON.stringify({ ai: true, type, cat, sub, reason: obj.reason || '', raw }), { status: 200, headers: cors });
+  } catch (e) {
+    return jsonError(502, 'AI 调用失败：' + (e ? e.message : '未知错误'));
+  }
 }
 
 function b64(str) {

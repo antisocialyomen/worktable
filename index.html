@@ -680,6 +680,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
       <div class="nav-item" data-mod="study"><i class="fas fa-graduation-cap"></i><span>学习</span></div>
       <div class="nav-item" data-mod="period"><i class="fas fa-heartbeat"></i><span>经期</span></div>
       <div class="nav-item" data-mod="countdown"><i class="fas fa-hourglass-half"></i><span>倒数</span></div>
+      <div class="nav-item" data-mod="tripbox"><i class="fas fa-suitcase-rolling"></i><span>旅箱</span></div>
       <div class="nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
       <div class="nav-item" data-mod="drama"><i class="fas fa-film"></i><span>热播</span></div>
       <div class="nav-item" data-mod="content"><i class="fas fa-pen-fancy"></i><span>创作</span></div>
@@ -951,6 +952,79 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           <div style="text-align:right;margin-top:12px"><button class="btn btn-p" onclick="saveCountdown()"><i class="fas fa-save"></i> 保存</button></div>
         </div>
         <div class="card" style="margin-top:16px"><div class="card-hd"><h3>📑 我的倒数日</h3><div style="display:flex;gap:6px"><input class="in" id="cdSearch" placeholder="搜索事件名称..." oninput="renderCountdowns()" style="width:140px;padding:4px 8px;font-size:12px"><button class="btn-sm btn-o" onclick="document.getElementById('cdSearch').focus()"><i class="fas fa-search"></i></button></div></div><div id="cdList"></div></div>
+      </div>
+
+      <!-- 旅箱 / 智能行李清单 -->
+      <div class="page" id="p-tripbox">
+        <style>
+          #p-tripbox .tb-act{display:inline-flex;align-items:center;padding:5px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:var(--bg-card);transition:all var(--t);user-select:none}
+          #p-tripbox .tb-act:hover{border-color:var(--primary);color:var(--primary)}
+          #p-tripbox .tb-act.on{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(155,126,222,.3)}
+          #p-tripbox .tb-trip{border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;background:var(--bg-card);cursor:pointer;transition:all var(--t)}
+          #p-tripbox .tb-trip:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+          #p-tripbox .tb-trip.on{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-bg)}
+          #p-tripbox .tb-cat-hd{font-size:13px;font-weight:700;color:var(--primary);margin:14px 0 4px;display:flex;align-items:center;gap:6px}
+          #p-tripbox .tb-prog{height:10px;border-radius:6px;background:var(--border);overflow:hidden;margin:8px 0}
+          #p-tripbox .tb-prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:6px;transition:width .3s}
+        </style>
+        <div class="card">
+          <div class="card-hd"><h3 id="tbFormTitle">🧳 新建旅行</h3><span class="btn-sm btn-o" onclick="tbResetForm()">清空</span></div>
+          <div class="ig" style="flex-wrap:wrap">
+            <input class="in" id="tbTitle" placeholder="旅行名称，如：东京旅行" style="flex:1 1 100%">
+            <input class="in" id="tbDest" placeholder="目的地，如：东京，日本" style="flex:1 1 55%">
+            <select class="in" id="tbType" style="flex:1 1 35%">
+              <option value="leisure">休闲</option>
+              <option value="business">商务</option>
+              <option value="family">探亲访友</option>
+              <option value="outdoor">户外</option>
+              <option value="mixed">混合</option>
+            </select>
+            <input class="in" id="tbStart" type="date" style="flex:1" onchange="tbCalcNights()">
+            <input class="in" id="tbEnd" type="date" style="flex:1" onchange="tbCalcNights()">
+            <div style="flex:0 0 auto;align-self:center;font-size:13px;font-weight:600;color:var(--primary)" id="tbNights">0 晚</div>
+          </div>
+          <div class="ig" style="margin-top:4px;flex-wrap:wrap">
+            <span style="font-size:12px;color:var(--text2);align-self:center">天气预设</span>
+            <select class="in" id="tbWeather" style="flex:0 0 auto;width:120px">
+              <option value="auto">暂不确定</option>
+              <option value="hot">炎热 ≥28°</option>
+              <option value="warm">温暖 18-28°</option>
+              <option value="cold">寒冷 &lt;10°</option>
+            </select>
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px;align-self:center"><input type="checkbox" id="tbRain"> 有雨</label>
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px;align-self:center"><input type="checkbox" id="tbSnow"> 有雪</label>
+          </div>
+          <div style="margin-top:10px;font-size:12px;color:var(--text2)">参与活动（可多选）</div>
+          <div id="tbActs" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div>
+          <div class="ig" style="margin-top:10px;flex-wrap:wrap">
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px;align-self:center"><input type="checkbox" id="tbLaundry"> 有洗衣设施</label>
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px;align-self:center"><input type="checkbox" id="tbRepeat"> 重复基础衣物</label>
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px;align-self:center"><input type="checkbox" id="tbIntl"> 国际旅行</label>
+          </div>
+          <div style="text-align:right;margin-top:12px"><button class="btn btn-p" onclick="tbSaveTrip()"><i class="fas fa-save"></i> 保存并生成清单</button></div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="card-hd"><h3>🧳 我的旅行</h3><span class="btn-sm btn-o" onclick="tbResetForm()">＋新建</span></div>
+          <div id="tbList"></div>
+        </div>
+        <div class="card" id="tbDetailCard" style="margin-top:16px;display:none">
+          <div class="card-hd">
+            <h3 id="tbDetailTitle">清单</h3>
+            <div style="display:flex;gap:6px">
+              <button class="btn-sm btn-o" onclick="tbRegenerate()"><i class="fas fa-sync"></i> 重新生成</button>
+              <button class="btn-sm btn-p" onclick="tbShareText()"><i class="fas fa-share"></i> 分享</button>
+            </div>
+          </div>
+          <div id="tbProgress" style="margin:2px 0 8px"></div>
+          <div class="ig" style="margin-top:2px"><label style="font-size:12px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="tbHideDone" onchange="tbRenderDetail()"> 隐藏已完成</label>
+          <span style="font-size:12px;color:var(--text3);margin-left:auto" id="tbDetailMeta"></span></div>
+          <div id="tbDetail"></div>
+          <div class="ig" style="margin-top:14px;border-top:1px dashed var(--border);padding-top:12px">
+            <input class="in" id="tbAddName" placeholder="添加自定义物品…" style="flex:1">
+            <select class="in" id="tbAddCat" style="flex:0 0 auto;width:140px"></select>
+            <button class="btn-sm btn-p" onclick="tbAddCustom()"><i class="fas fa-plus"></i> 添加</button>
+          </div>
+        </div>
       </div>
 
       <!-- NOTES -->
@@ -1232,6 +1306,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
         <div class="m-nav-item" data-mod="notes"><i class="fas fa-lightbulb"></i><span>灵感</span></div>
         <div class="m-nav-item" data-mod="study"><i class="fas fa-graduation-cap"></i><span>学习</span></div>
         <div class="m-nav-item" data-mod="countdown"><i class="fas fa-hourglass-half"></i><span>倒数</span></div>
+        <div class="m-nav-item" data-mod="tripbox"><i class="fas fa-suitcase-rolling"></i><span>旅箱</span></div>
         <div class="m-nav-item" data-mod="hotnews"><i class="fas fa-fire"></i><span>热点</span></div>
         <div class="m-nav-item" data-mod="drama"><i class="fas fa-film"></i><span>剧集</span></div>
         <div class="m-nav-item" data-mod="settings"><i class="fas fa-cog"></i><span>设置</span></div>
@@ -2330,12 +2405,12 @@ function toast(msg, duration) {
 // ===== NAVIGATION =====
 const MOD_NAMES = {
   home:'首页', tasks:'任务', life:'日常', schedule:'日程',
-  notes:'笔记', study:'学习', period:'经期', countdown:'倒数', hotnews:'热点', drama:'热播', data:'数据',
+  notes:'笔记', study:'学习', period:'经期', countdown:'倒数', tripbox:'旅箱', hotnews:'热点', drama:'热播', data:'数据',
   content:'创作', food:'吃啥', settings:'设置'
 };
 const MOD_ICONS = {
   home:'fa-home', tasks:'fa-tasks', life:'fa-heart', schedule:'fa-calendar',
-  notes:'fa-lightbulb', study:'fa-graduation-cap', period:'fa-heartbeat', countdown:'fa-hourglass-half', hotnews:'fa-fire', drama:'fa-film', data:'fa-chart-bar',
+  notes:'fa-lightbulb', study:'fa-graduation-cap', period:'fa-heartbeat', countdown:'fa-hourglass-half', tripbox:'fa-suitcase-rolling', hotnews:'fa-fire', drama:'fa-film', data:'fa-chart-bar',
   content:'fa-pen-fancy', food:'fa-utensils', settings:'fa-cog'
 };
 
@@ -2364,6 +2439,7 @@ function go(m) {
   if (m === 'period') renderPeriod();
   if (m === 'life') switchLifeTab('expense');
   if (m === 'countdown') { renderCountdowns(); onCDCalType(); renderCDColors(window.__cdColor || CD_COLORS[0].v); }
+  if (m === 'tripbox') { renderTripbox(); }
   renderAll();
 }
 
@@ -2694,7 +2770,7 @@ function initTheme() {
 
 // ===== WEBDAV =====
 function readSyncData() {
-  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs','incomeSubs','totalAssets','totalDebts','assetEyes','foodShops'];
+  const keys = ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','periods','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs','incomeSubs','totalAssets','totalDebts','assetEyes','foodShops','trips'];
   const d = {};
   keys.forEach(k => { d[k] = Store.get(k, null); });
   return d;
@@ -2738,7 +2814,7 @@ function mergeArrayById(localArr, remoteArr) {
 
 function mergeRecords(local, remote) {
   const result = {};
-  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant','periods','calorie','eatCats','countdowns','studyBook'];
+  const arrayKeys = ['tasks','events','notes','habits','shopping','collections','topics','materials','health','expenses','hotFav','dramaWant','periods','calorie','eatCats','countdowns','studyBook','trips'];
   const allKeys = new Set([...Object.keys(local || {}), ...Object.keys(remote || {})]);
   for (const key of allKeys) {
     const loc = local ? local[key] : undefined;
@@ -3604,7 +3680,32 @@ function autoDetectType() {
   const typeEl = document.getElementById('expType');
   if (typeEl && typeEl.value !== type) { typeEl.value = type; onExpTypeChange(); }
 }
-function applyNl() {
+// AI 智能分类：把消费名称 + 现有分类体系发给 /api/ai，由 Workers AI 零样本推断。
+// 任何失败（未绑定 AI / 网络错误 / 超时 / 模型未返回合法分类）都返回 null，由调用方回退关键词逻辑。
+async function aiClassify(raw) {
+  try {
+    const schema = {
+      eCats: getExpCats1(),
+      iCats: INCOME_CATS1,
+      eSubs: getExpSubs(),
+      iSubs: getIncomeSubs()
+    };
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 8000);
+    const r = await fetch('/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: raw, ...schema }),
+      signal: ctrl.signal
+    });
+    clearTimeout(timer);
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (!d || d.ai === false || !d.type) return null;
+    return d;
+  } catch (e) { return null; }
+}
+async function applyNl() {
   const raw = (document.getElementById('expNl') && document.getElementById('expNl').value || '').trim();
   if (!raw) return toast('请输入自然语言，如：晚餐30 / 买药20 / 演唱会两千');
   let txt = raw, date = todayStr(), amt = 0, cat = '', sub = '';
@@ -3616,26 +3717,36 @@ function applyNl() {
   let am = txt.match(/(\d+(?:\.\d+)?)/);
   if (am) amt = parseFloat(am[1]);
   else { const cn = cnToNum(txt); if (cn) amt = cn; }
-  const type = detectNlType(raw);
+
+  // 优先走 AI 识别（不依赖词库）；失败则回退到关键词逻辑
+  const ai = await aiClassify(raw);
+  let type, aiReason = '';
+  if (ai && ai.type) {
+    type = ai.type; cat = ai.cat || ''; sub = ai.sub || ''; aiReason = ai.reason || '';
+  } else {
+    type = detectNlType(raw);
+    const allCats = type === 'i' ? INCOME_CATS1 : CATS1;
+    for (const c of allCats) { if (raw.indexOf(c) > -1) { cat = c; break; } }
+    const kw = type === 'i' ? NL_KW_I : NL_KW_E;
+    if (!cat) {
+      const m = matchKw(raw, kw);
+      if (m) { cat = m[1]; sub = m[2] || ''; }
+    }
+    if (cat) {
+      const subs = type === 'i' ? getIncomeSubs()[cat] : getExpSubs()[cat];
+      for (const s of (subs || [])) { if (raw.indexOf(s) > -1) { sub = s; break; } }
+    }
+  }
+
   const typeEl = document.getElementById('expType');
-  if (typeEl) typeEl.value = type;
-  const allCats = type === 'i' ? INCOME_CATS1 : CATS1;
-  for (const c of allCats) { if (raw.indexOf(c) > -1) { cat = c; break; } }
-  const kw = type === 'i' ? NL_KW_I : NL_KW_E;
-  if (!cat) {
-    const m = matchKw(raw, kw);
-    if (m) { cat = m[1]; sub = m[2] || ''; }
-  }
-  if (cat) {
-    const subs = type === 'i' ? getIncomeSubs()[cat] : getExpSubs()[cat];
-    for (const s of (subs || [])) { if (raw.indexOf(s) > -1) { sub = s; break; } }
-  }
+  if (typeEl) { typeEl.value = type; onExpTypeChange(); }
   if (amt > 0) document.getElementById('expAmt').value = amt;
   document.getElementById('expDate').value = date;
   var nlBtn = document.querySelector('[data-dt-target="expDate"]');
   if (nlBtn) nlBtn.querySelector('.dt-btn-text').textContent = date;
   if (cat) { document.getElementById('expCat').value = cat; fillExpSubs(); if (sub) document.getElementById('expSub').value = sub; }
-  toast('✅ 已智能填充' + (amt > 0 ? ' ¥' + amt : '') + (cat ? ' · ' + cat + (sub ? '·' + sub : '') : ' · 未识别分类') + (date !== todayStr() ? ' · ' + date : ''));
+  const tag = (ai && ai.type) ? '🤖 AI' : '🔑 关键词';
+  toast(tag + ' 已填充' + (amt > 0 ? ' ¥' + amt : '') + (cat ? ' · ' + cat + (sub ? '·' + sub : '') : ' · 未识别分类') + (date !== todayStr() ? ' · ' + date : '') + (aiReason ? ' · ' + aiReason : ''));
 }
 function startVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -4475,6 +4586,437 @@ function saveEvent() {
 function delEvent(id) { Store.set('events', Store.get('events', []).filter(e => e.id !== id)); renderCalendar(); renderEvents(); renderHome(); }
 function chMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderCalendar(); renderEvents(); }
 function goToday() { calDate = new Date(); renderCalendar(); renderEvents(); }
+
+// ============================================================
+// 旅箱 / 智能行李清单（TripPack 规则引擎，数据驱动，独立于 UI）
+// 适配个人工作台单文件 HTML 架构：localStorage 持久化，离线可用
+// ============================================================
+const TB_CATS = ['证件与重要物品','衣物','鞋类','洗漱','电子设备','药品与健康','活动装备','其他'];
+const TB_ACTS = [
+  {id:'sightseeing',n:'日常观光'},{id:'business',n:'商务会议'},{id:'beach',n:'海滩'},{id:'swim',n:'游泳'},
+  {id:'hiking',n:'徒步'},{id:'run',n:'跑步'},{id:'gym',n:'健身'},{id:'ski',n:'滑雪'},
+  {id:'dinner',n:'正式晚宴'},{id:'photo',n:'摄影'},{id:'night',n:'城市夜生活'},{id:'religious',n:'宗教场所'},
+  {id:'flight',n:'长途飞行'},{id:'kids',n:'儿童同行'}
+];
+
+// 规则库：when(ctx)->bool 决定是否触发；ratio/strat 决定数量；acts 限制活动触发
+const TB_RULES = [
+  // 证件与重要物品
+  {id:'idcard',name:'身份证',cat:'证件与重要物品',base:1,req:true},
+  {id:'passport',name:'护照',cat:'证件与重要物品',base:1,req:true,when:c=>c.international},
+  {id:'visa',name:'签证/入境文件',cat:'证件与重要物品',base:1,req:true,when:c=>c.international},
+  {id:'ticket',name:'机票/行程凭证',cat:'证件与重要物品',base:1,req:true},
+  {id:'card',name:'银行卡',cat:'证件与重要物品',base:1,req:true},
+  {id:'cash',name:'现金',cat:'证件与重要物品',base:1},
+  {id:'adapter',name:'转换插头',cat:'电子设备',base:1,when:c=>c.international},
+  // 衣物
+  {id:'underwear',name:'内衣',cat:'衣物',strat:'nights+1',min:3,req:true},
+  {id:'socks',name:'袜子',cat:'衣物',strat:'nights+1',min:3},
+  {id:'tshirt',name:'T恤',cat:'衣物',ratio:0.6,upper:10,min:2},
+  {id:'shirt',name:'衬衫',cat:'衣物',base:1},
+  {id:'pants',name:'长裤',cat:'衣物',ratio:0.4,upper:6,min:2},
+  {id:'shorts',name:'短裤',cat:'衣物',ratio:0.3,upper:6,min:1,when:c=>c.weatherClass==='hot'},
+  {id:'sweater',name:'毛衣/保暖层',cat:'衣物',base:1,when:c=>c.weatherClass==='cold'},
+  {id:'jacket',name:'外套',cat:'衣物',base:1},
+  {id:'lightjacket',name:'薄外套',cat:'衣物',base:1,when:c=>c.weatherClass==='warm'||c.weatherClass==='hot'},
+  {id:'warmjacket',name:'保暖外套',cat:'衣物',base:1,when:c=>c.weatherClass==='cold'},
+  {id:'pajama',name:'睡衣',cat:'衣物',base:1},
+  {id:'warmacc',name:'保暖配件(帽/手套/围巾)',cat:'衣物',base:1,when:c=>c.weatherClass==='cold'||c.hasSnow},
+  {id:'suit',name:'正装',cat:'衣物',base:1,acts:['business','dinner']},
+  {id:'accessory',name:'配饰',cat:'衣物',base:1,acts:['dinner']},
+  // 鞋类
+  {id:'shoe',name:'日常鞋',cat:'鞋类',base:1,req:true},
+  {id:'dressshoe',name:'正式鞋',cat:'鞋类',base:1,acts:['business','dinner']},
+  {id:'slipper',name:'拖鞋',cat:'鞋类',base:1},
+  {id:'hikingshoe',name:'徒步鞋',cat:'鞋类',base:1,acts:['hiking']},
+  {id:'antislip',name:'防滑鞋',cat:'鞋类',base:1,when:c=>c.hasSnow},
+  // 洗漱
+  {id:'toothbrush',name:'牙刷',cat:'洗漱',base:1,req:true},
+  {id:'toothpaste',name:'牙膏',cat:'洗漱',base:1},
+  {id:'facewash',name:'洗面用品',cat:'洗漱',base:1},
+  {id:'shampoo',name:'洗发用品',cat:'洗漱',base:1},
+  {id:'bodywash',name:'沐浴用品',cat:'洗漱',base:1},
+  {id:'skincare',name:'护肤品',cat:'洗漱',base:1},
+  {id:'sunscreen',name:'防晒霜',cat:'洗漱',base:1,when:c=>c.weatherClass==='hot'||c.weatherClass==='warm'||c.activities.includes('beach')||c.activities.includes('hiking')||c.activities.includes('photo')},
+  {id:'raincoat',name:'雨衣/防水外套',cat:'其他',base:1,when:c=>c.hasRain},
+  // 电子设备
+  {id:'phone',name:'手机',cat:'电子设备',base:1,req:true},
+  {id:'phonecharger',name:'手机充电器',cat:'电子设备',base:1,req:true},
+  {id:'cable',name:'充电线',cat:'电子设备',base:1},
+  {id:'powerbank',name:'充电宝',cat:'电子设备',base:1},
+  {id:'earphone',name:'耳机',cat:'电子设备',base:1},
+  {id:'laptop',name:'笔记本电脑',cat:'电子设备',base:1,acts:['business']},
+  {id:'laptopcharger',name:'电脑充电器',cat:'电子设备',base:1,acts:['business']},
+  {id:'camera',name:'相机',cat:'电子设备',base:1,acts:['photo']},
+  {id:'sdcard',name:'存储卡',cat:'电子设备',base:1,acts:['photo']},
+  // 药品与健康
+  {id:'meds',name:'常用药品',cat:'药品与健康',base:1,req:true},
+  {id:'bandaid',name:'创可贴',cat:'药品与健康',base:1},
+  // 活动装备
+  {id:'swimwear',name:'泳衣',cat:'活动装备',base:1,acts:['beach','swim']},
+  {id:'beachtowel',name:'沙滩巾',cat:'活动装备',base:1,acts:['beach']},
+  {id:'sunglasses',name:'墨镜',cat:'活动装备',base:1,when:c=>c.weatherClass==='hot'||c.activities.includes('beach')},
+  {id:'sunhat',name:'防晒帽',cat:'活动装备',base:1,when:c=>c.weatherClass==='hot'||c.activities.includes('beach')||c.activities.includes('hiking')},
+  {id:'hikingsock',name:'登山袜',cat:'活动装备',base:1,acts:['hiking']},
+  {id:'bottle',name:'水壶',cat:'活动装备',base:1,acts:['hiking','run','gym']},
+  {id:'daypack',name:'小背包',cat:'活动装备',base:1,acts:['hiking']},
+  {id:'neckpillow',name:'颈枕',cat:'活动装备',base:1,acts:['flight']},
+  {id:'eyemask',name:'眼罩',cat:'活动装备',base:1,acts:['flight']},
+  {id:'kidstuff',name:'儿童用品',cat:'活动装备',base:1,acts:['kids']},
+  {id:'umbrella',name:'雨伞',cat:'其他',base:1,when:c=>c.hasRain}
+];
+
+const TB_TYPE_LABEL = {leisure:'休闲',business:'商务',family:'探亲访友',outdoor:'户外',mixed:'混合'};
+
+function tbGetTrips(){ return Store.get('trips', []) || []; }
+
+function tbCalcQty(r, ctx){
+  if (r.strat === 'nights+1') {
+    let q = ctx.nights + 1;
+    if (ctx.hasLaundry) q = Math.max(3, Math.ceil((ctx.nights + 1) * 0.6));
+    return Math.max(r.min || 3, q);
+  }
+  if (r.ratio) {
+    let q = Math.min(Math.max(r.min || 2, Math.ceil(ctx.nights * r.ratio)), r.upper || 99);
+    if (ctx.hasLaundry && r.cat === '衣物') q = Math.ceil(q * 0.6);
+    if (ctx.repeatBasics && r.cat === '衣物') q = Math.min(q, (r.min || 2) + 1);
+    return Math.max(r.min || 1, q);
+  }
+  return r.base || 1;
+}
+
+function tbReasons(r, ctx){
+  const rs = [ctx.nights + ' 晚行程'];
+  if (ctx.tripType && TB_TYPE_LABEL[ctx.tripType]) rs.push(TB_TYPE_LABEL[ctx.tripType]);
+  if (ctx.weatherClass === 'hot') rs.push('炎热天气');
+  if (ctx.weatherClass === 'cold') rs.push('寒冷天气');
+  if (ctx.hasRain) rs.push('有降雨风险');
+  if (ctx.hasSnow) rs.push('有降雪风险');
+  if (ctx.hasLaundry) rs.push('有洗衣条件·已精简数量');
+  if (r.acts && r.acts.length) rs.push('活动：' + r.acts.map(a => (TB_ACTS.find(x => x.id === a) || {}).n).join('/'));
+  return rs.filter(Boolean);
+}
+
+function tbGenerateItems(ctx){
+  const out = [];
+  TB_RULES.forEach(r => {
+    if (r.acts && r.acts.length && !r.acts.some(a => ctx.activities.includes(a))) return;
+    if (r.when && !r.when(ctx)) return;
+    out.push({
+      id: 'g_' + r.id + '_' + Math.random().toString(36).slice(2, 7),
+      defId: r.id, name: r.name, cat: r.cat, qty: tbCalcQty(r, ctx), unit: r.unit || '件',
+      checked: false, required: !!r.req, custom: false, genBy: r.id, notes: '', userRemoved: false,
+      reasons: tbReasons(r, ctx)
+    });
+  });
+  return out;
+}
+
+// 重新生成时合并：保留用户勾选/自定义项，尊重用户主动删除（AC-005 / AC-006）
+function tbMergeItems(trip, generated){
+  const prev = trip.items || [];
+  const byDef = {};
+  prev.forEach(it => { if (it.defId) byDef[it.defId] = it; });
+  const customKept = prev.filter(it => it.custom && !it.userRemoved);
+  const result = [];
+  generated.forEach(g => {
+    const old = byDef[g.defId];
+    if (old && old.userRemoved) return; // 用户主动删除，不再插回
+    const merged = Object.assign({}, g);
+    if (old) {
+      merged.checked = !!old.checked;
+      merged.notes = old.notes || '';
+      if (old.name && old.name !== g.name) merged.name = old.name;
+      if (typeof old.qty === 'number' && old.qty !== g.qty) merged.qty = old.qty;
+    }
+    result.push(merged);
+  });
+  customKept.forEach(c => result.push(Object.assign({}, c)));
+  return result;
+}
+
+function tbBuildCtx(){
+  return {
+    destination: (document.getElementById('tbDest').value || '').trim(),
+    tripType: document.getElementById('tbType').value,
+    nights: tbCalcNights(true),
+    activities: (window.__tbActs || []).slice(),
+    hasLaundry: document.getElementById('tbLaundry').checked,
+    repeatBasics: document.getElementById('tbRepeat').checked,
+    international: document.getElementById('tbIntl').checked,
+    weatherClass: document.getElementById('tbWeather').value,
+    hasRain: document.getElementById('tbRain').checked,
+    hasSnow: document.getElementById('tbSnow').checked
+  };
+}
+function tbTripCtx(t){
+  return {
+    destination: t.destination || '', tripType: t.tripType || 'leisure', nights: t.nights || 1,
+    activities: (t.activities || []).slice(), hasLaundry: !!t.hasLaundry, repeatBasics: !!t.repeatBasics,
+    international: !!t.international, weatherClass: t.weatherClass || 'auto', hasRain: !!t.hasRain, hasSnow: !!t.hasSnow
+  };
+}
+
+function tbCalcNights(silent){
+  const s = document.getElementById('tbStart').value, e = document.getElementById('tbEnd').value;
+  let n = 0;
+  if (s && e) { const d = (Date.parse(e) - Date.parse(s)) / 86400000; n = Math.floor(d); }
+  const el = document.getElementById('tbNights'); if (el) el.textContent = Math.max(0, n) + ' 晚';
+  return Math.max(0, n);
+}
+
+function tbRenderActs(){
+  const box = document.getElementById('tbActs'); if (!box) return;
+  box.innerHTML = TB_ACTS.map(a => '<span class="tb-act' + (window.__tbActs && window.__tbActs.includes(a.id) ? ' on' : '') + '" onclick="tbToggleAct(\'' + a.id + '\')">' + a.n + '</span>').join('');
+}
+function tbToggleAct(id){
+  window.__tbActs = window.__tbActs || [];
+  const i = window.__tbActs.indexOf(id);
+  if (i >= 0) window.__tbActs.splice(i, 1); else window.__tbActs.push(id);
+  tbRenderActs();
+}
+
+function tbResetForm(){
+  window.__tbEditId = null;
+  const ft = document.getElementById('tbFormTitle'); if (ft) ft.textContent = '🧳 新建旅行';
+  document.getElementById('tbTitle').value = '';
+  document.getElementById('tbDest').value = '';
+  const today = new Date();
+  const end = new Date(Date.now() + 5 * 86400000);
+  const p = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  document.getElementById('tbStart').value = p(today);
+  document.getElementById('tbEnd').value = p(end);
+  document.getElementById('tbType').value = 'leisure';
+  document.getElementById('tbWeather').value = 'auto';
+  document.getElementById('tbRain').checked = false;
+  document.getElementById('tbSnow').checked = false;
+  document.getElementById('tbLaundry').checked = false;
+  document.getElementById('tbRepeat').checked = false;
+  document.getElementById('tbIntl').checked = false;
+  window.__tbActs = [];
+  tbCalcNights(); tbRenderActs();
+}
+
+function tbSaveTrip(){
+  const title = (document.getElementById('tbTitle').value || '').trim();
+  if (!title) { toast('请输入旅行名称'); return; }
+  const start = document.getElementById('tbStart').value;
+  const end = document.getElementById('tbEnd').value;
+  if (!start || !end) { toast('请选择出发和回程日期'); return; }
+  const nights = tbCalcNights(true);
+  if (nights < 1) { toast('回程需晚于出发，至少 1 晚'); return; }
+  const ctx = tbBuildCtx();
+  const generated = tbGenerateItems(ctx);
+  const id = window.__tbEditId || (Date.now().toString());
+  const trips = tbGetTrips();
+  const now = Date.now();
+  let trip = trips.find(t => t.id === id);
+  if (trip) {
+    trip.title = title; trip.destination = ctx.destination; trip.tripType = ctx.tripType;
+    trip.start = start; trip.end = end; trip.nights = nights;
+    trip.activities = ctx.activities; trip.hasLaundry = ctx.hasLaundry; trip.repeatBasics = ctx.repeatBasics;
+    trip.international = ctx.international; trip.weatherClass = ctx.weatherClass; trip.hasRain = ctx.hasRain; trip.hasSnow = ctx.hasSnow;
+    trip.items = tbMergeItems(trip, generated);
+    trip.updatedAt = now;
+  } else {
+    trip = { id, title, destination: ctx.destination, tripType: ctx.tripType, start, end, nights,
+      activities: ctx.activities, hasLaundry: ctx.hasLaundry, repeatBasics: ctx.repeatBasics, international: ctx.international,
+      weatherClass: ctx.weatherClass, hasRain: ctx.hasRain, hasSnow: ctx.hasSnow,
+      items: generated, createdAt: now, updatedAt: now };
+    trips.push(trip);
+  }
+  Store.set('trips', trips);
+  window.__tbEditId = null;
+  tbResetForm();
+  renderTripbox();
+  toast('✅ 已保存并生成清单');
+}
+
+function tbEditTrip(id){
+  const t = tbGetTrips().find(x => x.id === id); if (!t) return;
+  window.__tbEditId = id;
+  document.getElementById('tbFormTitle').textContent = '✏️ 编辑旅行';
+  document.getElementById('tbTitle').value = t.title;
+  document.getElementById('tbDest').value = t.destination || '';
+  document.getElementById('tbType').value = t.tripType || 'leisure';
+  document.getElementById('tbStart').value = t.start;
+  document.getElementById('tbEnd').value = t.end;
+  document.getElementById('tbWeather').value = t.weatherClass || 'auto';
+  document.getElementById('tbRain').checked = !!t.hasRain;
+  document.getElementById('tbSnow').checked = !!t.hasSnow;
+  document.getElementById('tbLaundry').checked = !!t.hasLaundry;
+  document.getElementById('tbRepeat').checked = !!t.repeatBasics;
+  document.getElementById('tbIntl').checked = !!t.international;
+  window.__tbActs = (t.activities || []).slice();
+  tbCalcNights(); tbRenderActs();
+  document.getElementById('tbTitle').focus();
+  const page = document.querySelector('#p-tripbox'); if (page) page.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function tbDuplicate(id){
+  const trips = tbGetTrips();
+  const src = trips.find(t => t.id === id); if (!src) return;
+  const copy = JSON.parse(JSON.stringify(src));
+  copy.id = Date.now().toString(); copy.title = src.title + ' 副本';
+  copy.createdAt = copy.updatedAt = Date.now();
+  copy.items = copy.items.map(i => { const n = Object.assign({}, i); n.id = (i.custom ? 'c_' : 'g_') + Math.random().toString(36).slice(2, 7); n.checked = false; return n; });
+  trips.push(copy); Store.set('trips', trips); renderTripbox(); toast('✅ 已复制旅行');
+}
+
+function tbDelTrip(id){
+  if (!confirm('删除这个旅行及其清单？')) return;
+  Store.set('trips', tbGetTrips().filter(t => t.id !== id));
+  if (window.__tbOpenId === id) { window.__tbOpenId = null; const c = document.getElementById('tbDetailCard'); if (c) c.style.display = 'none'; }
+  renderTripbox(); toast('🗑️ 已删除');
+}
+
+function tbOpenTrip(id){
+  window.__tbOpenId = id;
+  document.querySelectorAll('.tb-trip').forEach(el => el.classList.remove('on'));
+  const card = document.getElementById('tbDetailCard'); if (card) card.style.display = 'block';
+  tbRenderDetail(); tbRenderList();
+  if (card) card.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function tbRenderList(){
+  const trips = tbGetTrips().slice().sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+  const list = document.getElementById('tbList'); if (!list) return;
+  if (!trips.length) { list.innerHTML = '<div class="emp"><i class="fas fa-suitcase-rolling"></i><p>还没有旅行，先在上方建一个吧</p></div>'; return; }
+  list.innerHTML = trips.map(t => {
+    const its = t.items.filter(i => !i.userRemoved);
+    const reqTot = its.filter(i => i.required).length;
+    const reqDone = its.filter(i => i.required && i.checked).length;
+    const tot = its.length, done = its.filter(i => i.checked).length;
+    const pct = reqTot ? Math.round(reqDone / reqTot * 100) : 100;
+    const open = window.__tbOpenId === t.id;
+    return '<div class="tb-trip' + (open ? ' on' : '') + '" onclick="tbOpenTrip(\'' + t.id + '\')">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;font-size:15px">' + escHtml(t.title) + '</div>'
+      + '<div style="display:flex;gap:4px" onclick="event.stopPropagation()">'
+      + '<span class="btn-sm btn-o" onclick="tbEditTrip(\'' + t.id + '\')"><i class="fas fa-edit"></i></span>'
+      + '<span class="btn-sm btn-o" onclick="tbDuplicate(\'' + t.id + '\')" title="复制"><i class="fas fa-copy"></i></span>'
+      + '<span class="btn-sm btn-o" style="color:var(--d)" onclick="tbDelTrip(\'' + t.id + '\')"><i class="fas fa-trash"></i></span>'
+      + '</div></div>'
+      + '<div style="font-size:12px;color:var(--text2);margin-top:3px">' + escHtml(t.destination || '') + ' · ' + t.start + ' → ' + t.end + ' · ' + t.nights + ' 晚</div>'
+      + '<div class="tb-prog"><i style="width:' + pct + '%"></i></div>'
+      + '<div style="font-size:12px;color:var(--text3)">必需物品已打包 ' + reqDone + '/' + reqTot + '（' + pct + '%）· 共 ' + tot + ' 件已勾 ' + done + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function tbRenderDetail(){
+  const tid = window.__tbOpenId;
+  const card = document.getElementById('tbDetailCard');
+  if (!tid) { if (card) card.style.display = 'none'; return; }
+  const trip = tbGetTrips().find(t => t.id === tid);
+  if (!trip) { if (card) card.style.display = 'none'; return; }
+  document.getElementById('tbDetailTitle').textContent = '📋 ' + trip.title;
+  const its = trip.items.filter(i => !i.userRemoved);
+  const reqTot = its.filter(i => i.required).length, reqDone = its.filter(i => i.required && i.checked).length;
+  const tot = its.length, done = its.filter(i => i.checked).length;
+  const pct = reqTot ? Math.round(reqDone / reqTot * 100) : 100;
+  document.getElementById('tbProgress').innerHTML = '<div class="tb-prog"><i style="width:' + pct + '%"></i></div><div style="font-size:12px;color:var(--text3);margin-top:4px">必需 ' + reqDone + '/' + reqTot + '（' + pct + '%）· 全部 ' + done + '/' + tot + '</div>';
+  const hide = document.getElementById('tbHideDone').checked;
+  let html = '';
+  TB_CATS.forEach(cat => {
+    let cits = its.filter(i => i.cat === cat);
+    if (hide) cits = cits.filter(i => !i.checked);
+    if (!cits.length) return;
+    html += '<div class="tb-cat-hd">📦 ' + cat + ' <span style="font-size:11px;color:var(--text3);font-weight:400">' + cits.length + ' 件</span></div>';
+    cits.forEach(i => {
+      const checked = !!i.checked;
+      html += '<div class="cb" onclick="tbToggle(\'' + tid + '\',\'' + i.id + '\')">'
+        + '<input type="checkbox" ' + (checked ? 'checked' : '') + '>'
+        + '<span class="cc"></span>'
+        + '<span class="ct" style="' + (checked ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + escHtml(i.name)
+        + (i.required ? ' <span class="tag t-urgent" style="font-size:10px;padding:1px 5px">必需</span>' : '')
+        + (i.custom ? ' <span style="font-size:10px;color:var(--primary)">＋自定义</span>' : '') + '</span>'
+        + '<span style="font-size:12px;color:var(--text2);margin-left:6px">×' + (i.qty || 1) + '</span>'
+        + '<div class="cb-acts">'
+        + '<span class="btn-sm btn-o" onclick="event.stopPropagation();tbQty(\'' + tid + '\',\'' + i.id + '\',-1)">−</span>'
+        + '<span class="btn-sm btn-o" onclick="event.stopPropagation();tbQty(\'' + tid + '\',\'' + i.id + '\',1)">＋</span>'
+        + '<span class="btn-sm btn-o" onclick="event.stopPropagation();tbEditItem(\'' + tid + '\',\'' + i.id + '\')"><i class="fas fa-edit"></i></span>'
+        + '<span class="btn-sm btn-o" style="color:var(--d)" onclick="event.stopPropagation();tbDelItem(\'' + tid + '\',\'' + i.id + '\')"><i class="fas fa-trash"></i></span>'
+        + '</div></div>';
+    });
+  });
+  if (!html) html = '<div class="emp"><i class="fas fa-suitcase-rolling"></i><p>清单为空，点击「重新生成」试试</p></div>';
+  document.getElementById('tbDetail').innerHTML = html;
+  document.getElementById('tbDetailMeta').textContent = '点击行可勾选 · 系统推荐项可解释';
+}
+
+function tbToggle(tripId, itemId){
+  const trips = tbGetTrips(); const trip = trips.find(t => t.id === tripId); if (!trip) return;
+  const it = trip.items.find(i => i.id === itemId); if (!it) return;
+  it.checked = !it.checked; Store.set('trips', trips); tbRenderDetail(); tbRenderList();
+}
+function tbQty(tripId, itemId, d){
+  const trips = tbGetTrips(); const trip = trips.find(t => t.id === tripId); if (!trip) return;
+  const it = trip.items.find(i => i.id === itemId); if (!it) return;
+  it.qty = Math.max(1, (it.qty || 1) + d); Store.set('trips', trips); tbRenderDetail(); tbRenderList();
+}
+function tbEditItem(tripId, itemId){
+  const trips = tbGetTrips(); const trip = trips.find(t => t.id === tripId); if (!trip) return;
+  const it = trip.items.find(i => i.id === itemId); if (!it) return;
+  const nv = prompt('修改物品名称：', it.name); if (nv === null) return;
+  const v = (nv || '').trim(); if (!v) return;
+  it.name = v; Store.set('trips', trips); tbRenderDetail();
+}
+function tbDelItem(tripId, itemId){
+  const trips = tbGetTrips(); const trip = trips.find(t => t.id === tripId); if (!trip) return;
+  const it = trip.items.find(i => i.id === itemId); if (!it) return;
+  if (it.custom) { trip.items = trip.items.filter(i => i.id !== itemId); }
+  else { it.userRemoved = true; }
+  Store.set('trips', trips); tbRenderDetail(); tbRenderList();
+}
+function tbAddCustom(){
+  const tid = window.__tbOpenId; if (!tid) { toast('请先打开一个旅行'); return; }
+  const name = (document.getElementById('tbAddName').value || '').trim(); if (!name) { toast('请输入物品名称'); return; }
+  const cat = document.getElementById('tbAddCat').value;
+  const trips = tbGetTrips(); const trip = trips.find(t => t.id === tid); if (!trip) return;
+  trip.items.push({ id: 'c_' + Date.now().toString(), defId: null, name, cat, qty: 1, unit: '件', checked: false, required: false, custom: true, genBy: 'custom', notes: '', userRemoved: false, reasons: ['手动添加'] });
+  Store.set('trips', trips);
+  document.getElementById('tbAddName').value = '';
+  tbRenderDetail(); tbRenderList();
+}
+function tbRegenerate(){
+  const tid = window.__tbOpenId; if (!tid) return;
+  const trips = tbGetTrips(); const trip = trips.find(t => t.id === tid); if (!trip) return;
+  const ctx = tbTripCtx(trip);
+  const generated = tbGenerateItems(ctx);
+  trip.items = tbMergeItems(trip, generated);
+  trip.updatedAt = Date.now();
+  Store.set('trips', trips); tbRenderDetail(); tbRenderList(); toast('🔄 已按当前条件重新生成');
+}
+function tbShareText(){
+  const trip = tbGetTrips().find(t => t.id === window.__tbOpenId); if (!trip) return;
+  let s = trip.title + '\n' + trip.start + ' - ' + trip.end + ' · ' + trip.nights + ' 晚\n\n';
+  TB_CATS.forEach(cat => {
+    const its = trip.items.filter(i => i.cat === cat && !i.userRemoved);
+    if (!its.length) return;
+    s += '【' + cat + '】\n';
+    its.forEach(i => { s += (i.checked ? '☑ ' : '☐ ') + i.name + (i.qty > 1 ? (' ×' + i.qty) : '') + '\n'; });
+    s += '\n';
+  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(s).then(() => toast('📋 清单已复制到剪贴板'), () => tbCopyFallback(s));
+  } else tbCopyFallback(s);
+}
+function tbCopyFallback(s){
+  const ta = document.createElement('textarea'); ta.value = s; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast('📋 清单已复制'); } catch (e) { prompt('复制下面的清单：', s); }
+  document.body.removeChild(ta);
+}
+
+function renderTripbox(){
+  tbRenderActs();
+  const sel = document.getElementById('tbAddCat');
+  if (sel && !sel.dataset.filled) { sel.innerHTML = TB_CATS.map(c => '<option value="' + c + '">' + c + '</option>').join(''); sel.dataset.filled = '1'; }
+  if (!window.__tbActs) window.__tbActs = [];
+  const startEl = document.getElementById('tbStart');
+  if (!startEl || !startEl.value) tbResetForm(); else tbCalcNights();
+  tbRenderList();
+  if (window.__tbOpenId) tbRenderDetail();
+}
 
 // ============================================================
 // 倒数日
@@ -15411,14 +15953,14 @@ function clearBook() { if (!confirm('清空积累本？')) return; Store.set('st
 // 记账：二级分类
 // ============================================================
 const EXP_SUBS_DEFAULT = {
-  '餐饮': ['早餐','午餐','晚餐','零食','饮品','果蔬','生鲜','粮油调味','甜品','外卖'],
-  '交通': ['公交地铁','打车','高铁火车','飞机','加油','停车','共享单车'],
-  '购物': ['服饰','数码','美妆','日用品','家居','鞋包'],
-  '娱乐': ['电影','演出','游戏','会员','旅游','健身'],
-  '学习': ['书籍','课程','文具','考试','培训'],
-  '医疗': ['门诊','药品','体检','牙科'],
-  '住房': ['房租','物业','水电燃气','维修'],
-  '其他': ['借款']
+  '餐饮': ['早餐','午餐','晚餐','夜宵','零食','饮品','咖啡','奶茶','果蔬','生鲜','粮油调味','甜品','外卖','火锅','烧烤','麻辣烫','面食','饺子馄饨','包子早点','汉堡披萨','日料','西餐','快餐','食堂','聚餐宴请'],
+  '交通': ['公交地铁','打车','网约车','高铁火车','飞机','加油','充电','停车费','共享单车','电动车','租车','过路费','汽车保养','洗车','违章罚款','车险','年检','渡轮','顺风车拼车'],
+  '购物': ['服饰','男装','女装','童装','内衣袜','鞋包','箱包','数码','手机','电脑','耳机配件','家电','美妆护肤','个护清洁','日用品','家居家纺','厨具','母婴','玩具','宠物用品','运动户外','文具书籍','首饰配饰','鲜花礼品'],
+  '娱乐': ['电影','演出','演唱会','游戏','游戏充值','视频会员','音乐会员','旅游','周边游','健身','游泳','KTV','桌游','密室剧本杀','酒吧','展览','按摩足疗','美容美发','美甲','写真摄影','游乐园'],
+  '学习': ['书籍','教材课本','网课','线下课程','考试报名','培训','文具','知识付费','考证','早教'],
+  '医疗': ['门诊挂号','药品','中药','体检','牙科','眼科','耳鼻喉科','中医','疫苗','保健养生','心理咨询','住院','康复','孕产','医保'],
+  '住房': ['房租','房贷','物业','水电燃气','通讯网络','家具','家电','装修','维修','保洁家政','租房中介','取暖'],
+  '其他': ['借款','还款','捐赠','公益','赔偿','礼金','红包往来','罚款','手续费','保险','社保公积金','快递','宠物医疗','寄卖','其他']
 };
 const CATS1 = ['餐饮','交通','购物','娱乐','学习','医疗','住房','其他'];
 const INCOME_CATS1 = ['薪资','兼职','奖金','理财盈亏','收红包','中奖','借入','报销','卖二手','收礼','补贴','其他'];
@@ -15427,9 +15969,9 @@ const NL_KW_E = [
   // 餐饮
   ['早饭', '餐饮', '早餐'], ['早餐', '餐饮', '早餐'],
   ['午饭', '餐饮', '午餐'], ['中饭', '餐饮', '午餐'], ['午餐', '餐饮', '午餐'],
-  ['晚饭', '餐饮', '晚餐'], ['夜宵', '餐饮', '晚餐'], ['晚餐', '餐饮', '晚餐'], ['宵夜', '餐饮', '晚餐'],
+  ['晚饭', '餐饮', '晚餐'], ['夜宵', '餐饮', '夜宵'], ['晚餐', '餐饮', '晚餐'], ['宵夜', '餐饮', '夜宵'],
   ['零食', '餐饮', '零食'],
-  ['奶茶', '餐饮', '饮品'], ['咖啡', '餐饮', '饮品'], ['饮料', '餐饮', '饮品'], ['饮品', '餐饮', '饮品'],
+  ['奶茶', '餐饮', '奶茶'], ['咖啡', '餐饮', '咖啡'], ['星巴克', '餐饮', '咖啡'], ['瑞幸', '餐饮', '咖啡'], ['饮料', '餐饮', '饮品'], ['饮品', '餐饮', '饮品'],
   ['矿泉水', '餐饮', '饮品'], ['酸奶', '餐饮', '饮品'], ['牛奶', '餐饮', '饮品'], ['果汁', '餐饮', '饮品'],
   ['啤酒', '餐饮', '饮品'], ['红酒', '餐饮', '饮品'], ['白酒', '餐饮', '饮品'], ['酒', '餐饮', '饮品'], ['茶叶', '餐饮', '饮品'], ['茶', '餐饮', '饮品'],
   ['水果', '餐饮', '果蔬'], ['买菜', '餐饮', '果蔬'], ['菜', '餐饮', '果蔬'], ['果蔬', '餐饮', '果蔬'],
@@ -15444,117 +15986,144 @@ const NL_KW_E = [
   ['蛋糕', '餐饮', '甜品'], ['甜品', '餐饮', '甜品'], ['点心', '餐饮', '甜品'],
   ['冰淇淋', '餐饮', '甜品'], ['面包', '餐饮', '甜品'], ['饼干', '餐饮', '甜品'], ['糖果', '餐饮', '甜品'], ['巧克力', '餐饮', '甜品'],
   ['外卖', '餐饮', '外卖'], ['点外卖', '餐饮', '外卖'],
-  ['火锅', '餐饮', '其他'], ['烧烤', '餐饮', '其他'], ['烤串', '餐饮', '其他'], ['麻辣烫', '餐饮', '其他'],
-  ['米线', '餐饮', '其他'], ['面条', '餐饮', '其他'], ['面', '餐饮', '其他'], ['粉', '餐饮', '其他'],
-  ['饺子', '餐饮', '其他'], ['馄饨', '餐饮', '其他'], ['包子', '餐饮', '其他'], ['油条', '餐饮', '其他'],
-  ['豆浆', '餐饮', '其他'], ['煎饼', '餐饮', '其他'], ['汉堡', '餐饮', '其他'], ['披萨', '餐饮', '其他'],
-  ['寿司', '餐饮', '其他'], ['日料', '餐饮', '其他'], ['西餐', '餐饮', '其他'], ['快餐', '餐饮', '其他'],
-  ['食堂', '餐饮', '其他'], ['聚餐', '餐饮', '其他'], ['请客', '餐饮', '其他'], ['吃饭', '餐饮', '其他'],
-  ['便当', '餐饮', '其他'], ['盒饭', '餐饮', '其他'], ['小吃', '餐饮', '其他'], ['泡面', '餐饮', '其他'], ['方便面', '餐饮', '其他'],
+  ['火锅', '餐饮', '火锅'], ['烧烤', '餐饮', '烧烤'], ['烤串', '餐饮', '烧烤'], ['麻辣烫', '餐饮', '麻辣烫'],
+  ['米线', '餐饮', '面食'], ['面条', '餐饮', '面食'], ['面', '餐饮', '面食'], ['粉', '餐饮', '面食'],
+  ['饺子', '餐饮', '饺子馄饨'], ['馄饨', '餐饮', '饺子馄饨'], ['包子', '餐饮', '包子早点'], ['油条', '餐饮', '包子早点'],
+  ['豆浆', '餐饮', '包子早点'], ['煎饼', '餐饮', '包子早点'], ['汉堡', '餐饮', '汉堡披萨'], ['披萨', '餐饮', '汉堡披萨'],
+  ['寿司', '餐饮', '日料'], ['日料', '餐饮', '日料'], ['西餐', '餐饮', '西餐'], ['快餐', '餐饮', '快餐'],
+  ['食堂', '餐饮', '食堂'], ['聚餐', '餐饮', '聚餐宴请'], ['请客', '餐饮', '聚餐宴请'], ['吃饭', '餐饮', '聚餐宴请'],
+  ['便当', '餐饮', '快餐'], ['盒饭', '餐饮', '快餐'], ['小吃', '餐饮', '聚餐宴请'], ['泡面', '餐饮', '面食'], ['方便面', '餐饮', '面食'],
   // 交通
   ['公交', '交通', '公交地铁'], ['地铁', '交通', '公交地铁'], ['地铁票', '交通', '公交地铁'], ['公交卡', '交通', '公交地铁'], ['地铁卡', '交通', '公交地铁'],
-  ['打车', '交通', '打车'], ['滴滴', '交通', '打车'], ['出租车', '交通', '打车'], ['网约车', '交通', '打车'], ['顺风车', '交通', '打车'], ['拼车', '交通', '打车'], ['车费', '交通', '打车'],
+  ['打车', '交通', '打车'], ['滴滴', '交通', '打车'], ['出租车', '交通', '打车'], ['网约车', '交通', '网约车'], ['顺风车', '交通', '顺风车拼车'], ['拼车', '交通', '顺风车拼车'], ['车费', '交通', '打车'],
   ['高铁', '交通', '高铁火车'], ['火车', '交通', '高铁火车'], ['动车', '交通', '高铁火车'], ['车票', '交通', '高铁火车'], ['火车票', '交通', '高铁火车'],
   ['机票', '交通', '飞机'], ['飞机', '交通', '飞机'], ['航班', '交通', '飞机'],
   ['加油', '交通', '加油'], ['油价', '交通', '加油'], ['油费', '交通', '加油'],
-  ['停车', '交通', '停车'], ['停车费', '交通', '停车'], ['车位费', '交通', '停车'],
-  ['单车', '交通', '共享单车'], ['共享单车', '交通', '共享单车'], ['骑行', '交通', '共享单车'], ['电动车', '交通', '共享单车'],
-  ['过路费', '交通', '其他'], ['高速费', '交通', '其他'], ['路费', '交通', '其他'], ['轮渡', '交通', '其他'], ['船票', '交通', '其他'],
+  ['充电', '交通', '充电'], ['充电桩', '交通', '充电'],
+  ['停车', '交通', '停车费'], ['停车费', '交通', '停车费'], ['车位费', '交通', '停车费'],
+  ['单车', '交通', '共享单车'], ['共享单车', '交通', '共享单车'], ['骑行', '交通', '共享单车'], ['电动车', '交通', '电动车'],
+  ['租车', '交通', '租车'],
+  ['过路费', '交通', '过路费'], ['高速费', '交通', '过路费'], ['路费', '交通', '过路费'], ['轮渡', '交通', '渡轮'], ['船票', '交通', '渡轮'],
+  ['保养', '交通', '汽车保养'], ['洗车', '交通', '洗车'], ['违章', '交通', '违章罚款'], ['车险', '交通', '车险'], ['年检', '交通', '年检'],
   // 购物
   ['买衣服', '购物', '服饰'], ['衣服', '购物', '服饰'], ['服饰', '购物', '服饰'],
-  ['买鞋', '购物', '服饰'], ['鞋子', '购物', '服饰'], ['裤子', '购物', '服饰'], ['裙子', '购物', '服饰'],
-  ['外套', '购物', '服饰'], ['衬衫', '购物', '服饰'], ['毛衣', '购物', '服饰'], ['羽绒服', '购物', '服饰'],
-  ['袜子', '购物', '服饰'], ['帽子', '购物', '服饰'], ['围巾', '购物', '服饰'], ['手套', '购物', '服饰'],
-  ['内衣', '购物', '服饰'], ['睡衣', '购物', '服饰'], ['西装', '购物', '服饰'], ['连衣裙', '购物', '服饰'],
-  ['卫衣', '购物', '服饰'], ['牛仔裤', '购物', '服饰'], ['运动鞋', '购物', '服饰'], ['高跟鞋', '购物', '服饰'],
-  ['凉鞋', '购物', '服饰'], ['拖鞋', '购物', '服饰'], ['T恤', '购物', '服饰'],
-  ['手机', '购物', '数码'], ['电脑', '购物', '数码'], ['数码', '购物', '数码'],
-  ['耳机', '购物', '数码'], ['平板', '购物', '数码'], ['笔记本', '购物', '数码'],
-  ['键盘', '购物', '数码'], ['鼠标', '购物', '数码'], ['显示器', '购物', '数码'],
-  ['相机', '购物', '数码'], ['镜头', '购物', '数码'], ['手表', '购物', '数码'],
-  ['充电器', '购物', '数码'], ['数据线', '购物', '数码'], ['充电宝', '购物', '数码'], ['移动电源', '购物', '数码'],
-  ['U盘', '购物', '数码'], ['硬盘', '购物', '数码'], ['路由器', '购物', '数码'], ['智能手表', '购物', '数码'], ['手环', '购物', '数码'],
-  ['电视', '购物', '数码'], ['冰箱', '购物', '数码'], ['洗衣机', '购物', '数码'], ['空调', '购物', '数码'], ['电饭煲', '购物', '数码'], ['家电', '购物', '数码'],
-  ['化妆品', '购物', '美妆'], ['美妆', '购物', '美妆'], ['口红', '购物', '美妆'], ['面膜', '购物', '美妆'],
-  ['护肤品', '购物', '美妆'], ['洗发水', '购物', '美妆'], ['沐浴露', '购物', '美妆'], ['洗面奶', '购物', '美妆'],
-  ['香水', '购物', '美妆'], ['粉底', '购物', '美妆'], ['眼影', '购物', '美妆'], ['防晒', '购物', '美妆'],
-  ['精华', '购物', '美妆'], ['乳液', '购物', '美妆'], ['爽肤水', '购物', '美妆'],
-  ['日用品', '购物', '日用品'], ['杂货', '购物', '日用品'], ['纸巾', '购物', '日用品'], ['洗衣液', '购物', '日用品'],
-  ['牙膏', '购物', '日用品'], ['牙刷', '购物', '日用品'], ['毛巾', '购物', '日用品'], ['肥皂', '购物', '日用品'],
-  ['洗洁精', '购物', '日用品'], ['垃圾袋', '购物', '日用品'], ['雨伞', '购物', '日用品'], ['水杯', '购物', '日用品'],
-  ['保温杯', '购物', '日用品'], ['拖把', '购物', '日用品'], ['扫帚', '购物', '日用品'],
-  ['家居', '购物', '家居'], ['家具', '购物', '家居'], ['床单', '购物', '家居'], ['被子', '购物', '家居'],
-  ['枕头', '购物', '家居'], ['窗帘', '购物', '家居'], ['台灯', '购物', '家居'], ['地毯', '购物', '家居'],
-  ['沙发', '购物', '家居'], ['桌子', '购物', '家居'], ['椅子', '购物', '家居'], ['柜子', '购物', '家居'], ['床', '购物', '家居'],
-  ['鞋', '购物', '鞋包'], ['包', '购物', '鞋包'], ['买包', '购物', '鞋包'], ['包包', '购物', '鞋包'],
-  ['背包', '购物', '鞋包'], ['行李箱', '购物', '鞋包'], ['钱包', '购物', '鞋包'], ['皮带', '购物', '鞋包'],
-  ['首饰', '购物', '鞋包'], ['项链', '购物', '鞋包'], ['戒指', '购物', '鞋包'], ['耳环', '购物', '鞋包'],
-  ['眼镜', '购物', '鞋包'], ['太阳镜', '购物', '鞋包'],
+  ['男装', '购物', '男装'], ['女装', '购物', '女装'], ['童装', '购物', '童装'],
+  ['买鞋', '购物', '鞋包'], ['鞋子', '购物', '鞋包'], ['鞋', '购物', '鞋包'], ['运动鞋', '购物', '鞋包'], ['高跟鞋', '购物', '鞋包'], ['凉鞋', '购物', '鞋包'], ['拖鞋', '购物', '鞋包'],
+  ['裤子', '购物', '服饰'], ['裙子', '购物', '服饰'], ['外套', '购物', '服饰'], ['衬衫', '购物', '服饰'], ['毛衣', '购物', '服饰'], ['羽绒服', '购物', '服饰'],
+  ['袜子', '购物', '内衣袜'], ['帽子', '购物', '服饰'], ['围巾', '购物', '服饰'], ['手套', '购物', '服饰'],
+  ['内衣', '购物', '内衣袜'], ['睡衣', '购物', '服饰'], ['西装', '购物', '服饰'], ['连衣裙', '购物', '女装'],
+  ['卫衣', '购物', '服饰'], ['牛仔裤', '购物', '服饰'], ['T恤', '购物', '服饰'],
+  ['包', '购物', '箱包'], ['买包', '购物', '箱包'], ['包包', '购物', '箱包'], ['背包', '购物', '箱包'], ['行李箱', '购物', '箱包'], ['钱包', '购物', '箱包'], ['皮带', '购物', '箱包'],
+  ['手机', '购物', '手机'], ['电脑', '购物', '电脑'], ['数码', '购物', '数码'], ['平板', '购物', '电脑'], ['笔记本', '购物', '电脑'],
+  ['耳机', '购物', '耳机配件'], ['键盘', '购物', '耳机配件'], ['鼠标', '购物', '耳机配件'], ['显示器', '购物', '耳机配件'],
+  ['相机', '购物', '数码'], ['镜头', '购物', '数码'], ['手表', '购物', '数码'], ['充电器', '购物', '耳机配件'], ['数据线', '购物', '耳机配件'], ['充电宝', '购物', '耳机配件'], ['移动电源', '购物', '耳机配件'],
+  ['U盘', '购物', '耳机配件'], ['硬盘', '购物', '耳机配件'], ['路由器', '购物', '耳机配件'], ['智能手表', '购物', '数码'], ['手环', '购物', '数码'],
+  ['电视', '购物', '家电'], ['冰箱', '购物', '家电'], ['洗衣机', '购物', '家电'], ['空调', '购物', '家电'], ['电饭煲', '购物', '家电'], ['家电', '购物', '家电'],
+  ['化妆品', '购物', '美妆护肤'], ['美妆', '购物', '美妆护肤'], ['口红', '购物', '美妆护肤'], ['面膜', '购物', '美妆护肤'],
+  ['护肤品', '购物', '美妆护肤'], ['洗发水', '购物', '美妆护肤'], ['沐浴露', '购物', '美妆护肤'], ['洗面奶', '购物', '美妆护肤'],
+  ['香水', '购物', '美妆护肤'], ['粉底', '购物', '美妆护肤'], ['眼影', '购物', '美妆护肤'], ['防晒', '购物', '美妆护肤'],
+  ['精华', '购物', '美妆护肤'], ['乳液', '购物', '美妆护肤'], ['爽肤水', '购物', '美妆护肤'],
+  ['日用品', '购物', '日用品'], ['杂货', '购物', '日用品'], ['纸巾', '购物', '个护清洁'], ['洗衣液', '购物', '个护清洁'],
+  ['牙膏', '购物', '个护清洁'], ['牙刷', '购物', '个护清洁'], ['毛巾', '购物', '个护清洁'], ['肥皂', '购物', '个护清洁'],
+  ['洗洁精', '购物', '个护清洁'], ['垃圾袋', '购物', '个护清洁'], ['雨伞', '购物', '日用品'], ['水杯', '购物', '日用品'],
+  ['保温杯', '购物', '日用品'], ['拖把', '购物', '个护清洁'], ['扫帚', '购物', '个护清洁'],
+  ['家居', '购物', '家居家纺'], ['家具', '购物', '家居家纺'], ['床单', '购物', '家居家纺'], ['被子', '购物', '家居家纺'],
+  ['枕头', '购物', '家居家纺'], ['窗帘', '购物', '家居家纺'], ['台灯', '购物', '家居家纺'], ['地毯', '购物', '家居家纺'],
+  ['沙发', '购物', '家居家纺'], ['桌子', '购物', '家居家纺'], ['椅子', '购物', '家居家纺'], ['柜子', '购物', '家居家纺'], ['床', '购物', '家居家纺'],
+  ['厨具', '购物', '厨具'], ['锅', '购物', '厨具'], ['餐具', '购物', '厨具'],
+  ['母婴', '购物', '母婴'], ['奶粉', '购物', '母婴'], ['尿不湿', '购物', '母婴'], ['玩具', '购物', '玩具'],
+  ['宠物', '购物', '宠物用品'], ['猫粮', '购物', '宠物用品'], ['狗粮', '购物', '宠物用品'],
+  ['运动装备', '购物', '运动户外'], ['健身用品', '购物', '运动户外'],
+  ['文具', '购物', '文具书籍'], ['图书', '购物', '文具书籍'], ['书籍', '购物', '文具书籍'],
+  ['首饰', '购物', '首饰配饰'], ['项链', '购物', '首饰配饰'], ['戒指', '购物', '首饰配饰'], ['耳环', '购物', '首饰配饰'],
+  ['眼镜', '购物', '首饰配饰'], ['太阳镜', '购物', '首饰配饰'],
+  ['鲜花', '购物', '鲜花礼品'], ['礼品', '购物', '鲜花礼品'], ['礼物', '购物', '鲜花礼品'],
   // 娱乐
   ['看电影', '娱乐', '电影'], ['电影', '娱乐', '电影'], ['电影票', '娱乐', '电影'], ['观影', '娱乐', '电影'],
-  ['演唱会', '娱乐', '演出'], ['演出', '娱乐', '演出'], ['话剧', '娱乐', '演出'], ['音乐节', '娱乐', '演出'],
+  ['演唱会', '娱乐', '演唱会'], ['演出', '娱乐', '演出'], ['话剧', '娱乐', '演出'], ['音乐节', '娱乐', '演出'],
   ['音乐会', '娱乐', '演出'], ['相声', '娱乐', '演出'], ['脱口秀', '娱乐', '演出'], ['舞台剧', '娱乐', '演出'],
-  ['音乐剧', '娱乐', '演出'], ['展览', '娱乐', '演出'], ['画展', '娱乐', '演出'],
-  ['游戏', '娱乐', '游戏'], ['手游', '娱乐', '游戏'], ['游戏充值', '娱乐', '游戏'], ['皮肤', '娱乐', '游戏'], ['点卡', '娱乐', '游戏'],
-  ['视频会员', '娱乐', '会员'], ['会员', '娱乐', '会员'], ['会员费', '娱乐', '会员'], ['订阅', '娱乐', '会员'], ['续费', '娱乐', '会员'],
-  ['爱奇艺', '娱乐', '会员'], ['腾讯视频', '娱乐', '会员'], ['优酷', '娱乐', '会员'], ['B站', '娱乐', '会员'], ['b站', '娱乐', '会员'],
+  ['音乐剧', '娱乐', '演出'], ['展览', '娱乐', '展览'], ['画展', '娱乐', '展览'], ['博物馆', '娱乐', '展览'], ['美术馆', '娱乐', '展览'],
+  ['游戏', '娱乐', '游戏'], ['手游', '娱乐', '游戏'], ['游戏充值', '娱乐', '游戏充值'], ['皮肤', '娱乐', '游戏充值'], ['点卡', '娱乐', '游戏充值'],
+  ['视频会员', '娱乐', '视频会员'], ['会员', '娱乐', '视频会员'], ['会员费', '娱乐', '视频会员'], ['订阅', '娱乐', '视频会员'], ['续费', '娱乐', '视频会员'],
+  ['爱奇艺', '娱乐', '视频会员'], ['腾讯视频', '娱乐', '视频会员'], ['优酷', '娱乐', '视频会员'], ['B站', '娱乐', '视频会员'], ['b站', '娱乐', '视频会员'],
+  ['音乐会员', '娱乐', '音乐会员'], ['网易云', '娱乐', '音乐会员'], ['QQ音乐', '娱乐', '音乐会员'], ['酷狗', '娱乐', '音乐会员'],
   ['旅游', '娱乐', '旅游'], ['旅行', '娱乐', '旅游'], ['出游', '娱乐', '旅游'], ['门票', '娱乐', '旅游'],
   ['景区', '娱乐', '旅游'], ['酒店', '娱乐', '旅游'], ['民宿', '娱乐', '旅游'], ['住宿', '娱乐', '旅游'], ['跟团', '娱乐', '旅游'],
+  ['周边游', '娱乐', '周边游'], ['周末游', '娱乐', '周边游'],
   ['健身', '娱乐', '健身'], ['健身卡', '娱乐', '健身'], ['运动', '娱乐', '健身'], ['健身房', '娱乐', '健身'], ['私教', '娱乐', '健身'],
-  ['瑜伽', '娱乐', '健身'], ['舞蹈', '娱乐', '健身'], ['游泳', '娱乐', '健身'], ['羽毛球', '娱乐', '健身'],
+  ['瑜伽', '娱乐', '健身'], ['舞蹈', '娱乐', '健身'], ['游泳', '娱乐', '游泳'], ['羽毛球', '娱乐', '健身'],
   ['篮球', '娱乐', '健身'], ['足球', '娱乐', '健身'], ['乒乓球', '娱乐', '健身'], ['网球', '娱乐', '健身'],
   ['高尔夫', '娱乐', '健身'], ['滑雪', '娱乐', '健身'], ['滑冰', '娱乐', '健身'],
-  ['KTV', '娱乐', '其他'], ['ktv', '娱乐', '其他'], ['唱歌', '娱乐', '其他'], ['酒吧', '娱乐', '其他'],
-  ['桌游', '娱乐', '其他'], ['剧本杀', '娱乐', '其他'], ['密室', '娱乐', '其他'], ['游乐园', '娱乐', '其他'], ['迪士尼', '娱乐', '其他'],
-  ['按摩', '娱乐', '其他'], ['足疗', '娱乐', '其他'], ['洗浴', '娱乐', '其他'], ['温泉', '娱乐', '其他'],
-  ['美容', '娱乐', '其他'], ['美发', '娱乐', '其他'], ['理发', '娱乐', '其他'], ['剪发', '娱乐', '其他'],
-  ['染发', '娱乐', '其他'], ['烫发', '娱乐', '其他'], ['美甲', '娱乐', '其他'], ['写真', '娱乐', '其他'], ['摄影', '娱乐', '其他'],
-  ['博物馆', '娱乐', '其他'], ['美术馆', '娱乐', '其他'], ['主题乐园', '娱乐', '其他'], ['环球影城', '娱乐', '其他'],
+  ['KTV', '娱乐', 'KTV'], ['ktv', '娱乐', 'KTV'], ['唱歌', '娱乐', 'KTV'], ['酒吧', '娱乐', '酒吧'],
+  ['桌游', '娱乐', '桌游'], ['剧本杀', '娱乐', '密室剧本杀'], ['密室', '娱乐', '密室剧本杀'], ['游乐园', '娱乐', '游乐园'], ['迪士尼', '娱乐', '游乐园'], ['主题乐园', '娱乐', '游乐园'], ['环球影城', '娱乐', '游乐园'],
+  ['按摩', '娱乐', '按摩足疗'], ['足疗', '娱乐', '按摩足疗'], ['洗浴', '娱乐', '按摩足疗'], ['温泉', '娱乐', '按摩足疗'], ['SPA', '娱乐', '按摩足疗'],
+  ['美容', '娱乐', '美容美发'], ['美发', '娱乐', '美容美发'], ['理发', '娱乐', '美容美发'], ['剪发', '娱乐', '美容美发'],
+  ['染发', '娱乐', '美容美发'], ['烫发', '娱乐', '美容美发'], ['美甲', '娱乐', '美甲'], ['写真', '娱乐', '写真摄影'], ['摄影', '娱乐', '写真摄影'],
   // 学习
-  ['买书', '学习', '书籍'], ['书', '学习', '书籍'], ['书籍', '学习', '书籍'], ['教材', '学习', '书籍'],
-  ['教辅', '学习', '书籍'], ['练习册', '学习', '书籍'], ['图书', '学习', '书籍'], ['绘本', '学习', '书籍'],
-  ['小说', '学习', '书籍'], ['漫画', '学习', '书籍'],
-  ['课程', '学习', '课程'], ['网课', '学习', '课程'], ['培训班', '学习', '课程'], ['辅导班', '学习', '课程'],
-  ['家教', '学习', '课程'], ['学费', '学习', '课程'], ['学杂费', '学习', '课程'], ['知识付费', '学习', '课程'],
+  ['买书', '学习', '书籍'], ['书', '学习', '书籍'], ['书籍', '学习', '书籍'], ['教材', '学习', '教材课本'],
+  ['教辅', '学习', '教材课本'], ['练习册', '学习', '教材课本'], ['图书', '学习', '书籍'], ['绘本', '学习', '教材课本'],
+  ['小说', '学习', '书籍'], ['漫画', '学习', '书籍'], ['课本', '学习', '教材课本'],
+  ['课程', '学习', '线下课程'], ['网课', '学习', '网课'], ['培训班', '学习', '线下课程'], ['辅导班', '学习', '线下课程'],
+  ['家教', '学习', '线下课程'], ['学费', '学习', '线下课程'], ['学杂费', '学习', '线下课程'],
+  ['知识付费', '学习', '知识付费'], ['付费专栏', '学习', '知识付费'],
   ['文具', '学习', '文具'], ['笔', '学习', '文具'], ['书包', '学习', '文具'], ['文具盒', '学习', '文具'],
   ['打印', '学习', '文具'], ['复印', '学习', '文具'],
-  ['考试', '学习', '考试'], ['报名费', '学习', '考试'], ['考试费', '学习', '考试'], ['报名', '学习', '考试'],
-  ['考证', '学习', '考试'], ['驾照', '学习', '考试'], ['驾校', '学习', '考试'], ['考研', '学习', '考试'],
-  ['考公', '学习', '考试'], ['雅思', '学习', '考试'], ['托福', '学习', '考试'], ['四六级', '学习', '考试'],
+  ['考试', '学习', '考试报名'], ['报名费', '学习', '考试报名'], ['考试费', '学习', '考试报名'], ['报名', '学习', '考试报名'],
+  ['考证', '学习', '考证'], ['驾照', '学习', '考证'], ['驾校', '学习', '考证'], ['考研', '学习', '考试报名'],
+  ['考公', '学习', '考试报名'], ['雅思', '学习', '考试报名'], ['托福', '学习', '考试报名'], ['四六级', '学习', '考试报名'],
   ['培训', '学习', '培训'], ['培训费', '学习', '培训'],
+  ['早教', '学习', '早教'], ['幼儿园', '学习', '早教'],
   // 医疗
-  ['门诊', '医疗', '门诊'], ['看病', '医疗', '门诊'], ['挂号', '医疗', '门诊'], ['急诊', '医疗', '门诊'],
-  ['复诊', '医疗', '门诊'], ['就诊', '医疗', '门诊'], ['医院', '医疗', '门诊'], ['诊所', '医疗', '门诊'],
+  ['门诊', '医疗', '门诊挂号'], ['看病', '医疗', '门诊挂号'], ['挂号', '医疗', '门诊挂号'], ['急诊', '医疗', '门诊挂号'],
+  ['复诊', '医疗', '门诊挂号'], ['就诊', '医疗', '门诊挂号'], ['医院', '医疗', '门诊挂号'], ['诊所', '医疗', '门诊挂号'],
+  ['检查', '医疗', '门诊挂号'], ['化验', '医疗', '门诊挂号'], ['CT', '医疗', '门诊挂号'], ['打针', '医疗', '门诊挂号'], ['输液', '医疗', '门诊挂号'], ['西医', '医疗', '门诊挂号'],
   ['买药', '医疗', '药品'], ['药', '医疗', '药品'], ['药品', '医疗', '药品'], ['药房', '医疗', '药品'], ['药店', '医疗', '药品'],
   ['感冒药', '医疗', '药品'], ['退烧药', '医疗', '药品'], ['止痛药', '医疗', '药品'], ['创可贴', '医疗', '药品'],
-  ['维生素', '医疗', '药品'], ['钙片', '医疗', '药品'], ['口罩', '医疗', '药品'], ['保健品', '医疗', '药品'],
+  ['维生素', '医疗', '药品'], ['钙片', '医疗', '药品'], ['口罩', '医疗', '药品'], ['保健品', '医疗', '药品'], ['处方', '医疗', '药品'],
+  ['中药', '医疗', '中药'], ['抓药', '医疗', '中药'],
   ['体检', '医疗', '体检'], ['体检费', '医疗', '体检'],
   ['牙', '医疗', '牙科'], ['牙科', '医疗', '牙科'], ['看牙', '医疗', '牙科'], ['补牙', '医疗', '牙科'],
   ['拔牙', '医疗', '牙科'], ['洗牙', '医疗', '牙科'], ['牙齿', '医疗', '牙科'],
-  ['住院', '医疗', '其他'], ['手术', '医疗', '其他'], ['检查', '医疗', '其他'], ['化验', '医疗', '其他'],
-  ['CT', '医疗', '其他'], ['疫苗', '医疗', '其他'], ['打针', '医疗', '其他'], ['输液', '医疗', '其他'],
-  ['针灸', '医疗', '其他'], ['推拿', '医疗', '其他'], ['中医', '医疗', '其他'], ['西医', '医疗', '其他'],
-  ['处方', '医疗', '其他'], ['医保', '医疗', '其他'],
+  ['眼科', '医疗', '眼科'], ['视力', '医疗', '眼科'], ['配镜', '医疗', '眼科'],
+  ['耳鼻喉', '医疗', '耳鼻喉科'], ['鼻炎', '医疗', '耳鼻喉科'],
+  ['中医', '医疗', '中医'], ['针灸', '医疗', '中医'], ['推拿', '医疗', '中医'],
+  ['疫苗', '医疗', '疫苗'], ['HPV', '医疗', '疫苗'], ['流感疫苗', '医疗', '疫苗'],
+  ['保健', '医疗', '保健养生'], ['养生', '医疗', '保健养生'],
+  ['心理咨询', '医疗', '心理咨询'], ['心理', '医疗', '心理咨询'], ['咨询', '医疗', '心理咨询'],
+  ['住院', '医疗', '住院'], ['手术', '医疗', '住院'],
+  ['康复', '医疗', '康复'], ['理疗', '医疗', '康复'],
+  ['孕产', '医疗', '孕产'], ['产检', '医疗', '孕产'], ['月子', '医疗', '孕产'],
+  ['医保', '医疗', '医保'],
   // 住房
   ['房租', '住房', '房租'], ['租金', '住房', '房租'], ['交租', '住房', '房租'], ['月租', '住房', '房租'],
   ['物业', '住房', '物业'], ['物业费', '住房', '物业'],
   ['水电', '住房', '水电燃气'], ['燃气', '住房', '水电燃气'], ['水电费', '住房', '水电燃气'],
   ['水费', '住房', '水电燃气'], ['电费', '住房', '水电燃气'], ['燃气费', '住房', '水电燃气'], ['天然气', '住房', '水电燃气'],
   ['维修', '住房', '维修'], ['修理', '住房', '维修'], ['维修费', '住房', '维修'],
-  ['房贷', '住房', '其他'], ['月供', '住房', '其他'], ['装修', '住房', '其他'], ['宽带', '住房', '其他'],
-  ['网费', '住房', '其他'], ['话费', '住房', '其他'], ['手机费', '住房', '其他'], ['充值话费', '住房', '其他'],
-  ['取暖费', '住房', '其他'], ['供暖', '住房', '其他'], ['押金', '住房', '其他'], ['定金', '住房', '其他'],
-  ['中介费', '住房', '其他'], ['保洁', '住房', '其他'], ['家政', '住房', '其他'], ['搬家', '住房', '其他'],
-  ['快递', '住房', '其他'], ['快递费', '住房', '其他'], ['邮费', '住房', '其他'], ['邮寄', '住房', '其他'],
+  ['房贷', '住房', '房贷'], ['月供', '住房', '房贷'],
+  ['装修', '住房', '装修'], ['装修费', '住房', '装修'],
+  ['宽带', '住房', '通讯网络'], ['网费', '住房', '通讯网络'], ['话费', '住房', '通讯网络'], ['手机费', '住房', '通讯网络'], ['充值话费', '住房', '通讯网络'],
+  ['家具', '住房', '家具'], ['家电', '住房', '家电'], ['床', '住房', '家具'], ['沙发', '住房', '家具'],
+  ['取暖费', '住房', '取暖'], ['供暖', '住房', '取暖'],
+  ['押金', '住房', '租房中介'], ['定金', '住房', '租房中介'], ['中介费', '住房', '租房中介'],
+  ['保洁', '住房', '保洁家政'], ['家政', '住房', '保洁家政'], ['搬家', '住房', '保洁家政'],
   // 其他
   ['借款', '其他', '借款'], ['借钱', '其他', '借款'], ['借给', '其他', '借款'], ['还钱', '其他', '借款'],
-  ['还款', '其他', '借款'], ['转账', '其他', '借款'], ['发红包', '其他', '借款'], ['随礼', '其他', '借款'],
-  ['份子钱', '其他', '借款'], ['捐款', '其他', '借款'], ['捐赠', '其他', '借款'], ['慈善', '其他', '借款'],
-  ['罚款', '其他', '其他'], ['罚单', '其他', '其他'], ['滞纳金', '其他', '其他'], ['手续费', '其他', '其他'],
-  ['利息', '其他', '其他'], ['保险', '其他', '其他'], ['保费', '其他', '其他'], ['税费', '其他', '其他'],
-  ['个税', '其他', '其他'], ['社保', '其他', '其他'], ['公积金', '其他', '其他'], ['党费', '其他', '其他'],
+  ['还款', '其他', '还款'], ['转账', '其他', '借款'],
+  ['发红包', '其他', '红包往来'], ['随礼', '其他', '红包往来'], ['份子钱', '其他', '红包往来'], ['收红包', '其他', '红包往来'],
+  ['捐款', '其他', '捐赠'], ['捐赠', '其他', '捐赠'], ['慈善', '其他', '公益'],
+  ['赔偿', '其他', '赔偿'], ['赔钱', '其他', '赔偿'], ['理赔', '其他', '赔偿'],
+  ['礼金', '其他', '礼金'], ['人情', '其他', '礼金'],
+  ['罚款', '其他', '罚款'], ['罚单', '其他', '罚款'], ['滞纳金', '其他', '罚款'], ['违章罚款', '其他', '罚款'],
+  ['手续费', '其他', '手续费'], ['服务费', '其他', '手续费'], ['管理费', '其他', '手续费'], ['杂费', '其他', '手续费'],
+  ['利息', '其他', '其他'], ['税费', '其他', '其他'], ['个税', '其他', '其他'], ['党费', '其他', '其他'],
   ['团费', '其他', '其他'], ['会费', '其他', '其他'], ['年费', '其他', '其他'], ['充值', '其他', '其他'],
-  ['打赏', '其他', '其他'], ['小费', '其他', '其他'], ['服务费', '其他', '其他'], ['管理费', '其他', '其他'], ['杂费', '其他', '其他']
+  ['打赏', '其他', '其他'], ['小费', '其他', '其他'],
+  ['保险', '其他', '保险'], ['保费', '其他', '保险'],
+  ['社保', '其他', '社保公积金'], ['公积金', '其他', '社保公积金'],
+  ['快递', '其他', '快递'], ['快递费', '其他', '快递'], ['邮费', '其他', '快递'], ['邮寄', '其他', '快递'],
+  ['宠物医院', '其他', '宠物医疗'], ['宠物看病', '其他', '宠物医疗'], ['宠物药', '其他', '宠物医疗'],
+  ['寄卖', '其他', '寄卖'], ['闲鱼', '其他', '寄卖'],
 ];
 // 自然语言关键词字典：[关键词, 一级分类]（收入）
 const NL_KW_I = [
@@ -15606,15 +16175,34 @@ const INCOME_SUBS_DEFAULT = {
 };
 function getExpSubs() {
   let s = Store.get('expSubs', null);
-  if (!s || typeof s !== 'object' || Array.isArray(s)) { s = JSON.parse(JSON.stringify(EXP_SUBS_DEFAULT)); Store.set('expSubs', s); }
-  Object.keys(EXP_SUBS_DEFAULT).forEach(k => { if (!Array.isArray(s[k])) s[k] = EXP_SUBS_DEFAULT[k].slice(); });
-  return s;
+  if (!s || typeof s !== 'object' || Array.isArray(s)) s = {};
+  // 并集合并：默认二级分类追加进用户已有数据（去重），同时保留用户自定义的一级分类
+  const merged = {};
+  Object.keys(EXP_SUBS_DEFAULT).forEach(k => {
+    const def = EXP_SUBS_DEFAULT[k] || [];
+    const cur = Array.isArray(s[k]) ? s[k] : [];
+    const set = {};
+    def.concat(cur).forEach(x => { if (x != null && x !== '') set[x] = 1; });
+    merged[k] = Object.keys(set);
+  });
+  Object.keys(s).forEach(k => { if (!(k in merged)) merged[k] = Array.isArray(s[k]) ? s[k] : []; });
+  Store.set('expSubs', merged);
+  return merged;
 }
 function getIncomeSubs() {
   let s = Store.get('incomeSubs', null);
-  if (!s || typeof s !== 'object' || Array.isArray(s)) { s = JSON.parse(JSON.stringify(INCOME_SUBS_DEFAULT)); Store.set('incomeSubs', s); }
-  Object.keys(INCOME_SUBS_DEFAULT).forEach(k => { if (!Array.isArray(s[k])) s[k] = (INCOME_SUBS_DEFAULT[k] || []).slice(); });
-  return s;
+  if (!s || typeof s !== 'object' || Array.isArray(s)) s = {};
+  const merged = {};
+  Object.keys(INCOME_SUBS_DEFAULT).forEach(k => {
+    const def = INCOME_SUBS_DEFAULT[k] || [];
+    const cur = Array.isArray(s[k]) ? s[k] : [];
+    const set = {};
+    def.concat(cur).forEach(x => { if (x != null && x !== '') set[x] = 1; });
+    merged[k] = Object.keys(set);
+  });
+  Object.keys(s).forEach(k => { if (!(k in merged)) merged[k] = Array.isArray(s[k]) ? s[k] : []; });
+  Store.set('incomeSubs', merged);
+  return merged;
 }
 function onExpTypeChange() { fillExpCatOptions(); }
 function onExpCatChange() { fillExpSubs(); }
@@ -15802,7 +16390,7 @@ onExpCatChange();
 // ============================================================
 function exportData() {
   const d = {};
-  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs','incomeSubs','totalAssets','totalDebts','assetEyes','foodShops'].forEach(k => { d[k] = Store.get(k, null); });
+  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','budget','targetWeight','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook','expSubs','incomeSubs','totalAssets','totalDebts','assetEyes','foodShops','trips'].forEach(k => { d[k] = Store.get(k, null); });
   const b = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = '工作台备份_' + todayStr() + '.json'; a.click(); toast('✅ 已导出');
 }
@@ -15815,7 +16403,7 @@ function importData(i) {
 function clearData() {
   if (!confirm('确定清空所有数据？\n建议先导出备份！')) return;
   if (!confirm('再次确认！')) return;
-  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook','foodShops'].forEach(k => Store.set(k, []));
+  ['tasks','expenses','habits','notes','health','shopping','collections','topics','materials','events','hotFav','dramaWant','water','calorie','eatCats','countdowns','moodlogs','studyBook','foodShops','trips'].forEach(k => Store.set(k, []));
   Store.set('budget', 0); Store.set('targetWeight', 0); Store.set('expSubs', {}); Store.set('incomeSubs', {}); Store.set('totalAssets', 0); Store.set('totalDebts', 0); Store.set('assetEyes', { net: false, assets: false, debts: false });
   renderAll(); toast('🗑️ 已清空');
 }
