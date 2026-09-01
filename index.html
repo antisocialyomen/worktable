@@ -22,18 +22,19 @@
 /* ===== 移动端（≤768px）界面标准令牌：iOS/Android 统一尺寸，新增功能须引用，禁止各写各的像素值 ===== */
 :root{
   --mb-break:768px;            /* 断点 */
-  --mb-icon-btn:34px;          /* 方形图标按钮边长（减/加/编辑/删除等） */
+  --mb-icon-btn:32px;          /* 主图标按钮边长（比此前34更紧凑，仍≥手指触控下限） */
+  --mb-icon-sm:28px;           /* 次要导航箭头（日历翻页等），小于主图标按钮 */
   --mb-icon-btn-radius:8px;    /* 图标按钮圆角 */
   --mb-icon-font:13px;         /* 图标按钮内图标字号 */
-  --mb-btn-pad:8px 14px;       /* 文字按钮内边距 */
+  --mb-btn-pad:6px 12px;       /* 文字按钮内边距（横向从14收紧，省空间） */
   --mb-btn-font:13px;          /* 文字按钮字号 */
   --mb-btn-radius:var(--radius-lg); /* 文字按钮圆角 */
-  --mb-in-pad:9px 11px;        /* 输入框内边距 */
-  --mb-in-font:14px;           /* 输入框字号 */
-  --mb-card-pad:14px;          /* 卡片内边距 */
-  --mb-gap:8px;                /* 控件间距 */
+  --mb-in-pad:8px 10px;        /* 输入框内边距（纵向从9收紧） */
+  --mb-in-font:14px;           /* 输入框字号（可读性下限，不降） */
+  --mb-card-pad:12px;          /* 卡片内边距（从14收紧） */
+  --mb-gap:6px;                /* 控件间距（从8收紧，提高信息密度） */
   --mb-line:1.5;               /* 行高 */
-  --mb-hbtn:34px;              /* 顶栏/头栏图标按钮边长 */
+  --mb-hbtn:32px;              /* 顶栏/头栏图标按钮边长 */
 }
 [data-theme=dark]{--bg:#24152E;--bg-card:rgba(52,34,58,0.55);--glass:rgba(52,34,58,0.55);--bg-nav:rgba(52,34,58,0.55);--text:#F2EAF8;--text2:#C9B8D8;--text3:#A99BC2;--border:rgba(255,255,255,0.10);--primary-bg:#3A2438;--primary-light:#C4B0F0;--accent:#7FD0C0;--accent-light:#1F3A36;--alert:#FFD166;--s:#5FCF9E;--w:#FFC349;--d:#FF8F8F}
 html{font-size:16px}
@@ -286,7 +287,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .bill-cal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .bill-cal-hd .cal-title{font-size:14px;font-weight:600;cursor:pointer;padding:4px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);color:var(--text)}
 .bill-cal-hd .cal-title:hover{background:var(--bg)}
-.bill-cal-hd button{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text2);border:1px solid var(--border);background:var(--bg-card);cursor:pointer}
+.bill-cal-hd button{width:var(--mb-icon-sm);height:var(--mb-icon-sm);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:var(--mb-icon-font);color:var(--text2);border:1px solid var(--border);background:var(--bg-card);cursor:pointer}
 .bill-cal-hd button:hover{background:var(--bg)}
 .bill-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
 .bill-cal-grid .cal-wk{font-size:10px;color:var(--text3);padding:4px 0;font-weight:600}
@@ -502,7 +503,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   .stat-detail .cb>div:first-child>div:last-child{font-size:7px!important}
   .stat-bar .num{font-size:9px!important}
   /* 移动端：记录饮水按钮 */
-  .w-btn{font-size:9px!important;padding:1px 5px!important;width:40px!important;min-width:40px!important}
+  .w-btn{font-size:var(--mb-btn-font)!important;padding:var(--mb-btn-pad)!important;min-width:auto!important;width:auto!important}
   #wCustom{width:100px!important;flex:0 0 100px!important}
   /* 移动端：热量计算餐次下拉框55px、食材输入框弹性伸展 */
   #calMeal{width:55px!important;flex:0 0 55px!important}
@@ -644,6 +645,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
 .mood-cell:hover{transform:scale(1.08)}
 .mood-cell.active{border-color:var(--primary);background:var(--primary-bg);box-shadow:0 2px 8px rgba(155,126,222,0.25)}
 .log-area{width:100%;min-height:96px;resize:vertical;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);font-size:14px;line-height:1.6;font-family:inherit;margin-top:6px}
+.log-area:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(155,126,222,0.15)}
 .log-count{text-align:right;font-size:10px;color:var(--text3);margin-top:4px}
 
 /* ===== 心情日志列表（日历下方） ===== */
