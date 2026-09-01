@@ -333,7 +333,8 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .ig{flex-wrap:wrap;gap:3px;margin-bottom:10px}
   .ig .in{flex:0 1 auto;min-width:auto;width:auto}
 select.in{font-size:11px!important;padding:2px 5px!important;height:auto!important}
-.ig select.in{flex:0 0 auto;min-width:auto;width:auto}
+  .ig select.in{flex:0 0 auto;min-width:auto;width:auto}
+  #expNote{flex:1 1 100%!important;width:100%!important;margin-left:0!important}
   .ig .btn{flex:0 0 auto}
   .g2,.g4{grid-template-columns:1fr;gap:10px}
   .mg{grid-template-columns:1fr;gap:10px}
@@ -966,6 +967,17 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           #p-tripbox .tb-cat-hd{font-size:13px;font-weight:700;color:var(--primary);margin:14px 0 4px;display:flex;align-items:center;gap:6px}
           #p-tripbox .tb-prog{height:10px;border-radius:6px;background:var(--border);overflow:hidden;margin:8px 0}
           #p-tripbox .tb-prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:6px;transition:width .3s}
+          /* 移动端适配：表单字段整行堆叠，固定宽控件改为弹性，防止横排溢出 */
+          @media(max-width:768px){
+            #p-tripbox .ig{margin-bottom:8px;gap:6px}
+            #p-tripbox .ig input.in, #p-tripbox .ig select.in{flex:1 1 100%!important;width:100%!important;min-width:0}
+            #p-tripbox #tbNights{flex:1 1 100%!important;width:100%!important;text-align:left;margin-top:2px}
+            #p-tripbox #tbWeather, #p-tripbox #tbAddCat{width:100%!important;flex:1 1 100%!important}
+            #p-tripbox .card-hd>div{display:flex;flex-wrap:wrap;gap:6px;width:100%}
+            #p-tripbox #tbAddName{flex:1 1 100%!important;width:100%!important}
+            #p-tripbox .tb-trip{padding:12px}
+            #p-tripbox #tbActs .tb-act{flex:1 1 auto;justify-content:center}
+          }
         </style>
         <div class="card">
           <div class="card-hd"><h3 id="tbFormTitle">🧳 新建旅行</h3><span class="btn-sm btn-o" onclick="tbResetForm()">清空</span></div>
