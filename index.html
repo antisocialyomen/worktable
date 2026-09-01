@@ -19,6 +19,22 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--primary:#9B7EDE;--primary-light:#B39BE8;--primary-dark:#8264CE;--primary-bg:#EFE9FB;--accent:#5FB8A8;--accent-light:#E3F4F0;--accent2:#5FB8A8;--alert:#FFC349;--bg:#F3EEFC;--bg-card:var(--glass);--glass:rgba(248,244,255,.55);--bg-nav:var(--glass);--text:#2E2440;--text2:#5E5276;--text3:#9389A8;--border:rgba(155,126,222,0.16);--shadow:0 2px 8px rgba(155,126,222,0.12);--shadow-lg:0 8px 25px rgba(155,126,222,0.18);--radius:16px;--radius-sm:10px;--radius-lg:24px;--nav-w:170px;--h:56px;--t:.3s;--s:#4CAF85;--w:#FFC349;--d:#FF8383;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
+/* ===== 移动端（≤768px）界面标准令牌：iOS/Android 统一尺寸，新增功能须引用，禁止各写各的像素值 ===== */
+:root{
+  --mb-break:768px;            /* 断点 */
+  --mb-icon-btn:34px;          /* 方形图标按钮边长（减/加/编辑/删除等） */
+  --mb-icon-btn-radius:8px;    /* 图标按钮圆角 */
+  --mb-icon-font:13px;         /* 图标按钮内图标字号 */
+  --mb-btn-pad:8px 14px;       /* 文字按钮内边距 */
+  --mb-btn-font:13px;          /* 文字按钮字号 */
+  --mb-btn-radius:var(--radius-lg); /* 文字按钮圆角 */
+  --mb-in-pad:9px 11px;        /* 输入框内边距 */
+  --mb-in-font:14px;           /* 输入框字号 */
+  --mb-card-pad:14px;          /* 卡片内边距 */
+  --mb-gap:8px;                /* 控件间距 */
+  --mb-line:1.5;               /* 行高 */
+  --mb-hbtn:34px;              /* 顶栏/头栏图标按钮边长 */
+}
 [data-theme=dark]{--bg:#24152E;--bg-card:rgba(52,34,58,0.55);--glass:rgba(52,34,58,0.55);--bg-nav:rgba(52,34,58,0.55);--text:#F2EAF8;--text2:#C9B8D8;--text3:#A99BC2;--border:rgba(255,255,255,0.10);--primary-bg:#3A2438;--primary-light:#C4B0F0;--accent:#7FD0C0;--accent-light:#1F3A36;--alert:#FFD166;--s:#5FCF9E;--w:#FFC349;--d:#FF8F8F}
 html{font-size:16px}
 body{font-family:var(--font);background:transparent;color:var(--text);line-height:1.6;overflow:hidden;height:100vh;transition:color var(--t);padding-top:0;padding-top:env(safe-area-inset-top)}
@@ -42,7 +58,12 @@ body{font-family:var(--font);background:transparent;color:var(--text);line-heigh
 [data-theme=dark] #homeCountdown,[data-theme=dark] #homeReminder{color:#5A4A00}
 [data-theme=dark] #homeCountdown .card-hd h3,[data-theme=dark] #homeReminder .card-hd h3{color:#5A4A00}
 [data-theme=dark] #homeCountdownTip,[data-theme=dark] #reminderList{color:#5A4A00}
-a{color:var(--accent)}input,textarea,select,button{font-family:inherit;font-size:inherit;outline:none;border:none;background:none}button{cursor:pointer;border-radius:var(--radius-sm)}
+a{color:var(--accent)}
+/* ===== iOS/Android 跨平台一致性重置：抹平系统默认样式差异（iOS Safari 按钮自带圆角/内边距、Android 字体缩放等） ===== */
+*,*::before,*::after{box-sizing:border-box}
+input,textarea,select,button{font-family:inherit;font-size:inherit;outline:none;border:none;background:none;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
+button{cursor:pointer;border-radius:var(--radius-sm)}
+body{-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
 #splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);text-align:center;padding:24px;transition:opacity .4s}
 #splash.hide{opacity:0;pointer-events:none}
@@ -139,10 +160,15 @@ a{color:var(--accent)}input,textarea,select,button{font-family:inherit;font-size
 .btn-o:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-bg)}
 .btn-sm{padding:5px 10px;font-size:12px}
 .btn-icon{width:32px;height:32px;padding:0;justify-content:center;border-radius:8px}
+/* ===== 移动端图标按钮标准（所有方形容积按钮：减/加/编辑/删除/展开收起等）统一引用，iOS/Android 一致 ===== */
+.icon-btn{width:var(--mb-icon-btn);height:var(--mb-icon-btn);border-radius:var(--mb-icon-btn-radius);display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:var(--bg-card);color:var(--text2);font-size:var(--mb-icon-font);cursor:pointer;transition:all var(--t);flex-shrink:0;-webkit-appearance:none;appearance:none}
+.icon-btn:hover{border-color:var(--primary);color:var(--primary)}
+.icon-btn.danger{color:var(--d);border-color:var(--d)}
+.icon-btn.danger:hover{background:var(--d);color:#fff}
 .cb-acts.task-acts{flex-direction:row;align-items:center;gap:4px;margin-left:8px}
 .cb-acts.task-acts .btn-icon{width:22px;height:22px;font-size:11px;border-radius:5px}
 .txn-acts{display:flex;flex-direction:column;gap:4px;margin-left:8px;align-items:center}
-.txn-acts .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px}
+.txn-acts .btn-icon{width:var(--mb-icon-btn);height:var(--mb-icon-btn);font-size:var(--mb-icon-font);border-radius:var(--mb-icon-btn-radius);padding:0}
 .bill-total{justify-content:center;text-align:center}
 .bill-total .si{width:auto;height:auto}
 .ig{display:flex;gap:8px;margin-bottom:12px}
@@ -327,9 +353,9 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
   .card{padding:14px;margin-bottom:10px;border-radius:var(--radius)}
   .card-hd{margin-bottom:12px;gap:3px;flex-wrap:wrap}
   .card-hd h3{font-size:14px}
-  .btn{padding:3px 7px;font-size:11px;border-radius:var(--radius-lg)}
-.btn-sm{padding:3px 7px;font-size:11px}
-  .in{padding:2px 5px!important;font-size:11px!important;height:auto!important}
+  .btn{padding:var(--mb-btn-pad);font-size:var(--mb-btn-font);border-radius:var(--mb-btn-radius)}
+.btn-sm{padding:var(--mb-btn-pad);font-size:var(--mb-btn-font)}
+  .in{padding:var(--mb-in-pad)!important;font-size:var(--mb-in-font)!important;height:auto!important}
   .ig{flex-wrap:wrap;gap:3px;margin-bottom:10px}
   .ig .in{flex:0 1 auto;min-width:auto;width:auto}
 select.in{font-size:11px!important;padding:2px 5px!important;height:auto!important}
@@ -349,12 +375,12 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   .cb .ct{font-size:10px}
   .cb-acts{flex-direction:column;align-items:flex-end;gap:3px;margin-left:6px;flex:0 0 auto}
   .cb-acts.task-acts{flex-direction:column;align-items:flex-end;gap:3px}
-  .cb-acts.task-acts .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px}
+  .cb-acts.task-acts .btn-icon{width:var(--mb-icon-btn);height:var(--mb-icon-btn);font-size:var(--mb-icon-font);border-radius:var(--mb-icon-btn-radius);padding:0}
   .txn-acts{gap:3px;margin-left:4px}
-.txn-acts .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px}
+.txn-acts .btn-icon{width:var(--mb-icon-btn);height:var(--mb-icon-btn);font-size:var(--mb-icon-font);border-radius:var(--mb-icon-btn-radius);padding:0}
 .cb-acts .tag{padding:1px 6px;font-size:10px}
   /* 移动端：图标按钮统一16px */
-  .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
+  .btn-icon{width:var(--mb-icon-btn);height:var(--mb-icon-btn);font-size:var(--mb-icon-font);border-radius:var(--mb-icon-btn-radius);padding:0}
   /* 记账备注输入框宽度 */
   #expNote{width:100px!important;flex:0 0 100px!important}
   /* 想看列表标签左对齐 */
@@ -392,14 +418,14 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
   .toggle::after{width:18px;height:18px}
   .toast{bottom:72px;font-size:13px;padding:8px 16px;max-width:90%;white-space:normal;text-align:center}
   /* 移动端：健康编辑/删除按钮缩小50%紧凑排列 */
-  #healthList .cb .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
+  #healthList .cb .btn-icon{width:var(--mb-icon-btn);height:var(--mb-icon-btn);font-size:var(--mb-icon-font);border-radius:var(--mb-icon-btn-radius);padding:0}
   #healthList .cb{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
   /* 移动端：笔记编辑/删除按钮缩小50%紧凑排列 */
-  #notesList .cb .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
+  #notesList .cb .btn-icon{width:var(--mb-icon-btn);height:var(--mb-icon-btn);font-size:var(--mb-icon-font);border-radius:var(--mb-icon-btn-radius);padding:0}
   /* 移动端：热量克数输入框缩小50% */
   #calGrams{width:50px!important;flex:0 0 50px!important;min-width:50px!important}
   /* 移动端：选题/素材编辑删除按钮 */
-  #topicList .cb .btn-icon,#matList .cb .btn-icon{width:16px;height:16px;font-size:9px;border-radius:4px;padding:0}
+  #topicList .cb .btn-icon,#matList .cb .btn-icon{width:var(--mb-icon-btn);height:var(--mb-icon-btn);font-size:var(--mb-icon-font);border-radius:var(--mb-icon-btn-radius);padding:0}
   /* 移动端：健康记录输入框缩小50%紧凑排列 */
   #hWeight,#hFat{width:70px!important;flex:0 0 70px!important;min-width:70px!important;font-size:11px!important;padding:2px 5px!important}
   #hDate{width:21px!important;height:21px;flex:0 0 21px!important;padding:0!important;box-sizing:border-box;background:var(--bg-card)!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1.5' y='2.5' width='13' height='12' rx='2' fill='none' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M1.5 6h13' stroke='%236B7280' stroke-width='1.5'/%3E%3Cpath d='M4.5 1v3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M11.5 1v3' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:16px!important;border:1px solid var(--border)!important;border-radius:var(--radius-sm)!important;color:transparent!important;cursor:pointer}
@@ -967,6 +993,13 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           #p-tripbox .tb-cat-hd{font-size:13px;font-weight:700;color:var(--primary);margin:14px 0 4px;display:flex;align-items:center;gap:6px}
           #p-tripbox .tb-prog{height:10px;border-radius:6px;background:var(--border);overflow:hidden;margin:8px 0}
           #p-tripbox .tb-prog>i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:6px;transition:width .3s}
+          #p-tripbox .tb-item{align-items:center}
+          #p-tripbox .tb-qty{font-size:12px;color:var(--text2);margin-left:6px;white-space:nowrap}
+          #p-tripbox .tb-acts{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto}
+          #p-tripbox .tb-btn{width:28px;height:28px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:var(--bg-card);color:var(--text2);font-size:12px;cursor:pointer;transition:all var(--t)}
+          #p-tripbox .tb-btn:hover{border-color:var(--primary);color:var(--primary)}
+          #p-tripbox .tb-btn-d{color:var(--d);border-color:var(--d)}
+          #p-tripbox .tb-btn-d:hover{background:var(--d);color:#fff}
           /* 移动端适配：表单字段整行堆叠，固定宽控件改为弹性，防止横排溢出 */
           @media(max-width:768px){
             #p-tripbox .ig{margin-bottom:8px;gap:6px}
@@ -977,6 +1010,12 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
             #p-tripbox #tbAddName{flex:1 1 100%!important;width:100%!important}
             #p-tripbox .tb-trip{padding:12px}
             #p-tripbox #tbActs .tb-act{flex:1 1 auto;justify-content:center}
+            #p-tripbox .tb-item{flex-wrap:wrap;padding:8px 0;gap:4px 8px}
+            #p-tripbox .tb-item .cc{width:18px;height:18px}
+            #p-tripbox .tb-item .ct{flex:1 1 0;font-size:12px}
+            #p-tripbox .tb-qty{font-size:11px}
+            #p-tripbox .tb-acts{flex-direction:row!important;flex:1 1 100%!important;margin-left:0!important;margin-top:6px;justify-content:flex-end;gap:8px}
+            #p-tripbox .tb-btn{width:var(--mb-icon-btn);height:var(--mb-icon-btn);font-size:var(--mb-icon-font)}
           }
         </style>
         <div class="card">
@@ -1023,6 +1062,7 @@ select.in{font-size:11px!important;padding:2px 5px!important;height:auto!importa
           <div class="card-hd">
             <h3 id="tbDetailTitle">清单</h3>
             <div style="display:flex;gap:6px">
+              <button class="btn-sm btn-o" onclick="tbCloseTrip()"><i class="fas fa-chevron-up"></i> 收起</button>
               <button class="btn-sm btn-o" onclick="tbRegenerate()"><i class="fas fa-sync"></i> 重新生成</button>
               <button class="btn-sm btn-p" onclick="tbShareText()"><i class="fas fa-share"></i> 分享</button>
             </div>
@@ -4883,11 +4923,18 @@ function tbDelTrip(id){
 }
 
 function tbOpenTrip(id){
+  // 再次点击已展开的卡片 = 收起
+  if (window.__tbOpenId === id) { tbCloseTrip(); return; }
   window.__tbOpenId = id;
   document.querySelectorAll('.tb-trip').forEach(el => el.classList.remove('on'));
   const card = document.getElementById('tbDetailCard'); if (card) card.style.display = 'block';
   tbRenderDetail(); tbRenderList();
   if (card) card.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function tbCloseTrip(){
+  window.__tbOpenId = null;
+  const c = document.getElementById('tbDetailCard'); if (c) c.style.display = 'none';
+  tbRenderList();
 }
 
 function tbRenderList(){
@@ -4936,18 +4983,18 @@ function tbRenderDetail(){
     html += '<div class="tb-cat-hd">📦 ' + cat + ' <span style="font-size:11px;color:var(--text3);font-weight:400">' + cits.length + ' 件</span></div>';
     cits.forEach(i => {
       const checked = !!i.checked;
-      html += '<div class="cb" onclick="tbToggle(\'' + tid + '\',\'' + i.id + '\')">'
+      html += '<div class="cb tb-item" onclick="tbToggle(\'' + tid + '\',\'' + i.id + '\')">'
         + '<input type="checkbox" ' + (checked ? 'checked' : '') + '>'
         + '<span class="cc"></span>'
         + '<span class="ct" style="' + (checked ? 'text-decoration:line-through;color:var(--text3)' : '') + '">' + escHtml(i.name)
         + (i.required ? ' <span class="tag t-urgent" style="font-size:10px;padding:1px 5px">必需</span>' : '')
         + (i.custom ? ' <span style="font-size:10px;color:var(--primary)">＋自定义</span>' : '') + '</span>'
-        + '<span style="font-size:12px;color:var(--text2);margin-left:6px">×' + (i.qty || 1) + '</span>'
-        + '<div class="cb-acts">'
-        + '<span class="btn-sm btn-o" onclick="event.stopPropagation();tbQty(\'' + tid + '\',\'' + i.id + '\',-1)">−</span>'
-        + '<span class="btn-sm btn-o" onclick="event.stopPropagation();tbQty(\'' + tid + '\',\'' + i.id + '\',1)">＋</span>'
-        + '<span class="btn-sm btn-o" onclick="event.stopPropagation();tbEditItem(\'' + tid + '\',\'' + i.id + '\')"><i class="fas fa-edit"></i></span>'
-        + '<span class="btn-sm btn-o" style="color:var(--d)" onclick="event.stopPropagation();tbDelItem(\'' + tid + '\',\'' + i.id + '\')"><i class="fas fa-trash"></i></span>'
+        + '<span class="tb-qty">×' + (i.qty || 1) + '</span>'
+        + '<div class="tb-acts">'
+        + '<span class="tb-btn" title="减少" onclick="event.stopPropagation();tbQty(\'' + tid + '\',\'' + i.id + '\',-1)"><i class="fas fa-minus"></i></span>'
+        + '<span class="tb-btn" title="增加" onclick="event.stopPropagation();tbQty(\'' + tid + '\',\'' + i.id + '\',1)"><i class="fas fa-plus"></i></span>'
+        + '<span class="tb-btn" title="改名" onclick="event.stopPropagation();tbEditItem(\'' + tid + '\',\'' + i.id + '\')"><i class="fas fa-edit"></i></span>'
+        + '<span class="tb-btn tb-btn-d" title="删除" onclick="event.stopPropagation();tbDelItem(\'' + tid + '\',\'' + i.id + '\')"><i class="fas fa-trash"></i></span>'
         + '</div></div>';
     });
   });
